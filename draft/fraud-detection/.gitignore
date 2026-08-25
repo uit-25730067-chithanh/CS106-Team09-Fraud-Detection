@@ -1,0 +1,28 @@
+# Data files (không commit lên git — quá nặng)
+data/raw/
+data/processed/*.pkl
+data/processed/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Models (có thể lớn)
+*.pkl
+*.h5
+*.joblib
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

@@ -1,0 +1,68 @@
+---
+title: "CS106 Final — Fraud Detection Full Implementation to Submit"
+description: "End-to-end implementation plan: từ code rỗng đến bản nộp hoàn chỉnh, chia theo phase độc lập có validation gate"
+status: pending
+priority: P1
+effort: ~40h (7 người)
+branch: main
+tags: [cs106, fraud-detection, academic, python, ml, submit]
+created: 2026-08-24
+updated: 2026-08-25
+sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
+---
+
+# Plan: CS106 Final — Fraud Detection Full Submit
+
+## Mục tiêu
+
+Từ skeleton hiện tại (docs + structure, không có code) → bản nộp hoàn chỉnh:
+`[Project AI-UIT] - Nhom 9.zip` với đủ: code, notebooks, báo cáo Word, PPT, demo.
+
+## Sprint Timeline
+
+| Sprint | Thời gian | Mục tiêu chính | Sprint Review |
+|--------|----------|---------------|---------------|
+| **Sprint 1** | 25/8 – 28/8 | Setup repo + Scaffold, phân chia công việc | Tối Thứ 6 28/8 |
+| **Sprint 2** | 28/8 – 4/9 | Tải dữ liệu, EDA, Preprocessing, Phân tích imbalance. Mã nguồn đánh giá mẫu & UI shell | Tối Thứ 6 4/9 |
+| **Sprint 3** | 4/9 – 11/9 | Xử lý imbalance (SMOTE/ADASYN), Modeling (RF, XGBoost, Autoencoder). Viết Methodology | Tối Thứ 6 11/9 |
+| **Sprint 4** | 11/9 – 18/9 | Evaluation, Demo UI kết nối model thật, Báo cáo & PPT hoàn thiện, Đóng gói nộp bài | Deadline 18/9 |
+
+> ⚡ Nhóm Đánh giá, Báo cáo & Demo (Khang, Trung, Duy, Hôn) bắt đầu triển khai song song từ Sprint 2.
+> Phase files 05–07 có mục `Early Start Tasks` cho các thành viên thực hiện trước.
+
+## Constraints
+
+- Dataset: `creditcard.csv` (~150MB) — phải tải thủ công từ Kaggle, không commit git
+- Tech: Python 3.10+, scikit-learn, xgboost, imbalanced-learn, keras/tensorflow
+- Mỗi người làm phần riêng → gom vào 1 commit chung
+- Phase phải passed validation gate trước khi chuyển tiếp
+- Tóm lược phase viết **sau khi code xong** (evidence-based, không phải plan)
+
+## Phase Overview
+
+| # | Phase | Owner | Sprint | Status | Gate |
+|---|-------|-------|--------|--------|------|
+| 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | Thanh | Sprint 1 | `pending` | Dataset loaded, venv OK, imports work |
+| 01 | [EDA & Preprocessing](./phase-01-eda-preprocessing.md) | Thanh | Sprint 2 | `pending` | Notebooks chạy, processed data saved |
+| 02 | [Imbalance Handling](./phase-02-imbalance-handling.md) | Sơn | Sprint 3 | `pending` | SMOTE/ADASYN applied, class dist verified |
+| 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `pending` | RF trained, metrics ≥ baseline |
+| 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `pending` | Both models trained, artifacts saved |
+| 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `pending` | All metrics computed, comparison table done |
+| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | Streamlit/Gradio runs, predicts correctly |
+| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word + PPT complete per rubric |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | ZIP ready, all notebooks re-run clean |
+
+> \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
+
+## Git Convention
+
+- Làm riêng → 1 commit gộp cuối mỗi phase: `feat(phaseXX): <description>`
+- Không commit: `data/raw/*.csv`, `.venv/`, `__pycache__/`, `*.pkl > 50MB`
+
+## Validation Rules (áp dụng cho mọi phase)
+
+Một phase được coi là **PASSED** khi:
+1. ✅ Tất cả checklist items trong phase file được tick
+2. ✅ Evidence section điền đầy đủ (output thực tế, không phải expected)
+3. ✅ Summary section viết dựa trên code đã làm (không phải plan)
+4. ❌ Nếu bất kỳ item nào FAIL → phase chưa passed, không chuyển tiếp

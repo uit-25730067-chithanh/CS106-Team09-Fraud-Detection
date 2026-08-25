@@ -1,0 +1,34 @@
+# CS106 Final — Global .gitignore
+
+# Dataset (too large to commit)
+**/data/raw/*.csv
+**/data/raw/creditcard.csv
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Model artifacts (can be large)
+*.pkl
+*.h5
+*.joblib
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# IDE
+.vscode/
+.idea/
+*.swp
