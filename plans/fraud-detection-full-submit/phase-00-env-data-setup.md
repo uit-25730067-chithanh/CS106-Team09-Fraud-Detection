@@ -20,13 +20,13 @@
 
 Project scaffold đã có sẵn tại `draft/fraud-detection/`. Cần:
 1. Cài venv + dependencies
-2. Tải dataset `creditcard.csv` từ Kaggle
+2. Tải dataset `paysim.csv` từ Kaggle (và đổi tên từ file log gốc)
 3. Verify toàn bộ imports work
 
 ## Requirements
 
 - Python 3.10+
-- `data/raw/creditcard.csv` phải có mặt (284,807 rows × 31 cols)
+- `data/raw/paysim.csv` phải có mặt (6,362,620 rows × 11 cols)
 - Tất cả packages trong `requirements.txt` cài được
 - `RANDOM_STATE = 42` set trong mọi script
 
@@ -42,8 +42,8 @@ Project scaffold đã có sẵn tại `draft/fraud-detection/`. Cần:
 draft/fraud-detection/
 ├── requirements.txt          ← Install target
 ├── .gitignore                ← Verify csv excluded
-├── data/raw/                 ← Đặt creditcard.csv vào đây
-│   └── DOWNLOAD_DATA_HERE.txt
+├── data/raw/                 ← Đặt paysim.csv vào đây
+│   └── .gitkeep
 └── src/utils/
     ├── __init__.py
     └── helpers.py            ← Tạo constants + helpers cơ bản
@@ -66,15 +66,16 @@ pip install -r requirements.txt
 ### Step 2 — Download Dataset
 
 ```bash
-# Option A: Kaggle CLI (khuyên dùng)
+# Option A: Kaggle CLI
 pip install kaggle
-kaggle datasets download mlg-ulb/creditcardfraud
-unzip creditcardfraud.zip -d data/raw/
-rm creditcardfraud.zip
+kaggle datasets download ealaxi/paysim1
+unzip paysim1.zip -d data/raw/
+mv data/raw/PS_20174392719_1491204439457_log.csv data/raw/paysim.csv
+rm paysim1.zip
 
 # Option B: Manual
-# Truy cập: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-# Tải creditcard.csv → đặt vào data/raw/
+# Truy cập: https://www.kaggle.com/datasets/ealaxi/paysim1
+# Tải file log .csv → đổi tên thành paysim.csv -> đặt vào data/raw/
 ```
 
 ### Step 3 — Create Utility Files
@@ -89,7 +90,7 @@ import random
 # ─── Constants ────────────────────────────────────────────────────────────────
 RANDOM_STATE = 42
 TEST_SIZE = 0.2
-DATA_RAW_PATH = "data/raw/creditcard.csv"
+DATA_RAW_PATH = "data/raw/paysim.csv"
 DATA_PROCESSED_DIR = "data/processed"
 
 # ─── Reproducibility ──────────────────────────────────────────────────────────
@@ -139,18 +140,18 @@ print(f"Pandas: {pd.__version__}")
 print(f"Sklearn: {sklearn.__version__}")
 print(f"XGBoost: {xgboost.__version__}")
 
-df = pd.read_csv("data/raw/creditcard.csv")
-print(f"Dataset shape: {df.shape}")  # Expected: (284807, 31)
-print(f"Fraud ratio: {df['Class'].mean():.4f}")  # Expected: ~0.0017
+df = pd.read_csv("data/raw/paysim.csv")
+print(f"Dataset shape: {df.shape}")  # Expected: (6362620, 11)
+print(f"Fraud ratio: {df['isFraud'].mean():.6f}")  # Expected: ~0.00129
 ```
 
 ## Checklist
 
 - [ ] `python -m venv .venv` tạo được venv
 - [ ] `pip install -r requirements.txt` không error
-- [ ] `data/raw/creditcard.csv` có mặt, size ~150MB
-- [ ] `df.shape == (284807, 31)` ✅
-- [ ] `df['Class'].mean() ≈ 0.0017` ✅
+- [ ] `data/raw/paysim.csv` có mặt, size ~500MB
+- [ ] `df.shape == (6362620, 11)` ✅
+- [ ] `df['isFraud'].mean() ≈ 0.00129` ✅
 - [ ] `src/utils/helpers.py` có `RANDOM_STATE`, `set_seeds()`, `get_project_root()`
 - [ ] Tất cả imports (pandas, sklearn, xgboost, imblearn, tensorflow) không lỗi
 - [ ] `.gitignore` exclude `*.csv` và `.venv/`
@@ -159,8 +160,8 @@ print(f"Fraud ratio: {df['Class'].mean():.4f}")  # Expected: ~0.0017
 
 | Criterion | Evidence |
 |-----------|---------|
-| Dataset loaded | `df.shape == (284807, 31)` |
-| Fraud ratio correct | `df['Class'].mean() ≈ 0.001727` |
+| Dataset loaded | `df.shape == (6362620, 11)` |
+| Fraud ratio correct | `df['isFraud'].mean() ≈ 0.00129` |
 | All imports work | No ImportError |
 | Utils module works | `from src.utils import RANDOM_STATE` works |
 
@@ -180,7 +181,7 @@ tf ver        = ________________
 |------|-----------|--------|------------|
 | tensorflow conflict (numpy) | Medium | Medium | Pin `numpy<2.0`, use `tensorflow-macos` on M-series |
 | Kaggle auth fail | Low | Low | Manual download fallback |
-| Disk space | Low | Low | CSV ~150MB, ensure ≥500MB free |
+| Disk space | Low | Low | CSV ~500MB, ensure ≥1GB free |
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 

@@ -104,13 +104,14 @@ Group: Nhóm 9 — CS106, UIT
    2.4. Phạm vi nghiên cứu
 
 3. DỮ LIỆU (Dataset)
-   3.1. Mô tả dataset (Kaggle Credit Card Fraud)
-   3.2. Thống kê mô tả (shape, features, missing values)
+   3.1. Mô tả dataset (Kaggle PaySim Mobile Money)
+   3.2. Thống kê mô tả (shape, features, missing values, downsampling)
    3.3. Phân tích mất cân bằng (chart từ EDA)
    
 4. PHƯƠNG PHÁP (Methodology)
    4.1. Tiền xử lý dữ liệu
-        - Feature scaling (StandardScaler)
+        - Feature scaling (StandardScaler) & Encoding (One-Hot Encoding)
+        - Stratified Downsampling và lọc giao dịch
         - Train/Test split (stratified 80/20)
    4.2. Xử lý mất cân bằng
         - SMOTE
@@ -165,14 +166,15 @@ Slide 2: Giới thiệu bài toán
   - Thách thức chính (imbalanced data)
 
 Slide 3: Dataset
-  - Stats: 284,807 transactions, 0.17% fraud
-  - Chart: Class distribution
+  - Stats: ~200,000 transactions (downsampled), ~4.1% fraud
+  - Chart: Class distribution (isFraud)
 
 Slide 4: Pipeline Overview
   - Flow chart: Data → Preprocessing → Models → Evaluation
 
 Slide 5: Tiền xử lý & Xử lý imbalance
-  - StandardScaler cho Amount, Time
+  - StandardScaler cho balances/amount, OHE type
+  - Downsampling & Feature Engineering (errorBalance)
   - SMOTE vs ADASYN: before/after distribution
 
 Slide 6: Mô hình Random Forest

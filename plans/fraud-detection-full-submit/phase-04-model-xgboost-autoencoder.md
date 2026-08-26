@@ -41,7 +41,7 @@ Cẩm cũng save tất cả processed data artifacts chuẩn.
 - `early_stopping_rounds=10` để tránh overfit
 
 **Autoencoder:**
-- Train ONLY trên normal transactions (Class=0)
+- Train ONLY trên normal transactions (isFraud=0)
 - Fraud detection: reconstruction error cao → likely fraud
 - Threshold: chọn percentile của reconstruction error trên validation set
 - Framework: Keras functional API hoặc Sequential
@@ -209,7 +209,7 @@ def train_autoencoder(
     validation_split: float = 0.1,
 ) -> tuple[keras.Model, keras.callbacks.History]:
     """
-    Train autoencoder on NORMAL (Class=0) transactions only.
+    Train autoencoder on NORMAL (isFraud=0) transactions only.
     Fraud detection: high reconstruction error = anomaly.
     """
     # Train ONLY on normal transactions
@@ -328,7 +328,7 @@ def save_autoencoder(model: keras.Model, threshold: float) -> None:
 
 **Autoencoder:**
 - [ ] `src/models/autoencoder_model.py` tạo xong
-- [ ] Autoencoder trained CHỈ trên normal transactions (Class=0)
+- [ ] Autoencoder trained CHỈ trên normal transactions (isFraud=0)
 - [ ] `models/autoencoder.h5` tồn tại
 - [ ] `models/autoencoder_threshold.txt` chứa threshold value
 - [ ] Reconstruction error distribution plot có trong notebook

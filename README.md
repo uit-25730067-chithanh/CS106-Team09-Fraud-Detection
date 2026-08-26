@@ -40,9 +40,9 @@ Final/
 | Thông tin | Chi tiết |
 |-----------|---------|
 | **Bài toán** | Binary Classification — Phân loại giao dịch gian lận |
-| **Dataset** | [Credit Card Fraud — Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) (284,807 mẫu) |
+| **Dataset** | [PaySim Mobile Money — Kaggle](https://www.kaggle.com/datasets/ealaxi/paysim1) (Downsample còn ~200,000 mẫu) |
 | **Models** | Random Forest, XGBoost, Autoencoder |
-| **Imbalance** | SMOTE / ADASYN (~0.17% fraud) |
+| **Imbalance** | SMOTE / ADASYN (~0.13% fraud gốc, điều chỉnh khi downsample) |
 | **Metrics** | F1-Score, ROC-AUC, Precision, Recall |
 | **Nộp bài** | Tên: `[Project AI-UIT] - Nhóm 9` |
 

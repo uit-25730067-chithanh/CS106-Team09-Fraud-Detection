@@ -26,7 +26,7 @@
 
 ## Requirements
 
-- Input: `data/raw/creditcard.csv`
+- Input: `data/raw/paysim.csv`
 - Output: `data/processed/X_train.pkl`, `X_test.pkl`, `y_train.pkl`, `y_test.pkl`
 - Scaling chỉ fit trên train set, transform cả train và test
 - Split: stratified 80/20, `random_state=42`
@@ -34,10 +34,13 @@
 
 ## Key Insights
 
-- Features V1–V28 đã PCA-transformed → không cần thêm feature engineering
-- `Amount` và `Time` chưa scale → cần StandardScaler
-- Class imbalance: 284,315 normal vs 492 fraud (~0.17%) → stratified split bắt buộc
-- `Time` ít meaningful → có thể drop hoặc giữ (ghi chú trong notebook)
+- Features có ý nghĩa vật lý rõ ràng → Cần làm Feature Engineering để mô hình học tốt hơn.
+- `type` là biến categorical → Cần One-Hot Encoding (OHE).
+- `amount` và các biến số dư (`oldbalanceOrg`, `newbalanceOrig`, `oldbalanceDest`, `newbalanceDest`) cần StandardScaler.
+- Class imbalance cực kỳ lớn: 6.36 triệu dòng, trong đó chỉ có 8,213 mẫu fraud (~0.13%). Để tránh OOM trên máy tính cá nhân, Thanh sẽ thực hiện **Stratified Downsampling**:
+  1. Lọc giao dịch chỉ giữ lại `TRANSFER` và `CASH_OUT` (các loại giao dịch thực tế có xảy ra fraud).
+  2. Lấy mẫu ngẫu nhiên (sampling) để rút gọn tập dữ liệu xuống khoảng **200,000 dòng**, giữ lại toàn bộ 8,213 mẫu fraud.
+- `nameOrig` và `nameDest` (ID tài khoản) nên được drop trước khi đưa vào huấn luyện mô hình.
 
 ## Related Files
 
@@ -70,29 +73,47 @@ __all__ = ["load_data", "validate_data", "scale_features", "split_data"]
 ### Step 2 — `src/preprocessing/data_loader.py`
 
 ```python
-"""Load and validate the credit card fraud dataset."""
+"""Load, filter and validate the PaySim dataset."""
 import pandas as pd
 from pathlib import Path
 
-def load_data(path: str = "data/raw/creditcard.csv") -> pd.DataFrame:
-    """Load CSV and return DataFrame. Raises FileNotFoundError if missing."""
+def load_data(path: str = "data/raw/paysim.csv") -> pd.DataFrame:
+    """
+    Load CSV, filter for TRANSFER/CASH_OUT, and downsample to ~200k rows
+    while preserving all fraud cases.
+    """
     p = Path(path)
     if not p.exists():
         raise FileNotFoundError(
             f"Dataset not found at {path}. "
-            "Download from: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud"
+            "Download from: https://www.kaggle.com/datasets/ealaxi/paysim1"
         )
+    
+    # Load và lọc loại giao dịch
     df = pd.read_csv(p)
-    return df
+    df = df[df["type"].isin(["TRANSFER", "CASH_OUT"])].reset_index(drop=True)
+    
+    # Stratified downsampling
+    fraud_df = df[df["isFraud"] == 1]
+    normal_df = df[df["isFraud"] == 0]
+    
+    # Downsample normal_df để đạt tổng kích thước ~200,000 dòng
+    n_normal_samples = 200000 - len(fraud_df)
+    normal_sampled = normal_df.sample(n=n_normal_samples, random_state=42)
+    
+    # Gộp lại và shuffle
+    df_downsampled = pd.concat([fraud_df, normal_sampled])
+    df_downsampled = df_downsampled.sample(frac=1.0, random_state=42).reset_index(drop=True)
+    
+    return df_downsampled
 
 def validate_data(df: pd.DataFrame) -> dict:
     """Validate dataset integrity. Returns summary dict."""
-    assert df.shape == (284807, 31), f"Unexpected shape: {df.shape}"
-    assert df["Class"].nunique() == 2, "Class column must have 2 unique values"
+    assert df["isFraud"].nunique() == 2, "isFraud column must have 2 unique values"
     assert df.isnull().sum().sum() == 0, "Dataset has missing values"
     
-    n_fraud = df["Class"].sum()
-    fraud_ratio = df["Class"].mean()
+    n_fraud = df["isFraud"].sum()
+    fraud_ratio = df["isFraud"].mean()
     
     return {
         "shape": df.shape,
@@ -106,30 +127,50 @@ def validate_data(df: pd.DataFrame) -> dict:
 ### Step 3 — `src/preprocessing/feature_scaler.py`
 
 ```python
-"""Feature scaling — StandardScaler on Amount and Time columns."""
+"""Feature engineering, encoding and scaling for PaySim dataset."""
 import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-SCALE_COLS = ["Amount", "Time"]
+SCALE_COLS = ["amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "step"]
 
 def scale_features(
     X_train: pd.DataFrame,
     X_test: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame, StandardScaler]:
     """
-    Fit StandardScaler on train, transform both train and test.
-    Prevents data leakage — scaler never sees test distribution.
+    1. Thực hiện Feature Engineering (errorBalanceOrig, errorBalanceDest).
+    2. One-Hot Encoding cho cột type.
+    3. Fit StandardScaler trên train set, transform cả train và test.
+    4. Drop các cột ID không sử dụng (nameOrig, nameDest).
     
-    Returns: (X_train_scaled, X_test_scaled, fitted_scaler)
+    Returns: (X_train_processed, X_test_processed, fitted_scaler)
     """
-    scaler = StandardScaler()
-    
     X_train = X_train.copy()
     X_test = X_test.copy()
     
-    X_train[SCALE_COLS] = scaler.fit_transform(X_train[SCALE_COLS])
-    X_test[SCALE_COLS] = scaler.transform(X_test[SCALE_COLS])
+    # ─── 1. Feature Engineering ──────────────────────────────────────────────
+    for df in [X_train, X_test]:
+        df["errorBalanceOrig"] = df["oldbalanceOrg"] - df["amount"] - df["newbalanceOrig"]
+        df["errorBalanceDest"] = df["oldbalanceDest"] + df["amount"] - df["newbalanceDest"]
+    
+    # ─── 2. Encoding ──────────────────────────────────────────────────────────
+    X_train = pd.get_dummies(X_train, columns=["type"], drop_first=True)
+    X_test = pd.get_dummies(X_test, columns=["type"], drop_first=True)
+    
+    # Align columns in case some categories are missing in test set
+    X_train, X_test = X_train.align(X_test, join="left", axis=1, fill_value=0)
+    
+    # ─── 3. Scaling ───────────────────────────────────────────────────────────
+    cols_to_scale = SCALE_COLS + ["errorBalanceOrig", "errorBalanceDest"]
+    scaler = StandardScaler()
+    X_train[cols_to_scale] = scaler.fit_transform(X_train[cols_to_scale])
+    X_test[cols_to_scale] = scaler.transform(X_test[cols_to_scale])
+    
+    # ─── 4. Drop IDs ──────────────────────────────────────────────────────────
+    drop_cols = ["nameOrig", "nameDest"]
+    X_train = X_train.drop(columns=[c for c in drop_cols if c in X_train.columns], errors="ignore")
+    X_test = X_test.drop(columns=[c for c in drop_cols if c in X_test.columns], errors="ignore")
     
     return X_train, X_test, scaler
 ```
@@ -137,7 +178,7 @@ def scale_features(
 ### Step 4 — `src/preprocessing/data_splitter.py`
 
 ```python
-"""Stratified train/test split for imbalanced fraud data."""
+"""Stratified train/test split for imbalanced PaySim data."""
 import pandas as pd
 import pickle
 from pathlib import Path
@@ -151,13 +192,13 @@ def split_data(
     save: bool = True,
 ) -> tuple:
     """
-    Stratified split on Class column.
+    Stratified split on isFraud column.
     Saves processed splits to data/processed/ if save=True.
     
     Returns: (X_train, X_test, y_train, y_test)
     """
-    X = df.drop("Class", axis=1)
-    y = df["Class"]
+    X = df.drop("isFraud", axis=1)
+    y = df["isFraud"]
     
     X_train, X_test, y_train, y_test = train_test_split(
         X, y,
@@ -190,24 +231,24 @@ import sys
 import os
 sys.path.insert(0, os.path.abspath(".."))
 ```
-## 1. Load Data
+## 1. Load Data (Phải tải paysim.csv)
 ## 2. Basic Info (shape, dtypes, describe)
 ## 3. Missing Values Analysis
-## 4. Target Distribution (Class imbalance visualization)
-## 5. Feature Distributions (Amount, Time histograms)
-## 6. Correlation Matrix (heatmap)
-## 7. Fraud vs Normal comparison (boxplots V1-V28 top features)
-## 8. Preprocessing Pipeline (gọi scripts từ src/)
-## 9. Verify Split (check class ratio maintained)
-## 10. Kết luận / Observations
-```
+## 4. Target Distribution (isFraud distribution chart)
+## 5. Feature Distributions (amount, step histograms, type bar chart)
+## 6. Balance Analysis (so sánh oldbalance vs newbalance)
+## 7. Preprocessing & Feature Engineering (tạo errorBalance, OHE type, downsampling)
+## 8. Correlation Matrix (heatmap các thuộc tính đã mã hóa và tạo mới)
+## 9. Preprocessing Pipeline (gọi scripts từ src/)
+## 10. Verify Split (check isFraud ratio maintained)
+## 11. Kết luận / Observations
 
 **Key visualizations cần có:**
-- Pie chart / bar chart: Class distribution (0 vs 1)
-- Histogram: `Amount` distribution (fraud vs normal)
-- Histogram: `Time` distribution
-- Heatmap: Correlation matrix top features
-- Boxplots: Top 5 V-features có correlation cao với Class
+- Pie chart / bar chart: isFraud distribution (0 vs 1)
+- Histogram: `amount` distribution (fraud vs normal)
+- Bar chart: Tần suất giao dịch theo `type`
+- Scatter/Line chart: Phân bố giao dịch gian lận theo `step` (thời gian)
+- Heatmap: Correlation matrix của các numeric features + engineered features
 
 ### Step 6 — Run & Save Processed Data
 
@@ -220,18 +261,18 @@ from src.preprocessing.feature_scaler import scale_features
 from src.preprocessing.data_splitter import split_data
 from src.utils import DATA_PROCESSED_DIR
 
-# 1. Load và validate
+# 1. Load và validate (gồm downsampling bên trong load_data)
 df = load_data()
 stats = validate_data(df)
 print("Dataset Stats:", stats)
 
-# 2. Split (không tự động save vì chưa scale)
+# 2. Split (không tự động save vì chưa scale & encode)
 X_train, X_test, y_train, y_test = split_data(df, save=False)
 
-# 3. Scale các cột Amount, Time
+# 3. Scale các cột numerical và One-Hot Encode type, thêm feature mới
 X_train_scaled, X_test_scaled, scaler = scale_features(X_train, X_test)
 
-# 4. Lưu processed data (đã scale)
+# 4. Lưu processed data
 os.makedirs(DATA_PROCESSED_DIR, exist_ok=True)
 for name, obj in [
     ("X_train", X_train_scaled),
@@ -264,21 +305,21 @@ print("Saved fitted scaler -> models/scaler.pkl")
 - [ ] `data/processed/y_train.pkl` tồn tại
 - [ ] `data/processed/y_test.pkl` tồn tại
 - [ ] `models/scaler.pkl` tồn tại và loadable
-- [ ] Verify split ratio: `y_train.mean() ≈ y_test.mean() ≈ 0.0017` (stratified OK)
+- [ ] Verify split ratio: `y_train.mean() ≈ y_test.mean() ≈ 0.041` (nếu tổng downsample là 200k và có 8,213 fraud)
 - [ ] `notebooks/01_eda.ipynb` chạy được Restart & Run All không lỗi
 - [ ] EDA notebook có ít nhất 5 visualizations
-- [ ] Heatmap correlation matrix có mặt
-- [ ] Class distribution chart có mặt
-- [ ] Fraud vs Normal comparison có mặt
+- [ ] Heatmap correlation matrix các feature mới có mặt
+- [ ] isFraud distribution chart có mặt
+- [ ] Phân phối giao dịch theo type có mặt
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| X_train shape | (227845, 30) | ___________ |
-| X_test shape | (56962, 30) | ___________ |
-| y_train fraud ratio | ≈ 0.001727 | ___________ |
-| y_test fraud ratio | ≈ 0.001727 | ___________ |
+| X_train shape | (160000, ~8) | ___________ |
+| X_test shape | (40000, ~8) | ___________ |
+| y_train fraud ratio | ≈ 0.041 | ___________ |
+| y_test fraud ratio | ≈ 0.041 | ___________ |
 | Notebook runs clean | 0 errors | ___________ |
 | Processed files saved | 4 .pkl files | ___________ |
 
@@ -299,7 +340,7 @@ notebook errors = ________________
 |------|-----------|--------|------------|
 | Import error (kebab filename) | Low | High | Sử dụng snake_case cho các module Python trong `src/` (đã được sửa đổi) |
 | Scaler leakage (fit on all data) | Low | High | Explicitly split before scaling, then fit_transform train only |
-| Memory error with 284K rows | Low | Medium | Use chunked loading or pandas dtype optimization |
+| Memory error with 6M rows | High | High | Lọc ngay TRANSFER/CASH_OUT và downsample stratified trong load_data trước khi phân tích |
 
 ## Notes for Sơn (Phase 02)
 

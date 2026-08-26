@@ -202,7 +202,7 @@ print(df_report.to_string(index=False))
 |-----------|---------|---------|
 | y_train_smote fraud % | ~33% (sampling_strategy=0.5) | ___________ |
 | y_train_adasyn fraud % | ~33% | ___________ |
-| Test set untouched | y_test.mean() ≈ 0.0017 | ___________ |
+| Test set untouched | y_test.mean() ≈ 0.041 | ___________ |
 | 4 new pkl files created | ✅ | ___________ |
 
 ## Evidence Section *(điền sau khi làm)*

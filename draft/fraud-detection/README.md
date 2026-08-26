@@ -24,11 +24,11 @@
 
 ## 🎯 Mô tả Bài toán
 
-Phân loại giao dịch thẻ tín dụng thành **hợp lệ** hoặc **gian lận (bất thường)** dựa trên tập dữ liệu thực tế với đặc điểm mất cân bằng nghiêm trọng (tỷ lệ gian lận ~0.17%).
+Phân loại giao dịch tài chính di động thành **hợp lệ** hoặc **gian lận (bất thường)** dựa trên tập dữ liệu mô phỏng thực tế với đặc điểm mất cân bằng nghiêm trọng (tỷ lệ gian lận ~0.13%).
 
 **Bài toán:** Binary Classification với Imbalanced Data  
-**Dataset:** [Credit Card Fraud Detection — Kaggle](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud)  
-**Kích thước:** 284,807 giao dịch, 31 features (V1–V28 PCA-transformed, Time, Amount, Class)
+**Dataset:** [PaySim Mobile Money Fraud Detection — Kaggle](https://www.kaggle.com/datasets/ealaxi/paysim1)  
+**Kích thước:** 6,362,620 giao dịch (sẽ được downsample còn ~200,000 giao dịch), 11 features (step, type, amount, oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest, isFraud, etc.)
 
 ---
 
@@ -53,7 +53,7 @@ Python 3.10+
 ```
 fraud-detection/
 ├── data/
-│   ├── raw/               # creditcard.csv (download từ Kaggle, không commit lên git)
+│   ├── raw/               # paysim.csv (download từ Kaggle, không commit lên git)
 │   └── processed/         # Dữ liệu đã qua preprocessing
 ├── notebooks/             # Jupyter notebooks cho EDA và thử nghiệm
 │   ├── 01_eda.ipynb
@@ -89,8 +89,8 @@ source .venv/bin/activate   # macOS/Linux
 pip install -r requirements.txt
 
 # 4. Tải dataset
-# Truy cập https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-# Tải file creditcard.csv vào thư mục data/raw/
+# Truy cập https://www.kaggle.com/datasets/ealaxi/paysim1
+# Tải file csv (tên gốc: PS_20174392719_1491204439457_log.csv), đổi tên thành paysim.csv và đặt vào thư mục data/raw/
 ```
 
 ---

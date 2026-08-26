@@ -34,7 +34,7 @@ random.seed(RANDOM_STATE)
 
 - Mỗi người làm trên notebook/script của mình — không sửa file người khác
 - Commit message: `feat: add XGBoost training notebook` hoặc `fix: fix SMOTE overfit`
-- Không commit `data/raw/creditcard.csv` vào git (>100MB)
+- Không commit `data/raw/paysim.csv` vào git (>100MB)
 
 ## Evaluation Checklist
 

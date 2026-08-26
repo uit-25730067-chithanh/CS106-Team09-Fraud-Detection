@@ -27,11 +27,11 @@ Gian lận thẻ tín dụng gây thiệt hại hàng tỷ USD mỗi năm trên 
 
 | Thuộc tính | Giá trị |
 |-----------|---------|
-| Nguồn | [Kaggle — Credit Card Fraud Detection](https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud) |
-| Số mẫu | 284,807 giao dịch |
-| Features | 30 (V1–V28 PCA, Time, Amount) + 1 label (Class) |
-| Tỷ lệ gian lận | 492 / 284,807 ≈ 0.17% |
-| Yêu cầu tối thiểu đề | ≥500 mẫu ✅ |
+| Nguồn | [Kaggle — PaySim Mobile Money Fraud](https://www.kaggle.com/datasets/ealaxi/paysim1) |
+| Số mẫu | 6,362,620 giao dịch (Downsample còn ~200,000) |
+| Features | 10 (step, type, amount, oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest...) + 1 label (isFraud) |
+| Tỷ lệ gian lận | 8,213 / 6,362,620 ≈ 0.13% (Giữ toàn bộ mẫu gian lận khi downsample) |
+| Yêu cầu tối thiểu đề | ≥500 mẫu ✅ (8,213 mẫu > 500) |
 
 ## Phạm vi đề tài
 
