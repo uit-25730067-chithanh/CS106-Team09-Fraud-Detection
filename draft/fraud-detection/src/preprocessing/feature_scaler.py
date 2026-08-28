@@ -1,0 +1,47 @@
+"""Feature engineering, encoding and scaling for PaySim dataset."""
+import numpy as np
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+
+SCALE_COLS = ["amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "step"]
+
+
+def scale_features(
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, StandardScaler]:
+    """
+    1. Thực hiện Feature Engineering (errorBalanceOrig, errorBalanceDest).
+    2. One-Hot Encoding cho cột type.
+    3. Fit StandardScaler trên train set, transform cả train và test.
+    4. Drop các cột ID không sử dụng (nameOrig, nameDest).
+
+    Returns: (X_train_processed, X_test_processed, fitted_scaler)
+    """
+    X_train = X_train.copy()
+    X_test = X_test.copy()
+
+    # ─── 1. Feature Engineering ──────────────────────────────────────────────
+    for df in [X_train, X_test]:
+        df["errorBalanceOrig"] = df["oldbalanceOrg"] - df["amount"] - df["newbalanceOrig"]
+        df["errorBalanceDest"] = df["oldbalanceDest"] + df["amount"] - df["newbalanceDest"]
+
+    # ─── 2. Encoding ──────────────────────────────────────────────────────────
+    X_train = pd.get_dummies(X_train, columns=["type"], drop_first=True)
+    X_test = pd.get_dummies(X_test, columns=["type"], drop_first=True)
+
+    # Align columns in case some categories are missing in test set
+    X_train, X_test = X_train.align(X_test, join="left", axis=1, fill_value=0)
+
+    # ─── 3. Scaling ───────────────────────────────────────────────────────────
+    cols_to_scale = SCALE_COLS + ["errorBalanceOrig", "errorBalanceDest"]
+    scaler = StandardScaler()
+    X_train[cols_to_scale] = scaler.fit_transform(X_train[cols_to_scale])
+    X_test[cols_to_scale] = scaler.transform(X_test[cols_to_scale])
+
+    # ─── 4. Drop IDs and Unused Columns ───────────────────────────────────────
+    drop_cols = ["nameOrig", "nameDest", "isFlaggedFraud"]
+    X_train = X_train.drop(columns=[c for c in drop_cols if c in X_train.columns], errors="ignore")
+    X_test = X_test.drop(columns=[c for c in drop_cols if c in X_test.columns], errors="ignore")
+
+    return X_train, X_test, scaler
