@@ -22,8 +22,8 @@ gantt
     Lên kế hoạch & Phân công (Hôn)      :done, s1_2, 2026-08-25, 2026-08-28
 
     section Sprint 2 (28/8 - 4/9)
-    Tải dữ liệu & EDA (Thanh)            :active, s2_1, 2026-08-28, 7d
-    Preprocessing & Outliers (Thanh)     :active, s2_2, 2026-08-31, 4d
+    Tải dữ liệu & EDA (Thanh)            :done, s2_1, 2026-08-28, 2d
+    Preprocessing & Outliers (Thanh)     :done, s2_2, 2026-08-30, 2d
     Imbalance Analysis (Sơn)             :active, s2_3, 2026-08-28, 5d
     Viết Eval scripts template (Khang)   :active, s2_4, 2026-08-28, 7d
     Thiết kế UI & Form shell (Trung)     :active, s2_5, 2026-08-28, 7d
@@ -72,10 +72,10 @@ gantt
 ### Thanh
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Setup môi trường (venv) & Tải dataset từ Kaggle <br> *[Đầu vào: Kaggle dataset link \| Đầu ra: `data/raw/paysim.csv`, `.venv`]* | 🔴 Critical | 🔲 |
-| Notebook EDA & Trực quan hóa (Phân phối Class, Amount, step, type, balances) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: `notebooks/01_eda.ipynb` với ít nhất 5 charts]* | 🔴 Critical | 🔲 |
-| Preprocessing dữ liệu (Chuẩn hóa các cột balances/amount & One-Hot Encoding `type` & Downsampling) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: scaled columns, OHE, downsampled splits, fitted `models/scaler.pkl`]* | 🔴 Critical | 🔲 |
-| Chia tập dữ liệu Train/Test split (Stratified 80/20) <br> *[Đầu vào: scaled data \| Đầu ra: `data/processed/X_train.pkl`, `X_test.pkl`, `y_train.pkl`, `y_test.pkl`]* | 🔴 Critical | 🔲 |
+| Setup môi trường (venv) & Tải dataset từ Kaggle <br> *[Đầu vào: Kaggle dataset link \| Đầu ra: `data/raw/paysim.csv`, `.venv`]* | 🔴 Critical | ✅ |
+| Notebook EDA & Trực quan hóa (Phân phối Class, Amount, step, type, balances) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: `notebooks/01_eda.ipynb` với ít nhất 5 charts]* | 🔴 Critical | ✅ |
+| Preprocessing dữ liệu (Chuẩn hóa các cột balances/amount & One-Hot Encoding `type` & Downsampling) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: scaled columns, OHE, downsampled splits, fitted `models/scaler.pkl`]* | 🔴 Critical | ✅ |
+| Chia tập dữ liệu Train/Test split (Stratified 80/20) <br> *[Đầu vào: scaled data \| Đầu ra: `data/processed/X_train.pkl`, `X_test.pkl`, `y_train.pkl`, `y_test.pkl`]* | 🔴 Critical | ✅ |
 ### Sơn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
