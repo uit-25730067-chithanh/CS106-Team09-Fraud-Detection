@@ -1,13 +1,13 @@
 ---
 title: "CS106 Final — Fraud Detection Full Implementation to Submit"
 description: "End-to-end implementation plan: từ code rỗng đến bản nộp hoàn chỉnh, chia theo phase độc lập có validation gate"
-status: pending
+status: in-progress
 priority: P1
 effort: ~40h (7 người)
 branch: main
 tags: [cs106, fraud-detection, academic, python, ml, submit]
 created: 2026-08-24
-updated: 2026-08-25
+updated: 2026-08-28
 sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
 ---
 
@@ -42,8 +42,8 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 
 | # | Phase | Owner | Sprint | Status | Gate |
 |---|-------|-------|--------|--------|------|
-| 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | Thanh | Sprint 1 | `pending` | Dataset loaded, venv OK, imports work |
-| 01 | [EDA & Preprocessing](./phase-01-eda-preprocessing.md) | Thanh | Sprint 2 | `pending` | Notebooks chạy, processed data saved |
+| 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | Thanh | Sprint 1 | `passed` ✅ | Dataset loaded, venv OK, imports work |
+| 01 | [EDA & Preprocessing](./phase-01-eda-preprocessing.md) | Thanh | Sprint 2 | `passed` ✅ | Notebooks chạy, processed data saved |
 | 02 | [Imbalance Handling](./phase-02-imbalance-handling.md) | Sơn | Sprint 3 | `pending` | SMOTE/ADASYN applied, class dist verified |
 | 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `pending` | RF trained, metrics ≥ baseline |
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `pending` | Both models trained, artifacts saved |

@@ -36,17 +36,20 @@ Final/
 
 ---
 
-## Current State (2026-08-25)
+## Current State (2026-08-28)
 
 | Component | Status |
 |-----------|--------|
-| Project scaffold | ✅ Done — folder structure (with `.gitkeep`) + docs created |
-| `src/` Python files | ❌ Empty — directories created but no `.py` files |
-| Notebooks | ❌ Empty — directory created but no `.ipynb` files |
-| Dataset (`paysim.csv`) | ❌ Not downloaded yet |
+| Project scaffold | ✅ Done — folder structure + docs created |
+| `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
+| `src/preprocessing/` | ✅ Done — data_loader, feature_scaler, data_splitter |
+| Notebooks | ✅ `01_eda.ipynb` hoàn chỉnh và đã execute |
+| Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
+| Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 9) |
+| `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
-> **Verdict: ~20% complete.** Planning & scaffold done, implementation not started.
+> **Verdict: Phase 00 + 01 PASSED. Sẵn sàng bàn giao Sơn (Phase 02).**
 
 ---
 
@@ -136,20 +139,26 @@ Place in `Final/submit/` before zipping.
 
 ---
 
-## Next Actions (bắt đầu Sprint 2 - 28/08)
+## Next Actions (Sprint 2/3 — 28/08 → 04/09)
 
-### Thanh
-1. Download dataset: https://www.kaggle.com/datasets/ealaxi/paysim1 → `draft/fraud-detection/data/raw/paysim.csv`
-2. Setup venv: `cd draft/fraud-detection && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`
-3. Start EDA: Create `notebooks/01_eda.ipynb`
-4. Implement preprocessing scripts in `src/preprocessing/`
+### ✅ Thanh — DONE (Phase 00 + 01 PASSED)
+- EDA notebook `notebooks/01_eda.ipynb` hoàn thành (6 visualizations, run clean)
+- Preprocessing pipeline: `src/preprocessing/` được implement đầy đủ
+- Processed splits được lưu vào `data/processed/` và đã commit lên git
+
+### Sơn — Bắt đầu Phase 02
+1. `git pull` trên branch `feat/phase-01-eda-preprocessing` → `git merge main`
+2. Load `data/processed/X_train.pkl` và `y_train.pkl`
+3. Apply SMOTE và ADASYN (chỉ trên train set)
+4. Xem chi tiết: `plans/fraud-detection-full-submit/phase-02-imbalance-handling.md`
 
 ### Khang
-1. Viết `src/evaluation/metrics-calculator.py` (template — không cần data)
-2. Viết `src/evaluation/plot-roc-curve.py` template
+1. Viết `src/evaluation/metrics_calculator.py` (template — không cần data)
+2. Viết `src/evaluation/plot_roc_curve.py` template
 
 ### Trung
 1. Thiết kế wireframe UI → bắt đầu Streamlit form nhập liệu
+2. Load `models/scaler.pkl` (815 bytes, đã có trong git sau khi merge)
 
 ### Duy
 1. Mở Word → viết phần Introduction + Problem Statement

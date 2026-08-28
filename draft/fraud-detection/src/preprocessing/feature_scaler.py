@@ -1,5 +1,4 @@
 """Feature engineering, encoding and scaling for PaySim dataset."""
-import numpy as np
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
@@ -14,7 +13,7 @@ def scale_features(
     1. Thực hiện Feature Engineering (errorBalanceOrig, errorBalanceDest).
     2. One-Hot Encoding cho cột type.
     3. Fit StandardScaler trên train set, transform cả train và test.
-    4. Drop các cột ID không sử dụng (nameOrig, nameDest).
+    4. Drop các cột không dùng: nameOrig, nameDest, isFlaggedFraud (độ phủ quá thấp).
 
     Returns: (X_train_processed, X_test_processed, fitted_scaler)
     """
@@ -22,9 +21,10 @@ def scale_features(
     X_test = X_test.copy()
 
     # ─── 1. Feature Engineering ──────────────────────────────────────────────
-    for df in [X_train, X_test]:
-        df["errorBalanceOrig"] = df["oldbalanceOrg"] - df["amount"] - df["newbalanceOrig"]
-        df["errorBalanceDest"] = df["oldbalanceDest"] + df["amount"] - df["newbalanceDest"]
+    X_train["errorBalanceOrig"] = X_train["oldbalanceOrg"] - X_train["amount"] - X_train["newbalanceOrig"]
+    X_train["errorBalanceDest"] = X_train["oldbalanceDest"] + X_train["amount"] - X_train["newbalanceDest"]
+    X_test["errorBalanceOrig"] = X_test["oldbalanceOrg"] - X_test["amount"] - X_test["newbalanceOrig"]
+    X_test["errorBalanceDest"] = X_test["oldbalanceDest"] + X_test["amount"] - X_test["newbalanceDest"]
 
     # ─── 2. Encoding ──────────────────────────────────────────────────────────
     X_train = pd.get_dummies(X_train, columns=["type"], drop_first=True)

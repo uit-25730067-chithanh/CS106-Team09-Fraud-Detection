@@ -18,10 +18,13 @@ build/
 .ipynb_checkpoints/
 *.ipynb_checkpoints
 
-# Model artifacts (can be large)
-*.pkl
-*.h5
-*.joblib
+# Model artifacts (large trained models > 50MB — theo quy tắc plan.md)
+# PKL nhỏ (scaler.pkl ~1KB, processed splits ~18MB tổng) → được commit để team sử dụng
+models/rf_*.pkl
+models/xgboost_*.pkl
+models/autoencoder_*.pkl
+models/*.h5
+models/*.joblib
 
 # macOS
 .DS_Store
