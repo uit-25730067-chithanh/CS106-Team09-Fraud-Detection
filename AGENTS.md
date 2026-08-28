@@ -17,19 +17,24 @@
 ```
 Final/
 ├── docs/              ← PDF đề bài gốc từ GV
+├── AGENTS.md          ← File này — context cho AI agents
 ├── draft/
-│   └── fraud-detection/    ← Working project (đang phát triển)
-│       ├── src/            ← Python scripts (CHƯA CÓ CODE)
-│       │   ├── preprocessing/   # data_loader, feature_scaler, data_splitter, imbalance_handler
-│       │   ├── models/          # random_forest_model, xgboost_model, autoencoder_model
-│       │   ├── evaluation/      # metrics_calculator, plot_roc_curve, confusion_matrix_plot, model_comparator
-│       │   └── utils/           # helpers, constants
-│       ├── notebooks/      ← Jupyter notebooks (CHƯA CÓ)
-│       ├── data/raw/       ← paysim.csv (CHƯA TẢI)
-│       ├── data/processed/ ← Output từ preprocessing pipeline
-│       ├── docs/           ← Tài liệu kỹ thuật (đã có 4 file)
-│       ├── reports/        ← Kết quả (trống)
-│       ├── demo/           ← Streamlit UI (trống)
+│   └── fraud-detection/    ← Working project
+│       ├── src/            ← Python source code
+│       │   ├── preprocessing/   ✅ data_loader, feature_scaler, data_splitter
+│       │   ├── models/          ⏳ random_forest_model, xgboost_model, autoencoder_model
+│       │   ├── evaluation/      ⏳ metrics_calculator, plot_roc_curve, model_comparator
+│       │   └── utils/           ✅ helpers.py, constants (RANDOM_STATE=42, TEST_SIZE=0.2)
+│       ├── notebooks/      ← Jupyter notebooks
+│       │   └── 01_eda.ipynb    ✅ Hoàn thành (6 biểu đồ, run clean)
+│       ├── data/
+│       │   ├── raw/        ← paysim.csv (✅ đã tải, KHÔNG commit git — ~500MB)
+│       │   └── processed/  ← ✅ X_train/X_test/y_train/y_test.pkl + README.md (đã commit)
+│       ├── models/         ← ✅ scaler.pkl (đã commit); model lớn sẽ gitignored
+│       ├── docs/           ← ✅ 4 file kỹ thuật (overview, roadmap, architecture, code-standards)
+│       ├── reports/        ← Kết quả (trống — Sprint 3+)
+│       ├── demo/           ← Streamlit UI (trống — Sprint 4)
+│       ├── run_preprocessing.py  ← Script chạy lại pipeline nếu cần
 │       └── requirements.txt
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
 ```
