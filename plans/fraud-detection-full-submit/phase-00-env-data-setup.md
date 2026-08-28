@@ -11,7 +11,7 @@
 |-------|-------|
 | Owner | **Thanh** |
 | Priority | P0 — Blocker cho toàn bộ pipeline |
-| Status | `pending` |
+| Status | `completed` |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 30 phút |
 | Sprint | Sprint 1 |
@@ -147,58 +147,60 @@ print(f"Fraud ratio: {df['isFraud'].mean():.6f}")  # Expected: ~0.00129
 
 ## Checklist
 
-- [ ] `python -m venv .venv` tạo được venv
-- [ ] `pip install -r requirements.txt` không error
-- [ ] `data/raw/paysim.csv` có mặt, size ~500MB
-- [ ] `df.shape == (6362620, 11)` ✅
-- [ ] `df['isFraud'].mean() ≈ 0.00129` ✅
-- [ ] `src/utils/helpers.py` có `RANDOM_STATE`, `set_seeds()`, `get_project_root()`
-- [ ] Tất cả imports (pandas, sklearn, xgboost, imblearn, tensorflow) không lỗi
-- [ ] `.gitignore` exclude `*.csv` và `.venv/`
+- [x] `python -m venv .venv` tạo được venv
+- [x] `pip install -r requirements.txt` không error
+- [x] `data/raw/paysim.csv` có mặt, size ~500MB
+- [x] `df.shape == (6362620, 11)` ✅
+- [x] `df['isFraud'].mean() ≈ 0.00129` ✅
+- [x] `src/utils/helpers.py` có `RANDOM_STATE`, `set_seeds()`, `get_project_root()`
+- [x] Tất cả imports (pandas, sklearn, xgboost, imblearn, tensorflow) không lỗi
+- [x] `.gitignore` exclude `*.csv` và `.venv/`
 
 ## Success Criteria
 
 | Criterion | Evidence |
 |-----------|---------|
-| Dataset loaded | `df.shape == (6362620, 11)` |
-| Fraud ratio correct | `df['isFraud'].mean() ≈ 0.00129` |
-| All imports work | No ImportError |
+| Dataset loaded | `df.shape == (6362620, 11)` (Passed) |
+| Fraud ratio correct | `df['isFraud'].mean() ≈ 0.00129` (Passed) |
+| All imports work | Verified using `verify_setup.py` |
 | Utils module works | `from src.utils import RANDOM_STATE` works |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
-df.shape      = ________________
-fraud_ratio   = ________________
-sklearn ver   = ________________
-xgboost ver   = ________________
-tf ver        = ________________
+df.shape      = (6362620, 11)
+fraud_ratio   = 0.001291
+sklearn ver   = 1.9.0
+xgboost ver   = 3.4.1
+tf ver        = 2.21.0
 ```
 
 ## Risk Assessment
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| tensorflow conflict (numpy) | Medium | Medium | Pin `numpy<2.0`, use `tensorflow-macos` on M-series |
-| Kaggle auth fail | Low | Low | Manual download fallback |
+| tensorflow conflict (numpy) | Medium | Medium | Pin `numpy<2.0`, use `tensorflow-macos` on M-series (Resolved by pinning numpy<2.0.0) |
+| Kaggle auth fail | Low | Low | Manual download fallback (Resolved by configuring access_token and downloading via Kaggle CLI) |
 | Disk space | Low | Low | CSV ~500MB, ensure ≥1GB free |
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ⬜ Chưa hoàn thành — điền vào sau khi tất cả checklist PASSED
+> ✅ Hoàn thành hoàn toàn — Đã hoàn thành phần cài đặt môi trường ảo, utilities và dataset.
 
 ```
-Hoàn thành: __/__/2026
+Hoàn thành setup env: 28/08/2026
 Người thực hiện: Thanh
 Kết quả thực tế:
-- ...
-Issues gặp phải:
-- ...
+- Đã tạo venv, nâng cấp pip và cài đặt thành công mọi packages trong requirements.txt.
+- Sửa requirements.txt để pin numpy < 2.0.0 tránh xung đột với tensorflow.
+- Tạo files utils helpers và init hoạt động tốt.
+- Tải dataset tự động thành công thông qua Kaggle CLI sau khi cấu hình access_token.
+- Viết file test tự động src/verify_setup.py chạy thành công 100% cho phần package imports, utilities, và dataset validation (Shape: (6362620, 11), Fraud ratio: 0.001291).
 ```
 
 ## Commit
 
 ```bash
-git add src/utils/ data/raw/.gitkeep
+git add src/utils/ data/raw/.gitkeep src/verify_setup.py requirements.txt plans/fraud-detection-full-submit/phase-00-env-data-setup.md
 git commit -m "feat(phase00): env setup, utils helpers, dataset verified"
 ```
