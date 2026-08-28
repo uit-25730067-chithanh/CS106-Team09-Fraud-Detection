@@ -32,7 +32,7 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 
 ## Constraints
 
-- Dataset: `creditcard.csv` (~150MB) — phải tải thủ công từ Kaggle, không commit git
+- Dataset: `paysim.csv` (~500MB) — phải tải thủ công từ Kaggle, không commit git, downsample khi preprocess
 - Tech: Python 3.10+, scikit-learn, xgboost, imbalanced-learn, keras/tensorflow
 - Mỗi người làm phần riêng → gom vào 1 commit chung
 - Phase phải passed validation gate trước khi chuyển tiếp

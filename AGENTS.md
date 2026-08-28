@@ -25,7 +25,7 @@ Final/
 │       │   ├── evaluation/      # metrics_calculator, plot_roc_curve, confusion_matrix_plot, model_comparator
 │       │   └── utils/           # helpers, constants
 │       ├── notebooks/      ← Jupyter notebooks (CHƯA CÓ)
-│       ├── data/raw/       ← creditcard.csv (CHƯA TẢI — xem DOWNLOAD_DATA_HERE.txt)
+│       ├── data/raw/       ← paysim.csv (CHƯA TẢI)
 │       ├── data/processed/ ← Output từ preprocessing pipeline
 │       ├── docs/           ← Tài liệu kỹ thuật (đã có 4 file)
 │       ├── reports/        ← Kết quả (trống)
@@ -43,7 +43,7 @@ Final/
 | Project scaffold | ✅ Done — folder structure (with `.gitkeep`) + docs created |
 | `src/` Python files | ❌ Empty — directories created but no `.py` files |
 | Notebooks | ❌ Empty — directory created but no `.ipynb` files |
-| Dataset (`creditcard.csv`) | ❌ Not downloaded yet |
+| Dataset (`paysim.csv`) | ❌ Not downloaded yet |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
 > **Verdict: ~20% complete.** Planning & scaffold done, implementation not started.
@@ -57,16 +57,16 @@ Final/
 - **Classes:** PascalCase — `FraudDetector`, `DataPreprocessor`
 - **Constants:** UPPER_SNAKE_CASE — `RANDOM_STATE = 42`, `TEST_SIZE = 0.2`
 - **Random seed:** Always set `RANDOM_STATE = 42`
-- **Git:** Do NOT commit `data/raw/creditcard.csv` (>100MB)
+- **Git:** Do NOT commit `data/raw/paysim.csv` (>100MB)
 
 ---
 
 ## Pipeline Overview
 
 ```
-creditcard.csv
+paysim.csv
   → [data_loader.py]        Load & validate CSV
-  → [feature_scaler.py]     StandardScaler on Amount, Time
+  → [feature_scaler.py]     StandardScaler on numericals, OHE on categorical Type, and Downsampling
   → [data_splitter.py]      Stratified 80/20 split
   → [imbalance_handler.py]  SMOTE/ADASYN on train only (no leakage)
   → [random_forest_model.py / xgboost_model.py / autoencoder_model.py]
@@ -86,11 +86,11 @@ creditcard.csv
 
 | Field | Value |
 |-------|-------|
-| Source | Kaggle: `mlg-ulb/creditcardfraud` |
-| Shape | 284,807 rows × 31 cols |
-| Features | V1–V28 (PCA), Time, Amount |
-| Label | Class (0=normal, 1=fraud) |
-| Fraud ratio | ~0.17% (492 fraud / 284,807 total) |
+| Source | Kaggle: `ealaxi/paysim1` |
+| Shape | 6,362,620 rows × 11 cols (Downsampled to ~200k rows) |
+| Features | step, type, amount, oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest |
+| Label | isFraud (0=normal, 1=fraud) |
+| Fraud ratio | ~0.13% (8,213 fraud / 6.36M total) |
 
 ---
 
@@ -139,7 +139,7 @@ Place in `Final/submit/` before zipping.
 ## Next Actions (bắt đầu Sprint 2 - 28/08)
 
 ### Thanh
-1. Download dataset: https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud → `draft/fraud-detection/data/raw/creditcard.csv`
+1. Download dataset: https://www.kaggle.com/datasets/ealaxi/paysim1 → `draft/fraud-detection/data/raw/paysim.csv`
 2. Setup venv: `cd draft/fraud-detection && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`
 3. Start EDA: Create `notebooks/01_eda.ipynb`
 4. Implement preprocessing scripts in `src/preprocessing/`

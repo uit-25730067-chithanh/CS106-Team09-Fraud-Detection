@@ -147,43 +147,55 @@ tab1, tab2, tab3 = st.tabs(["🎯 Dự đoán", "📊 Kết quả Models", "ℹ�
 with tab1:
     st.header("Nhập thông tin giao dịch")
     
-    col1, col2, col3 = st.columns(3)
+    col1, col2 = st.columns(2)
     
     with col1:
-        amount = st.number_input("Amount ($)", min_value=0.0, max_value=25000.0, value=100.0)
-        time_val = st.number_input("Time (seconds)", min_value=0, max_value=172792, value=50000)
+        tx_type = st.selectbox("Loại giao dịch (Type)", ["TRANSFER", "CASH_OUT"])
+        amount = st.number_input("Số tiền giao dịch (Amount)", min_value=0.0, value=1000.0)
+        step = st.number_input("Thời gian (Step - giờ trong tháng)", min_value=1, max_value=744, value=1)
     
     with col2:
-        v1 = st.slider("V1", -5.0, 5.0, 0.0)
-        v2 = st.slider("V2", -5.0, 5.0, 0.0)
-        v3 = st.slider("V3", -5.0, 5.0, 0.0)
-    
-    with col3:
-        v4 = st.slider("V4", -5.0, 5.0, 0.0)
-        v14 = st.slider("V14", -5.0, 5.0, 0.0)
-        v17 = st.slider("V17", -5.0, 5.0, 0.0)
+        oldbalanceOrg = st.number_input("Số dư gửi ban đầu (oldbalanceOrg)", min_value=0.0, value=5000.0)
+        newbalanceOrig = st.number_input("Số dư gửi lúc sau (newbalanceOrig)", min_value=0.0, value=4000.0)
+        oldbalanceDest = st.number_input("Số dư nhận ban đầu (oldbalanceDest)", min_value=0.0, value=0.0)
+        newbalanceDest = st.number_input("Số dư nhận lúc sau (newbalanceDest)", min_value=0.0, value=1000.0)
     
     if st.button("🔮 Dự đoán", type="primary"):
         model = load_best_model()
         scaler = load_scaler()
         
-        # Create input DataFrame matching the exact training columns and their order (Time, V1-V28, Amount)
+        # 1. Tạo input DataFrame
         input_data = {
-            "Time": [time_val],
-            **{f"V{i}": [locals().get(f"v{i}", 0.0)] for i in range(1, 29)},
-            "Amount": [amount]
+            "step": [step],
+            "type": [tx_type],
+            "amount": [amount],
+            "oldbalanceOrg": [oldbalanceOrg],
+            "newbalanceOrig": [newbalanceOrig],
+            "oldbalanceDest": [oldbalanceDest],
+            "newbalanceDest": [newbalanceDest],
+            "nameOrig": ["C_DEMO"],   # Placeholder — sẽ bị drop trước predict
+            "nameDest": ["D_DEMO"],   # Placeholder — sẽ bị drop trước predict
         }
         X_input = pd.DataFrame(input_data)
         
-        # Ensure column order matches the training dataset exactly
-        cols_order = ["Time"] + [f"V{i}" for i in range(1, 29)] + ["Amount"]
-        X_input = X_input[cols_order]
+        # 2. Feature Engineering
+        X_input["errorBalanceOrig"] = X_input["oldbalanceOrg"] - X_input["amount"] - X_input["newbalanceOrig"]
+        X_input["errorBalanceDest"] = X_input["oldbalanceDest"] + X_input["amount"] - X_input["newbalanceDest"]
         
-        # Scale Time and Amount columns before prediction to prevent prediction errors
-        X_input[["Amount", "Time"]] = scaler.transform(X_input[["Amount", "Time"]])
+        # 3. One-Hot Encoding type (đảm bảo khớp với tập train: type_TRANSFER)
+        # Giả sử trong tập train chỉ có type_TRANSFER (type_CASH_OUT bị loại bỏ khi drop_first=True)
+        # Hoặc viết logic OHE khớp chính xác với scaler/model:
+        X_input["type_TRANSFER"] = 1 if tx_type == "TRANSFER" else 0
         
-        prob = model.predict_proba(X_input)[0][1]
-        pred = model.predict(X_input)[0]
+        # 4. Scale các cột số
+        cols_to_scale = ["amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "step", "errorBalanceOrig", "errorBalanceDest"]
+        X_input[cols_to_scale] = scaler.transform(X_input[cols_to_scale])
+        
+        # 5. Drop các cột ID không dùng
+        X_input_processed = X_input[["step", "amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "errorBalanceOrig", "errorBalanceDest", "type_TRANSFER"]]
+        
+        prob = model.predict_proba(X_input_processed)[0][1]
+        pred = model.predict(X_input_processed)[0]
         
         if pred == 1:
             st.error(f"⚠️ **GIAO DỊCH NGHI VẤN GIAN LẬN** (Xác suất: {prob:.1%})")
@@ -254,15 +266,16 @@ with tab2:
 with tab3:
     st.header("ℹ️ Thông tin dự án")
     st.markdown("""
-    **Dataset:** Credit Card Fraud Detection (Kaggle)
-    - 284,807 giao dịch | 31 features | Fraud ratio: ~0.17%
+    **Dataset:** PaySim Mobile Money Fraud Detection (Kaggle)
+    - 6.36 triệu giao dịch (lọc & downsample còn ~200k) | 11 features | Fraud ratio: ~0.13%
     
     **Pipeline:**
-    1. EDA & Preprocessing (Thanh)
-    2. Imbalance Handling: SMOTE + ADASYN (Sơn)
-    3. Random Forest (Sơn)
-    4. XGBoost + Autoencoder (Cẩm)
-    5. Evaluation (Khang)
+    1. EDA & Preprocessing & Downsampling (Thanh)
+    2. Feature Engineering (errorBalance) & Encoding (Thanh)
+    3. Imbalance Handling: SMOTE + ADASYN (Sơn)
+    4. Random Forest (Sơn)
+    5. XGBoost + Autoencoder (Cẩm)
+    6. Evaluation (Khang)
     
     **Metrics chính:** F1-Score, ROC-AUC (không dùng Accuracy do imbalanced data)
     """)

@@ -30,7 +30,7 @@ Phase cuối: gộp tất cả, final verification, đóng gói ZIP, nộp bài.
 ## Key Insights
 
 - `Restart & Run All` quan trọng — tránh trường hợp notebook chạy được vì có cached variables
-- Không commit dataset `creditcard.csv` vào git (>100MB)
+- Không commit dataset `paysim.csv` vào git (>100MB)
 - Cần kiểm tra `models/*.pkl` và `models/autoencoder.h5` tồn tại trước khi đóng gói
 
 ## Pre-Commit Verification
@@ -41,7 +41,7 @@ Trước khi mỗi người commit phần cuối, kiểm tra:
 # Verify không có untracked sensitive files
 git status
 # Verify .gitignore đang hoạt động
-git check-ignore data/raw/creditcard.csv  # phải bị ignore
+git check-ignore data/raw/paysim.csv  # phải bị ignore
 ```
 
 ## Final Git Flow
@@ -142,7 +142,7 @@ echo "ZIP created: [Project AI-UIT] - Nhom 9.zip"
 - [ ] `slides/` có PPT file
 - [ ] `demo/` có screenshots hoặc clip
 - [ ] ZIP tạo thành công: `[Project AI-UIT] - Nhom 9.zip`
-- [ ] ZIP size hợp lý (không bao gồm creditcard.csv)
+- [ ] ZIP size hợp lý (không bao gồm paysim.csv)
 - [ ] Test unzip và kiểm tra nội dung
 - [ ] Nộp đúng hạn
 
