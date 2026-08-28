@@ -98,7 +98,14 @@ def load_data(path: str = "data/raw/paysim.csv") -> pd.DataFrame:
     normal_df = df[df["isFraud"] == 0]
     
     # Downsample normal_df để đạt tổng kích thước ~200,000 dòng
-    n_normal_samples = 200000 - len(fraud_df)
+    # Clamp để tránh n_normal_samples âm hoặc vượt số mẫu normal có sẵn
+    n_fraud = len(fraud_df)
+    if n_fraud >= 200000:
+        raise ValueError(
+            f"Số fraud ({n_fraud}) vượt mục tiêu downsample 200,000. "
+            "Kiểm tra lại bộ lọc hoặc tăng ngưỡng mục tiêu."
+        )
+    n_normal_samples = min(200000 - n_fraud, len(normal_df))
     normal_sampled = normal_df.sample(n=n_normal_samples, random_state=42)
     
     # Gộp lại và shuffle
@@ -316,8 +323,8 @@ print("Saved fitted scaler -> models/scaler.pkl")
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| X_train shape | (160000, ~8) | ___________ |
-| X_test shape | (40000, ~8) | ___________ |
+| X_train shape | (160000, 9) | ___________ |
+| X_test shape | (40000, 9) | ___________ |
 | y_train fraud ratio | ≈ 0.041 | ___________ |
 | y_test fraud ratio | ≈ 0.041 | ___________ |
 | Notebook runs clean | 0 errors | ___________ |

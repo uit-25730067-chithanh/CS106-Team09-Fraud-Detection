@@ -75,7 +75,7 @@ gantt
 | Setup môi trường (venv) & Tải dataset từ Kaggle <br> *[Đầu vào: Kaggle dataset link \| Đầu ra: `data/raw/paysim.csv`, `.venv`]* | 🔴 Critical | 🔲 |
 | Notebook EDA & Trực quan hóa (Phân phối Class, Amount, step, type, balances) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: `notebooks/01_eda.ipynb` với ít nhất 5 charts]* | 🔴 Critical | 🔲 |
 | Preprocessing dữ liệu (Chuẩn hóa các cột balances/amount & One-Hot Encoding `type` & Downsampling) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: scaled columns, OHE, downsampled splits, fitted `models/scaler.pkl`]* | 🔴 Critical | 🔲 |
-| Chia tập dữ liệu Train/Test split (Stratified 80/20) <br> *[Đầu vào: scaled data \| Đầu ra: `data/processed/X_train.pkl`, `X_test.pkl`, `y_train.pkl`, `y_test.pkl`]* | 🔴 Critical | 🔲 |Target Content:
+| Chia tập dữ liệu Train/Test split (Stratified 80/20) <br> *[Đầu vào: scaled data \| Đầu ra: `data/processed/X_train.pkl`, `X_test.pkl`, `y_train.pkl`, `y_test.pkl`]* | 🔴 Critical | 🔲 |
 ### Sơn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|

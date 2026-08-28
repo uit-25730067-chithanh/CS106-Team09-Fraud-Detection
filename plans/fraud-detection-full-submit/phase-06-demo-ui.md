@@ -173,8 +173,8 @@ with tab1:
             "newbalanceOrig": [newbalanceOrig],
             "oldbalanceDest": [oldbalanceDest],
             "newbalanceDest": [newbalanceDest],
-            "nameOrig": ["C_DEMO"], # Placeholder
-            "nameDest": ["M_DEMO" if tx_type == "PAYMENT" else "C_DEMO"] # Placeholder
+            "nameOrig": ["C_DEMO"],   # Placeholder — sẽ bị drop trước predict
+            "nameDest": ["D_DEMO"],   # Placeholder — sẽ bị drop trước predict
         }
         X_input = pd.DataFrame(input_data)
         

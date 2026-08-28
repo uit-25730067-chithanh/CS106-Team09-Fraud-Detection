@@ -12,9 +12,10 @@
 │                  PREPROCESSING PIPELINE                  │
 │  1. Load data & filter (TRANSFER, CASH_OUT)              │
 │  2. Stratified Downsampling to ~200,000 transactions    │
-│  3. Feature scaling (StandardScaler: balances, amount)   │
-│  4. One-Hot Encoding on Type column                      │
-│  5. Train/Test split (stratified, 80/20)                │
+│  3. Train/Test split (stratified, 80/20)                │
+│  4. Feature scaling (StandardScaler: balances, amount)   │
+│     fit trên train set, transform cả train & test        │
+│  5. One-Hot Encoding on Type column                      │
 │  6. Imbalance handling (SMOTE / ADASYN on train only)   │
 └─────────────────────┬───────────────────────────────────┘
                       │
@@ -52,7 +53,7 @@
 | `data/raw/paysim.csv` | File gốc từ Kaggle (không commit git) |
 | `data/processed/X_train.pkl` | Features training sau scaling, encoding, downsampling |
 | `data/processed/X_test.pkl` | Features test sau scaling, encoding, downsampling |
-| `data/processed/y_train.pkl` | Labels training (oversampled) |
+| `data/processed/y_train.pkl` | Labels training gốc (sau downsample/split, trước oversample) |
 | `data/processed/y_test.pkl` | Labels test (giữ nguyên tỷ lệ downsampled) |
 
 ### 2. Preprocessing Pipeline (`src/preprocessing/`)
@@ -89,9 +90,10 @@
 paysim.csv
     ↓ [data-loader & downsampler]
 Filtered & Downsampled DataFrame (~200,000 × 11)
-    ↓ [feature-scaler & encoder]
-Scaled & Encoded DataFrame
     ↓ [data-splitter] → 80% train | 20% test
+Train DataFrame (80%)          Test DataFrame (20%)
+    ↓ [feature-scaler & encoder]    ↓ [transform only — không fit]
+Scaled & Encoded Train Set     Scaled & Encoded Test Set
     ↓ [imbalance-handler] → SMOTE/ADASYN trên train only
     ↓ [models] → Random Forest / XGBoost / Autoencoder
     ↓ [evaluation] → Metrics trên test set
