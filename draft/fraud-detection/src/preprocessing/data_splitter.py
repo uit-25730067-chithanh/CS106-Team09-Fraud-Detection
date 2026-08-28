@@ -3,7 +3,7 @@ import pandas as pd
 import pickle
 from pathlib import Path
 from sklearn.model_selection import train_test_split
-from src.utils import RANDOM_STATE, TEST_SIZE, DATA_PROCESSED_DIR
+from src.utils import RANDOM_STATE, TEST_SIZE, DATA_PROCESSED_DIR, get_project_root
 
 
 def split_data(
@@ -30,15 +30,18 @@ def split_data(
     )
 
     if save:
-        Path(DATA_PROCESSED_DIR).mkdir(parents=True, exist_ok=True)
+        import os
+        proj_root = get_project_root()
+        processed_dir = os.path.join(proj_root, DATA_PROCESSED_DIR)
+        Path(processed_dir).mkdir(parents=True, exist_ok=True)
         for name, obj in [
             ("X_train", X_train),
             ("X_test", X_test),
             ("y_train", y_train),
             ("y_test", y_test),
         ]:
-            with open(f"{DATA_PROCESSED_DIR}/{name}.pkl", "wb") as f:
+            with open(os.path.join(processed_dir, f"{name}.pkl"), "wb") as f:
                 pickle.dump(obj, f)
-        print(f"Saved splits to {DATA_PROCESSED_DIR}/")
+        print(f"Saved splits to {processed_dir}/")
 
     return X_train, X_test, y_train, y_test

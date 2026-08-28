@@ -54,7 +54,7 @@ Python 3.10+
 fraud-detection/
 ├── data/
 │   ├── raw/               # paysim.csv (tải từ Kaggle, KHÔNG commit git — ~500MB)
-│   └── processed/         # ✅ Dữ liệu đã xử lý — X_train/X_test/y_train/y_test.pkl + scaler.pkl
+│   └── processed/         # ✅ Dữ liệu đã xử lý — X_train/X_test/y_train/y_test.pkl
 │                          #    → Đã có trong git, chỉ cần git pull
 │                          #    → Xem: data/processed/README.md
 ├── models/                # scaler.pkl (đã commit) + model .pkl lớn (ignore)
@@ -110,7 +110,7 @@ pip install -r requirements.txt
 python run_preprocessing.py
 ```
 
-> ⚠ï¸ **Lưu ý cho người chưa dùng terminal bao giờ:** Chỉ cần `git pull` là có đủ file dữ liệu rồi. Không cần chạy preprocessing. Môi trường ảo chỉ cần khi muốn chạy notebook hoặc script.
+> ⚠️ **Lưu ý cho người chưa dùng terminal bao giờ:** Chỉ cần `git pull` là có đủ file dữ liệu rồi. Không cần chạy preprocessing. Môi trường ảo chỉ cần khi muốn chạy notebook hoặc script.
 
 ---
 

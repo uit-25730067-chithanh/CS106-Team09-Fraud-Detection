@@ -13,10 +13,9 @@ venv/
 .ipynb_checkpoints/
 
 # Models (large trained models only — theo plan.md: chỉ ignore > 50MB)
-# scaler.pkl (~1KB) và processed splits (~18MB tổng) → được commit
-models/rf_*.pkl
-models/xgboost_*.pkl
-models/autoencoder_*.pkl
+# scaler.pkl (~1KB) được commit, các model khác bị ignore
+models/*.pkl
+!models/scaler.pkl
 *.h5
 *.joblib
 

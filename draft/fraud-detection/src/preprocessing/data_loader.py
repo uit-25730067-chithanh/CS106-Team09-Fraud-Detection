@@ -1,6 +1,7 @@
 """Load, filter and validate the PaySim dataset."""
 import pandas as pd
 from pathlib import Path
+from src.utils import RANDOM_STATE
 
 
 def load_data(path: str = "data/raw/paysim.csv") -> pd.DataFrame:
@@ -34,19 +35,21 @@ def load_data(path: str = "data/raw/paysim.csv") -> pd.DataFrame:
             "Kiểm tra lại bộ lọc hoặc tăng ngưỡng mục tiêu."
         )
     n_normal_samples = min(200000 - n_fraud, len(normal_df))
-    normal_sampled = normal_df.sample(n=n_normal_samples, random_state=42)
+    normal_sampled = normal_df.sample(n=n_normal_samples, random_state=RANDOM_STATE)
 
     # Gộp lại và shuffle
     df_downsampled = pd.concat([fraud_df, normal_sampled])
-    df_downsampled = df_downsampled.sample(frac=1.0, random_state=42).reset_index(drop=True)
+    df_downsampled = df_downsampled.sample(frac=1.0, random_state=RANDOM_STATE).reset_index(drop=True)
 
     return df_downsampled
 
 
 def validate_data(df: pd.DataFrame) -> dict:
     """Validate dataset integrity. Returns summary dict."""
-    assert df["isFraud"].nunique() == 2, "isFraud column must have 2 unique values"
-    assert df.isnull().sum().sum() == 0, "Dataset has missing values"
+    if df["isFraud"].nunique() != 2:
+        raise ValueError("isFraud column must have 2 unique values")
+    if df.isnull().sum().sum() != 0:
+        raise ValueError("Dataset has missing values")
 
     n_fraud = df["isFraud"].sum()
     fraud_ratio = df["isFraud"].mean()
