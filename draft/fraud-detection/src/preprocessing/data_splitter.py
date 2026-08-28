@@ -10,11 +10,11 @@ def split_data(
     df: pd.DataFrame,
     test_size: float = TEST_SIZE,
     random_state: int = RANDOM_STATE,
-    save: bool = True,
+    save: bool = False,
 ) -> tuple:
     """
     Stratified split on isFraud column.
-    Saves processed splits to data/processed/ if save=True.
+    Saves raw splits to data/processed/ if save=True (warning: this will overwrite scaled data).
 
     Returns: (X_train, X_test, y_train, y_test)
     """
