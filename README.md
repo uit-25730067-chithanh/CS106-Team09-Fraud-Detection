@@ -67,7 +67,7 @@ Final/
 | Sprint | Nội dung công việc | Trạng thái | Người phụ trách |
 |--------|-------------------|-----------|------------------|
 | **Sprint 1 (25/8 – 28/8)** | Khởi tạo Repo, phân công & thiết kế khung dự án | ✅ Xong | Thanh + Hôn |
-| **Sprint 2 (28/8 – 4/9)** | Phân tích dữ liệu (EDA), viết evaluation scripts & thiết kế UI demo | 🔲 Chưa làm | Cả nhóm (song song) |
+| **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅ — evaluation scripts & UI demo đang tiếp tục | 🔄 Đang làm | Cả nhóm (song song) |
 | **Sprint 3 (4/9 – 11/9)** | Xử lý mất cân bằng & huấn luyện các mô hình (RF, XGBoost, Autoencoder) | 🔲 Chưa làm | Thanh + Sơn + Cẩm |
 | **Sprint 4 (11/9 – 18/9)** | Đánh giá so sánh, tích hợp model vào UI & hoàn thiện báo cáo Word/PPT | 🔲 Chưa làm | Khang + Trung + Duy + Hôn |
 | **Nộp bài (18/9)** | Đóng gói zip & Nộp bài chính thức trước deadline | 🔲 Chưa làm | Hôn |
@@ -81,6 +81,7 @@ Final/
 - [Lộ trình & Phân công](./draft/fraud-detection/docs/project-roadmap.md)
 - [Kiến trúc hệ thống](./draft/fraud-detection/docs/system-architecture.md)
 - [Code Standards](./draft/fraud-detection/docs/code-standards.md)
+- [Dữ liệu đã xử lý (data/processed)](./draft/fraud-detection/data/processed/README.md) ← **đọc trước khi dùng `.pkl`**
 
 ---
 

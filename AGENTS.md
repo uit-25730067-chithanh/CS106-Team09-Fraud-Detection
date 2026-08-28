@@ -122,6 +122,71 @@ Pipeline dữ liệu có sự tuần tự giữa các thành viên phụ trách 
 
 ---
 
+## Agent Workflow — Post-Implementation Checklist
+
+> **BẮT BUỘC cho mọi AI agent sau khi implement xong 1 phase.**
+> Đây là quy trình chuẩn đã được thiết lập sau Phase 01.
+
+### Sau khi code xong, agent phải làm theo thứ tự:
+
+```
+[1] Verify pipeline chạy đúng
+    → Chạy lại script chính, kiểm tra output shape/ratio khớp Success Criteria
+    → Không claim "done" nếu chưa chạy thực tế
+
+[2] Update phase file (plans/fraud-detection-full-submit/phase-XX-*.md)
+    → Điền Evidence section bằng output THỰC TẾ (không phải expected)
+    → Tick [x] tất cả checklist items
+    → Viết Summary sau khi code xong
+
+[3] Update plan.md (plans/fraud-detection-full-submit/plan.md)
+    → Đổi status phase vừa xong: pending → passed ✅
+    → Cập nhật field updated: với ngày thực tế
+
+[4] Update AGENTS.md (file này)
+    → Cập nhật bảng Current State
+    → Cập nhật Next Actions cho thành viên tiếp theo
+
+[5] Update docs/ (nếu architecture/data thay đổi)
+    → system-architecture.md: cập nhật pipeline diagram nếu có bước mới
+    → project-overview-pdr.md: cập nhật số liệu nếu thay đổi
+
+[6] Update README files (nếu cần)
+    → draft/fraud-detection/README.md: cập nhật Workflow status ✔/→
+    → Final/README.md: cập nhật Sprint progress
+
+[7] Xử lý artifacts (data, models)
+    → Kiểm tra file .pkl nào team cần → đảm bảo KHÔNG bị gitignore
+    → Processed data (< ~50MB) → commit luôn để team dùng
+    → Model lớn (> 50MB) → để trong gitignore, ghi hướng dẫn reproduce
+
+[8] Commit
+    → feat(phaseXX): <mô tả ngắn>  ← code + notebook
+    → docs(phaseXX): <mô tả ngắn> ← docs/README riêng nếu nhiều thay đổi
+```
+
+### File nào phải update sau mỗi phase
+
+| File | Khi nào cập nhật |
+|------|----------------|
+| `plans/.../phase-XX-*.md` | Luôn luôn — điền Evidence + Summary |
+| `plans/.../plan.md` | Luôn luôn — đổi status + updated date |
+| `AGENTS.md` | Luôn luôn — Current State + Next Actions |
+| `draft/fraud-detection/README.md` | Khi có file mới hoặc workflow thay đổi |
+| `Final/README.md` | Khi sprint status thay đổi |
+| `docs/system-architecture.md` | Khi pipeline có thêm/bớt bước |
+| `data/processed/README.md` | Khi có file .pkl mới được tạo ra |
+
+### Quy tắc về .pkl và artifacts
+
+- `data/raw/paysim.csv` → **KHÔNG bao giờ commit** (500MB)
+- `data/processed/*.pkl` (splits, scaler) → **Commit luôn** nếu < 50MB
+- `models/scaler.pkl` → **Commit luôn** (nhỏ, team UI cần)  
+- `models/rf_*.pkl`, `models/xgboost_*.pkl` → **Gitignore** (thường > 50MB)
+- Khi gitignore model lớn → ghi rõ lệnh reproduce trong phase file
+
+---
+
 ## Submission Format
 
 Final package name: `[Project AI-UIT] - Nhom 9.zip`

@@ -19,6 +19,70 @@
 
 ## Dữ liệu này đến từ đâu?
 
+### Sơ đồ luồng xử lý dữ liệu
+
+```
+ ┌─────────────────────────────────────────────────────────────────┐
+ │  📥 NGUỒN: paysim.csv  (6,362,620 giao dịch — ~500MB)          │
+ │  Tải từ Kaggle. KHÔNG commit lên git (quá nặng)                │
+ └───────────────────────────┬─────────────────────────────────────┘
+                             │
+                    [ data_loader.py ]
+                             │
+              ┌──────────────▼──────────────┐
+              │   LỌC loại giao dịch        │
+              │   Chỉ giữ: TRANSFER &       │
+              │   CASH_OUT (fraud chỉ xảy   │
+              │   ra ở 2 loại này)          │
+              └──────────────┬──────────────┘
+                             │
+              ┌──────────────▼──────────────┐
+              │   DOWNSAMPLE xuống ~200,000 │
+              │   Giữ TOÀN BỘ 8,213 fraud  │
+              │   Lấy ngẫu nhiên normal     │
+              └──────────────┬──────────────┘
+                             │
+                   [ data_splitter.py ]
+                             │
+              ┌──────────────▼──────────────┐
+              │   CHIA TẬP (Stratified)     │
+              │   80% Train — 20% Test      │
+              │   Tỷ lệ fraud giữ đều nhau  │
+              └──────┬───────────────┬──────┘
+                     │               │
+               [TRAIN SET]     [TEST SET]
+               160,000 dòng    40,000 dòng
+                     │               │
+                    [ feature_scaler.py ]
+                     │               │
+         ┌───────────▼───┐   ┌───────▼───────┐
+         │ Feature       │   │ Feature       │
+         │ Engineering   │   │ Engineering   │
+         │ (tạo 2 cột    │   │ (tạo 2 cột    │
+         │ errorBalance) │   │ errorBalance) │
+         │               │   │               │
+         │ StandardScaler│   │ .transform()  │
+         │ .fit_transform│   │ CHỈ transform │
+         │ (FIT Ở ĐÂY)   │   │ KHÔNG fit lại │
+         └───────┬───────┘   └───────┬───────┘
+                 │                   │
+                 ▼                   ▼
+    ┌────────────────────┐  ┌────────────────────┐
+    │  X_train.pkl ✅    │  │  X_test.pkl  ✅    │
+    │  y_train.pkl ✅    │  │  y_test.pkl  ✅    │
+    │  (160,000 × 9)     │  │  (40,000 × 9)      │
+    └────────────────────┘  └────────────────────┘
+              +
+    ┌────────────────────┐
+    │  scaler.pkl  ✅    │  ← Dùng khi predict giao dịch mới
+    │  (models/)         │    trong Demo UI
+    └────────────────────┘
+
+  ✅ = Đã commit lên git. Chỉ cần git pull là có ngay.
+```
+
+### Bước xử lý chi tiết
+
 ```
 paysim.csv (6.36 triệu giao dịch, ~500MB)
     │
