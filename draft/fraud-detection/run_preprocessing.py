@@ -18,7 +18,7 @@ def main():
     # Resolve absolute path for raw data
     proj_root = get_project_root()
     raw_path = os.path.join(proj_root, DATA_RAW_PATH)
-    print(f"Loading raw data from: {raw_path}")
+    print(f"Loading raw data from: {DATA_RAW_PATH}")
 
     # 1. Load và validate (gồm downsampling bên trong load_data)
     df = load_data(raw_path)
@@ -45,7 +45,7 @@ def main():
         path = os.path.join(processed_dir, f"{name}.pkl")
         with open(path, "wb") as f:
             pickle.dump(obj, f)
-        print(f"Saved processed file: {path}")
+        print(f"Saved processed file: {DATA_PROCESSED_DIR}/{name}.pkl")
 
     # 5. Lưu fitted scaler vào models/ để Demo UI
     models_dir = os.path.join(proj_root, "models")
@@ -53,7 +53,7 @@ def main():
     scaler_path = os.path.join(models_dir, "scaler.pkl")
     with open(scaler_path, "wb") as f:
         pickle.dump(scaler, f)
-    print(f"Saved fitted scaler -> {scaler_path}")
+    print("Saved fitted scaler -> models/scaler.pkl")
 
     # Verification checks according to success criteria
     print("\n=== Verification ===")
