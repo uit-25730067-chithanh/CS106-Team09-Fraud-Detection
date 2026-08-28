@@ -1,7 +1,5 @@
-# Data files (không commit lên git — quá nặng)
+# Data files (không commit dữ liệu thô — quá nặng ~500MB)
 data/raw/
-data/processed/*.pkl
-data/processed/*.csv
 
 # Python
 __pycache__/
@@ -14,8 +12,10 @@ venv/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
-# Models (có thể lớn)
-*.pkl
+# Models (large trained models only — theo plan.md: chỉ ignore > 50MB)
+# scaler.pkl (~1KB) được commit, các model khác bị ignore
+models/*.pkl
+!models/scaler.pkl
 *.h5
 *.joblib
 

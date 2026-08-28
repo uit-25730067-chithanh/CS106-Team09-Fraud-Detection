@@ -13,10 +13,12 @@
 │  1. Load data & filter (TRANSFER, CASH_OUT)              │
 │  2. Stratified Downsampling to ~200,000 transactions    │
 │  3. Train/Test split (stratified, 80/20)                │
-│  4. Feature scaling (StandardScaler: balances, amount)   │
+│  4. Feature Engineering (errorBalanceOrig, errorBalanceDest) │
+│  5. Feature scaling (StandardScaler: balances, amount)   │
 │     fit trên train set, transform cả train & test        │
-│  5. One-Hot Encoding on Type column                      │
-│  6. Imbalance handling (SMOTE / ADASYN on train only)   │
+│  6. One-Hot Encoding on Type column                      │
+│  7. Drop unused columns (nameOrig, nameDest, isFlaggedFraud) │
+│  8. Imbalance handling (SMOTE / ADASYN on train only)   │
 └─────────────────────┬───────────────────────────────────┘
                       │
          ┌────────────┼────────────┐
@@ -50,11 +52,12 @@
 
 | File | Mô tả |
 |------|-------|
-| `data/raw/paysim.csv` | File gốc từ Kaggle (không commit git) |
-| `data/processed/X_train.pkl` | Features training sau scaling, encoding, downsampling |
-| `data/processed/X_test.pkl` | Features test sau scaling, encoding, downsampling |
-| `data/processed/y_train.pkl` | Labels training gốc (sau downsample/split, trước oversample) |
-| `data/processed/y_test.pkl` | Labels test (giữ nguyên tỷ lệ downsampled) |
+| `data/raw/paysim.csv` | File gốc từ Kaggle (**không commit git** — ~500MB) |
+| `data/processed/X_train.pkl` | Features training: 160,000 × 9, đã scale + encode (**đã commit**) |
+| `data/processed/X_test.pkl` | Features test: 40,000 × 9 (**đã commit**) |
+| `data/processed/y_train.pkl` | Labels training, trước oversample (**đã commit**) |
+| `data/processed/y_test.pkl` | Labels test, giữ nguyên tỷ lệ thực tế (**đã commit**) |
+| `models/scaler.pkl` | Fitted StandardScaler, dùng khi predict mới (**đã commit**) |
 
 ### 2. Preprocessing Pipeline (`src/preprocessing/`)
 
@@ -92,8 +95,11 @@ paysim.csv
 Filtered & Downsampled DataFrame (~200,000 × 11)
     ↓ [data-splitter] → 80% train | 20% test
 Train DataFrame (80%)          Test DataFrame (20%)
+    ↓ [feature-engineering]       ↓ [feature-engineering]
+errorBalanceOrig, errorBalanceDest thêm vào cả 2 tập
     ↓ [feature-scaler & encoder]    ↓ [transform only — không fit]
 Scaled & Encoded Train Set     Scaled & Encoded Test Set
+    ↓ ↳ Lưu: X_train.pkl, y_train.pkl   ↳ Lưu: X_test.pkl, y_test.pkl
     ↓ [imbalance-handler] → SMOTE/ADASYN trên train only
     ↓ [models] → Random Forest / XGBoost / Autoencoder
     ↓ [evaluation] → Metrics trên test set

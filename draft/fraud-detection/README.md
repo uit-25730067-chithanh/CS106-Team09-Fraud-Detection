@@ -53,23 +53,27 @@ Python 3.10+
 ```
 fraud-detection/
 ├── data/
-│   ├── raw/               # paysim.csv (download từ Kaggle, không commit lên git)
-│   └── processed/         # Dữ liệu đã qua preprocessing
+│   ├── raw/               # paysim.csv (tải từ Kaggle, KHÔNG commit git — ~500MB)
+│   └── processed/         # ✅ Dữ liệu đã xử lý — X_train/X_test/y_train/y_test.pkl
+│                          #    → Đã có trong git, chỉ cần git pull
+│                          #    → Xem: data/processed/README.md
+├── models/                # scaler.pkl (đã commit) + model .pkl lớn (ignore)
 ├── notebooks/             # Jupyter notebooks cho EDA và thử nghiệm
-│   ├── 01_eda.ipynb
+│   ├── 01_eda.ipynb       ✔ Hoàn thành
 │   ├── 02_imbalance_handling.ipynb
 │   ├── 03_model_random_forest.ipynb
 │   ├── 04_model_xgboost.ipynb
 │   ├── 05_model_autoencoder.ipynb
 │   └── 06_evaluation_comparison.ipynb
 ├── src/
-│   ├── preprocessing/     # Scripts tiền xử lý dữ liệu
+│   ├── preprocessing/     ✔ data_loader, feature_scaler, data_splitter
 │   ├── models/            # Training scripts cho từng model
 │   ├── evaluation/        # Metrics và đánh giá
-│   └── utils/             # Các hàm tiện ích
+│   └── utils/             ✔ helpers.py, constants, set_seeds()
 ├── reports/               # Báo cáo kết quả, biểu đồ
-├── demo/                  # Demo UI
+├── demo/                  # Demo UI (Streamlit)
 ├── docs/                  # Tài liệu dự án
+├── run_preprocessing.py   # Script chạy lại pipeline nếu cần
 ├── requirements.txt
 └── README.md
 ```
@@ -79,32 +83,49 @@ fraud-detection/
 ## 🚀 Hướng dẫn Cài đặt
 
 ```bash
-# 1. Clone repo (nếu dùng git riêng)
-# 2. Tạo virtual environment
-python -m venv .venv
-source .venv/bin/activate   # macOS/Linux
-# .venv\Scripts\activate    # Windows
+# Bước 1. Clone repo (nếu dùng git riêng)
+git clone <url-repo>
+cd draft/fraud-detection
 
-# 3. Cài dependencies
+# Bước 2. Tạo môi trường ảo Python (bắt buộc!)
+python -m venv .venv
+
+# Kích hoạt môi trường ảo:
+source .venv/bin/activate      # macOS / Linux
+# hoặc trên Windows:
+# .venv\Scripts\activate        # Windows (Command Prompt)
+# .venv\Scripts\Activate.ps1    # Windows (PowerShell)
+
+# Kiểm tra đã kích hoạt chưa: terminal sẽ hiện (.venv) ở đầu dòng
+
+# Bước 3. Cài các thư viện cần thiết
 pip install -r requirements.txt
 
-# 4. Tải dataset
+# Bước 4. (Chỉ khi cần tạo lại dữ liệu) Tải dataset
 # Truy cập https://www.kaggle.com/datasets/ealaxi/paysim1
-# Tải file csv (tên gốc: PS_20174392719_1491204439457_log.csv), đổi tên thành paysim.csv và đặt vào thư mục data/raw/
+# Tải file csv (đổi tên thành paysim.csv), đặt vào: data/raw/paysim.csv
+
+# Bước 5. (Tùy chọn) Chạy lại preprocessing nếu muốn tạo lại .pkl từ đầu
+# ✔ Bước này KHÔNG cần thiết nếu đã git pull — file .pkl đã có trong git!
+python run_preprocessing.py
 ```
+
+> ⚠️ **Lưu ý cho người chưa dùng terminal bao giờ:** Chỉ cần `git pull` là có đủ file dữ liệu rồi. Không cần chạy preprocessing. Môi trường ảo chỉ cần khi muốn chạy notebook hoặc script.
 
 ---
 
 ## 📊 Workflow
 
 ```
-1. EDA → Phân tích phân phối, correlation, visualize imbalance
-2. Preprocessing → Chuẩn hóa, train/test split (stratified)
-3. Imbalance Handling → SMOTE / ADASYN trên tập train
-4. Modeling → RF, XGBoost, Autoencoder
-5. Evaluation → Precision, Recall, F1-Score, ROC-AUC
-6. Comparison → Bảng so sánh hiệu năng các mô hình
+1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance
+2. Preprocessing  ✔ Feature Engineering, chuẩn hóa, train/test split (stratified)
+3. Imbalance      → SMOTE / ADASYN trên tập train (Phase 02 — Sơn)
+4. Modeling       → RF, XGBoost, Autoencoder (Phase 03–04 — Sơn + Cẩm)
+5. Evaluation     → Precision, Recall, F1-Score, ROC-AUC (Phase 05 — Khang)
+6. Comparison     → Bảng so sánh hiệu năng các mô hình
 ```
+
+> 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 
 ---
 

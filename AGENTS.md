@@ -17,36 +17,44 @@
 ```
 Final/
 ├── docs/              ← PDF đề bài gốc từ GV
+├── AGENTS.md          ← File này — context cho AI agents
 ├── draft/
-│   └── fraud-detection/    ← Working project (đang phát triển)
-│       ├── src/            ← Python scripts (CHƯA CÓ CODE)
-│       │   ├── preprocessing/   # data_loader, feature_scaler, data_splitter, imbalance_handler
-│       │   ├── models/          # random_forest_model, xgboost_model, autoencoder_model
-│       │   ├── evaluation/      # metrics_calculator, plot_roc_curve, confusion_matrix_plot, model_comparator
-│       │   └── utils/           # helpers, constants
-│       ├── notebooks/      ← Jupyter notebooks (CHƯA CÓ)
-│       ├── data/raw/       ← paysim.csv (CHƯA TẢI)
-│       ├── data/processed/ ← Output từ preprocessing pipeline
-│       ├── docs/           ← Tài liệu kỹ thuật (đã có 4 file)
-│       ├── reports/        ← Kết quả (trống)
-│       ├── demo/           ← Streamlit UI (trống)
+│   └── fraud-detection/    ← Working project
+│       ├── src/            ← Python source code
+│       │   ├── preprocessing/   ✅ data_loader, feature_scaler, data_splitter
+│       │   ├── models/          ⏳ random_forest_model, xgboost_model, autoencoder_model
+│       │   ├── evaluation/      ⏳ metrics_calculator, plot_roc_curve, model_comparator
+│       │   └── utils/           ✅ helpers.py, constants (RANDOM_STATE=42, TEST_SIZE=0.2)
+│       ├── notebooks/      ← Jupyter notebooks
+│       │   └── 01_eda.ipynb    ✅ Hoàn thành (6 biểu đồ, run clean)
+│       ├── data/
+│       │   ├── raw/        ← paysim.csv (✅ đã tải, KHÔNG commit git — ~500MB)
+│       │   └── processed/  ← ✅ X_train/X_test/y_train/y_test.pkl + README.md (đã commit)
+│       ├── models/         ← ✅ scaler.pkl (đã commit); model lớn sẽ gitignored
+│       ├── docs/           ← ✅ 4 file kỹ thuật (overview, roadmap, architecture, code-standards)
+│       ├── reports/        ← Kết quả (trống — Sprint 3+)
+│       ├── demo/           ← Streamlit UI (trống — Sprint 4)
+│       ├── run_preprocessing.py  ← Script chạy lại pipeline nếu cần
 │       └── requirements.txt
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
 ```
 
 ---
 
-## Current State (2026-08-25)
+## Current State (2026-08-28)
 
 | Component | Status |
 |-----------|--------|
-| Project scaffold | ✅ Done — folder structure (with `.gitkeep`) + docs created |
-| `src/` Python files | ❌ Empty — directories created but no `.py` files |
-| Notebooks | ❌ Empty — directory created but no `.ipynb` files |
-| Dataset (`paysim.csv`) | ❌ Not downloaded yet |
+| Project scaffold | ✅ Done — folder structure + docs created |
+| `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
+| `src/preprocessing/` | ✅ Done — data_loader, feature_scaler, data_splitter |
+| Notebooks | ✅ `01_eda.ipynb` hoàn chỉnh và đã execute |
+| Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
+| Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 9) |
+| `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
-> **Verdict: ~20% complete.** Planning & scaffold done, implementation not started.
+> **Verdict: Phase 00 + 01 PASSED. Sẵn sàng bàn giao Sơn (Phase 02).**
 
 ---
 
@@ -119,6 +127,71 @@ Pipeline dữ liệu có sự tuần tự giữa các thành viên phụ trách 
 
 ---
 
+## Agent Workflow — Post-Implementation Checklist
+
+> **BẮT BUỘC cho mọi AI agent sau khi implement xong 1 phase.**
+> Đây là quy trình chuẩn đã được thiết lập sau Phase 01.
+
+### Sau khi code xong, agent phải làm theo thứ tự:
+
+```
+[1] Verify pipeline chạy đúng
+    → Chạy lại script chính, kiểm tra output shape/ratio khớp Success Criteria
+    → Không claim "done" nếu chưa chạy thực tế
+
+[2] Update phase file (plans/fraud-detection-full-submit/phase-XX-*.md)
+    → Điền Evidence section bằng output THỰC TẾ (không phải expected)
+    → Tick [x] tất cả checklist items
+    → Viết Summary sau khi code xong
+
+[3] Update plan.md (plans/fraud-detection-full-submit/plan.md)
+    → Đổi status phase vừa xong: pending → passed ✅
+    → Cập nhật field updated: với ngày thực tế
+
+[4] Update AGENTS.md (file này)
+    → Cập nhật bảng Current State
+    → Cập nhật Next Actions cho thành viên tiếp theo
+
+[5] Update docs/ (nếu architecture/data thay đổi)
+    → system-architecture.md: cập nhật pipeline diagram nếu có bước mới
+    → project-overview-pdr.md: cập nhật số liệu nếu thay đổi
+
+[6] Update README files (nếu cần)
+    → draft/fraud-detection/README.md: cập nhật Workflow status ✔/→
+    → Final/README.md: cập nhật Sprint progress
+
+[7] Xử lý artifacts (data, models)
+    → Kiểm tra file .pkl nào team cần → đảm bảo KHÔNG bị gitignore
+    → Processed data (< ~50MB) → commit luôn để team dùng
+    → Model lớn (> 50MB) → để trong gitignore, ghi hướng dẫn reproduce
+
+[8] Commit
+    → feat(phaseXX): <mô tả ngắn>  ← code + notebook
+    → docs(phaseXX): <mô tả ngắn> ← docs/README riêng nếu nhiều thay đổi
+```
+
+### File nào phải update sau mỗi phase
+
+| File | Khi nào cập nhật |
+|------|----------------|
+| `plans/.../phase-XX-*.md` | Luôn luôn — điền Evidence + Summary |
+| `plans/.../plan.md` | Luôn luôn — đổi status + updated date |
+| `AGENTS.md` | Luôn luôn — Current State + Next Actions |
+| `draft/fraud-detection/README.md` | Khi có file mới hoặc workflow thay đổi |
+| `Final/README.md` | Khi sprint status thay đổi |
+| `docs/system-architecture.md` | Khi pipeline có thêm/bớt bước |
+| `data/processed/README.md` | Khi có file .pkl mới được tạo ra |
+
+### Quy tắc về .pkl và artifacts
+
+- `data/raw/paysim.csv` → **KHÔNG bao giờ commit** (500MB)
+- `data/processed/*.pkl` (splits, scaler) → **Commit luôn** nếu < 50MB
+- `models/scaler.pkl` → **Commit luôn** (nhỏ, team UI cần)  
+- `models/rf_*.pkl`, `models/xgboost_*.pkl` → **Gitignore** (thường > 50MB)
+- Khi gitignore model lớn → ghi rõ lệnh reproduce trong phase file
+
+---
+
 ## Submission Format
 
 Final package name: `[Project AI-UIT] - Nhom 9.zip`
@@ -136,20 +209,26 @@ Place in `Final/submit/` before zipping.
 
 ---
 
-## Next Actions (bắt đầu Sprint 2 - 28/08)
+## Next Actions (Sprint 2/3 — 28/08 → 04/09)
 
-### Thanh
-1. Download dataset: https://www.kaggle.com/datasets/ealaxi/paysim1 → `draft/fraud-detection/data/raw/paysim.csv`
-2. Setup venv: `cd draft/fraud-detection && python -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt`
-3. Start EDA: Create `notebooks/01_eda.ipynb`
-4. Implement preprocessing scripts in `src/preprocessing/`
+### ✅ Thanh — DONE (Phase 00 + 01 PASSED)
+- EDA notebook `notebooks/01_eda.ipynb` hoàn thành (6 visualizations, run clean)
+- Preprocessing pipeline: `src/preprocessing/` được implement đầy đủ
+- Processed splits được lưu vào `data/processed/` và đã commit lên git
+
+### Sơn — Bắt đầu Phase 02
+1. `git pull` trên branch `feat/phase-01-eda-preprocessing` → `git merge main`
+2. Load `data/processed/X_train.pkl` và `y_train.pkl`
+3. Apply SMOTE và ADASYN (chỉ trên train set)
+4. Xem chi tiết: `plans/fraud-detection-full-submit/phase-02-imbalance-handling.md`
 
 ### Khang
-1. Viết `src/evaluation/metrics-calculator.py` (template — không cần data)
-2. Viết `src/evaluation/plot-roc-curve.py` template
+1. Viết `src/evaluation/metrics_calculator.py` (template — không cần data)
+2. Viết `src/evaluation/plot_roc_curve.py` template
 
 ### Trung
 1. Thiết kế wireframe UI → bắt đầu Streamlit form nhập liệu
+2. Load `models/scaler.pkl` (815 bytes, đã có trong git sau khi merge)
 
 ### Duy
 1. Mở Word → viết phần Introduction + Problem Statement

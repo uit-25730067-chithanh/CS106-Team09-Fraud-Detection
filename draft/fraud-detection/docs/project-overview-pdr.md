@@ -13,7 +13,7 @@
 
 Gian lận thẻ tín dụng gây thiệt hại hàng tỷ USD mỗi năm trên toàn cầu. Bài toán phát hiện gian lận có hai thách thức chính:
 
-1. **Mất cân bằng dữ liệu cực độ**: Tỷ lệ giao dịch gian lận chỉ ~0.17% → Accuracy truyền thống vô nghĩa
+1. **Mất cân bằng dữ liệu cực độ**: Tỷ lệ giao dịch gian lận chỉ ~0.13% → Accuracy truyền thống vô nghĩa
 2. **Chi phí lỗi không đối xứng**: False Negative (bỏ sót gian lận) tốn kém hơn nhiều False Positive
 
 ## Mục tiêu
@@ -29,7 +29,7 @@ Gian lận thẻ tín dụng gây thiệt hại hàng tỷ USD mỗi năm trên 
 |-----------|---------|
 | Nguồn | [Kaggle — PaySim Mobile Money Fraud](https://www.kaggle.com/datasets/ealaxi/paysim1) |
 | Số mẫu | 6,362,620 giao dịch (Downsample còn ~200,000) |
-| Features | 10 (step, type, amount, oldbalanceOrg, newbalanceOrig, oldbalanceDest, newbalanceDest...) + 1 label (isFraud) |
+| Features | 9 features sau preprocessing (errorBalanceOrig, errorBalanceDest thêm vào; nameOrig, nameDest, isFlaggedFraud bỏ) + 1 label (isFraud) |
 | Tỷ lệ gian lận | 8,213 / 6,362,620 ≈ 0.13% (Giữ toàn bộ mẫu gian lận khi downsample) |
 | Yêu cầu tối thiểu đề | ≥500 mẫu ✅ (8,213 mẫu > 500) |
 
