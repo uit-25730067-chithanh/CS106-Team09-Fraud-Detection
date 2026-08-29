@@ -55,6 +55,8 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
 > **Phase 06 — Trung — checkpoint 29/08/2026:** UI shell Revision 7.7 đã được xác minh ở cấp code, AppTest và local runtime. Phase vẫn `pending`; còn browser/pixel QA, tích hợp model và figures thật, screenshot và demo clip.
+>
+> **Phase 07 — Duy — checkpoint 29/08/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) đã hoàn thành và merge vào `main` (`report-source.md` và file docx). Phase vẫn `pending` chờ Methodology (Sprint 3) và Results/Conclusion (Sprint 4).
 
 ## Git Convention
 
