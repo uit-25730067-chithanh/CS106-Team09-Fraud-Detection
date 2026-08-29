@@ -33,7 +33,7 @@ Final/
 │       ├── models/         ← ✅ scaler.pkl (đã commit); model lớn sẽ gitignored
 │       ├── docs/           ← ✅ 4 file kỹ thuật (overview, roadmap, architecture, code-standards)
 │       ├── reports/        ← Kết quả (trống — Sprint 3+)
-│       ├── demo/           ← Streamlit UI (trống — Sprint 4)
+│       ├── demo/           ← ✅ Streamlit UI shell + wireframe; ⏳ model thật
 │       ├── run_preprocessing.py  ← Script chạy lại pipeline nếu cần
 │       └── requirements.txt
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-08-28)
+## Current State (2026-08-29)
 
 | Component | Status |
 |-----------|--------|
@@ -52,6 +52,7 @@ Final/
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 9) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
+| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh ở cấp code, AppTest và local runtime. Có System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch; còn browser/pixel QA, model integration, figures và demo clip |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
 > **Verdict: Phase 00 + 01 PASSED. Sẵn sàng bàn giao Sơn (Phase 02).**
@@ -227,8 +228,10 @@ Place in `Final/submit/` before zipping.
 2. Viết `src/evaluation/plot_roc_curve.py` template
 
 ### Trung
-1. Thiết kế wireframe UI → bắt đầu Streamlit form nhập liệu
-2. Load `models/scaler.pkl` (815 bytes, đã có trong git sau khi merge)
+1. ✅ Hoàn thành UI shell Revision 7.7: form PaySim, safe-preview, System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch
+2. ✅ Xác minh AppTest `0 exceptions`, local root/health `200` và không hiển thị kết quả mô hình giả
+3. ⏳ Click và review pixel System/Sáng/Tối
+4. ⏳ Nhận artifacts Phase 04–05, tích hợp inference/figures thật và quay demo clip
 
 ### Duy
 1. Mở Word → viết phần Introduction + Problem Statement
