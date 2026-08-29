@@ -25,14 +25,25 @@
 > **Hôn:** Template + slides non-technical bắt đầu ngay từ Sprint 2. Điền số sau Sprint 4.
 
 ### Duy — Báo cáo Word
-| Task | Sprint | Ghi chú |
-|------|--------|----------|
-| Viết Introduction + Problem Statement | Sprint 2 | Không cần code |
-| Viết Dataset Description (Kaggle stats) | Sprint 2 | Chỉ cần đọc README |
-| Viết Methodology (thuật toán + preprocessing + imbalance) | Sprint 3 | Không cần kết quả |
-| Viết Results & Discussion (điền số từ Khang) | Sprint 4 | Cần output Phase 05 |
-| Viết Conclusion + References | Sprint 4 | Draft trước, hoàn thiện sau |
-| Format Word + Abstract + kiểm tra citation | Sprint 4 | |
+| Task | Sprint | Ghi chú | Trạng thái |
+|------|--------|---------|------------|
+| Viết Introduction + Problem Statement | Sprint 2 | Không cần code | ✅ Hoàn thành |
+| Viết Dataset Description (Kaggle stats) | Sprint 2 | Dùng đề bài, Kaggle, PaySim paper và evidence Phase 01 | ✅ Hoàn thành |
+| Viết Methodology (thuật toán + preprocessing + imbalance) | Sprint 3 | Không cần kết quả | 🔲 Chưa bắt đầu |
+| Viết Results & Discussion (điền số từ Khang) | Sprint 4 | Cần output Phase 05 | 🔲 Chưa bắt đầu |
+| Viết Conclusion + References | Sprint 4 | Draft trước, hoàn thiện sau | 🔲 Chưa bắt đầu |
+| Format Word + Abstract + kiểm tra citation | Sprint 4 | | 🔲 Chưa bắt đầu |
+
+#### Evidence Early Start — Duy, Sprint 2 (29/08/2026)
+
+- Branch riêng: `docs/vu-van-duy-sprint2-report`.
+- Source có thể review bằng Git: `draft/fraud-detection/reports/report-source.md`.
+- Word draft: `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint2_Duy.docx`.
+- Phạm vi đã viết: Chương 1 — Giới thiệu; Chương 2 — Phát biểu bài toán; Chương 3 — Mô tả dữ liệu.
+- Evidence sử dụng: đề bài CS106, notebook EDA, Phase 01, PaySim paper và Kaggle data card.
+- Kiểm tra thực tế: citation validator PASS; DOCX package validation PASS; 131 paragraphs, 5 tables, đủ heading Chương 1–3.
+- Giới hạn xác minh: chưa render PDF vì máy không có LibreOffice/Pages; cần mở Word và cập nhật trường mục lục khi review thủ công.
+- Phase 07 tổng thể vẫn `pending`; Methodology, Results, Discussion, Conclusion và Abstract chờ Sprint 3–4.
 
 ### Hôn — PPT
 | Task | Sprint | Ghi chú |

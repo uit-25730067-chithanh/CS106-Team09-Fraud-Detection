@@ -96,8 +96,8 @@ gantt
 ### Duy *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết phần Introduction + Problem Statement (Word) <br> *[Đầu vào: Đề bài PDF \| Đầu ra: nháp Chương 1 & 2 của báo cáo]* | 🔴 Critical | 🔲 |
-| Viết phần Dataset Description (Word) <br> *[Đầu vào: Đề bài PDF + thông tin Kaggle \| Đầu ra: nháp Chương 3 mô tả dữ liệu]* | 🟡 High | 🔲 |
+| Viết phần Introduction + Problem Statement (Word) <br> *[Đầu vào: Đề bài PDF \| Đầu ra: nháp Chương 1 & 2 của báo cáo]* | 🔴 Critical | ✅ |
+| Viết phần Dataset Description (Word) <br> *[Đầu vào: Đề bài PDF + thông tin Kaggle \| Đầu ra: nháp Chương 3 mô tả dữ liệu]* | 🟡 High | ✅ |
 
 ### Hôn *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
