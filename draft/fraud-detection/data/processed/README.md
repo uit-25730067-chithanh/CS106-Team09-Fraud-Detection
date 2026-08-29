@@ -8,9 +8,9 @@
 
 | File | Kích thước | Nội dung |
 |------|-----------|---------|
-| `X_train.pkl` | ~12 MB | **Features (đặc trưng) tập huấn luyện** — 160,000 giao dịch × 9 thuộc tính, đã được chuẩn hóa và mã hóa |
-| `X_test.pkl` | ~3 MB | **Features tập kiểm tra** — 40,000 giao dịch × 9 thuộc tính |
-| `y_train.pkl` | ~4 MB | **Nhãn tập huấn luyện** — 160,000 giá trị (0 = bình thường, 1 = gian lận) |
+| `X_train.pkl` | ~18 MB | **Features (đặc trưng) tập huấn luyện** — 160,000 giao dịch × 14 thuộc tính, đã được chuẩn hóa và mã hóa |
+| `X_test.pkl` | ~4.5 MB | **Features tập kiểm tra** — 40,000 giao dịch × 14 thuộc tính |
+| `y_train.pkl` | ~3.8 MB | **Nhãn tập huấn luyện** — 160,000 giá trị (0 = bình thường, 1 = gian lận) |
 | `y_test.pkl` | ~1 MB | **Nhãn tập kiểm tra** — 40,000 giá trị |
 
 > **`.pkl`** là định dạng file nhị phân của Python (pickle). Không mở bằng Excel hay Word — chỉ đọc được bằng Python.
@@ -58,8 +58,8 @@
          ┌───────────▼───┐   ┌───────▼───────┐
          │ Feature       │   │ Feature       │
          │ Engineering   │   │ Engineering   │
-         │ (tạo 2 cột    │   │ (tạo 2 cột    │
-         │ errorBalance) │   │ errorBalance) │
+         │ (tạo 7 cột    │   │ (tạo 7 cột    │
+         │ đặc trưng mới)│   │ đặc trưng mới)│
          │               │   │               │
          │ StandardScaler│   │ .transform()  │
          │ .fit_transform│   │ CHỈ transform │
@@ -70,7 +70,7 @@
     ┌────────────────────┐  ┌────────────────────┐
     │  X_train.pkl ✅    │  │  X_test.pkl  ✅    │
     │  y_train.pkl ✅    │  │  y_test.pkl  ✅    │
-    │  (160,000 × 9)     │  │  (40,000 × 9)      │
+    │  (160,000 × 14)    │  │  (40,000 × 14)     │
     └────────────────────┘  └────────────────────┘
               +
     ┌────────────────────┐
@@ -92,9 +92,14 @@ paysim.csv (6.36 triệu giao dịch, ~500MB)
     ├── Downsampling: Giảm xuống ~200,000 dòng
     │         (Giữ toàn bộ 8,213 mẫu gian lận)
     │
-    ├── Tạo thêm 2 đặc trưng mới:
+    ├── Tạo 7 đặc trưng mới (Phase 01 + Phase 01b):
     │     errorBalanceOrig = oldbalanceOrg - amount - newbalanceOrig
     │     errorBalanceDest = oldbalanceDest + amount - newbalanceDest
+    │     is_drain_account = (oldbalanceOrg > 0) & (newbalanceOrig == 0)
+    │     hour_of_day = step % 24
+    │     is_night_transaction = hour_of_day < 6
+    │     amount_to_oldbalance_ratio = amount / (oldbalanceOrg + 1e-5)
+    │     is_large_transaction = amount > 200,000
     │
     ├── Chia tập: 80% train / 20% test (stratified — giữ nguyên tỷ lệ fraud)
     │
@@ -103,19 +108,24 @@ paysim.csv (6.36 triệu giao dịch, ~500MB)
 
 ---
 
-## 9 thuộc tính (cột) trong X_train / X_test
+## 14 thuộc tính (cột) trong X_train / X_test
 
-| # | Tên cột | Ý nghĩa | Đã xử lý? |
-|---|---------|---------|-----------|
-| 1 | `step` | Thời điểm giao dịch (giờ) | Đã scale |
-| 2 | `amount` | Số tiền giao dịch | Đã scale |
-| 3 | `oldbalanceOrg` | Số dư nguồn trước giao dịch | Đã scale |
-| 4 | `newbalanceOrig` | Số dư nguồn sau giao dịch | Đã scale |
-| 5 | `oldbalanceDest` | Số dư đích trước giao dịch | Đã scale |
-| 6 | `newbalanceDest` | Số dư đích sau giao dịch | Đã scale |
-| 7 | `errorBalanceOrig` | **[Tạo mới]** Chênh lệch số dư nguồn | Đã scale |
-| 8 | `errorBalanceDest` | **[Tạo mới]** Chênh lệch số dư đích | Đã scale |
-| 9 | `type_TRANSFER` | Loại giao dịch (1=TRANSFER, 0=CASH_OUT) | One-Hot Encoding |
+| # | Tên cột | Ý nghĩa | Loại & Xử lý |
+|---|---------|---------|--------------|
+| 1 | `step` | Thời điểm giao dịch (giờ giả lập) | Số liên tục — Đã scale |
+| 2 | `amount` | Số tiền giao dịch | Số liên tục — Đã scale |
+| 3 | `oldbalanceOrg` | Số dư nguồn trước giao dịch | Số liên tục — Đã scale |
+| 4 | `newbalanceOrig` | Số dư nguồn sau giao dịch | Số liên tục — Đã scale |
+| 5 | `oldbalanceDest` | Số dư đích trước giao dịch | Số liên tục — Đã scale |
+| 6 | `newbalanceDest` | Số dư đích sau giao dịch | Số liên tục — Đã scale |
+| 7 | `is_drain_account` | **[Tạo mới 01b]** Rút cạn tài khoản nguồn | Cờ nhị phân (0/1) |
+| 8 | `hour_of_day` | **[Tạo mới 01b]** Giờ giao dịch trong ngày (0–23) | Số liên tục — Đã scale |
+| 9 | `is_night_transaction` | **[Tạo mới 01b]** Giao dịch ban đêm (0h–5h) | Cờ nhị phân (0/1) |
+| 10 | `amount_to_oldbalance_ratio` | **[Tạo mới 01b]** Tỉ lệ tiền gửi / số dư gốc | Số liên tục — Đã scale |
+| 11 | `is_large_transaction` | **[Tạo mới 01b]** Giao dịch lớn (> 200k) | Cờ nhị phân (0/1) |
+| 12 | `errorBalanceOrig` | **[Tạo mới 01]** Chênh lệch số dư nguồn | Số liên tục — Đã scale |
+| 13 | `errorBalanceDest` | **[Tạo mới 01]** Chênh lệch số dư đích | Số liên tục — Đã scale |
+| 14 | `type_TRANSFER` | Loại giao dịch (1=TRANSFER, 0=CASH_OUT) | One-Hot Encoding (0/1) |
 
 > Các cột đã bị **loại bỏ**: `nameOrig`, `nameDest` (ID tài khoản — không có giá trị dự báo), `isFlaggedFraud` (chỉ có 16 giao dịch được gắn cờ trong 6.36M — quá thưa thớt)
 
@@ -144,11 +154,13 @@ with open("data/processed/X_train.pkl", "rb") as f:
 with open("data/processed/y_train.pkl", "rb") as f:
     y_train = pickle.load(f)
 
-print(X_train.shape)   # → (160000, 9)
+print(X_train.shape)   # → (160000, 14)
 print(y_train.mean())  # → ~0.041 (tỷ lệ fraud)
 ```
 
-> ⚠️ **QUAN TRỌNG:** Chỉ apply SMOTE/ADASYN trên `X_train`/`y_train`. **Không được** dùng trên `X_test`/`y_test`.
+> ⚠️ **QUAN TRỌNG:**
+> 1. Chỉ apply SMOTE/ADASYN trên `X_train`/`y_train`. **Không được** dùng trên `X_test`/`y_test`.
+> 2. Các cờ nhị phân (`is_drain_account`, `is_night_transaction`, `is_large_transaction`, `type_TRANSFER`) nên được xử lý bằng `SMOTENC` hoặc làm tròn nhị phân `np.round()` sau khi oversample để bảo toàn dạng giá trị 0/1.
 
 ---
 

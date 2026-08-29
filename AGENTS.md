@@ -47,16 +47,16 @@ Final/
 |-----------|--------|
 | Project scaffold | ✅ Done — folder structure + docs created |
 | `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
-| `src/preprocessing/` | ✅ Done — data_loader, feature_scaler, data_splitter |
+| `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features: 5 derived + 2 error balances + 1 OHE), data_splitter |
 | Notebooks | ✅ `01_eda.ipynb` hoàn chỉnh và đã execute |
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
-| Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 9) |
+| Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh ở cấp code, AppTest và local runtime. Có System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch; còn browser/pixel QA, model integration, figures và demo clip |
-| Báo cáo Word | ✅ Nháp Chương 1, 2, 3 + Threats to Validity (`report-source.md` & docx đã merge main) |
+| Báo cáo Word | ✅ Nháp Chương 1, 2, 3 + Threats to Validity (`report-source.md` & docx/pdf đã merge main) |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
-> **Verdict: Phase 00 + 01 PASSED. Báo cáo nháp Sprint 2 & UI Shell hoàn tất. Sẵn sàng bàn giao Sơn (Phase 02).**
+> **Verdict: Phase 00, 01 & 01b PASSED. Dữ liệu chuẩn 14 features & Báo cáo nháp Sprint 2 (Word + PDF) hoàn tất. Sẵn sàng bàn giao Sơn (Phase 02).**
 
 ---
 
@@ -213,15 +213,16 @@ Place in `Final/submit/` before zipping.
 
 ## Next Actions (Sprint 2/3 — 28/08 → 04/09)
 
-### ✅ Thanh — DONE (Phase 00 + 01 PASSED)
+### ✅ Thanh — DONE (Phase 00 + 01 + 01b PASSED)
 - EDA notebook `notebooks/01_eda.ipynb` hoàn thành (6 visualizations, run clean)
-- Preprocessing pipeline: `src/preprocessing/` được implement đầy đủ
-- Processed splits được lưu vào `data/processed/` và đã commit lên git
+- Preprocessing pipeline: `src/preprocessing/` hiện thực 14 đặc trưng (bổ sung 5 derived features)
+- Processed splits (160k/40k × 14) và scaler được lưu vào `data/processed/` & `models/`
 
 ### Sơn — Bắt đầu Phase 02
-1. `git pull` trên branch `feat/phase-01-eda-preprocessing` → `git merge main`
+1. `git pull` trên branch `main` (dữ liệu `X_train.pkl` đã có 14 features)
 2. Load `data/processed/X_train.pkl` và `y_train.pkl`
 3. Apply SMOTE và ADASYN (chỉ trên train set)
+   - *Lưu ý*: Với các cờ nhị phân (`is_drain_account`, `is_night_transaction`, `is_large_transaction`, `type_TRANSFER`), cân nhắc dùng `SMOTENC` hoặc làm tròn `np.round()` sau khi oversampling để bảo toàn giá trị 0/1.
 4. Xem chi tiết: `plans/fraud-detection-full-submit/phase-02-imbalance-handling.md`
 
 ### Khang
