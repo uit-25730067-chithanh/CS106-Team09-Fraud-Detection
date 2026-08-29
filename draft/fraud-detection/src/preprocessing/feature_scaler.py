@@ -2,7 +2,7 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
-SCALE_COLS = ["amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "step"]
+SCALE_COLS = ["amount", "oldbalanceOrg", "newbalanceOrig", "oldbalanceDest", "newbalanceDest", "step", "hour_of_day", "amount_to_oldbalance_ratio"]
 
 
 def scale_features(
@@ -10,7 +10,7 @@ def scale_features(
     X_test: pd.DataFrame,
 ) -> tuple[pd.DataFrame, pd.DataFrame, StandardScaler]:
     """
-    1. Thực hiện Feature Engineering (errorBalanceOrig, errorBalanceDest).
+    1. Thực hiện Feature Engineering (errorBalanceOrig, errorBalanceDest và 5 features mới).
     2. One-Hot Encoding cho cột type.
     3. Fit StandardScaler trên train set, transform cả train và test.
     4. Drop các cột không dùng: nameOrig, nameDest, isFlaggedFraud (độ phủ quá thấp).
@@ -21,6 +21,13 @@ def scale_features(
     X_test = X_test.copy()
 
     # ─── 1. Feature Engineering ──────────────────────────────────────────────
+    for df in [X_train, X_test]:
+        df["is_drain_account"] = ((df["oldbalanceOrg"] > 0) & (df["newbalanceOrig"] == 0)).astype(int)
+        df["hour_of_day"] = (df["step"] % 24).astype(int)
+        df["is_night_transaction"] = (df["hour_of_day"] < 6).astype(int)
+        df["amount_to_oldbalance_ratio"] = df["amount"] / (df["oldbalanceOrg"] + 1e-5)
+        df["is_large_transaction"] = (df["amount"] > 200000).astype(int)
+
     X_train["errorBalanceOrig"] = X_train["oldbalanceOrg"] - X_train["amount"] - X_train["newbalanceOrig"]
     X_train["errorBalanceDest"] = X_train["oldbalanceDest"] + X_train["amount"] - X_train["newbalanceDest"]
     X_test["errorBalanceOrig"] = X_test["oldbalanceOrg"] - X_test["amount"] - X_test["newbalanceOrig"]
