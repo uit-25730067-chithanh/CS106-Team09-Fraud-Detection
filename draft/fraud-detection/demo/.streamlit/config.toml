@@ -1,0 +1,81 @@
+[theme]
+showWidgetBorder = true
+showSidebarBorder = true
+baseRadius = "18px"
+buttonRadius = "999px"
+font = "Manrope:https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
+headingFont = "'Space Grotesk':https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap"
+codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
+baseFontSize = 14
+baseFontWeight = 400
+codeFontSize = "13px"
+headingFontSizes = ["38px", "27px", "21px", "17px", "14px", "12px"]
+headingFontWeights = [700, 600, 600, 600, 500, 500]
+linkUnderline = false
+chartCategoricalColors = ["#7C3AED", "#06B6D4", "#EC4899", "#F97316", "#22C55E", "#A855F7", "#FACC15"]
+chartSequentialColors = ["#2E1065", "#4C1D95", "#5B21B6", "#6D28D9", "#7C3AED", "#8B5CF6", "#A78BFA", "#C4B5FD", "#DDD6FE", "#F5F3FF"]
+
+[theme.light]
+primaryColor = "#7C3AED"
+backgroundColor = "#FBF9FF"
+secondaryBackgroundColor = "#F3E8FF"
+textColor = "#251A4A"
+linkColor = "#6D28D9"
+codeTextColor = "#312E81"
+codeBackgroundColor = "#F5F3FF"
+borderColor = "#DDD6FE"
+dataframeBorderColor = "#DDD6FE"
+dataframeHeaderBackgroundColor = "#EDE9FE"
+
+blueColor = "#2563EB"
+greenColor = "#16A34A"
+yellowColor = "#CA8A04"
+orangeColor = "#EA580C"
+redColor = "#E11D48"
+violetColor = "#7C3AED"
+grayColor = "#64748B"
+
+[theme.light.sidebar]
+backgroundColor = "#140A2E"
+secondaryBackgroundColor = "#24124A"
+textColor = "#F8FAFC"
+codeBackgroundColor = "#1D103B"
+borderColor = "#4C2A7A"
+primaryColor = "#7C3AED"
+linkColor = "#67E8F9"
+
+[theme.dark]
+primaryColor = "#7C3AED"
+backgroundColor = "#090619"
+secondaryBackgroundColor = "#1A1033"
+textColor = "#F8FAFC"
+linkColor = "#67E8F9"
+codeTextColor = "#DDD6FE"
+codeBackgroundColor = "#17102E"
+borderColor = "#3B2663"
+dataframeBorderColor = "#3B2663"
+dataframeHeaderBackgroundColor = "#251746"
+
+blueColor = "#38BDF8"
+greenColor = "#34D399"
+yellowColor = "#FBBF24"
+orangeColor = "#FB923C"
+redColor = "#FB7185"
+violetColor = "#C084FC"
+grayColor = "#94A3B8"
+
+[theme.dark.sidebar]
+backgroundColor = "#060313"
+secondaryBackgroundColor = "#160B2D"
+textColor = "#F1F5F9"
+codeBackgroundColor = "#110824"
+borderColor = "#321A59"
+primaryColor = "#7C3AED"
+linkColor = "#67E8F9"
+
+[server]
+headless = true
+
+[client]
+showErrorDetails = true
+toolbarMode = "minimal"
