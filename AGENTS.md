@@ -53,10 +53,10 @@ Final/
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh ở cấp code, AppTest và local runtime. Có System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch; còn browser/pixel QA, model integration, figures và demo clip |
-| Báo cáo Word | ✅ Nháp Chương 1, 2, 3 + Threats to Validity (`report-source.md` & docx/pdf đã merge main) |
+| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 9 slides PPTX/PDF (Hôn) đã hoàn tất tại `reports/` |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
-> **Verdict: Phase 00, 01 & 01b PASSED. Dữ liệu chuẩn 14 features & Báo cáo nháp Sprint 2 (Word + PDF) hoàn tất. Sẵn sàng bàn giao Sơn (Phase 02).**
+> **Verdict: Phase 00, 01 & 01b PASSED. Báo cáo nháp Sprint 2 (Word/PDF) & Slide PPT nháp (9 slides) hoàn tất. Sẵn sàng bàn giao Sơn (Phase 02).**
 
 ---
 
@@ -239,5 +239,6 @@ Place in `Final/submit/` before zipping.
 1. ✅ Đã viết xong Chương 1, 2, 3 trong `reports/report-source.md` và `[Nhom9]_BaoCao...docx` (đã merge `main`)
 2. ⏳ Chuẩn bị viết Chương 4 (Methodology) ở Sprint 3
 
-### Hôn
-1. Tạo file PPT → chọn theme → thiết kế layout template (Slide 1–4)
+### Hôn — DONE SPRINT 2 PPT DRAFT ✅
+1. ✅ Đã thiết kế template và hoàn thành 9 slides PPT mở đầu (`[Nhom9]_Slide_FraudDetection_Hon.pptx/.pdf`)
+2. ⏳ Chuẩn bị tiếp nhận số liệu kết quả (Khang) và screenshot Demo (Trung) ở Sprint 4 để hoàn thiện slide kết quả.

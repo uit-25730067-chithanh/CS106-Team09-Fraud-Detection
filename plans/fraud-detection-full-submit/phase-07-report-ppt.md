@@ -46,14 +46,23 @@
 - Phase 07 tổng thể vẫn `pending`; Methodology, Results, Discussion, Conclusion và Abstract chờ Sprint 3–4.
 
 ### Hôn — PPT
-| Task | Sprint | Ghi chú |
-|------|--------|----------|
-| Thiết kế template PPT (theme, layout, màu, font) | Sprint 2 | Không cần code |
-| Điền slides: Title, Team, Giới thiệu bài toán, Dataset | Sprint 2 | |
-| Điền slides: Pipeline, Preprocessing, Modeling (RF/XGB/AE) | Sprint 3 | |
-| Điền slides: Kết quả, ROC, Confusion Matrix (điền số từ Khang) | Sprint 4 | Cần output Phase 05 |
-| Điền slide Demo (screenshot từ Trung) | Sprint 4 | Cần screenshot từ Trung |
-| Hoàn thiện PPT + kiểm tra timing | Sprint 4 | |
+| Task | Sprint | Ghi chú | Trạng thái |
+|------|--------|----------|------------|
+| Thiết kế template PPT (theme, layout, màu, font) | Sprint 2 | Chuẩn phong cách UIT & Financial AI | ✅ Hoàn thành |
+| Điền slides: Title, Team, Giới thiệu bài toán, Dataset, EDA (Slides 1–5) | Sprint 2 | Khớp dữ liệu PaySim và EDA | ✅ Hoàn thành |
+| Điền slides: Pipeline, Preprocessing 14 features, Imbalance & Models (Slides 6–9) | Sprint 2–3 | Sơ đồ data flow chống leakage, 14 features, RF/XGB/AE | ✅ Hoàn thành |
+| Điền slides: Kết quả, ROC, Confusion Matrix (điền số từ Khang) | Sprint 4 | Cần output Phase 05 | 🔲 Chưa bắt đầu |
+| Điền slide Demo (screenshot từ Trung) | Sprint 4 | Cần screenshot từ Trung | 🔲 Chưa bắt đầu |
+| Hoàn thiện PPT + kiểm tra timing | Sprint 4 | | 🔲 Chưa bắt đầu |
+
+#### Evidence Early Start — Hôn, Sprint 2 (29/08/2026)
+
+- Google Slides thiết kế gốc: [Google Slides Link](https://docs.google.com/presentation/d/1GEibG9p26vu57G15NdChx8SQrG0zTD50LZBwpIXPU58/edit?usp=drive_link).
+- File artifacts lưu trữ tại repo:
+  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pptx` (795 KB)
+  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pdf` (3.08 MB)
+- Số lượng slide: **9 slides** hoàn chỉnh (Bìa, Mục lục, Bài toán, Dữ liệu PaySim, Khám phá EDA, Kiến trúc Pipeline, Tiền xử lý 14 features, Xử lý mất cân bằng, Mô hình học máy & học sâu).
+- Nội dung xác minh: Đầy đủ 14 đặc trưng sau Phase 01b, nguyên tắc chống rò rỉ dữ liệu (No Data Leakage), giải thích bản chất không dùng Accuracy, và 3 mô hình (Random Forest, XGBoost, Autoencoder).
 
 ## Context
 
