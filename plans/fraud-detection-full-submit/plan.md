@@ -7,7 +7,7 @@ effort: ~40h (7 người)
 branch: main
 tags: [cs106, fraud-detection, academic, python, ml, submit]
 created: 2026-08-24
-updated: 2026-08-28
+updated: 2026-08-29
 sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
 ---
 
@@ -53,6 +53,8 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | ZIP ready, all notebooks re-run clean |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
+>
+> **Phase 06 — Trung — checkpoint 29/08/2026:** UI shell Revision 7.7 đã được xác minh ở cấp code, AppTest và local runtime. Phase vẫn `pending`; còn browser/pixel QA, tích hợp model và figures thật, screenshot và demo clip.
 
 ## Git Convention
 

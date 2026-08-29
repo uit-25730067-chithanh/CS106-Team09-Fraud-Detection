@@ -26,7 +26,7 @@ gantt
     Preprocessing & Outliers (Thanh)     :done, s2_2, 2026-08-30, 2d
     Imbalance Analysis (Sơn)             :active, s2_3, 2026-08-28, 5d
     Viết Eval scripts template (Khang)   :active, s2_4, 2026-08-28, 7d
-    Thiết kế UI & Form shell (Trung)     :active, s2_5, 2026-08-28, 7d
+    Thiết kế UI & Form shell (Trung)     :done, s2_5, 2026-08-28, 2d
     Viết báo cáo Intro + Dataset (Duy)   :active, s2_6, 2026-08-28, 7d
     PPT Template & Slide skeleton (Hôn)  :active, s2_7, 2026-08-28, 7d
 
@@ -90,8 +90,8 @@ gantt
 ### Trung *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Thiết kế wireframe UI (layout, input fields, output area) <br> *[Đầu vào: None \| Đầu ra: bản phác thảo/mô tả layout giao diện]* | 🟡 High | 🔲 |
-| Implement Streamlit form nhập thông tin giao dịch <br> *[Đầu vào: None \| Đầu ra: `demo/app.py` với các widgets nhập liệu]* | 🟡 High | 🔲 |
+| Thiết kế wireframe UI (layout, input fields, output area) <br> *[Đầu vào: None \| Đầu ra: `demo/WIREFRAME.md`]* | 🟡 High | ✅ |
+| Implement Streamlit UI shell <br> *[Đầu vào: processed labels \| Đầu ra: `demo/app.py` với form, safe-preview, theme switcher và 3 góc nhìn giao dịch]* | 🟡 High | ✅ |
 
 ### Duy *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
@@ -108,8 +108,8 @@ gantt
 
 ## 🏃 Sprint 3 — 4/9 (Thứ 6) → 11/9 tối (Thứ 6)
 
-> **Mục tiêu Sprint 3:** Xử lý mất cân bằng, hoàn thiện huấn luyện các mô hình (Sơn + Cẩm). Lớp A viết xong Methodology và hoàn thiện UI shell với placeholder.
-> **Sprint Review:** Tối Thứ 6 11/9 — các file model `.pkl` / `.h5` được lưu trữ, UI Streamlit chạy được với placeholder.
+> **Mục tiêu Sprint 3:** Xử lý mất cân bằng, hoàn thiện huấn luyện các mô hình (Sơn + Cẩm). Lớp A viết xong Methodology và Trung hoàn thiện UI shell với safe-preview.
+> **Sprint Review:** Tối Thứ 6 11/9 — các file model `.pkl` / `.h5` được lưu trữ, UI Streamlit chạy được và không tạo kết quả dự đoán giả khi chưa có model.
 
 ### Sơn
 | Task | Ưu tiên | Trạng thái |
@@ -137,7 +137,7 @@ gantt
 ### Trung
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết placeholder `predict()` function (mock output để test UI) <br> *[Đầu vào: dummy transaction values \| Đầu ra: mock probability & decision]* | 🟡 High | 🔲 |
+| Hoàn thiện safe-preview khi chưa có model <br> *[Đầu vào: transaction form \| Đầu ra: 3 preset, 3 góc nhìn trực quan, data-quality state và inference lock; không tạo probability giả]* | 🟡 High | ✅ |
 
 ### Duy
 | Task | Ưu tiên | Trạng thái |

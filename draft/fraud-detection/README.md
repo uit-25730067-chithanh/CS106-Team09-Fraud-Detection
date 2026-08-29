@@ -71,7 +71,12 @@ fraud-detection/
 │   ├── evaluation/        # Metrics và đánh giá
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
 ├── reports/               # Báo cáo kết quả, biểu đồ
-├── demo/                  # Demo UI (Streamlit)
+├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
+│   ├── app.py            # Quick presets + signal/flow/error views + native motion
+│   ├── assets/           # Custom crystal logo + hero asset của revision cũ
+│   ├── screenshots/      # Revision 5 rendered QA evidence
+│   ├── WIREFRAME.md      # Bố cục và nguyên tắc giao diện
+│   └── requirements-demo.txt
 ├── docs/                  # Tài liệu dự án
 ├── run_preprocessing.py   # Script chạy lại pipeline nếu cần
 ├── requirements.txt
@@ -112,6 +117,17 @@ python run_preprocessing.py
 
 > ⚠️ **Lưu ý cho người chưa dùng terminal bao giờ:** Chỉ cần `git pull` là có đủ file dữ liệu rồi. Không cần chạy preprocessing. Môi trường ảo chỉ cần khi muốn chạy notebook hoặc script.
 
+### Chạy Demo UI
+
+```bash
+pip install -r demo/requirements-demo.txt
+streamlit run demo/app.py
+```
+
+UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệu/Dòng tiền/Sai lệch số dư và chế độ System/Sáng/Tối. Các visual hiện chỉ mô tả dữ liệu đầu vào; ứng dụng không hiển thị nhãn hoặc xác suất gian lận cho đến khi model thật từ Phase 04–05 được bàn giao.
+
+**Trạng thái:** UI shell đã được xác minh ở cấp code, AppTest và local runtime. Phase 06 vẫn `pending`; còn browser/pixel QA, tích hợp model/figures thật, screenshot và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
+
 ---
 
 ## 📊 Workflow
@@ -123,6 +139,7 @@ python run_preprocessing.py
 4. Modeling       → RF, XGBoost, Autoencoder (Phase 03–04 — Sơn + Cẩm)
 5. Evaluation     → Precision, Recall, F1-Score, ROC-AUC (Phase 05 — Khang)
 6. Comparison     → Bảng so sánh hiệu năng các mô hình
+7. Demo UI       ✔ UI shell + form; → chờ model thật để tích hợp
 ```
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
