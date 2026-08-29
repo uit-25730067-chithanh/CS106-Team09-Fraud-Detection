@@ -59,8 +59,8 @@ def main():
     print("\n=== Verification ===")
     print(f"y_train fraud ratio: {y_train.mean():.6f}")
     print(f"y_test fraud ratio: {y_test.mean():.6f}")
-    assert X_train_scaled.shape == (160000, 9), f"X_train shape mismatch: {X_train_scaled.shape}"
-    assert X_test_scaled.shape == (40000, 9), f"X_test shape mismatch: {X_test_scaled.shape}"
+    assert X_train_scaled.shape == (160000, 14), f"X_train shape mismatch: {X_train_scaled.shape}"
+    assert X_test_scaled.shape == (40000, 14), f"X_test shape mismatch: {X_test_scaled.shape}"
     assert abs(y_train.mean() - 0.041065) < 1e-4, f"y_train fraud ratio unexpected: {y_train.mean()}"
     assert abs(y_test.mean() - 0.041065) < 1e-4, f"y_test fraud ratio unexpected: {y_test.mean()}"
     print("[🎉] Pipeline executed successfully and verified!")
