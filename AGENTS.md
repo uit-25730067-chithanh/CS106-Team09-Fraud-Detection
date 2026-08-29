@@ -53,9 +53,10 @@ Final/
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 9) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh ở cấp code, AppTest và local runtime. Có System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch; còn browser/pixel QA, model integration, figures và demo clip |
+| Báo cáo Word | ✅ Nháp Chương 1, 2, 3 + Threats to Validity (`report-source.md` & docx đã merge main) |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
-> **Verdict: Phase 00 + 01 PASSED. Sẵn sàng bàn giao Sơn (Phase 02).**
+> **Verdict: Phase 00 + 01 PASSED. Báo cáo nháp Sprint 2 & UI Shell hoàn tất. Sẵn sàng bàn giao Sơn (Phase 02).**
 
 ---
 
@@ -233,8 +234,9 @@ Place in `Final/submit/` before zipping.
 3. ⏳ Click và review pixel System/Sáng/Tối
 4. ⏳ Nhận artifacts Phase 04–05, tích hợp inference/figures thật và quay demo clip
 
-### Duy
-1. Mở Word → viết phần Introduction + Problem Statement
+### Duy — DONE SPRINT 2 DRAFT ✅
+1. ✅ Đã viết xong Chương 1, 2, 3 trong `reports/report-source.md` và `[Nhom9]_BaoCao...docx` (đã merge `main`)
+2. ⏳ Chuẩn bị viết Chương 4 (Methodology) ở Sprint 3
 
 ### Hôn
-1. Tạo file PPT → chọn theme → thiết kế layout template
+1. Tạo file PPT → chọn theme → thiết kế layout template (Slide 1–4)

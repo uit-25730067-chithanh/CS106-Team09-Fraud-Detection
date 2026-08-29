@@ -70,7 +70,7 @@ fraud-detection/
 │   ├── models/            # Training scripts cho từng model
 │   ├── evaluation/        # Metrics và đánh giá
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # Báo cáo kết quả, biểu đồ
+├── reports/               # ✅ Báo cáo nháp Sprint 2 (Chương 1–3) + report-source.md
 ├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Custom crystal logo + hero asset của revision cũ
@@ -139,7 +139,8 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 4. Modeling       → RF, XGBoost, Autoencoder (Phase 03–04 — Sơn + Cẩm)
 5. Evaluation     → Precision, Recall, F1-Score, ROC-AUC (Phase 05 — Khang)
 6. Comparison     → Bảng so sánh hiệu năng các mô hình
-7. Demo UI       ✔ UI shell + form; → chờ model thật để tích hợp
+7. Demo UI        ✔ UI shell + form + safe-preview; → chờ model thật để tích hợp
+8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) + Threats to Validity (Duy)
 ```
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
