@@ -45,6 +45,16 @@ draft/fraud-detection/demo/
 - Ba biểu đồ preview có vùng vẽ và khoảng đệm an toàn.
 - Giao diện tiếp tục khóa inference cho đến khi có model thật.
 
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Thanh trượt điều chỉnh ngưỡng quyết định linh hoạt (Threshold Slider $0.1 \rightarrow 0.9$):**
+   * Cho phép chuyên viên tài chính kéo thanh trượt `st.slider` để thay đổi Decision Threshold.
+   * Hiển thị biểu đồ tương tác thời gian thực: Khi hạ ngưỡng (ví dụ từ $0.5 \rightarrow 0.2$), tỷ lệ phát hiện gian lận (Recall) tăng lên bao nhiêu vs số lượng cảnh báo nhầm (False Positive) tăng bao nhiêu.
+2. **Minh bạch hóa AI với SHAP (Explainable AI Waterfall Plot):**
+   * Khi tích hợp model thật (XGBoost/RF), tích hợp biểu đồ **SHAP** để giải thích cho từng giao dịch: *"Tại sao giao dịch này bị gắn cờ là gian lận?"* (Ví dụ: `errorBalanceOrig` đóng góp +45% rủi ro, `amount` đóng góp +30%, `hour_of_day=2h` đóng góp +15%).
+3. **Mô phỏng dòng giao dịch thời gian thực (Real-time Transaction Simulation):**
+   * Bổ sung chế độ Stream simulation tự động đẩy các giao dịch mẫu từ tập test set theo chu kỳ 1 giây/giao dịch, tự động kích hoạt hiệu ứng còi/chuông cảnh báo khi phát hiện giao dịch có xác suất gian lận cao.
+
 ## Evidence đã xác minh
 
 | Kiểm tra | Kết quả | Giới hạn xác nhận |

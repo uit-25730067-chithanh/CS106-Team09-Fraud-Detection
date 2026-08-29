@@ -39,8 +39,23 @@
 - `amount` và các biến số dư (`oldbalanceOrg`, `newbalanceOrig`, `oldbalanceDest`, `newbalanceDest`) cần StandardScaler.
 - Class imbalance cực kỳ lớn: 6.36 triệu dòng, trong đó chỉ có 8,213 mẫu fraud (~0.13%). Để tránh OOM trên máy tính cá nhân, Thanh sẽ thực hiện **Stratified Downsampling**:
   1. Lọc giao dịch chỉ giữ lại `TRANSFER` và `CASH_OUT` (các loại giao dịch thực tế có xảy ra fraud).
-  2. Lấy mẫu ngẫu nhiên (sampling) để rút gọn tập dữ liệu xuống khoảng **200,000 dòng**, giữ lại toàn bộ 8,213 mẫu fraud.
 - `nameOrig` và `nameDest` (ID tài khoản) nên được drop trước khi đưa vào huấn luyện mô hình.
+
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Đặc trưng rút sạch tài khoản (`is_drain_account`):**
+   * Trong phần lớn các vụ lừa đảo, kẻ gian rút sạch toàn bộ số dư của nạn nhân:
+     `is_drain_account = (oldbalanceOrg > 0) & (newbalanceOrig == 0)` (Biến nhị phân nhạy bén với gian lận).
+2. **Đặc trưng chu kỳ thời gian (Temporal Patterns):**
+   * `step` biểu thị giờ mô phỏng trong tháng:
+     * `hour_of_day = step % 24` (Giờ trong ngày).
+     * `day_of_week = (step // 24) % 7` (Ngày trong tuần).
+     * `is_night_transaction = hour_of_day.isin([0, 1, 2, 3, 4, 5])` (Cờ giao dịch đêm khuya/rạng sáng khi nạn nhân ngủ).
+3. **Tương quan tỷ lệ số tiền rút:**
+   * `amount_to_oldbalance_ratio = amount / (oldbalanceOrg + 1e-5)` (Tỷ lệ số tiền rút trên tổng số dư hiện có).
+   * `is_large_transaction = amount > 200000` (Giao dịch giá trị lớn vượt trần kiểm soát).
+4. **Quy luật chuỗi 2 bước (Two-Step Fraud Chain):**
+   * Nhấn mạnh phát hiện $100\%$ gian lận trong PaySim chỉ nằm ở `TRANSFER` $\rightarrow$ `CASH_OUT`, làm cơ sở lý thuyết cho việc lọc bỏ 55% dữ liệu nhiễu vô hại (`PAYMENT`, `CASH_IN`, `DEBIT`).
 
 ## Related Files
 

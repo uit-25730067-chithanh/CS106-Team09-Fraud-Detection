@@ -34,8 +34,17 @@ Random Forest là model baseline bắt buộc của đề. Sơn train RF với c
 
 - RF robust với imbalanced data ngay cả không dùng SMOTE (class_weight='balanced' option)
 - `n_estimators=100–200` là good starting point
-- Feature importance từ RF có thể reveal top fraud indicators
 - Evaluation PHẢI dùng F1-Score và ROC-AUC, không phải Accuracy
+
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Thử nghiệm `class_weight='balanced_subsample'`:**
+   * Thay vì chỉ dùng `class_weight='balanced'` cố định toàn cục, thử nghiệm `'balanced_subsample'` để tự động tính toán lại trọng số cân bằng lớp trên từng cây con (bootstrap sample), giúp Random Forest học tốt hơn các đặc trưng vi mô của nhóm thiểu số.
+2. **Khai thác Feature Importance chuyên sâu:**
+   * Trích xuất và trực quan hóa bảng xếp hạng độ quan trọng của đặc trưng (MDI / Permutation Importance).
+   * Kiểm chứng xem 2 biến sai số `errorBalanceOrig`, `errorBalanceDest` có lọt vào Top 3 thuộc tính đóng góp lớn nhất vào quyết định phân loại hay không.
+3. **Kiểm soát độ sâu để chống học vẹt (Anti-Overfitting Tuning):**
+   * Do dữ liệu sau SMOTE có thể chứa các điểm ngoại lai nội suy, cần ràng buộc chặt chẽ `max_depth` (khoảng 15–20), `min_samples_split >= 10` và `min_samples_leaf >= 4` để cây không bị overfit vào dữ liệu nhân tạo.
 
 ## Related Files
 

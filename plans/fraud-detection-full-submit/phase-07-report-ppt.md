@@ -74,9 +74,20 @@ Duy viết báo cáo Word theo chuẩn Scientific Report. Hôn làm PPT cho bu�
 
 ## Key Insights
 
-- Lấy tất cả metrics từ Phase 05 evidence section (không nhớ lại, không đoán)
 - Hình ảnh: copy từ `reports/figures/*.png` (đã có sẵn, độ phân giải 150 DPI)
 - Abstract: viết sau cùng khi có kết quả đầy đủ
+
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Điểm nhấn mở đầu: Sự thất bại của Rule cổ điển (`isFlaggedFraud`):**
+   * Đưa số liệu thực chứng lên Slide 2 và Chương 1: Cờ cố định của ngân hàng cũ (chỉ flag khi `TRANSFER > 200,000`) chỉ bắt được **16 / 8,213 vụ** ($\approx \mathbf{0.19\%}$).
+   * *Mục tiêu:* Tạo lập luận đanh thép và thuyết phục về lý do ngân hàng bắt buộc phải chuyển dịch sang AI/Machine Learning.
+2. **Phản biện học thuật sâu sắc (Threats to Validity — Đã có trong Chương 3.6):**
+   * **Prevalence Shift:** Tỷ lệ gian lận trong tập test sau downsample là $4.1\%$ (so với $0.13\%$ thực tế), do đó Precision đo được sẽ cao hơn môi trường thực $\rightarrow$ giải thích cách hiệu chỉnh ngưỡng xác suất khi triển khai thực tế.
+   * **Simulator Artifacts:** Dữ liệu PaySim là dữ liệu mô phỏng, cần thảo luận việc các biến `errorBalance` có thể phản ánh cơ chế cập nhật của phần mềm giả lập bên cạnh hành vi con người.
+   * **Temporal Leakage vs Random Split:** Thảo luận về sự khác biệt giữa Stratified Random Split và Time-based Split theo chuỗi thời gian `step`.
+3. **Cấu trúc Slide thuyết trình 12 trang đạt chuẩn Rubric tối đa:**
+   * Phân bổ thời lượng 10–15 phút chuẩn chỉ: 4 Slide đầu đặt vấn đề & Data $\rightarrow$ 3 Slide Pipeline & Modeling $\rightarrow$ 3 Slide Kết quả & Demo $\rightarrow$ 2 Slide Phản biện học thuật & Q&A.
 
 ## Related Files
 

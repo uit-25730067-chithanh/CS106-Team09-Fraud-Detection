@@ -46,9 +46,21 @@ Khang implement toàn bộ evaluation module: metrics, visualizations, và bản
 ## Key Insights
 
 - `classification_report` của sklearn cho đầy đủ per-class metrics
-- ROC-AUC cho Autoencoder: dùng reconstruction error làm score (không phải binary pred)
 - Precision-Recall curve thường informative hơn ROC cho imbalanced data — nên vẽ cả 2
 - Focus on **Class 1 (fraud) metrics** — Class 0 metrics gần 1.0 không có ý nghĩa nhiều
+
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Chuẩn mực hóa đường cong Precision-Recall (PR-AUC / Average Precision):**
+   * Trong bài toán gian lận tài chính có độ mất cân bằng cao, đường cong **PR Curve** phản ánh thực chất khả năng đánh đổi giữa Precision và Recall mà không bị "thổi phồng" bởi số lượng lớn giao dịch hợp lệ (True Negatives) như ROC-AUC. Khang cần xuất cả `pr_curves_all.png` và tính chỉ số Average Precision (AP).
+2. **Xây dựng Ma trận Chi phí Tài chính (Financial Cost Matrix):**
+   * Bổ sung hàm tính toán thiệt hại thực tế ($) được cứu vãn:
+     * $\text{Tiền cứu được (True Positive)} = \sum \text{amount của các vụ bắt đúng}$ (trung bình ~$1.47\text{ triệu USD}$/vụ).
+     * $\text{Chi phí xác minh nhầm (False Positive)} = \text{Số lượng FP} \times \text{Chi phí kiểm tra thủ công}$ (~$5–10\text{ USD}$/giao dịch).
+     * $\text{Thiệt hại bỏ sót (False Negative)} = \sum \text{amount của các vụ lọt lưới}$.
+   * *Ý nghĩa:* Giúp bài báo cáo có giá trị ứng dụng thực tiễn cực cao, thuyết phục hoàn toàn hội đồng phản biện.
+3. **So sánh liên trường phái (Cross-Paradigm Comparison):**
+   * Tổng hợp bảng so sánh đối đầu giữa Supervised (RF, XGBoost) và Unsupervised Anomaly Detection (Autoencoder) trên cùng 1 biểu đồ radar hoặc bảng đa chiều.
 
 ## Related Files
 

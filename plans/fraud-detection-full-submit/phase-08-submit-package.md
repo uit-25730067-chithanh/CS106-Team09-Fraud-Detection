@@ -27,11 +27,19 @@ Phase cuối: gộp tất cả, final verification, đóng gói ZIP, nộp bài.
 - Tên file nộp: `[Project AI-UIT] - Nhom 9.zip`
 - Cấu trúc submit package đúng theo quy định
 
-## Key Insights
-
 - `Restart & Run All` quan trọng — tránh trường hợp notebook chạy được vì có cached variables
 - Không commit dataset `paysim.csv` vào git (>100MB)
 - Cần kiểm tra `models/*.pkl` và `models/autoencoder.h5` tồn tại trước khi đóng gói
+
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Kiểm tra tính toàn vẹn đa nền tảng (Cross-Platform Reproduction):**
+   * Đảm bảo pipeline và notebooks chạy độc lập từ file `data/processed/*.pkl` mà không cần tải lại tập thô 500MB `paysim.csv`.
+2. **Đồng bộ hóa 4 sản phẩm giao nộp (Deliverables Audit):**
+   * **Báo cáo Word:** Khớp 100% số liệu với bảng `model_comparison.csv` và ảnh biểu đồ trong `reports/figures/`.
+   * **Slide PPT:** Trình bày rõ nét các điểm nhấn: Anti-leakage, Feature engineering, So sánh đa trường phái, Explainable AI (SHAP) và Threats to validity.
+   * **Mã nguồn:** Thư mục `src/` modular, sạch sẽ, notebooks chạy không còn warning.
+   * **Demo UI:** Cung cấp đầy đủ hướng dẫn chạy Streamlit và video/ảnh chụp màn hình minh họa.
 
 ## Pre-Commit Verification
 

@@ -46,6 +46,18 @@ Cẩm cũng save tất cả processed data artifacts chuẩn.
 - Threshold: chọn percentile của reconstruction error trên validation set
 - Framework: Keras functional API hoặc Sequential
 
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+
+1. **Tối ưu hóa Hyperparameter XGBoost bằng Optuna (Bayesian Optimization):**
+   * Thay vì GridSearchCV duyệt lưới thô sơ, sử dụng **Optuna** để tìm kiếm siêu tham số tối ưu thông minh: `learning_rate` ($0.01 \rightarrow 0.2$), `max_depth` ($4 \rightarrow 10$), `subsample` ($0.6 \rightarrow 1.0$), `colsample_bytree` ($0.6 \rightarrow 1.0$) và `scale_pos_weight`.
+2. **Autoencoder — Deep Anomaly Detection (Zero-shot Fraud):**
+   * Chỉ huấn luyện mạng nơ-ron Autoencoder trên giao dịch **Bình thường (Class 0)**.
+   * Khi gặp gian lận, mô hình không tái tạo tốt $\rightarrow$ **Reconstruction Loss (MSE)** tăng vọt.
+   * Thử nghiệm các ngưỡng phân định khác nhau: 95th, 99th và 99.5th percentile của tập validation bình thường để tối ưu hóa F1-score.
+3. **🌟 Đột phá học thuật — Kiến trúc Lai (Hybrid Stacking Ensemble):**
+   * Trích xuất điểm số `reconstruction_error` từ Autoencoder và đưa vào làm **1 feature bổ sung** cho tập dữ liệu huấn luyện của XGBoost.
+   * *Ý nghĩa:* Giúp mô hình cây quyết định (XGBoost) kết hợp được cả thông tin quan hệ phi tuyến dạng nơ-ron từ Autoencoder, nâng cao khả năng phân loại vượt bậc.
+
 ## Related Files
 
 ```
