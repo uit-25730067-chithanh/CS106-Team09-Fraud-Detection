@@ -70,7 +70,7 @@ fraud-detection/
 │   ├── models/            # Training scripts cho từng model
 │   ├── evaluation/        # Metrics và đánh giá
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp Sprint 2 (Chương 1–3) + report-source.md
+├── reports/               # ✅ Báo cáo nháp (Chương 1–3 Docx/PDF) + Slide PPT (PPTX/PDF) + report-source.md
 ├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Custom crystal logo + hero asset của revision cũ

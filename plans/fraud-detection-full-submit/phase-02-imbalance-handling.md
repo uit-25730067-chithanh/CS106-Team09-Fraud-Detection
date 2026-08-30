@@ -19,14 +19,14 @@
 
 ## Context
 
-Phase 01 đã tạo `data/processed/X_train.pkl` và `y_train.pkl` (imbalanced).  
+Phase 01 & Phase 01b đã hoàn thành và tạo `data/processed/X_train.pkl` (shape: 160,000 × 14) và `y_train.pkl` (imbalanced ~4.1%).  
 Phase này apply SMOTE và ADASYN **chỉ trên train set** để tạo balanced version.
 
 > **CRITICAL:** Test set KHÔNG được touch — phải giữ nguyên distribution thực tế để evaluation có ý nghĩa.
 
 ## Requirements
 
-- Input: `data/processed/X_train.pkl`, `y_train.pkl`
+- Input: `data/processed/X_train.pkl` (14 features), `y_train.pkl`
 - Output:
   - `data/processed/X_train_smote.pkl`, `y_train_smote.pkl`
   - `data/processed/X_train_adasyn.pkl`, `y_train_adasyn.pkl`
@@ -40,14 +40,17 @@ Phase này apply SMOTE và ADASYN **chỉ trên train set** để tạo balanced
 - Nên thử cả 2, so sánh ở Phase 05 để xem cái nào cho model tốt hơn
 - Sau SMOTE/ADASYN: `y_train.value_counts()` sẽ ~50/50 hoặc theo ratio đặt
 
-## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
+## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS & Phase 01b Review)
 
-1. **Thiết lập nhánh đối chứng Cost-Sensitive Baseline (Không dùng Oversampling):**
+1. **Bảo toàn tính chất cờ nhị phân (Binary Flags Handling):**
+   * Tập dữ liệu 14 features có 4 cột nhị phân: `is_drain_account`, `is_night_transaction`, `is_large_transaction` và `type_TRANSFER`.
+   * *Giải pháp:* Sơn nên dùng `SMOTENC` (chỉ định categorical features) hoặc sau khi SMOTE thì làm tròn `np.round()` các cột này về lại `0` hoặc `1` để tránh nội suy ra số thực lẻ (ví dụ: `0.43`).
+2. **Thiết lập nhánh đối chứng Cost-Sensitive Baseline (Không dùng Oversampling):**
    * Bên cạnh SMOTE và ADASYN, Sơn nên chuẩn bị 1 nhánh baseline **giữ nguyên tập train gốc** và chỉ sử dụng trọng số phạt mã lớp (`class_weight='balanced_subsample'` cho Random Forest và `scale_pos_weight` cho XGBoost).
    * *Mục tiêu:* Chứng minh thực nghiệm xem SMOTE có thật sự mang lại hiệu quả vượt trội hay vô tình sinh ra nhiễu/overfit ở vùng biên đa chiều.
-2. **Kỹ thuật lấy mẫu kết hợp (Hybrid Sampling — Random Under-sampling + SMOTE):**
+3. **Kỹ thuật lấy mẫu kết hợp (Hybrid Sampling — Random Under-sampling + SMOTE):**
    * Nếu SMOTE lên 50/50 làm tăng kích thước tập train quá lớn (~300k dòng), có thể thử nghiệm hạ bớt tỷ lệ oversample (ví dụ `sampling_strategy=0.2` hoặc `0.3`) kết hợp dọn dẹp biên bằng Tomek Links hoặc Edited Nearest Neighbors (ENN).
-3. **Kiểm tra tính hợp lệ hình học sau khi sinh mẫu (Sanity Check Synthetic Samples):**
+4. **Kiểm tra tính hợp lệ hình học sau khi sinh mẫu (Sanity Check Synthetic Samples):**
    * Đảm bảo các điểm sinh ra từ SMOTE/ADASYN không vi phạm logic nghiệp vụ (ví dụ: các biến nhị phân One-hot không bị nội suy thành số thực lẻ, hoặc các cột số dư không bị âm bất hợp lý).
 
 ## Related Files

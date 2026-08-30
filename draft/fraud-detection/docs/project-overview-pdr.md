@@ -29,7 +29,7 @@ Gian lận thẻ tín dụng gây thiệt hại hàng tỷ USD mỗi năm trên 
 |-----------|---------|
 | Nguồn | [Kaggle — PaySim Mobile Money Fraud](https://www.kaggle.com/datasets/ealaxi/paysim1) |
 | Số mẫu | 6,362,620 giao dịch (Downsample còn ~200,000) |
-| Features | 9 features sau preprocessing (errorBalanceOrig, errorBalanceDest thêm vào; nameOrig, nameDest, isFlaggedFraud bỏ) + 1 label (isFraud) |
+| Features | 14 features sau preprocessing & feature engineering (7 đặc trưng mới: errorBalanceOrig/Dest, is_drain_account, hour_of_day, is_night_transaction, amount_to_oldbalance_ratio, is_large_transaction; bỏ nameOrig, nameDest, isFlaggedFraud) + 1 label (isFraud) |
 | Tỷ lệ gian lận | 8,213 / 6,362,620 ≈ 0.13% (Giữ toàn bộ mẫu gian lận khi downsample) |
 | Yêu cầu tối thiểu đề | ≥500 mẫu ✅ (8,213 mẫu > 500) |
 
