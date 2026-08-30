@@ -22,14 +22,22 @@
 
 > Viết 4 scripts template trong Sprint 2–3. Khi Sơn/Cẩm xong models (Sprint 4), chỉ cần **cắm model vào và chạy** — không viết code từ đầu.
 
-| Task | Sprint | Ghi chú |
-|------|--------|----------|
-| Viết `src/evaluation/metrics-calculator.py` template | Sprint 2 | Test với dummy predictions |
-| Viết `src/evaluation/plot-roc-curve.py` template | Sprint 2 | Test với dummy scores |
-| Viết `src/evaluation/confusion-matrix-plot.py` template | Sprint 3 | |
-| Viết `src/evaluation/model-comparator.py` template | Sprint 3 | |
-| Chạy metrics cho cả 3 models (cần `.pkl` từ Cẩm) | Sprint 4 | |
-| Tổng hợp bảng so sánh + export CSV | Sprint 4 | |
+| Task | Sprint | Ghi chú | Trạng thái |
+|------|--------|---------|------------|
+| Viết `src/evaluation/metrics_calculator.py` template | Sprint 2 | Test với dummy predictions | ✅ Hoàn thành |
+| Viết `src/evaluation/plot_roc_curve.py` template | Sprint 2 | Test với dummy scores | ✅ Hoàn thành |
+| Viết `src/evaluation/confusion_matrix_plot.py` template | Sprint 3 | | 🔲 Chưa bắt đầu |
+| Viết `src/evaluation/model_comparator.py` template | Sprint 3 | | 🔲 Chưa bắt đầu |
+| Chạy metrics cho cả 3 models (cần `.pkl` từ Cẩm) | Sprint 4 | | 🔲 Chưa bắt đầu |
+| Tổng hợp bảng so sánh + export CSV | Sprint 4 | | 🔲 Chưa bắt đầu |
+
+### Evidence Early Start — Khang, Sprint 2 (29/08/2026)
+
+- Đã tạo `metrics_calculator.py` với `compute_metrics()` và `print_metrics()`.
+- Đã tạo `plot_roc_curve.py` với `plot_roc_curves()` và `plot_pr_curves()`.
+- Đã export bốn hàm Sprint 2 qua `src/evaluation/__init__.py`.
+- Kiểm thử dummy predictions/scores: `7 passed` trên Python 3.12.10, scikit-learn 1.9.0.
+- Phase 05 vẫn `pending`; chưa chạy metrics model thật, chưa tạo figures báo cáo hoặc comparison CSV.
 
 ## Context
 
