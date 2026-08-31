@@ -57,7 +57,12 @@
 | `data/processed/X_test.pkl` | Features test: 40,000 × 14 (**đã commit**) |
 | `data/processed/y_train.pkl` | Labels training, trước oversample (**đã commit**) |
 | `data/processed/y_test.pkl` | Labels test, giữ nguyên tỷ lệ thực tế (**đã commit**) |
+| `data/processed/X_train_smote.pkl` | Features sau SMOTENC: 230,145 × 14 (**đã commit**) |
+| `data/processed/y_train_smote.pkl` | Labels sau SMOTENC: 33.3% fraud (**đã commit**) |
+| `data/processed/X_train_adasyn.pkl` | Features sau ADASYN: 230,411 × 14 (**đã commit**) |
+| `data/processed/y_train_adasyn.pkl` | Labels sau ADASYN: 33.4% fraud (**đã commit**) |
 | `models/scaler.pkl` | Fitted StandardScaler, dùng khi predict mới (**đã commit**) |
+| `models/rf_smote.pkl` | Model Random Forest đã train trên SMOTE (**đã lưu**) |
 
 ### 2. Preprocessing Pipeline (`src/preprocessing/`)
 

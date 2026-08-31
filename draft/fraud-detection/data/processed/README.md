@@ -8,10 +8,14 @@
 
 | File | Kích thước | Nội dung |
 |------|-----------|---------|
-| `X_train.pkl` | ~18 MB | **Features (đặc trưng) tập huấn luyện** — 160,000 giao dịch × 14 thuộc tính, đã được chuẩn hóa và mã hóa |
-| `X_test.pkl` | ~4.5 MB | **Features tập kiểm tra** — 40,000 giao dịch × 14 thuộc tính |
-| `y_train.pkl` | ~3.8 MB | **Nhãn tập huấn luyện** — 160,000 giá trị (0 = bình thường, 1 = gian lận) |
-| `y_test.pkl` | ~1 MB | **Nhãn tập kiểm tra** — 40,000 giá trị |
+| `X_train.pkl` | ~18 MB | **Features tập huấn luyện gốc** — 160,000 giao dịch × 14 thuộc tính |
+| `X_test.pkl` | ~4.5 MB | **Features tập kiểm tra (nguyên bản)** — 40,000 giao dịch × 14 thuộc tính |
+| `y_train.pkl` | ~3.8 MB | **Nhãn tập huấn luyện gốc** — 160,000 giá trị (~4.1% fraud) |
+| `y_test.pkl` | ~1 MB | **Nhãn tập kiểm tra** — 40,000 giá trị (~4.1% fraud) |
+| `X_train_smote.pkl` | ~25.8 MB | **Features sau SMOTENC** — 230,145 giao dịch × 14 thuộc tính (33.3% fraud) |
+| `y_train_smote.pkl` | ~1.8 MB | **Nhãn sau SMOTENC** — 230,145 nhãn (76,715 fraud) |
+| `X_train_adasyn.pkl` | ~25.8 MB | **Features sau ADASYN** — 230,411 giao dịch × 14 thuộc tính (33.4% fraud) |
+| `y_train_adasyn.pkl` | ~1.8 MB | **Nhãn sau ADASYN** — 230,411 nhãn (76,981 fraud) |
 
 > **`.pkl`** là định dạng file nhị phân của Python (pickle). Không mở bằng Excel hay Word — chỉ đọc được bằng Python.
 
@@ -144,23 +148,31 @@ paysim.csv (6.36 triệu giao dịch, ~500MB)
 
 ---
 
-## Dành cho Sơn (Phase 02 — SMOTE/ADASYN)
+---
+
+## Dành cho Cẩm (Phase 04 — XGBoost / Autoencoder)
 
 ```python
 import pickle
 
-with open("data/processed/X_train.pkl", "rb") as f:
-    X_train = pickle.load(f)
-with open("data/processed/y_train.pkl", "rb") as f:
-    y_train = pickle.load(f)
+# Load dữ liệu đã oversample qua SMOTENC để train XGBoost
+with open("data/processed/X_train_smote.pkl", "rb") as f:
+    X_train_smote = pickle.load(f)
+with open("data/processed/y_train_smote.pkl", "rb") as f:
+    y_train_smote = pickle.load(f)
 
-print(X_train.shape)   # → (160000, 14)
-print(y_train.mean())  # → ~0.041 (tỷ lệ fraud)
+print(X_train_smote.shape)   # → (230145, 14)
+print(y_train_smote.mean())  # → 0.333333 (~33.3% fraud)
+
+# Load dữ liệu test để đánh giá
+with open("data/processed/X_test.pkl", "rb") as f:
+    X_test = pickle.load(f)
+with open("data/processed/y_test.pkl", "rb") as f:
+    y_test = pickle.load(f)
 ```
 
-> ⚠️ **QUAN TRỌNG:**
-> 1. Chỉ apply SMOTE/ADASYN trên `X_train`/`y_train`. **Không được** dùng trên `X_test`/`y_test`.
-> 2. Các cờ nhị phân (`is_drain_account`, `is_night_transaction`, `is_large_transaction`, `type_TRANSFER`) nên được xử lý bằng `SMOTENC` hoặc làm tròn nhị phân `np.round()` sau khi oversample để bảo toàn dạng giá trị 0/1.
+> ⚠️ **Lưu ý:** Đối với **Autoencoder (Anomaly Detection)**, chỉ huấn luyện trên các mẫu bình thường (Class=0) từ tập `X_train.pkl` gốc (`X_train[y_train == 0]`).
+
 
 ---
 

@@ -41,22 +41,25 @@ Final/
 
 ---
 
-## Current State (2026-08-29)
+## Current State (2026-08-31)
 
 | Component | Status |
 |-----------|--------|
 | Project scaffold | ✅ Done — folder structure + docs created |
 | `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
-| `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features: 5 derived + 2 error balances + 1 OHE), data_splitter |
-| Notebooks | ✅ `01_eda.ipynb` hoàn chỉnh và đã execute |
+| `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features), data_splitter, **imbalance_handler** (SMOTENC + ADASYN) |
+| `src/models/` | ✅ Done — **random_forest_model.py** (train, tune, predict, evaluate, feature importance) |
+| Notebooks | ✅ `01_eda.ipynb` hoàn chỉnh; ⏳ `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` cần tạo |
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
-| Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (shape: 160k/40k × 14) |
+| Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
-| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh ở cấp code, AppTest và local runtime. Có System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch; còn browser/pixel QA, model integration, figures và demo clip |
+| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (9.2 MB) |
+| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (32.3 MB) |
+| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; còn model integration, figures và demo clip |
 | Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 9 slides PPTX/PDF (Hôn) đã hoàn tất tại `reports/` |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
-> **Verdict: Phase 00, 01 & 01b PASSED. Báo cáo nháp Sprint 2 (Word/PDF) & Slide PPT nháp (9 slides) hoàn tất. Sẵn sàng bàn giao Sơn (Phase 02).**
+> **Verdict: Phase 00, 01, 01b, 02 & 03 PASSED. Sơn hoàn thành imbalance handling + Random Forest. Sẵn sàng bàn giao Cẩm (Phase 04) và Khang (Phase 05).**
 
 ---
 
@@ -218,27 +221,40 @@ Place in `Final/submit/` before zipping.
 - Preprocessing pipeline: `src/preprocessing/` hiện thực 14 đặc trưng (bổ sung 5 derived features)
 - Processed splits (160k/40k × 14) và scaler được lưu vào `data/processed/` & `models/`
 
-### Sơn — Bắt đầu Phase 02
-1. `git pull` trên branch `main` (dữ liệu `X_train.pkl` đã có 14 features)
-2. Load `data/processed/X_train.pkl` và `y_train.pkl`
-3. Apply SMOTE và ADASYN (chỉ trên train set)
-   - *Lưu ý*: Với các cờ nhị phân (`is_drain_account`, `is_night_transaction`, `is_large_transaction`, `type_TRANSFER`), cân nhắc dùng `SMOTENC` hoặc làm tròn `np.round()` sau khi oversampling để bảo toàn giá trị 0/1.
-4. Xem chi tiết: `plans/fraud-detection-full-submit/phase-02-imbalance-handling.md`
+### ✅ Sơn — DONE (Phase 02 + 03 PASSED) — 31/08/2026
+- ✅ SMOTENC (SMOTE) + ADASYN áp dụng trên train set → 4 file `.pkl` đã lưu `data/processed/`
+  - SMOTE: 230,145 × 14, fraud 33.33% | ADASYN: 230,411 × 14, fraud 33.41%
+  - Binary features integrity: PASS (cả 4 cột 0/1)
+  - Test set untouched: y_test.mean() = 0.041075
+- ✅ Random Forest trained + tuned (RandomizedSearchCV n_iter=50, cv=5, scoring=f1)
+  - RF-SMOTE: **F1=0.9973, AUC=0.9994**, Precision=0.9994, Recall=0.9951
+  - RF-ADASYN: **F1=0.9966, AUC=0.9992**, Precision=0.9982, Recall=0.9951
+  - Best params: n_estimators=200, max_depth=20, max_features=sqrt, class_weight=balanced_subsample
+  - Top feature: errorBalanceOrig (41.1%)
+  - Models: rf_smote.pkl (9.2 MB), rf_adasyn.pkl (32.3 MB)
+- ⏳ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` cần tạo
 
-### Khang
-1. Viết `src/evaluation/metrics_calculator.py` (template — không cần data)
-2. Viết `src/evaluation/plot_roc_curve.py` template
+### Cẩm — Bắt đầu Phase 04 (XGBoost + Autoencoder)
+1. `git pull` trên branch `main` — dữ liệu SMOTE/ADASYN đã có
+2. Load `data/processed/X_train_smote.pkl` và `y_train_smote.pkl` để train XGBoost
+3. Xem chi tiết: `plans/fraud-detection-full-submit/phase-04-model-xgboost-autoencoder.md`
+
+### Khang — Có thể bắt đầu Phase 05 (Evaluation)
+1. `git pull` — RF predictions đã có tại `reports/rf_predictions.pkl` và `reports/rf_smote_predictions.pkl`
+2. Viết `src/evaluation/metrics_calculator.py` và `plot_roc_curve.py`
+3. Load model từ `models/rf_smote.pkl` để chạy evaluation
 
 ### Trung
-1. ✅ Hoàn thành UI shell Revision 7.7: form PaySim, safe-preview, System/Sáng/Tối, 3 quick presets và 3 góc nhìn giao dịch
-2. ✅ Xác minh AppTest `0 exceptions`, local root/health `200` và không hiển thị kết quả mô hình giả
-3. ⏳ Click và review pixel System/Sáng/Tối
-4. ⏳ Nhận artifacts Phase 04–05, tích hợp inference/figures thật và quay demo clip
+1. ✅ Hoàn thành UI shell Revision 7.7
+2. ⏳ `git pull` — model `models/rf_smote.pkl` đã có, có thể tích hợp inference
+3. ⏳ Quay demo clip sau khi kết nối model thật
 
 ### Duy — DONE SPRINT 2 DRAFT ✅
-1. ✅ Đã viết xong Chương 1, 2, 3 trong `reports/report-source.md` và `[Nhom9]_BaoCao...docx` (đã merge `main`)
-2. ⏳ Chuẩn bị viết Chương 4 (Methodology) ở Sprint 3
+1. ✅ Đã viết xong Chương 1, 2, 3
+2. ⏳ Viết Chương 4 (Methodology): có thể bắt đầu ngay — số liệu RF đã có:
+   - Hyperparameters, Training time, F1/AUC results, Feature Importance top 5
 
 ### Hôn — DONE SPRINT 2 PPT DRAFT ✅
-1. ✅ Đã thiết kế template và hoàn thành 9 slides PPT mở đầu (`[Nhom9]_Slide_FraudDetection_Hon.pptx/.pdf`)
-2. ⏳ Chuẩn bị tiếp nhận số liệu kết quả (Khang) và screenshot Demo (Trung) ở Sprint 4 để hoàn thiện slide kết quả.
+1. ✅ Đã thiết kế template và hoàn thành 9 slides PPT
+2. ⏳ Tiếp nhận số liệu RF (F1=0.9973, AUC=0.9994) để bổ sung vào slide kết quả
+
