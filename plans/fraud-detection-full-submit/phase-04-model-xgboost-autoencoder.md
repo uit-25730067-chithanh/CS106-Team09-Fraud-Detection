@@ -13,10 +13,20 @@
 |-------|-------|
 | Owner | **Cẩm** |
 | Priority | P0 (XGBoost required) + P1 (Autoencoder bonus) |
-| Status | `pending` |
-| Review | ⬜ Not reviewed |
+| Status | `passed` ✅ |
+| Review | ✅ Evidence-based |
 | Estimated effort | 3–4 giờ |
 | Sprint | Sprint 3 |
+
+> ⚠️ **Sai khác triển khai (có chủ đích):**
+> - **Autoencoder dùng `sklearn.neural_network.MLPRegressor`** thay cho Keras/TensorFlow.
+>   Máy phát triển chạy **Python 3.14**, chưa có bản TensorFlow nào (`pip`: *No matching
+>   distribution*). Kiến trúc giữ nguyên 16→8→4→8→16 (bottleneck 4), Adam + early stopping.
+>   Model lưu `models/autoencoder.pkl` (+ `autoencoder_threshold.txt`, `autoencoder_meta.json`)
+>   thay cho `.h5`.
+> - **Deliverable chính là `run_xgboost.py` + `run_autoencoder.py`** (theo pattern
+>   `run_random_forest.py` của Sơn). Notebook `04_*`/`05_*` là bản wrapper mỏng gọi lại
+>   `src/models/` để lên báo cáo.
 
 ## Context
 
@@ -330,39 +340,60 @@ def save_autoencoder(model: keras.Model, threshold: float) -> None:
 ## Checklist
 
 **XGBoost:**
-- [ ] `src/models/xgboost_model.py` tạo xong
-- [ ] XGBoost trained với SMOTE data
-- [ ] `models/xgb_smote.pkl` tồn tại và loadable
-- [ ] XGBoost F1-Score trên test > 0.75
-- [ ] XGBoost ROC-AUC trên test > 0.93
-- [ ] Feature importance plot trong notebook
-- [ ] Notebook `04_model_xgboost.ipynb` chạy clean
+- [x] `src/models/xgboost_model.py` tạo xong
+- [x] XGBoost trained với SMOTE data (+ ADASYN để so sánh)
+- [x] `models/xgb_smote.pkl` tồn tại và loadable (0.41 MB) + bản `.json` native
+- [x] XGBoost F1-Score trên test > 0.75 — **0.9963** ✅
+- [x] XGBoost ROC-AUC trên test > 0.93 — **0.9993** ✅
+- [x] Feature importance plot (notebook `04_*` §3) + CSV `reports/xgb_smote_feature_importance.csv`
+- [x] Notebook `04_model_xgboost.ipynb` chạy clean — đã execute bằng `jupyter nbconvert`,
+      output + biểu đồ nhúng sẵn (0 lỗi)
 
 **Autoencoder:**
-- [ ] `src/models/autoencoder_model.py` tạo xong
-- [ ] Autoencoder trained CHỈ trên normal transactions (isFraud=0)
-- [ ] `models/autoencoder.h5` tồn tại
-- [ ] `models/autoencoder_threshold.txt` chứa threshold value
-- [ ] Reconstruction error distribution plot có trong notebook
-- [ ] Autoencoder Recall trên fraud > 0.60 (acceptable for bonus)
-- [ ] Notebook `05_model_autoencoder.ipynb` chạy clean
+- [x] `src/models/autoencoder_model.py` tạo xong (MLPRegressor — xem ghi chú sai khác)
+- [x] Autoencoder trained CHỈ trên normal transactions (isFraud=0) — 122,744 dòng
+- [x] `models/autoencoder.pkl` tồn tại (thay `.h5`) + `autoencoder_meta.json`
+- [x] `models/autoencoder_threshold.txt` chứa threshold value — `0.045456`
+- [x] Reconstruction error distribution plot (notebook `05_*` §3)
+- [x] Autoencoder Recall trên fraud > 0.60 — **0.7523** ✅ (200 epoch)
+- [x] Notebook `05_model_autoencoder.ipynb` chạy clean — đã execute bằng `jupyter nbconvert`,
+      2 biểu đồ (loss curve + phân bố recon error) nhúng sẵn (0 lỗi)
 
 ## Success Criteria
 
 | Model | Criterion | Minimum | Evidence |
 |-------|-----------|---------|---------|
-| XGBoost | F1-Score | > 0.75 | ___________ |
-| XGBoost | ROC-AUC | > 0.93 | ___________ |
-| Autoencoder | Recall (fraud) | > 0.60 | ___________ |
-| Both | Model artifacts | loadable | ___________ |
+| XGBoost | F1-Score | > 0.75 | **0.9963** (SMOTE) / 0.9954 (ADASYN) ✅ |
+| XGBoost | ROC-AUC | > 0.93 | **0.9993** (SMOTE) / 0.9994 (ADASYN) ✅ |
+| Autoencoder | Recall (fraud) | > 0.60 | **0.7523** ✅ |
+| Both | Model artifacts | loadable | `xgb_smote.pkl` 0.41MB, `xgb_adasyn.pkl` 0.50MB, `autoencoder.pkl` 22KB ✅ |
 
-## Evidence Section *(điền sau khi làm)*
+## Evidence Section
 
 ```
-XGBoost SMOTE — F1: ____  AUC: ____  Training time: ____s
-Best XGB params: ____________________
-Autoencoder threshold: ____________________
-Autoencoder Recall: ____  Precision: ____
+XGBoost SMOTE  — F1: 0.9963  AUC: 0.9993  Precision: 0.9976  Recall: 0.9951  Training time: 45.9s
+XGBoost ADASYN — F1: 0.9954  AUC: 0.9994  Precision: 0.9957  Recall: 0.9951  Training time: 43.5s
+Best XGB params (SMOTE):  n_estimators=300, max_depth=8, learning_rate=0.2, subsample=0.85,
+                          colsample_bytree=1.0, min_child_weight=3, gamma=0.1
+Best CV F1 (SMOTE): 0.9994   |   RandomizedSearchCV: n_iter=20, cv=3, scoring=f1
+scale_pos_weight = 1.0 (dữ liệu đã cân bằng bằng SMOTE/ADASYN — không nhân đôi trọng số)
+
+Confusion Matrix (XGB-SMOTE):  TN=38,353  FP=4   FN=8  TP=1,635
+
+XGB Feature Importance Top 3 (SMOTE): errorBalanceOrig=0.499, newbalanceOrig=0.472, errorBalanceDest=0.010
+
+Autoencoder (MLPRegressor 16-8-4-8-16, train trên 122,744 giao dịch normal, 200 epoch)
+  threshold (p95 validation, ưu tiên recall≥0.60) = 0.045456
+  Test — Recall: 0.7523  Precision: 0.3822  F1: 0.5069  ROC-AUC: 0.9318
+  Confusion Matrix:  TN=36,359  FP=1,998  FN=407  TP=1,236
+  Threshold sweep (validation): p90 R=0.85/P=0.27 · p95 R=0.74/P=0.39 · p99 R=0.47/P=0.67
+
+Artifacts:
+  models/xgb_smote.pkl (0.41MB) + xgb_smote.json      models/xgb_adasyn.pkl (0.50MB) + xgb_adasyn.json
+  models/autoencoder.pkl (19KB) + autoencoder_threshold.txt + autoencoder_meta.json
+  reports/xgb_{smote,adasyn}_summary.txt, xgb_{smote,adasyn}_feature_importance.csv
+  reports/xgb_predictions.pkl, xgb_{smote,adasyn}_predictions.pkl
+  reports/autoencoder_summary.txt, autoencoder_predictions.pkl, autoencoder_recon_errors.pkl
 ```
 
 ## Risk Assessment
@@ -374,25 +405,64 @@ Autoencoder Recall: ____  Precision: ____
 | autoencoder.h5 too large to commit | Low | Low | Ensure < 50MB; use .gitignore if needed |
 | XGBoost underperforms RF | Low | Low | This is expected comparison data, not failure |
 
-## Phase Summary *(viết sau khi làm — evidence-based)*
+## Phase Summary
 
-> ⬜ Chưa hoàn thành
+> ✅ **PASSED — Hoàn thành ngày 31/08/2026**
 
 ```
-Hoàn thành: __/__/2026
-Người thực hiện: Cẩm
+Hoàn thành: 31/08/2026
+Người thực hiện: Mỷ Cẩm
 Kết quả thực tế:
-- XGBoost: F1=... AUC=...
-- Autoencoder: Recall=... Threshold=...
+- XGBoost SMOTE:  F1=0.9963  AUC=0.9993  Precision=0.9976  Recall=0.9951  (45.9s)
+- XGBoost ADASYN: F1=0.9954  AUC=0.9994  Precision=0.9957  Recall=0.9951  (43.5s)
+  → ngang Random Forest (RF-SMOTE F1=0.9973), nhưng train nhanh hơn ~25x (46s vs ~1188s)
+- Autoencoder: Recall(fraud)=0.7523  Precision=0.3822  F1=0.5069  AUC=0.9318
+  Threshold=0.045456 (p95 validation), train 200 epoch trên 122,744 giao dịch normal
+- Feature quan trọng nhất (XGB & RF đồng thuận): errorBalanceOrig
 Issues gặp phải:
-- ...
+- TensorFlow/Keras KHÔNG có bản cho Python 3.14 → Autoencoder chuyển sang sklearn
+  MLPRegressor (cùng kiến trúc), lưu .pkl thay .h5. API giữ nguyên cho Phase 05.
+- Ban đầu máy chưa có jupyter → đã `pip install jupyter nbconvert ipykernel` (OK trên
+  Python 3.14) và execute cả 2 notebook bằng `jupyter nbconvert --execute` (0 lỗi).
+- Windows console cp1252 + emoji trong log → `run_*.py` gọi `sys.stdout.reconfigure`,
+  notebook guard bằng `hasattr`, và `src/models/{xgboost,autoencoder}_model.py` có helper
+  `_log()` tự fallback sang ASCII khi UnicodeEncodeError.
+- Autoencoder precision thấp (~0.38) — đúng bản chất anomaly detection thuần; đây là
+  phần bonus (P1), không phải model chính.
 ```
+
+## Bàn giao cho Phase 05 (Khang)
+
+- `reports/xgb_predictions.pkl` — dict `{"xgb_smote": {y_pred, y_prob}, "xgb_adasyn": {...}}`
+  (cùng format `rf_predictions.pkl`).
+- `reports/autoencoder_predictions.pkl` — `{y_pred, y_prob}` với `y_prob` = reconstruction error.
+- `reports/autoencoder_recon_errors.pkl` — `{reconstruction_errors, y_test}` để vẽ phân bố.
+- Import chung: `from src.models import train_xgboost, load_xgb_model, load_autoencoder, ...`
 
 ## Commit
 
+`models/*.pkl` bị `.gitignore` (dễ vỡ cross-version, trùng với `.json`). Model chia sẻ
+qua git bằng **bản `.json` native của XGBoost** + threshold/meta — Trung load thẳng cho
+Streamlit, Khang dùng cho Phase 05. Chi tiết quyết định: xem comment trong `.gitignore`.
+
 ```bash
-git add src/models/xgboost-model.py src/models/autoencoder-model.py \
-        notebooks/04_model_xgboost.ipynb notebooks/05_model_autoencoder.ipynb \
-        models/
+cd <repo-root>
+git add draft/fraud-detection/src/models/ \
+        draft/fraud-detection/run_xgboost.py draft/fraud-detection/run_autoencoder.py \
+        draft/fraud-detection/notebooks/04_model_xgboost.ipynb \
+        draft/fraud-detection/notebooks/05_model_autoencoder.ipynb \
+        draft/fraud-detection/reports/xgb_*.txt draft/fraud-detection/reports/xgb_*.csv \
+        draft/fraud-detection/reports/xgb_predictions.pkl \
+        draft/fraud-detection/reports/autoencoder_predictions.pkl \
+        draft/fraud-detection/reports/autoencoder_recon_errors.pkl \
+        draft/fraud-detection/reports/autoencoder_summary.txt \
+        draft/fraud-detection/models/xgb_smote.json draft/fraud-detection/models/xgb_adasyn.json \
+        draft/fraud-detection/models/autoencoder_threshold.txt draft/fraud-detection/models/autoencoder_meta.json \
+        draft/fraud-detection/.gitignore draft/fraud-detection/requirements.txt \
+        draft/fraud-detection/docs/project-roadmap.md \
+        plans/fraud-detection-full-submit/
 git commit -m "feat(phase04): XGBoost + Autoencoder models trained and saved"
 ```
+
+> `models/xgb_smote.pkl` / `autoencoder.pkl` cố tình KHÔNG add (đã .gitignore). Ai cần
+> object Python nguyên bản thì chạy lại `python run_xgboost.py` / `run_autoencoder.py`.

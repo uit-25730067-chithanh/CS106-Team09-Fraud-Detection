@@ -1,0 +1,39 @@
+============================================================
+  XGBoost Model Summary
+  Model: XGB-ADASYN
+============================================================
+
+--- Evaluation Metrics (Test Set) ---
+  F1-Score:   0.9954
+  Precision:  0.9957
+  Recall:     0.9951
+  ROC-AUC:    0.9994
+
+--- Training Info ---
+  Tuned:              True
+  Training Time:      41.53s
+  Best CV Score:      0.9966
+  scale_pos_weight:   1.0
+
+--- Best Hyperparameters ---
+  subsample: 0.85
+  n_estimators: 400
+  min_child_weight: 5
+  max_depth: 4
+  learning_rate: 0.2
+  gamma: 0
+  colsample_bytree: 0.7
+
+--- Confusion Matrix ---
+  [[38350     7]
+ [    8  1635]]
+
+--- Classification Report ---
+              precision    recall  f1-score   support
+
+      Normal       1.00      1.00      1.00     38357
+       Fraud       1.00      1.00      1.00      1643
+
+    accuracy                           1.00     40000
+   macro avg       1.00      1.00      1.00     40000
+weighted avg       1.00      1.00      1.00     40000

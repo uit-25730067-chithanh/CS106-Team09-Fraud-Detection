@@ -1,0 +1,41 @@
+============================================================
+  Autoencoder (Anomaly Detection) — Model Summary
+  Model: Autoencoder
+============================================================
+
+  Implementation: sklearn MLPRegressor (thay Keras — Python 3.14)
+  Kiến trúc: 16 → 8 → 4 → 8 → 16 (bottleneck 4)
+  Train chỉ trên normal: 122,744 dòng
+  Epoch đã chạy: 200
+  Threshold (reconstruction error): 0.045456
+
+--- Evaluation Metrics (Test Set) ---
+  F1-Score:   0.5069
+  Precision:  0.3822
+  Recall:     0.7523
+  ROC-AUC:    0.9318
+
+--- Confusion Matrix ---
+  [[36359  1998]
+ [  407  1236]]
+
+--- Classification Report ---
+              precision    recall  f1-score   support
+
+      Normal       0.99      0.95      0.97     38357
+       Fraud       0.38      0.75      0.51      1643
+
+    accuracy                           0.94     40000
+   macro avg       0.69      0.85      0.74     40000
+weighted avg       0.96      0.94      0.95     40000
+
+
+--- Threshold sweep (validation) ---
+ percentile  threshold  precision  recall     f1
+       80.0   0.004556     0.1578  0.8752 0.2674
+       85.0   0.007200     0.1984  0.8668 0.3228
+       90.0   0.013446     0.2663  0.8478 0.4053
+       95.0   0.045456     0.3862  0.7352 0.5064
+       99.0   0.124001     0.6681  0.4703 0.5520
+       99.5   0.196197     0.7677  0.3874 0.5149
+       99.9   0.746027     0.9151  0.2542 0.3979

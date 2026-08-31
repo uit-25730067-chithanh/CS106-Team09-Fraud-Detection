@@ -1,0 +1,39 @@
+============================================================
+  XGBoost Model Summary
+  Model: XGB-SMOTE
+============================================================
+
+--- Evaluation Metrics (Test Set) ---
+  F1-Score:   0.9963
+  Precision:  0.9976
+  Recall:     0.9951
+  ROC-AUC:    0.9993
+
+--- Training Info ---
+  Tuned:              True
+  Training Time:      41.59s
+  Best CV Score:      0.9994
+  scale_pos_weight:   1.0
+
+--- Best Hyperparameters ---
+  subsample: 0.85
+  n_estimators: 300
+  min_child_weight: 3
+  max_depth: 8
+  learning_rate: 0.2
+  gamma: 0.1
+  colsample_bytree: 1.0
+
+--- Confusion Matrix ---
+  [[38353     4]
+ [    8  1635]]
+
+--- Classification Report ---
+              precision    recall  f1-score   support
+
+      Normal       1.00      1.00      1.00     38357
+       Fraud       1.00      1.00      1.00      1643
+
+    accuracy                           1.00     40000
+   macro avg       1.00      1.00      1.00     40000
+weighted avg       1.00      1.00      1.00     40000
