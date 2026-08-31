@@ -12,8 +12,8 @@
 |-------|-------|
 | Owner | **Sơn** |
 | Priority | P0 — Yêu cầu cho modeling |
-| Status | `pending` |
-| Review | ⬜ Not reviewed |
+| Status | `passed` ✅ |
+| Review | ✅ Evidence-based |
 | Estimated effort | 1–2 giờ |
 | Sprint | Sprint 3 |
 
@@ -197,63 +197,80 @@ print(df_report.to_string(index=False))
 
 ## Checklist
 
-- [ ] `src/preprocessing/imbalance_handler.py` tạo xong với `apply_smote()`, `apply_adasyn()`, `save_resampled()`, `report_class_distribution()`
-- [ ] SMOTE chỉ apply trên X_train (KHÔNG phải X_test)
-- [ ] ADASYN chỉ apply trên X_train (KHÔNG phải X_test)
-- [ ] `data/processed/X_train_smote.pkl` tồn tại
-- [ ] `data/processed/y_train_smote.pkl` tồn tại
-- [ ] `data/processed/X_train_adasyn.pkl` tồn tại
-- [ ] `data/processed/y_train_adasyn.pkl` tồn tại
-- [ ] `y_train_smote.mean()` > `y_train.mean()` (imbalance đã được xử lý)
-- [ ] `y_train_adasyn.mean()` > `y_train.mean()`
-- [ ] Notebook `02_imbalance_handling.ipynb` chạy clean
-- [ ] Summary table (Original vs SMOTE vs ADASYN) có trong notebook
+- [x] `src/preprocessing/imbalance_handler.py` tạo xong với `apply_smote()`, `apply_adasyn()`, `save_resampled()`, `report_class_distribution()`
+- [x] SMOTE chỉ apply trên X_train (KHÔNG phải X_test) — dùng SMOTENC cho binary features
+- [x] ADASYN chỉ apply trên X_train (KHÔNG phải X_test) — dùng np.round() cho binary features
+- [x] `data/processed/X_train_smote.pkl` tồn tại — shape (230145, 14)
+- [x] `data/processed/y_train_smote.pkl` tồn tại — fraud ratio 33.33%
+- [x] `data/processed/X_train_adasyn.pkl` tồn tại — shape (230411, 14)
+- [x] `data/processed/y_train_adasyn.pkl` tồn tại — fraud ratio 33.41%
+- [x] `y_train_smote.mean()` > `y_train.mean()` — 0.3333 > 0.0411 ✅
+- [x] `y_train_adasyn.mean()` > `y_train.mean()` — 0.3341 > 0.0411 ✅
+- [ ] Notebook `02_imbalance_handling.ipynb` chạy clean — ⏳ tạo sau
+- [x] Summary table (Original vs SMOTE vs ADASYN) có trong output
+- [x] Binary features integrity validated — tất cả 4 cột nhị phân chỉ chứa 0/1
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| y_train_smote fraud % | ~33% (sampling_strategy=0.5) | ___________ |
-| y_train_adasyn fraud % | ~33% | ___________ |
-| Test set untouched | y_test.mean() ≈ 0.041 | ___________ |
-| 4 new pkl files created | ✅ | ___________ |
+| y_train_smote fraud % | ~33% (sampling_strategy=0.5) | **33.33%** (76,715 / 230,145) ✅ |
+| y_train_adasyn fraud % | ~33% | **33.41%** (76,981 / 230,411) ✅ |
+| Test set untouched | y_test.mean() ≈ 0.041 | **0.041075** ✅ |
+| 4 new pkl files created | ✅ | X_train_smote.pkl, y_train_smote.pkl, X_train_adasyn.pkl, y_train_adasyn.pkl ✅ |
+| Binary features preserved | 0/1 only | SMOTE: PASS, ADASYN: PASS ✅ |
 
-## Evidence Section *(điền sau khi làm)*
+## Evidence Section
 
 ```
-Original y_train fraud ratio = ________________
-After SMOTE  y_train ratio   = ________________
-After ADASYN y_train ratio   = ________________
-y_test.mean() (unchanged)    = ________________
-SMOTE X_train_smote.shape    = ________________
-ADASYN X_train_adasyn.shape  = ________________
+Original y_train fraud ratio = 0.041063 (6,570 fraud / 160,000 total)
+After SMOTE  y_train ratio   = 0.333333 (76,715 fraud / 230,145 total)
+After ADASYN y_train ratio   = 0.334103 (76,981 fraud / 230,411 total)
+y_test.mean() (unchanged)    = 0.041075
+SMOTE X_train_smote.shape    = (230145, 14)
+ADASYN X_train_adasyn.shape  = (230411, 14)
+
+Binary feature integrity:
+  SMOTE:  is_drain_account=PASS, is_night_transaction=PASS, is_large_transaction=PASS, type_TRANSFER=PASS
+  ADASYN: is_drain_account=PASS, is_night_transaction=PASS, is_large_transaction=PASS, type_TRANSFER=PASS
+
+Implementation details:
+  - SMOTE: Sử dụng SMOTENC (categorical_features=[6,8,10,13]) để xử lý đúng binary features
+  - ADASYN: Sử dụng ADASYN + np.round() trên 4 cột nhị phân sau khi sinh mẫu
+  - sampling_strategy=0.5 cho cả hai → fraud ~33% (minority:majority = 1:2)
 ```
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|-----------|--------|------------|
-| SMOTE OOM (large synthetic) | Low | Medium | Use sampling_strategy=0.1 if memory issue |
-| ADASYN neighbors fail (sparse fraud) | Low | Low | Fallback to SMOTE only |
-| Data leakage (apply on test) | Low but catastrophic | Critical | Code review gate before next phase |
+| Risk | Likelihood | Impact | Mitigation | Kết quả |
+|------|-----------|--------|------------|---------|
+| SMOTE OOM (large synthetic) | Low | Medium | Use sampling_strategy=0.1 if memory issue | ✅ Không gặp |
+| ADASYN neighbors fail (sparse fraud) | Low | Low | Fallback to SMOTE only | ✅ Không gặp |
+| Data leakage (apply on test) | Low but catastrophic | Critical | Code review gate before next phase | ✅ Test set verified untouched |
+| Binary features corrupted | High | High | SMOTENC + np.round() | ✅ Đã xử lý thành công |
 
-## Phase Summary *(viết sau khi làm — evidence-based)*
+## Phase Summary
 
-> ⬜ Chưa hoàn thành
+> ✅ **PASSED — Hoàn thành ngày 31/08/2026**
 
 ```
-Hoàn thành: __/__/2026
-Người thực hiện: Sơn
+Hoàn thành: 31/08/2026
+Người thực hiện: Hoàng Cao Sơn
 Kết quả thực tế:
-- SMOTE: Original ... → Resampled ...
-- ADASYN: Original ... → Resampled ...
+- SMOTE (SMOTENC): Original 160k (4.11% fraud) → Resampled 230,145 (33.33% fraud)
+- ADASYN: Original 160k (4.11% fraud) → Resampled 230,411 (33.41% fraud)
+- 4 file .pkl đã lưu tại data/processed/
+- Binary features integrity: PASS (cả 4 cột đều 0/1)
+- Test set untouched: y_test.mean() = 0.041075
 Issues gặp phải:
-- ...
+- imblearn 0.14.2 không hỗ trợ n_jobs parameter cho SMOTENC/ADASYN → đã loại bỏ
+- Windows console encoding không hỗ trợ emoji → đã thêm sys.stdout.reconfigure(encoding='utf-8')
 ```
 
 ## Commit
 
 ```bash
-git add src/preprocessing/imbalance-handler.py notebooks/02_imbalance_handling.ipynb data/processed/
-git commit -m "feat(phase02): SMOTE + ADASYN imbalance handling, resampled data saved"
+git add src/preprocessing/imbalance_handler.py src/preprocessing/__init__.py run_imbalance_handling.py data/processed/
+git commit -m "feat(phase02): SMOTENC + ADASYN imbalance handling, 4 resampled pkl files saved"
 ```
+
