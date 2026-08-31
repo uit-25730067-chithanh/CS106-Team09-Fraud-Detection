@@ -68,8 +68,8 @@ Final/
 |--------|-------------------|-----------|------------------|
 | **Sprint 1 (25/8 – 28/8)** | Khởi tạo Repo, phân công & thiết kế khung dự án | ✅ Xong | Thanh + Hôn |
 | **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT nháp ✅, Streamlit UI Shell ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
-| **Sprint 3 (4/9 – 11/9)** | XGBoost & Autoencoder (Cẩm), Hoàn thiện Evaluation scripts (Khang), Báo cáo Chương 4 (Duy) | 🔄 Sẵn sàng khởi động | Cẩm + Khang + Duy + Trung |
-| **Sprint 4 (11/9 – 18/9)** | Đánh giá so sánh, tích hợp model vào UI & hoàn thiện báo cáo Word/PPT | 🔲 Chưa làm | Khang + Trung + Duy + Hôn |
+| **Sprint 3 (4/9 – 11/9)** | XGBoost & Autoencoder ✅ (Cẩm xong sớm), Evaluation & So sánh (Khang), Tích hợp Model UI (Trung), Báo cáo Chương 4-5 (Duy) | 🔄 Đang triển khai | Cẩm + Khang + Trung + Duy + Hôn |
+| **Sprint 4 (11/9 – 18/9)** | Đánh giá tổng kết, hoàn thiện báo cáo Word/PPT & diễn tập thuyết trình | 🔲 Chưa làm | Cả nhóm |
 | **Nộp bài (18/9)** | Đóng gói zip & Nộp bài chính thức trước deadline | 🔲 Chưa làm | Hôn |
 
 ---

@@ -41,25 +41,26 @@ Final/
 
 ---
 
-## Current State (2026-08-31)
+## Current State (2026-09-01)
 
 | Component | Status |
 |-----------|--------|
 | Project scaffold | ✅ Done — folder structure + docs created |
 | `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
 | `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features), data_splitter, **imbalance_handler** (SMOTENC + ADASYN) |
-| `src/models/` | ✅ Done — **random_forest_model.py** (train, tune, predict, evaluate, feature importance) |
-| Notebooks | ✅ `01_eda.ipynb` hoàn chỉnh; ⏳ `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` cần tạo |
+| `src/models/` | ✅ Done — **random_forest_model.py**, **xgboost_model.py**, **autoencoder_model.py** |
+| Notebooks | ✅ `01_eda.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` hoàn chỉnh |
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
-| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (9.2 MB) |
-| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (32.3 MB) |
-| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; còn model integration, figures và demo clip |
-| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 9 slides PPTX/PDF (Hôn) đã hoàn tất tại `reports/` |
-| Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
+| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 |
+| `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
+| `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
+| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; sẵn sàng nạp model thật |
+| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 9 slides PPTX/PDF (Hôn) đã hoàn tất |
+| Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict: Phase 00, 01, 01b, 02 & 03 PASSED. Sơn hoàn thành imbalance handling + Random Forest. Sẵn sàng bàn giao Cẩm (Phase 04) và Khang (Phase 05).**
+> **Verdict: Phase 00, 01, 01b, 02, 03 & 04 PASSED. Toàn bộ 3 họ mô hình (Random Forest, XGBoost, Autoencoder) đã hoàn thành xuất sắc. Sẵn sàng cho Khang (Phase 05 - Evaluation) và Trung (Phase 06 - UI Integration).**
 
 ---
 
@@ -234,27 +235,31 @@ Place in `Final/submit/` before zipping.
   - Models: rf_smote.pkl (9.2 MB), rf_adasyn.pkl (32.3 MB)
 - ⏳ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` cần tạo
 
-### Cẩm — Bắt đầu Phase 04 (XGBoost + Autoencoder)
-1. `git pull` trên branch `main` — dữ liệu SMOTE/ADASYN đã có
-2. Load `data/processed/X_train_smote.pkl` và `y_train_smote.pkl` để train XGBoost
-3. Xem chi tiết: `plans/fraud-detection-full-submit/phase-04-model-xgboost-autoencoder.md`
+### ✅ Cẩm — DONE (Phase 04 PASSED) — 01/09/2026
+- ✅ Huấn luyện & Tối ưu XGBoost trên SMOTE (`F1=0.9963, AUC=0.9993`, train time 41.6s) và ADASYN (`F1=0.9954, AUC=0.9994`)
+- ✅ Huấn luyện Autoencoder (MLPRegressor) trên normal data (`AUC=0.9318, Recall=0.7523`, threshold=0.045456)
+- ✅ Lưu artifact models: `models/xgb_smote.json`, `models/xgb_adasyn.json`, `models/autoencoder_threshold.txt`
+- ✅ Hoàn thành 2 notebooks `04_model_xgboost.ipynb` và `05_model_autoencoder.ipynb` (đầy đủ biểu đồ visual)
+- ✅ Đã bàn giao predictions cho Khang: `reports/xgb_predictions.pkl`, `reports/autoencoder_predictions.pkl`
 
-### Khang — Có thể bắt đầu Phase 05 (Evaluation)
-1. `git pull` — RF predictions đã có tại `reports/rf_predictions.pkl` và `reports/rf_smote_predictions.pkl`
-2. Viết `src/evaluation/metrics_calculator.py` và `plot_roc_curve.py`
-3. Load model từ `models/rf_smote.pkl` để chạy evaluation
+### Khang — Bắt đầu Phase 05 (Evaluation & Comparison)
+1. `git pull` — Đầy đủ predictions từ cả 3 mô hình đã có sẵn tại `reports/`:
+   - `rf_predictions.pkl` (Random Forest)
+   - `xgb_predictions.pkl` (XGBoost)
+   - `autoencoder_predictions.pkl` (Autoencoder)
+2. Viết `src/evaluation/metrics_calculator.py`, `plot_roc_curve.py`, `confusion_matrix_plot.py`, `model_comparator.py`
+3. Xuất bảng so sánh tổng hợp chéo (Cross-model comparison table) và biểu đồ ROC / PR curves so sánh 3 mô hình
 
-### Trung
-1. ✅ Hoàn thành UI shell Revision 7.7
-2. ⏳ `git pull` — model `models/rf_smote.pkl` đã có, có thể tích hợp inference
-3. ⏳ Quay demo clip sau khi kết nối model thật
+### Trung — Bắt đầu Tích hợp Model vào Demo UI (Phase 06)
+1. Đã có weights mô hình: `models/xgb_smote.json` / `models/rf_smote.pkl` và `models/scaler.pkl`
+2. Kết nối pipeline inference vào `demo/app.py` để dự đoán xác suất gian lận thời gian thực
+3. Chụp screenshots QA và quay video demo clip
 
-### Duy — DONE SPRINT 2 DRAFT ✅
+### Duy — Báo cáo Word
 1. ✅ Đã viết xong Chương 1, 2, 3
-2. ⏳ Viết Chương 4 (Methodology): có thể bắt đầu ngay — số liệu RF đã có:
-   - Hyperparameters, Training time, F1/AUC results, Feature Importance top 5
+2. ⏳ Viết Chương 4 (Methodology) & Chương 5 (Experimental Results): Đã có toàn bộ số liệu của cả 3 mô hình (RF, XGB, Autoencoder)
 
-### Hôn — DONE SPRINT 2 PPT DRAFT ✅
-1. ✅ Đã thiết kế template và hoàn thành 9 slides PPT
-2. ⏳ Tiếp nhận số liệu RF (F1=0.9973, AUC=0.9994) để bổ sung vào slide kết quả
+### Hôn — Slide Thuyết trình PPT
+1. ✅ Đã hoàn thành 9 slides nháp mở đầu
+2. ⏳ Điền bảng số liệu thực nghiệm và biểu đồ so sánh mô hình vào các slides kết quả (Slide 10-15)
 
