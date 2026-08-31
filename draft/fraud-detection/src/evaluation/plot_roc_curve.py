@@ -74,10 +74,12 @@ def plot_roc_curves(
         output_path.parent.mkdir(parents=True, exist_ok=True)
         figure.savefig(output_path, dpi=150, bbox_inches="tight")
 
-    if show:
-        import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
 
+    if show:
         plt.show()
+
+    plt.close(figure)
 
     return figure
 
@@ -116,9 +118,11 @@ def plot_pr_curves(
         output_path.parent.mkdir(parents=True, exist_ok=True)
         figure.savefig(output_path, dpi=150, bbox_inches="tight")
 
-    if show:
-        import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
 
+    if show:
         plt.show()
+
+    plt.close(figure)
 
     return figure

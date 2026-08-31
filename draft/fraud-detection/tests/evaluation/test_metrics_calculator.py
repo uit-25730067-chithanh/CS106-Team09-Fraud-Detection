@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import math
+
 import pytest
 
 from src.evaluation.metrics_calculator import compute_metrics, print_metrics
@@ -37,6 +39,17 @@ def test_compute_metrics_handles_no_predicted_fraud() -> None:
     assert metrics["f1_fraud"] == 0.0
     assert metrics["roc_auc"] == 1.0
     assert metrics["pr_auc"] == 1.0
+
+
+def test_compute_metrics_handles_single_class_y_true() -> None:
+    metrics = compute_metrics(
+        y_true=[0, 0, 0, 0],
+        y_pred=[0, 0, 0, 0],
+        y_prob=[0.1, 0.2, 0.3, 0.4],
+    )
+
+    assert math.isnan(metrics["roc_auc"])
+    assert math.isnan(metrics["pr_auc"])
 
 
 def test_compute_metrics_rejects_mismatched_lengths() -> None:

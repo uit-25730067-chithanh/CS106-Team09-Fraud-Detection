@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, TypedDict
 
 from sklearn.metrics import (
     average_precision_score,
@@ -13,10 +13,27 @@ from sklearn.metrics import (
 )
 
 
+class EvaluationMetrics(TypedDict):
+    model: str
+    precision_fraud: float
+    recall_fraud: float
+    f1_fraud: float
+    roc_auc: float
+    pr_auc: float
+
+
 def _validate_lengths(y_true: Any, y_pred: Any, y_prob: Any) -> None:
     lengths = (len(y_true), len(y_pred), len(y_prob))
     if len(set(lengths)) != 1:
         raise ValueError("y_true, y_pred, and y_prob must have the same number of samples")
+
+
+def _ranking_metric(metric_fn: Any, y_true: Any, y_prob: Any) -> float:
+    """Round a ranking metric, or return NaN when y_true has only one class."""
+
+    if len(set(y_true)) < 2:
+        return float("nan")
+    return round(float(metric_fn(y_true, y_prob)), 4)
 
 
 def compute_metrics(
@@ -24,7 +41,7 @@ def compute_metrics(
     y_pred: Any,
     y_prob: Any,
     model_name: str = "Model",
-) -> dict[str, str | float]:
+) -> EvaluationMetrics:
     """Return fraud-class metrics and ranking metrics for one model."""
 
     _validate_lengths(y_true, y_pred, y_prob)
@@ -43,12 +60,12 @@ def compute_metrics(
             float(f1_score(y_true, y_pred, pos_label=1, zero_division=0)),
             4,
         ),
-        "roc_auc": round(float(roc_auc_score(y_true, y_prob)), 4),
-        "pr_auc": round(float(average_precision_score(y_true, y_prob)), 4),
+        "roc_auc": _ranking_metric(roc_auc_score, y_true, y_prob),
+        "pr_auc": _ranking_metric(average_precision_score, y_true, y_prob),
     }
 
 
-def print_metrics(metrics: dict[str, str | float]) -> None:
+def print_metrics(metrics: EvaluationMetrics) -> None:
     """Print one model's metrics in a terminal-friendly layout."""
 
     separator = "=" * 50
