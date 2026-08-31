@@ -66,11 +66,11 @@ fraud-detection/
 │   ├── 05_model_autoencoder.ipynb
 │   └── 06_evaluation_comparison.ipynb
 ├── src/
-│   ├── preprocessing/     ✔ data_loader, feature_scaler, data_splitter
-│   ├── models/            # Training scripts cho từng model
-│   ├── evaluation/        # Metrics và đánh giá
+│   ├── preprocessing/     ✔ data_loader, feature_scaler, data_splitter, imbalance_handler
+│   ├── models/            ✔ random_forest_model.py (RF); ⏳ xgboost_model, autoencoder_model
+│   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp (Chương 1–3 Docx/PDF) + Slide PPT (PPTX/PDF) + report-source.md
+├── reports/               # ✅ Báo cáo nháp (Chương 1–3 Docx/PDF) + Slide PPT (PPTX/PDF) + RF Reports
 ├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Custom crystal logo + hero asset của revision cũ
@@ -79,6 +79,8 @@ fraud-detection/
 │   └── requirements-demo.txt
 ├── docs/                  # Tài liệu dự án
 ├── run_preprocessing.py   # Script chạy lại pipeline nếu cần
+├── run_imbalance_handling.py # Script chạy SMOTENC & ADASYN (Phase 02)
+├── run_random_forest.py   # Script train & evaluate Random Forest (Phase 03)
 ├── requirements.txt
 └── README.md
 ```
@@ -133,14 +135,14 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 ## 📊 Workflow
 
 ```
-1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance
-2. Preprocessing  ✔ Feature Engineering, chuẩn hóa, train/test split (stratified)
-3. Imbalance      → SMOTE / ADASYN trên tập train (Phase 02 — Sơn)
-4. Modeling       → RF, XGBoost, Autoencoder (Phase 03–04 — Sơn + Cẩm)
-5. Evaluation     → Precision, Recall, F1-Score, ROC-AUC (Phase 05 — Khang)
-6. Comparison     → Bảng so sánh hiệu năng các mô hình
-7. Demo UI        ✔ UI shell + form + safe-preview; → chờ model thật để tích hợp
-8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) + Threats to Validity (Duy)
+1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance (Thanh)
+2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
+3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
+4. Modeling       ✔ Random Forest (Phase 03 — Sơn); → XGBoost & Autoencoder (Phase 04 — Cẩm)
+5. Evaluation     ⏳ Precision, Recall, F1-Score, ROC-AUC, PR curve (Phase 05 — Khang)
+6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
+7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Chờ nạp model weights thật (Trung)
+8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) (Duy) + Slide PPT 9 slides (Hôn)
 ```
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)

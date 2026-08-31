@@ -24,18 +24,19 @@ gantt
     section Sprint 2 (28/8 - 4/9)
     Tải dữ liệu & EDA (Thanh)            :done, s2_1, 2026-08-28, 2d
     Preprocessing & Outliers (Thanh)     :done, s2_2, 2026-08-30, 2d
-    Imbalance Analysis (Sơn)             :active, s2_3, 2026-08-28, 5d
-    Viết Eval scripts template (Khang)   :active, s2_4, 2026-08-28, 7d
-    Thiết kế UI & Form shell (Trung)     :done, s2_5, 2026-08-28, 2d
-    Viết báo cáo Intro + Dataset (Duy)   :active, s2_6, 2026-08-28, 7d
-    PPT Template & Slide skeleton (Hôn)  :active, s2_7, 2026-08-28, 7d
+    Imbalance Analysis & SMOTE/ADASYN (Sơn) :done, s2_3, 2026-08-28, 4d
+    Huấn luyện Random Forest (Sơn)       :done, s2_4, 2026-08-30, 2d
+    Viết Eval scripts template (Khang)   :active, s2_5, 2026-08-28, 7d
+    Thiết kế UI & Form shell (Trung)     :done, s2_6, 2026-08-28, 2d
+    Viết báo cáo Intro + Dataset (Duy)   :done, s2_7, 2026-08-28, 4d
+    PPT Template & 9 slides nháp (Hôn)   :done, s2_8, 2026-08-28, 4d
 
     section Sprint 3 (4/9 - 11/9)
-    SMOTE/ADASYN & RF Model (Sơn)        :s3_1, 2026-09-04, 7d
-    XGBoost & Autoencoder (Cẩm)          :s3_2, 2026-09-04, 7d
-    Placeholder UI & Predict (Trung)     :s3_3, 2026-09-04, 7d
-    Viết báo cáo Methodology (Duy)       :s3_4, 2026-09-04, 7d
-    Cập nhật slides non-tech (Hôn)       :s3_5, 2026-09-04, 7d
+    XGBoost & Autoencoder (Cẩm)          :active, s3_1, 2026-09-01, 7d
+    Evaluation metrics execution (Khang) :active, s3_2, 2026-09-01, 7d
+    Tích hợp model thật vào UI (Trung)   :active, s3_3, 2026-09-01, 7d
+    Viết báo cáo Methodology (Duy)       :active, s3_4, 2026-09-01, 7d
+    Cập nhật slides kết quả (Hôn)        :active, s3_5, 2026-09-01, 7d
 
     section Sprint 4 (11/9 - 18/9)
     Chạy evaluation & So sánh (Khang)   :s4_1, 2026-09-11, 4d
@@ -79,7 +80,9 @@ gantt
 ### Sơn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Phân tích + visualize tỷ lệ mất cân bằng (sau khi Thanh tải xong) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: tỷ lệ phân phối Class trên biểu đồ]* | 🟡 High | 🔲 |
+| Phân tích + visualize tỷ lệ mất cân bằng (sau khi Thanh tải xong) <br> *[Đầu vào: `data/raw/paysim.csv` \| Đầu ra: tỷ lệ phân phối Class trên biểu đồ]* | 🟡 High | ✅ |
+| Áp dụng SMOTE & ADASYN trên tập train <br> *[Đầu vào: `data/processed/X_train.pkl`, `y_train.pkl` \| Đầu ra: `X_train_smote.pkl`, `X_train_adasyn.pkl`]* | 🔴 Critical | ✅ |
+| Huấn luyện mô hình Random Forest & Tuning (RandomizedSearchCV) <br> *[Đầu vào: resampled training data \| Đầu ra: `models/rf_smote.pkl`, `reports/rf_predictions.pkl`]* | 🔴 Critical | ✅ |
 
 ### Khang *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
@@ -102,7 +105,7 @@ gantt
 ### Hôn *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| PPT: Thiết kế slide template (theme, layout, font) và chuẩn bị slide nháp giới thiệu (slide 1-4) <br> *[Đầu vào: Slide guidelines + Đề tài \| Đầu ra: file `.pptx` slide nháp giới thiệu]* | 🟡 High | 🔲 |
+| PPT: Thiết kế slide template (theme, layout, font) và chuẩn bị slide nháp giới thiệu (slide 1-9) <br> *[Đầu vào: Slide guidelines + Đề tài \| Đầu ra: file `.pptx` & `.pdf` slide nháp 9 trang]* | 🟡 High | ✅ |
 
 ---
 
@@ -114,10 +117,10 @@ gantt
 ### Sơn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Áp dụng SMOTE trên tập train <br> *[Đầu vào: `data/processed/X_train.pkl`, `y_train.pkl` \| Đầu ra: `X_train_smote.pkl`, `y_train_smote.pkl`]* | 🔴 Critical | 🔲 |
-| Áp dụng ADASYN trên tập train (so sánh với SMOTE) <br> *[Đầu vào: `data/processed/X_train.pkl`, `y_train.pkl` \| Đầu ra: `X_train_adasyn.pkl`, `y_train_adasyn.pkl`]* | 🟡 High | 🔲 |
-| Huấn luyện mô hình Random Forest <br> *[Đầu vào: resampled training data \| Đầu ra: notebook thử nghiệm Random Forest]* | 🔴 Critical | 🔲 |
-| Tối ưu hyperparameter cho Random Forest (GridSearchCV) <br> *[Đầu vào: resampled training data + RF model \| Đầu ra: optimal RF model, `models/rf_smote.pkl`]* | 🟡 High | 🔲 |
+| Áp dụng SMOTE trên tập train <br> *[Đầu vào: `data/processed/X_train.pkl`, `y_train.pkl` \| Đầu ra: `X_train_smote.pkl`, `y_train_smote.pkl`]* | 🔴 Critical | ✅ |
+| Áp dụng ADASYN trên tập train (so sánh với SMOTE) <br> *[Đầu vào: `data/processed/X_train.pkl`, `y_train.pkl` \| Đầu ra: `X_train_adasyn.pkl`, `y_train_adasyn.pkl`]* | 🟡 High | ✅ |
+| Huấn luyện mô hình Random Forest <br> *[Đầu vào: resampled training data \| Đầu ra: `src/models/random_forest_model.py`]* | 🔴 Critical | ✅ |
+| Tối ưu hyperparameter cho Random Forest (RandomizedSearchCV) <br> *[Đầu vào: resampled training data + RF model \| Đầu ra: optimal RF model, `models/rf_smote.pkl`]* | 🟡 High | ✅ |
 
 ### Cẩm *(cần data đã split từ Thanh)*
 | Task | Ưu tiên | Trạng thái |
