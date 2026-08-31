@@ -1,0 +1,37 @@
+============================================================
+  Random Forest Model Summary
+  Model: RF-ADASYN
+============================================================
+
+--- Evaluation Metrics (Test Set) ---
+  F1-Score:   0.9966
+  Precision:  0.9982
+  Recall:     0.9951
+  ROC-AUC:    0.9992
+
+--- Training Info ---
+  Tuned:              True
+  Training Time:      1167.5s
+  Best CV Score:      0.9964
+
+--- Best Hyperparameters ---
+  n_estimators: 500
+  min_samples_split: 2
+  min_samples_leaf: 1
+  max_features: sqrt
+  max_depth: 20
+  class_weight: balanced_subsample
+
+--- Confusion Matrix ---
+  [[38354     3]
+ [    8  1635]]
+
+--- Classification Report ---
+              precision    recall  f1-score   support
+
+      Normal       1.00      1.00      1.00     38357
+       Fraud       1.00      1.00      1.00      1643
+
+    accuracy                           1.00     40000
+   macro avg       1.00      1.00      1.00     40000
+weighted avg       1.00      1.00      1.00     40000
