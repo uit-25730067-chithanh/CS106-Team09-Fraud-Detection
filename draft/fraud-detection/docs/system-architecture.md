@@ -63,6 +63,8 @@
 | `data/processed/y_train_adasyn.pkl` | Labels sau ADASYN: 33.4% fraud (**đã commit**) |
 | `models/scaler.pkl` | Fitted StandardScaler, dùng khi predict mới (**đã commit**) |
 | `models/rf_smote.pkl` | Model Random Forest đã train trên SMOTE (**đã lưu**) |
+| `models/xgb_smote.json` | Model XGBoost đã train dạng native JSON (**đã commit**) |
+| `models/autoencoder_threshold.txt` | Ngưỡng tái tạo tối ưu cho Autoencoder (**đã commit**) |
 
 ### 2. Preprocessing Pipeline (`src/preprocessing/`)
 
@@ -79,7 +81,7 @@
 |--------|-----------|-----------|
 | `random_forest_model.py` | Random Forest Classifier | scikit-learn |
 | `xgboost_model.py` | XGBoost Classifier | xgboost |
-| `autoencoder_model.py` | Autoencoder (anomaly) | Keras/TF |
+| `autoencoder_model.py` | Autoencoder Anomaly Detection | scikit-learn (MLPRegressor) |
 
 ### 4. Evaluation (`src/evaluation/`)
 

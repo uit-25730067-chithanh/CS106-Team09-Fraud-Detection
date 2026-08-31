@@ -57,20 +57,20 @@ fraud-detection/
 │   └── processed/         # ✅ Dữ liệu đã xử lý — X_train/X_test/y_train/y_test.pkl
 │                          #    → Đã có trong git, chỉ cần git pull
 │                          #    → Xem: data/processed/README.md
-├── models/                # scaler.pkl (đã commit) + model .pkl lớn (ignore)
+├── models/                # scaler.pkl, xgb_smote.json, autoencoder_threshold.txt
 ├── notebooks/             # Jupyter notebooks cho EDA và thử nghiệm
-│   ├── 01_eda.ipynb       ✔ Hoàn thành
+│   ├── 01_eda.ipynb       ✔ Hoàn thành (EDA & Feature Distributions)
 │   ├── 02_imbalance_handling.ipynb
 │   ├── 03_model_random_forest.ipynb
-│   ├── 04_model_xgboost.ipynb
-│   ├── 05_model_autoencoder.ipynb
+│   ├── 04_model_xgboost.ipynb ✔ Hoàn thành (XGBoost SMOTE/ADASYN)
+│   ├── 05_model_autoencoder.ipynb ✔ Hoàn thành (Autoencoder Anomaly Detection)
 │   └── 06_evaluation_comparison.ipynb
 ├── src/
 │   ├── preprocessing/     ✔ data_loader, feature_scaler, data_splitter, imbalance_handler
-│   ├── models/            ✔ random_forest_model.py (RF); ⏳ xgboost_model, autoencoder_model
+│   ├── models/            ✔ random_forest_model.py, xgboost_model.py, autoencoder_model.py
 │   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp (Chương 1–3 Docx/PDF) + Slide PPT (PPTX/PDF) + RF Reports
+├── reports/               # ✅ Báo cáo nháp Docx/PDF + Slide PPT + Predictions (RF, XGB, Autoencoder)
 ├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Custom crystal logo + hero asset của revision cũ
@@ -78,9 +78,11 @@ fraud-detection/
 │   ├── WIREFRAME.md      # Bố cục và nguyên tắc giao diện
 │   └── requirements-demo.txt
 ├── docs/                  # Tài liệu dự án
-├── run_preprocessing.py   # Script chạy lại pipeline nếu cần
+├── run_preprocessing.py   # Script chạy lại pipeline tiền xử lý (Phase 01)
 ├── run_imbalance_handling.py # Script chạy SMOTENC & ADASYN (Phase 02)
 ├── run_random_forest.py   # Script train & evaluate Random Forest (Phase 03)
+├── run_xgboost.py         # Script train & evaluate XGBoost (Phase 04)
+├── run_autoencoder.py     # Script train & evaluate Autoencoder (Phase 04)
 ├── requirements.txt
 └── README.md
 ```
@@ -138,10 +140,10 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance (Thanh)
 2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
-4. Modeling       ✔ Random Forest (Phase 03 — Sơn); → XGBoost & Autoencoder (Phase 04 — Cẩm)
+4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm)
 5. Evaluation     ⏳ Precision, Recall, F1-Score, ROC-AUC, PR curve (Phase 05 — Khang)
 6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
-7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Chờ nạp model weights thật (Trung)
+7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Sẵn sàng nạp model weights (Trung)
 8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) (Duy) + Slide PPT 9 slides (Hôn)
 ```
 
