@@ -56,6 +56,7 @@ Final/
 | `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (9.2 MB) |
 | `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (32.3 MB) |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; còn model integration, figures và demo clip |
+| Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending (Sprint 2 templates done)` — metrics_calculator.py & plot_roc_curve.py đã viết; còn confusion_matrix_plot.py, model_comparator.py và chạy metrics thực tế (Sprint 3) |
 | Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 9 slides PPTX/PDF (Hôn) đã hoàn tất tại `reports/` |
 | Docs | ✅ 4 files: overview, roadmap, architecture, code-standards |
 
@@ -239,10 +240,10 @@ Place in `Final/submit/` before zipping.
 2. Load `data/processed/X_train_smote.pkl` và `y_train_smote.pkl` để train XGBoost
 3. Xem chi tiết: `plans/fraud-detection-full-submit/phase-04-model-xgboost-autoencoder.md`
 
-### Khang — Có thể bắt đầu Phase 05 (Evaluation)
-1. `git pull` — RF predictions đã có tại `reports/rf_predictions.pkl` và `reports/rf_smote_predictions.pkl`
-2. Viết `src/evaluation/metrics_calculator.py` và `plot_roc_curve.py`
-3. Load model từ `models/rf_smote.pkl` để chạy evaluation
+### Khang — Phase 05 (Evaluation) — Sprint 2 templates DONE ✅
+1. ✅ `git pull` — RF predictions đã có tại `reports/rf_predictions.pkl` và `reports/rf_smote_predictions.pkl`
+2. ✅ Viết `src/evaluation/metrics_calculator.py` và `plot_roc_curve.py`
+3. ⏳ Sprint 3: viết nốt `confusion_matrix_plot.py` và `model_comparator.py`, sau đó load model từ `models/rf_smote.pkl` để chạy evaluation thực tế
 
 ### Trung
 1. ✅ Hoàn thành UI shell Revision 7.7

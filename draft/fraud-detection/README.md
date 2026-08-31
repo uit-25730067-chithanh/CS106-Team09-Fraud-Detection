@@ -139,7 +139,7 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
 4. Modeling       ✔ Random Forest (Phase 03 — Sơn); → XGBoost & Autoencoder (Phase 04 — Cẩm)
-5. Evaluation     ⏳ Precision, Recall, F1-Score, ROC-AUC, PR curve (Phase 05 — Khang)
+5. Evaluation     ⏳ templates done, pending model artifacts — Precision, Recall, F1-Score, ROC-AUC, PR curve (Phase 05 — Khang)
 6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
 7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Chờ nạp model weights thật (Trung)
 8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) (Duy) + Slide PPT 9 slides (Hôn)
