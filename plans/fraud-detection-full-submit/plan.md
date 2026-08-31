@@ -46,7 +46,7 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 01 | [EDA & Preprocessing](./phase-01-eda-preprocessing.md) | Thanh | Sprint 2 | `passed` ✅ | Notebooks chạy, processed data saved |
 | 02 | [Imbalance Handling](./phase-02-imbalance-handling.md) | Sơn | Sprint 3 | `passed` ✅ | SMOTENC+ADASYN applied, 4 pkl saved, binary integrity PASS |
 | 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `passed` ✅ | RF-SMOTE F1=0.9973 AUC=0.9994, RF-ADASYN F1=0.9966 AUC=0.9992 |
-| 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `pending` | Both models trained, artifacts saved |
+| 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `pending` | All metrics computed, comparison table done |
 | 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | Streamlit/Gradio runs, predicts correctly |
 | 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word + PPT complete per rubric |

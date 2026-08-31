@@ -1,0 +1,15 @@
+Feature,Importance
+errorBalanceOrig,0.49940524
+newbalanceOrig,0.47170678
+errorBalanceDest,0.009765038
+is_drain_account,0.005920262
+amount,0.004936859
+oldbalanceOrg,0.0032974817
+amount_to_oldbalance_ratio,0.0016726956
+type_TRANSFER,0.0010056295
+oldbalanceDest,0.00074182096
+step,0.0006310752
+newbalanceDest,0.00045518394
+hour_of_day,0.0003357978
+is_large_transaction,0.00012614664
+is_night_transaction,0.0

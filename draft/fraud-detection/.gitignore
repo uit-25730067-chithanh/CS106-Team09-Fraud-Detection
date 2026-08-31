@@ -12,8 +12,12 @@ venv/
 # Jupyter checkpoints
 .ipynb_checkpoints/
 
-# Models (large trained models only — theo plan.md: chỉ ignore > 50MB)
-# scaler.pkl (~1KB) được commit, các model khác bị ignore
+# Models
+# - File .pkl bị ignore (dễ vỡ khi khác phiên bản lib; trùng với bản .json).
+# - scaler.pkl (~1KB) vẫn commit vì preprocessing cần.
+# - Bản export portable ĐƯỢC track có chủ đích để nhóm dùng chung (demo Streamlit,
+#   đánh giá Phase 05): models/*.json (XGBoost native), models/*_threshold.txt,
+#   models/*_meta.json — đều < 1MB.
 models/*.pkl
 !models/scaler.pkl
 *.h5

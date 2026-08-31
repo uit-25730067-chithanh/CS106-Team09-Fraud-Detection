@@ -125,11 +125,11 @@ gantt
 ### Cẩm *(cần data đã split từ Thanh)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Chuẩn bị dữ liệu: Load dữ liệu train/test đã tiền xử lý <br> *[Đầu vào: `data/processed/` `.pkl` files \| Đầu ra: dữ liệu sẵn sàng trong bộ nhớ để huấn luyện]* | 🟡 High | 🔲 |
-| Notebook & script huấn luyện mô hình XGBoost <br> *[Đầu vào: `X_train_smote.pkl`, `y_train_smote.pkl` \| Đầu ra: notebook và script XGBoost]* | 🔴 Critical | 🔲 |
-| Tối ưu hyperparameter cho XGBoost <br> *[Đầu vào: XGBoost model \| Đầu ra: optimal XGBoost model, `models/xgb_smote.pkl`]* | 🟡 High | 🔲 |
-| Notebook & script huấn luyện Autoencoder (Keras) <br> *[Đầu vào: normal train data (Class=0) \| Đầu ra: trained Autoencoder model, `models/autoencoder.h5`, `models/autoencoder_threshold.txt`]* | 🟢 Medium | 🔲 |
-| Lưu tất cả models (`.pkl` / `.h5`) vào `models/` <br> *[Đầu vào: trained model objects \| Đầu ra: files in `models/` directory]* | 🔴 Critical | 🔲 |
+| Chuẩn bị dữ liệu: Load dữ liệu train/test đã tiền xử lý <br> *[Đầu vào: `data/processed/` `.pkl` files \| Đầu ra: dữ liệu sẵn sàng trong bộ nhớ để huấn luyện]* | 🟡 High | ✅ |
+| Notebook & script huấn luyện mô hình XGBoost <br> *[Đầu ra: `run_xgboost.py`, `src/models/xgboost_model.py`, `notebooks/04_model_xgboost.ipynb`]* | 🔴 Critical | ✅ |
+| Tối ưu hyperparameter cho XGBoost (RandomizedSearchCV) <br> *[Đầu ra: `models/xgb_smote.pkl` — F1=0.9963, AUC=0.9993 trên test]* | 🟡 High | ✅ |
+| Script huấn luyện Autoencoder <br> *[⚠️ Keras/TF không có bản Python 3.14 → dùng sklearn MLPRegressor, cùng kiến trúc 16-8-4-8-16. Đầu ra: `models/autoencoder.pkl`, `models/autoencoder_threshold.txt` — Recall(fraud)=0.75, AUC=0.93]* | 🟢 Medium | ✅ |
+| Lưu tất cả models vào `models/` <br> *[`xgb_smote.pkl`, `xgb_adasyn.pkl`, `autoencoder.pkl` (+ `.json` / threshold / meta)]* | 🔴 Critical | ✅ |
 
 ### Khang
 | Task | Ưu tiên | Trạng thái |
