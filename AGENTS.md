@@ -53,9 +53,11 @@ Final/
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
-| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 |
+| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (9.2 MB) |
+| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (32.3 MB) |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
+| Evaluation (`src/evaluation/`) | 🟡 Phase 05 in progress — metrics_calculator.py & plot_roc_curve.py merged; sẵn sàng chạy cross-model evaluation |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; sẵn sàng nạp model thật |
 | Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) đã hoàn tất |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
@@ -242,13 +244,13 @@ Place in `Final/submit/` before zipping.
 - ✅ Hoàn thành 2 notebooks `04_model_xgboost.ipynb` và `05_model_autoencoder.ipynb` (đầy đủ biểu đồ visual)
 - ✅ Đã bàn giao predictions cho Khang: `reports/xgb_predictions.pkl`, `reports/autoencoder_predictions.pkl`
 
-### Khang — Bắt đầu Phase 05 (Evaluation & Comparison)
-1. `git pull` — Đầy đủ predictions từ cả 3 mô hình đã có sẵn tại `reports/`:
+### Khang — Phase 05 (Evaluation & Comparison)
+1. ✅ Đã viết xong `src/evaluation/metrics_calculator.py` và `plot_roc_curve.py` (Unit tests pass 100%).
+2. ✅ Đầy đủ predictions từ cả 3 mô hình đã có sẵn tại `reports/`:
    - `rf_predictions.pkl` (Random Forest)
    - `xgb_predictions.pkl` (XGBoost)
    - `autoencoder_predictions.pkl` (Autoencoder)
-2. Viết `src/evaluation/metrics_calculator.py`, `plot_roc_curve.py`, `confusion_matrix_plot.py`, `model_comparator.py`
-3. Xuất bảng so sánh tổng hợp chéo (Cross-model comparison table) và biểu đồ ROC / PR curves so sánh 3 mô hình
+3. ⏳ Viết nốt `confusion_matrix_plot.py`, `model_comparator.py` và xuất bảng so sánh tổng hợp chéo (Cross-model comparison table) cùng biểu đồ ROC / PR curves so sánh 3 mô hình.
 
 ### Trung — Bắt đầu Tích hợp Model vào Demo UI (Phase 06)
 1. Đã có weights mô hình: `models/xgb_smote.json` / `models/rf_smote.pkl` và `models/scaler.pkl`
