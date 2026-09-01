@@ -51,18 +51,18 @@
 | Thiết kế template PPT (theme, layout, màu, font) | Sprint 2 | Chuẩn phong cách UIT & Financial AI | ✅ Hoàn thành |
 | Điền slides: Title, Team, Giới thiệu bài toán, Dataset, EDA (Slides 1–5) | Sprint 2 | Khớp dữ liệu PaySim và EDA | ✅ Hoàn thành |
 | Điền slides: Pipeline, Preprocessing 14 features, Imbalance & Models (Slides 6–9) | Sprint 2–3 | Sơ đồ data flow chống leakage, 14 features, RF/XGB/AE | ✅ Hoàn thành |
-| Điền slides: Kết quả, ROC, Confusion Matrix (điền số từ Khang) | Sprint 4 | Cần output Phase 05 | 🔲 Chưa bắt đầu |
-| Điền slide Demo (screenshot từ Trung) | Sprint 4 | Cần screenshot từ Trung | 🔲 Chưa bắt đầu |
-| Hoàn thiện PPT + kiểm tra timing | Sprint 4 | | 🔲 Chưa bắt đầu |
+| Điền slides: Kết quả, ROC, Confusion Matrix (Slides 10–12) | Sprint 3 | Số liệu thực nghiệm RF, XGBoost, Autoencoder | ✅ Hoàn thành |
+| Điền slide Demo & Tổng kết (Slides 13–15) | Sprint 3 | Demo Streamlit, Hướng phát triển, Q&A | ✅ Hoàn thành |
+| Hoàn thiện PPT + kiểm tra timing (15 slides) | Sprint 3 | Khớp 100% metrics thực tế | ✅ Hoàn thành |
 
-#### Evidence Early Start — Hôn, Sprint 2 (29/08/2026)
+#### Evidence Hoàn thiện Slides — Hôn (01/09/2026)
 
-- Google Slides thiết kế gốc: [Google Slides Link](https://docs.google.com/presentation/d/1GEibG9p26vu57G15NdChx8SQrG0zTD50LZBwpIXPU58/edit?usp=drive_link).
+- Google Slides thiết kế gốc: [Google Slides Link](https://docs.google.com/presentation/d/1GEibG9p26vu57G15NdChx8SQrG0zTD50LZBwpIXPU58/edit?usp=sharing).
 - File artifacts lưu trữ tại repo:
-  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pptx` (795 KB)
-  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pdf` (3.08 MB)
-- Số lượng slide: **9 slides** hoàn chỉnh (Bìa, Mục lục, Bài toán, Dữ liệu PaySim, Khám phá EDA, Kiến trúc Pipeline, Tiền xử lý 14 features, Xử lý mất cân bằng, Mô hình học máy & học sâu).
-- Nội dung xác minh: Đầy đủ 14 đặc trưng sau Phase 01b, nguyên tắc chống rò rỉ dữ liệu (No Data Leakage), giải thích bản chất không dùng Accuracy, và 3 mô hình (Random Forest, XGBoost, Autoencoder).
+  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pptx` (1.41 MB)
+  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pdf` (4.91 MB)
+- Số lượng slide: **15 slides** hoàn chỉnh (Bìa, Mục lục, Đặt vấn đề & Thách thức, Dữ liệu PaySim, EDA Discoveries, Kiến trúc Pipeline, Tiền xử lý 14 features, Xử lý mất cân bằng, 3 Mô hình RF/XGB/AE, Tiêu chí đánh giá, Bảng so sánh đa tiêu chí, Ma trận nhầm lẫn & Feature Importance, Live Demo Streamlit, Tổng kết & Hướng phát triển, Q&A & Cảm ơn).
+- Nội dung xác minh: Đầy đủ 15 slides, tích hợp 100% metrics thực tế từ Phase 03–04, hình ảnh trực quan và phân tích nghiệp vụ sâu sắc.
 
 ## Context
 

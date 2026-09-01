@@ -57,7 +57,7 @@ Final/
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; sẵn sàng nạp model thật |
-| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 9 slides PPTX/PDF (Hôn) đã hoàn tất |
+| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) đã hoàn tất |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
 > **Verdict: Phase 00, 01, 01b, 02, 03 & 04 PASSED. Toàn bộ 3 họ mô hình (Random Forest, XGBoost, Autoencoder) đã hoàn thành xuất sắc. Sẵn sàng cho Khang (Phase 05 - Evaluation) và Trung (Phase 06 - UI Integration).**
