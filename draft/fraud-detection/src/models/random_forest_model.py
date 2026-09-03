@@ -174,7 +174,7 @@ def evaluate_model(
     recall = recall_score(y_test, y_pred)
     auc = roc_auc_score(y_test, y_prob)
     cm = confusion_matrix(y_test, y_pred)
-    report = classification_report(y_test, y_pred, target_names=["Normal", "Fraud"])
+    report = classification_report(y_test, y_pred, target_names=["Normal", "Fraud"], digits=4)
 
     metrics = {
         "model_name": model_name,
