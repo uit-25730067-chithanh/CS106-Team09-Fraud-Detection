@@ -11,7 +11,7 @@
 
 --- Training Info ---
   Tuned:              True
-  Training Time:      41.59s
+  Training Time:      57.94s
   Best CV Score:      0.9994
   scale_pos_weight:   1.0
 
@@ -31,9 +31,9 @@
 --- Classification Report ---
               precision    recall  f1-score   support
 
-      Normal       1.00      1.00      1.00     38357
-       Fraud       1.00      1.00      1.00      1643
+      Normal     0.9998    0.9999    0.9998     38357
+       Fraud     0.9976    0.9951    0.9963      1643
 
-    accuracy                           1.00     40000
-   macro avg       1.00      1.00      1.00     40000
-weighted avg       1.00      1.00      1.00     40000
+    accuracy                         0.9997     40000
+   macro avg     0.9987    0.9975    0.9981     40000
+weighted avg     0.9997    0.9997    0.9997     40000
