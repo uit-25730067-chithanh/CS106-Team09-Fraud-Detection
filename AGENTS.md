@@ -53,13 +53,13 @@ Final/
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
-| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (9.2 MB) |
-| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (32.3 MB) |
+| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (digits=4 chuẩn hóa từ PR #15) |
+| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (digits=4 chuẩn hóa từ PR #15) |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
-| Evaluation (`src/evaluation/`) | 🟡 Phase 05 in progress — metrics_calculator.py & plot_roc_curve.py merged; sẵn sàng chạy cross-model evaluation |
+| Evaluation (`src/evaluation/`) | 🟡 Phase 05 in progress — metrics_calculator.py & plot_roc_curve.py merged (PR #7); sẵn sàng chạy cross-model evaluation |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; sẵn sàng nạp model thật |
-| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) đã hoàn tất |
+| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) + Slide học thuật 24 trang (PR #13) đã hoàn tất |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
 > **Verdict: Phase 00, 01, 01b, 02, 03 & 04 PASSED. Toàn bộ 3 họ mô hình (Random Forest, XGBoost, Autoencoder) đã hoàn thành xuất sắc. Sẵn sàng cho Khang (Phase 05 - Evaluation) và Trung (Phase 06 - UI Integration).**
@@ -262,6 +262,7 @@ Place in `Final/submit/` before zipping.
 2. ⏳ Viết Chương 4 (Methodology) & Chương 5 (Experimental Results): Đã có toàn bộ số liệu của cả 3 mô hình (RF, XGB, Autoencoder)
 
 ### Hôn — Slide Thuyết trình PPT
-1. ✅ Đã hoàn thành 9 slides nháp mở đầu
-2. ⏳ Điền bảng số liệu thực nghiệm và biểu đồ so sánh mô hình vào các slides kết quả (Slide 10-15)
+1. ✅ Đã hoàn thành 15 slides PPTX/PDF hoàn chỉnh (`[Nhom9]_Slide_FraudDetection_Hon.pptx`/`.pdf`) với đầy đủ số liệu thực nghiệm.
+2. ✅ Đã tích hợp bộ Slide học thuật 24 trang song ngữ EN-VN (`draft/fraud-detection/slide/`) từ PR #13 làm tài liệu tham khảo & backup Q&A.
+3. ⏳ Chuẩn bị kịch bản thuyết trình 10–12 phút và phối hợp Trung chụp ảnh màn hình Demo UI vào Slide 13.
 
