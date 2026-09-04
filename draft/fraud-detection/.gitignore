@@ -30,3 +30,14 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Slide tooling & Node
+node_modules/
+slide/node_modules/
+slide/package*.json
+slide_images/
+
+
+
+# Office / PowerPoint temp lock files
+~$*
