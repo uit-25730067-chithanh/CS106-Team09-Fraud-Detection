@@ -67,8 +67,8 @@ Final/
 | Sprint | Nội dung công việc | Trạng thái | Người phụ trách |
 |--------|-------------------|-----------|------------------|
 | **Sprint 1 (25/8 – 28/8)** | Khởi tạo Repo, phân công & thiết kế khung dự án | ✅ Xong | Thanh + Hôn |
-| **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, XGBoost & Autoencoder ✅ (Cẩm xong sớm), Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT 15 slides ✅, Streamlit UI Shell Rev 7.7 ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
-| **Sprint 3 (4/9 – 11/9)** | Evaluation scripts 2/4 ✅ (Khang), **còn thiếu**: confusion_matrix_plot + model_comparator + notebook 06 (Khang); Tích hợp Model UI (Trung — blocked on Phase 05); Báo cáo Chương 4 (Duy — có thể viết ngay); PM Audit ✅ (Hôn). ⚠️ Sơn cần tạo 2 notebooks (02, 03) | 🔄 Đang triển khai (55.6%) | Khang + Trung + Duy + Sơn + Hôn |
+| **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, XGBoost & Autoencoder ✅ (Cẩm xong sớm), Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT 21 slides học thuật & Kịch bản toàn team (đang xem xét) ✅, Streamlit UI Shell Rev 7.7 ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
+| **Sprint 3 (4/9 – 11/9)** | Notebooks 02, 03 hoàn thành (Sơn ✅); Evaluation scripts 2/4 ✅ (Khang), **còn thiếu**: confusion_matrix_plot + model_comparator + notebook 06 (Khang); Tích hợp Model UI (Trung — blocked on Phase 05); Báo cáo Chương 4 (Duy — có thể viết ngay); PM Audit ✅ (Hôn). | 🔄 Đang triển khai (55.6%) | Khang + Trung + Duy + Sơn + Hôn |
 | **Sprint 4 (11/9 – 18/9)** | Đánh giá tổng kết, hoàn thiện báo cáo Word/PPT & diễn tập thuyết trình | 🔲 Chưa làm | Cả nhóm |
 | **Nộp bài (18/9)** | Đóng gói zip & Nộp bài chính thức trước deadline | 🔲 Chưa làm | Hôn |
 

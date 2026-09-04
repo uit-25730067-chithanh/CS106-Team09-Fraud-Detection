@@ -59,7 +59,7 @@ Final/
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `reports/model_comparison.csv` |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh (code, AppTest, local runtime); còn thiếu browser/pixel QA, model integration, comparison figures, screenshots, demo clip |
-| Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: 15 slides ✅ (Hôn) + Slide học thuật 24 trang ✅ (PR #13) + Kịch bản thuyết trình toàn team 21 slide ✅ (PR #18) |
+| Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: Bộ slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người (đang xem xét làm bản chính thức); Đã dọn dẹp các bản nháp slide 15 trang cũ của Hôn |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
 > **Verdict (04/09): Phase 00–04 PASSED (5/9 = 55.6%). Toàn bộ 3 họ mô hình và 5/6 notebooks đã hoàn thành xuất sắc (Sơn đã bổ sung 02 & 03). Đang Sprint 3: Khang cần hoàn thành Phase 05 (2 scripts + notebook 06 + chạy metrics), Trung model integration, Duy viết Chương 4-6.**
@@ -278,11 +278,10 @@ Place in `Final/submit/` before zipping.
 5. ⏳ Format Word + kiểm tra citation
 
 ### 🔄 Hôn — PM + PPT — PARTIALLY BLOCKED
-1. ✅ Đã hoàn thành 15 slides PPTX/PDF hoàn chỉnh với đầy đủ số liệu thực nghiệm
-2. ✅ Đã tích hợp bộ Slide học thuật 24 trang song ngữ EN-VN từ PR #13
-3. ✅ **PM Audit Sprint 3** hoàn thành — phát hiện 17 missed items (xem bảng trên)
-4. ⏳ Chuẩn bị kịch bản thuyết trình 10–12 phút
-5. ⏳ Phối hợp Trung chụp ảnh Demo UI → cập nhật Slide 13
-6. ⏳ Phase 08: Đóng gói submit package (blocked by Phase 05–07)
+1. 🟡 Thống nhất lựa chọn bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md`) (đang xem xét làm bản chính thức); Đã loại bỏ các file slide nháp 15 trang cũ.
+2. ✅ **PM Audit Sprint 3** hoàn thành — theo dõi và đốc thúc tiến độ Sprint 3.
+3. ⏳ Phối hợp các thành viên rà soát, luyện tập thuyết trình theo kịch bản 10–12 phút (đang xem xét).
+4. ⏳ Phối hợp Trung chụp ảnh Demo UI → cập nhật hình ảnh vào slide & báo cáo.
+5. ⏳ Phase 08: Đóng gói submit package (blocked by Phase 05–07).
 
 

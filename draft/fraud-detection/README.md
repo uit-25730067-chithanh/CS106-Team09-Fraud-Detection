@@ -60,8 +60,8 @@ fraud-detection/
 ├── models/                # scaler.pkl, xgb_smote.json, autoencoder_threshold.txt
 ├── notebooks/             # Jupyter notebooks cho EDA và thử nghiệm
 │   ├── 01_eda.ipynb       ✔ Hoàn thành (EDA & Feature Distributions)
-│   ├── 02_imbalance_handling.ipynb
-│   ├── 03_model_random_forest.ipynb
+│   ├── 02_imbalance_handling.ipynb ✔ Hoàn thành (SMOTENC & ADASYN)
+│   ├── 03_model_random_forest.ipynb ✔ Hoàn thành (Random Forest & Tuning)
 │   ├── 04_model_xgboost.ipynb ✔ Hoàn thành (XGBoost SMOTE/ADASYN)
 │   ├── 05_model_autoencoder.ipynb ✔ Hoàn thành (Autoencoder Anomaly Detection)
 │   └── 06_evaluation_comparison.ipynb
@@ -70,7 +70,8 @@ fraud-detection/
 │   ├── models/            ✔ random_forest_model.py, xgboost_model.py, autoencoder_model.py
 │   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp Docx/PDF + Slide PPT + Predictions (RF, XGB, Autoencoder)
+├── reports/               # ✅ Báo cáo nháp Docx/PDF + Predictions (RF, XGB, Autoencoder)
+├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (đang xem xét)
 ├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Custom crystal logo + hero asset của revision cũ
@@ -144,10 +145,10 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
 6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + reports/model_comparison.csv
 7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
-8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Slide PPT 15 slides (Hôn) + Slide học thuật 24 trang
+8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
 ```
 
-> ⚠️ **PM Audit (04/09):** Thiếu 3 notebooks: `02_imbalance_handling`, `03_model_random_forest`, `06_evaluation_comparison` — cần cho submit package.
+> ⚠️ **PM Audit (04/09):** Đã có 5/6 notebooks (Sơn đã bổ sung 02, 03 qua PR #20); hiện chỉ còn thiếu notebook `06_evaluation_comparison` (Khang) cho submit package.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 
