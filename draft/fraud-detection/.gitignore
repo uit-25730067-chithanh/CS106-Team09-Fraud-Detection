@@ -30,3 +30,13 @@ Thumbs.db
 # IDE
 .vscode/
 .idea/
+
+# Node
+node_modules/
+slide_images/
+package.json
+package-lock.json
+
+
+# Office / PowerPoint temp lock files
+~$*

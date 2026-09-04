@@ -35,3 +35,6 @@ models/*.joblib
 .idea/
 *.swp
 .env
+
+# Office temp lock files
+~$*
