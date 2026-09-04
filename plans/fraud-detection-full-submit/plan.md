@@ -49,16 +49,16 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `pending` | 2/4 scripts done (PR #7 merged); còn thiếu confusion_matrix_plot.py + model_comparator.py + notebook 06 |
 | 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI shell Rev 7.7 verified; chờ model integration + browser QA + screenshots/clip |
-| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word: Chương 1-3 ✅ (Duy) + PPT 15 slides ✅ (Hôn) + Slide học thuật 24 trang ✅ (PR #13); Chương 4-6 chưa viết |
-| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 05–07; ⚠️ cần 6 notebooks (hiện chỉ có 3) |
+| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word: Chương 1-3 ✅ (Duy); PPT: Bộ slide học thuật 21 trang & Kịch bản toàn team (đang xem xét); Chương 4-6 chưa viết |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 05–07; Đã có 5/6 notebooks (chỉ còn thiếu 06 của Khang) |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
 > **Phase 06 — Trung — checkpoint 29/08/2026:** UI shell Revision 7.7 đã được xác minh ở cấp code, AppTest và local runtime. Phase vẫn `pending`; còn browser/pixel QA, tích hợp model và figures thật, screenshot và demo clip.
 >
-> **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main`. Bộ Slide PPT chính thức (15 slides) và Slide học thuật 24 trang đã hoàn tất. Phase vẫn `pending` chờ Methodology (Chương 4 — Duy có thể viết ngay) và Results/Conclusion (Chương 5-6 — cần Phase 05).
+> **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main`. Bộ Slide học thuật 21 trang và Kịch bản thuyết trình toàn team 7 người đã hoàn tất (đang xem xét làm bản chính thức; đã dọn dẹp các slide nháp 15 trang cũ). Phase vẫn `pending` chờ Methodology (Chương 4 — Duy có thể viết ngay) và Results/Conclusion (Chương 5-6 — cần Phase 05).
 >
-> **PM Audit — Hôn — 04/09/2026:** Scout toàn bộ file tree phát hiện 17 items cần xử lý: 3 notebooks thiếu (02, 03, 06), 2 scripts evaluation chưa tạo, thư mục `reports/figures/` và `reports/model_comparison.csv` chưa tồn tại, RF `.pkl` bị gitignore, và Phase 08 checklist tham chiếu sai (`autoencoder.h5` → `autoencoder_meta.json`). Tiến độ tổng thể 5/9 phases = 55.6%, đúng Sprint timeline.
+> **PM Audit — Hôn — 04/09/2026:** Tiến độ notebooks: Sơn đã bổ sung notebook 02 và 03 qua PR #20 (hiện đã có 5/6 notebooks, chỉ còn thiếu 06 của Khang). 2 scripts evaluation của Khang chưa tạo, thư mục `reports/figures/` và `reports/model_comparison.csv` chưa tồn tại, RF `.pkl` bị gitignore. Tiến độ tổng thể 5/9 phases = 55.6%, đúng Sprint timeline.
 
 ## Git Convention
 
