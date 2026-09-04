@@ -7,7 +7,7 @@ effort: ~40h (7 người)
 branch: main
 tags: [cs106, fraud-detection, academic, python, ml, submit]
 created: 2026-08-24
-updated: 2026-08-31
+updated: 2026-09-04
 sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
 ---
 
@@ -45,18 +45,20 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 00 | [Environment & Data Setup](./phase-00-env-data-setup.md) | Thanh | Sprint 1 | `passed` ✅ | Dataset loaded, venv OK, imports work |
 | 01 | [EDA & Preprocessing](./phase-01-eda-preprocessing.md) | Thanh | Sprint 2 | `passed` ✅ | Notebooks chạy, processed data saved |
 | 02 | [Imbalance Handling](./phase-02-imbalance-handling.md) | Sơn | Sprint 3 | `passed` ✅ | SMOTENC+ADASYN applied, 4 pkl saved, binary integrity PASS |
-| 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `passed` ✅ | RF-SMOTE F1=0.9973 AUC=0.9994, RF-ADASYN F1=0.9966 AUC=0.9992 |
+| 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `passed` ✅ | RF-SMOTE F1=0.9973 AUC=0.9994, RF-ADASYN F1=0.9966 AUC=0.9992 (digits=4 synced) |
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
-| 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `pending` | All metrics computed, comparison table done |
-| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | Streamlit/Gradio runs, predicts correctly |
-| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word + PPT complete per rubric |
-| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | ZIP ready, all notebooks re-run clean |
+| 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `pending` | 2/4 scripts done (PR #7 merged); còn thiếu confusion_matrix_plot.py + model_comparator.py + notebook 06 |
+| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI shell Rev 7.7 verified; chờ model integration + browser QA + screenshots/clip |
+| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word: Chương 1-3 ✅ (Duy); PPT: Bộ slide học thuật 21 trang & Kịch bản toàn team (đang xem xét); Chương 4-6 chưa viết |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 05–07; Đã có 5/6 notebooks (chỉ còn thiếu 06 của Khang) |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
 > **Phase 06 — Trung — checkpoint 02/09/2026:** Đã tích hợp XGBoost-SMOTE và scaler thật, khóa contract 14 đặc trưng, trả probability/nhãn theo ngưỡng và vượt `6` inference tests. Phase vẫn `pending`; còn browser QA, figures/kết luận Phase 05, screenshot và demo clip.
 >
-> **Phase 07 — Duy & Hôn — checkpoint 29/08/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main` (`report-source.md` và file docx/pdf). Bộ Slide PowerPoint thuyết trình nháp (9 slides: bìa, bài toán, PaySim EDA, pipeline 14 features, models) của Hôn đã hoàn tất lưu tại `reports/` dạng `.pptx` và `.pdf`. Phase vẫn `pending` chờ Methodology (Sprint 3) và Results/Conclusion (Sprint 4).
+> **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main`. Bộ Slide học thuật 21 trang và Kịch bản thuyết trình toàn team 7 người đã hoàn tất (đang xem xét làm bản chính thức; đã dọn dẹp các slide nháp 15 trang cũ). Phase vẫn `pending` chờ Methodology (Chương 4 — Duy có thể viết ngay) và Results/Conclusion (Chương 5-6 — cần Phase 05).
+>
+> **PM Audit — Hôn — 04/09/2026:** Tiến độ notebooks: Sơn đã bổ sung notebook 02 và 03 qua PR #20 (hiện đã có 5/6 notebooks, chỉ còn thiếu 06 của Khang). 2 scripts evaluation của Khang chưa tạo, thư mục `reports/figures/` và `reports/model_comparison.csv` chưa tồn tại, RF `.pkl` bị gitignore. Tiến độ tổng thể 5/9 phases = 55.6%, đúng Sprint timeline.
 
 ## Git Convention
 

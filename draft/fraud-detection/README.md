@@ -60,8 +60,8 @@ fraud-detection/
 ├── models/                # scaler.pkl, xgb_smote.json, autoencoder_threshold.txt
 ├── notebooks/             # Jupyter notebooks cho EDA và thử nghiệm
 │   ├── 01_eda.ipynb       ✔ Hoàn thành (EDA & Feature Distributions)
-│   ├── 02_imbalance_handling.ipynb
-│   ├── 03_model_random_forest.ipynb
+│   ├── 02_imbalance_handling.ipynb ✔ Hoàn thành (SMOTENC & ADASYN)
+│   ├── 03_model_random_forest.ipynb ✔ Hoàn thành (Random Forest & Tuning)
 │   ├── 04_model_xgboost.ipynb ✔ Hoàn thành (XGBoost SMOTE/ADASYN)
 │   ├── 05_model_autoencoder.ipynb ✔ Hoàn thành (Autoencoder Anomaly Detection)
 │   └── 06_evaluation_comparison.ipynb
@@ -70,7 +70,8 @@ fraud-detection/
 │   ├── models/            ✔ random_forest_model.py, xgboost_model.py, autoencoder_model.py
 │   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp Docx/PDF + Slide PPT + Predictions (RF, XGB, Autoencoder)
+├── reports/               # ✅ Báo cáo nháp Docx/PDF + Predictions (RF, XGB, Autoencoder)
+├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (đang xem xét)
 ├── demo/                  # 🟡 Streamlit UI + XGBoost inference (Phase 06 checkpoint)
 │   ├── inference.py      # 14-feature contract + XGBoost probability
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
@@ -141,12 +142,14 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance (Thanh)
 2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
-4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm)
-5. Evaluation     ⏳ Precision, Recall, F1-Score, ROC-AUC, PR curve (Phase 05 — Khang)
-6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
-7. Demo UI        ✔ UI + 4 presets + XGBoost inference; → Chờ browser QA, figures và demo clip (Trung)
-8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) (Duy) + Slide PPT 9 slides (Hôn)
+4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
+5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
+6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + reports/model_comparison.csv
+7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
+8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
 ```
+
+> ⚠️ **PM Audit (04/09):** Đã có 5/6 notebooks (Sơn đã bổ sung 02, 03 qua PR #20); hiện chỉ còn thiếu notebook `06_evaluation_comparison` (Khang) cho submit package.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 

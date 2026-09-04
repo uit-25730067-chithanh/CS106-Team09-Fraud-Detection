@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-09-01)
+## Current State (2026-09-04)
 
 | Component | Status |
 |-----------|--------|
@@ -49,18 +49,22 @@ Final/
 | `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
 | `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features), data_splitter, **imbalance_handler** (SMOTENC + ADASYN) |
 | `src/models/` | ✅ Done — **random_forest_model.py**, **xgboost_model.py**, **autoencoder_model.py** |
-| Notebooks | ✅ `01_eda.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` hoàn chỉnh |
+| Notebooks | ✅ 5/6 notebooks hoàn thành: `01_eda.ipynb`, `02_imbalance_handling.ipynb`, `03_model_random_forest.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` (chỉ còn thiếu `06_evaluation_comparison.ipynb` của Khang) |
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
-| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 |
+| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (digits=4 chuẩn hóa từ PR #15) |
+| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (digits=4 chuẩn hóa từ PR #15) |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
+| Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `reports/model_comparison.csv` |
+| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh (code, AppTest, local runtime); còn thiếu browser/pixel QA, model integration, comparison figures, screenshots, demo clip |
+| Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: Bộ slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người (đang xem xét làm bản chính thức); Đã dọn dẹp các bản nháp slide 15 trang cũ của Hôn |
 | Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng; còn browser QA, figures Phase 05 và demo clip |
 | Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) đã hoàn tất |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict: Phase 00, 01, 01b, 02, 03 & 04 PASSED. Toàn bộ 3 họ mô hình (Random Forest, XGBoost, Autoencoder) đã hoàn thành xuất sắc. Sẵn sàng cho Khang (Phase 05 - Evaluation) và Trung (Phase 06 - UI Integration).**
+> **Verdict (04/09): Phase 00–04 PASSED (5/9 = 55.6%). Toàn bộ 3 họ mô hình và 5/6 notebooks đã hoàn thành xuất sắc (Sơn đã bổ sung 02 & 03). Đang Sprint 3: Khang cần hoàn thành Phase 05 (2 scripts + notebook 06 + chạy metrics), Trung model integration, Duy viết Chương 4-6.**
 
 ---
 
@@ -215,7 +219,14 @@ Place in `Final/submit/` before zipping.
 
 ---
 
-## Next Actions (Sprint 2/3 — 28/08 → 04/09)
+## Next Actions (Sprint 3 — 04/09 → 11/09)
+
+> **⚠️ PM Audit 04/09/2026 — Checkpoint findings (by Hôn):**
+> - 5/9 phases passed (55.6%); Sprint 3 đúng tiến độ.
+> - **1 notebook còn thiếu** cần tạo trước submit: `06_evaluation_comparison.ipynb` (Khang) — (Notebooks 02 và 03 của Sơn đã hoàn thành ✅).
+> - RF model `.pkl` files bị gitignore, chỉ có local — team cần reproduce hoặc Sơn share offline.
+> - `reports/figures/` chưa tồn tại — Khang sẽ tạo khi chạy Phase 05.
+> - Phase 08 checklist cần chỉnh: `autoencoder.h5` → `autoencoder_meta.json` (dùng MLPRegressor, không Keras).
 
 ### ✅ Thanh — DONE (Phase 00 + 01 + 01b PASSED)
 - EDA notebook `notebooks/01_eda.ipynb` hoàn thành (6 visualizations, run clean)
@@ -232,8 +243,8 @@ Place in `Final/submit/` before zipping.
   - RF-ADASYN: **F1=0.9966, AUC=0.9992**, Precision=0.9982, Recall=0.9951
   - Best params: n_estimators=200, max_depth=20, max_features=sqrt, class_weight=balanced_subsample
   - Top feature: errorBalanceOrig (41.1%)
-  - Models: rf_smote.pkl (9.2 MB), rf_adasyn.pkl (32.3 MB)
-- ⏳ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` cần tạo
+  - Models: rf_smote.pkl (9.2 MB), rf_adasyn.pkl (32.3 MB) — ⚠️ gitignored, local only
+- ✅ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` hoàn thành và lưu đầy đủ biểu đồ trực quan (Clean run)
 
 ### ✅ Cẩm — DONE (Phase 04 PASSED) — 01/09/2026
 - ✅ Huấn luyện & Tối ưu XGBoost trên SMOTE (`F1=0.9963, AUC=0.9993`, train time 41.6s) và ADASYN (`F1=0.9954, AUC=0.9994`)
@@ -242,24 +253,35 @@ Place in `Final/submit/` before zipping.
 - ✅ Hoàn thành 2 notebooks `04_model_xgboost.ipynb` và `05_model_autoencoder.ipynb` (đầy đủ biểu đồ visual)
 - ✅ Đã bàn giao predictions cho Khang: `reports/xgb_predictions.pkl`, `reports/autoencoder_predictions.pkl`
 
-### Khang — Bắt đầu Phase 05 (Evaluation & Comparison)
-1. `git pull` — Đầy đủ predictions từ cả 3 mô hình đã có sẵn tại `reports/`:
+### 🔄 Khang — Phase 05 (Evaluation & Comparison) — IN PROGRESS
+1. ✅ Đã viết xong `src/evaluation/metrics_calculator.py` và `plot_roc_curve.py` (Unit tests pass 100%, merged PR #7).
+2. ✅ Đầy đủ predictions từ cả 3 mô hình đã có sẵn tại `reports/`:
    - `rf_predictions.pkl` (Random Forest)
    - `xgb_predictions.pkl` (XGBoost)
    - `autoencoder_predictions.pkl` (Autoencoder)
-2. Viết `src/evaluation/metrics_calculator.py`, `plot_roc_curve.py`, `confusion_matrix_plot.py`, `model_comparator.py`
-3. Xuất bảng so sánh tổng hợp chéo (Cross-model comparison table) và biểu đồ ROC / PR curves so sánh 3 mô hình
+3. ⏳ **Sprint 3 TODO (ưu tiên cao):**
+   - Viết `confusion_matrix_plot.py` — template có sẵn trong phase file
+   - Viết `model_comparator.py` — template có sẵn trong phase file
+   - Tạo `notebooks/06_evaluation_comparison.ipynb`
+   - Chạy evaluation cho cả 3 mô hình → xuất `reports/figures/` + `reports/model_comparison.csv`
 
 ### Trung — Bắt đầu Tích hợp Model vào Demo UI (Phase 06)
 1. ✅ Đã kết nối `models/xgb_smote.json` + `models/scaler.pkl` vào UI với contract 14 đặc trưng
 2. ✅ Đã hiển thị xác suất, ngưỡng tương tác và nhãn thật; kiểm thử form + 4 preset + ngưỡng không có exception
 3. ⏳ Nhận figures/kết luận model chính thức từ Phase 05, browser QA System/Sáng/Tối, chụp screenshot và quay demo clip
 
-### Duy — Báo cáo Word
-1. ✅ Đã viết xong Chương 1, 2, 3
-2. ⏳ Viết Chương 4 (Methodology) & Chương 5 (Experimental Results): Đã có toàn bộ số liệu của cả 3 mô hình (RF, XGB, Autoencoder)
+### 🔄 Duy — Báo cáo Word — BLOCKED on Phase 05 (Results)
+1. ✅ Đã viết xong Chương 1, 2, 3 (merge vào `main`; source: `reports/report-source.md`)
+2. ⏳ Viết Chương 4 (Methodology) — **có thể viết ngay** (không cần kết quả Phase 05)
+3. ⏳ Viết Chương 5 (Results & Discussion) — cần `reports/model_comparison.csv` + `reports/figures/`
+4. ⏳ Viết Chương 6 (Conclusion) + Abstract
+5. ⏳ Format Word + kiểm tra citation
 
-### Hôn — Slide Thuyết trình PPT
-1. ✅ Đã hoàn thành 9 slides nháp mở đầu
-2. ⏳ Điền bảng số liệu thực nghiệm và biểu đồ so sánh mô hình vào các slides kết quả (Slide 10-15)
+### 🔄 Hôn — PM + PPT — PARTIALLY BLOCKED
+1. 🟡 Thống nhất lựa chọn bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md`) (đang xem xét làm bản chính thức); Đã loại bỏ các file slide nháp 15 trang cũ.
+2. ✅ **PM Audit Sprint 3** hoàn thành — theo dõi và đốc thúc tiến độ Sprint 3.
+3. ⏳ Phối hợp các thành viên rà soát, luyện tập thuyết trình theo kịch bản 10–12 phút (đang xem xét).
+4. ⏳ Phối hợp Trung chụp ảnh Demo UI → cập nhật hình ảnh vào slide & báo cáo.
+5. ⏳ Phase 08: Đóng gói submit package (blocked by Phase 05–07).
+
 

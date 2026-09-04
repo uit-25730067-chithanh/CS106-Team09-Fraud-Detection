@@ -29,14 +29,15 @@ Phase cuối: gộp tất cả, final verification, đóng gói ZIP, nộp bài.
 
 - `Restart & Run All` quan trọng — tránh trường hợp notebook chạy được vì có cached variables
 - Không commit dataset `paysim.csv` vào git (>100MB)
-- Cần kiểm tra `models/*.pkl` và `models/autoencoder.h5` tồn tại trước khi đóng gói
+- Cần kiểm tra artifacts tại `draft/fraud-detection/models/` (`scaler.pkl`, `xgb_smote.json`, `autoencoder_meta.json`) tồn tại trước khi đóng gói
+- ⚠️ RF models (`draft/fraud-detection/models/rf_smote.pkl`, `rf_adasyn.pkl`) bị gitignore — cần reproduce hoặc share offline
 
 ## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
 
 1. **Kiểm tra tính toàn vẹn đa nền tảng (Cross-Platform Reproduction):**
    * Đảm bảo pipeline và notebooks chạy độc lập từ file `data/processed/*.pkl` mà không cần tải lại tập thô 500MB `paysim.csv`.
 2. **Đồng bộ hóa 4 sản phẩm giao nộp (Deliverables Audit):**
-   * **Báo cáo Word:** Khớp 100% số liệu với bảng `model_comparison.csv` và ảnh biểu đồ trong `reports/figures/`.
+   * **Báo cáo Word:** Khớp 100% số liệu với bảng `reports/model_comparison.csv` và ảnh biểu đồ trong `reports/figures/`.
    * **Slide PPT:** Trình bày rõ nét các điểm nhấn: Anti-leakage, Feature engineering, So sánh đa trường phái, Explainable AI (SHAP) và Threats to validity.
    * **Mã nguồn:** Thư mục `src/` modular, sạch sẽ, notebooks chạy không còn warning.
    * **Demo UI:** Cung cấp đầy đủ hướng dẫn chạy Streamlit và video/ảnh chụp màn hình minh họa.
@@ -112,9 +113,9 @@ cp -r draft/fraud-detection/notebooks "$SUBMIT_DIR/code/"
 cp -r draft/fraud-detection/demo "$SUBMIT_DIR/code/"
 cp draft/fraud-detection/requirements.txt "$SUBMIT_DIR/code/"
 
-# Copy reports
+# Copy reports & slides
 cp draft/fraud-detection/reports/*.docx "$SUBMIT_DIR/report/"
-cp draft/fraud-detection/reports/*.pptx "$SUBMIT_DIR/slides/"
+cp draft/fraud-detection/slide/*.pptx "$SUBMIT_DIR/slides/"  # slide chính thức (đang xem xét)
 cp -r draft/fraud-detection/demo/screenshots "$SUBMIT_DIR/demo/"
 
 # Create ZIP
@@ -134,14 +135,15 @@ echo "ZIP created: [Project AI-UIT] - Nhom 9.zip"
 - [ ] `notebooks/06_evaluation_comparison.ipynb` — Restart & Run All → 0 errors
 - [ ] `streamlit run demo/app.py` → app starts OK
 
-**Artifacts verification:**
-- [ ] `models/rf_smote.pkl` exists
-- [ ] `models/xgb_smote.pkl` exists
-- [ ] `models/autoencoder.h5` exists
+**Artifacts verification (thực hiện từ thư mục `draft/fraud-detection/`):**
+- [ ] `models/scaler.pkl` exists
+- [ ] `models/xgb_smote.json` exists
+- [ ] `models/autoencoder_meta.json` exists
+- [ ] `models/rf_smote.pkl` exists (**cần reproduce — bị gitignore**)
 - [ ] `reports/model_comparison.csv` exists
 - [ ] `reports/figures/roc_curves_all.png` exists
 - [ ] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists
-- [ ] `reports/[Nhom9]_PPT_FraudDetection.pptx` exists
+- [ ] `slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` exists (hoặc bản slide chính thức được duyệt)
 
 **Submit package verification (Hôn):**
 - [ ] `[Project AI-UIT] - Nhom 9/` folder structure đúng
