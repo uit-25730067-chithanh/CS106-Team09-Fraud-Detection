@@ -140,12 +140,14 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance (Thanh)
 2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
-4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm)
-5. Evaluation     ⏳ Templates merged, đang chạy so sánh metrics 3 mô hình (Phase 05 — Khang)
-6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
-7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Sẵn sàng nạp model weights (Trung)
-8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) (Duy) + Slide PPT 15 slides (Hôn)
+4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
+5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
+6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + reports/model_comparison.csv
+7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
+8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Slide PPT 15 slides (Hôn) + Slide học thuật 24 trang
 ```
+
+> ⚠️ **PM Audit (04/09):** Thiếu 3 notebooks: `02_imbalance_handling`, `03_model_random_forest`, `06_evaluation_comparison` — cần cho submit package.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 

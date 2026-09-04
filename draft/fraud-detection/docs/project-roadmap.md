@@ -32,11 +32,11 @@ gantt
     PPT Template & 9 slides nháp (Hôn)   :done, s2_8, 2026-08-28, 4d
 
     section Sprint 3 (4/9 - 11/9)
-    XGBoost & Autoencoder (Cẩm)          :active, s3_1, 2026-09-01, 7d
+    XGBoost & Autoencoder (Cẩm)          :done, s3_1, 2026-09-01, 7d
     Evaluation metrics execution (Khang) :active, s3_2, 2026-09-01, 7d
     Tích hợp model thật vào UI (Trung)   :active, s3_3, 2026-09-01, 7d
     Viết báo cáo Methodology (Duy)       :active, s3_4, 2026-09-01, 7d
-    Cập nhật slides kết quả (Hôn)        :active, s3_5, 2026-09-01, 7d
+    Cập nhật slides kết quả (Hôn)        :done, s3_5, 2026-09-01, 7d
 
     section Sprint 4 (11/9 - 18/9)
     Chạy evaluation & So sánh (Khang)   :s4_1, 2026-09-11, 4d
@@ -87,8 +87,8 @@ gantt
 ### Khang *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết `src/evaluation/metrics-calculator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compute_metrics`]* | 🟡 High | 🔲 |
-| Viết `src/evaluation/plot-roc-curve.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_roc_curves` & `plot_pr_curves`]* | 🟡 High | 🔲 |
+| Viết `src/evaluation/metrics_calculator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compute_metrics`]* | 🟡 High | ✅ (PR #7 merged) |
+| Viết `src/evaluation/plot_roc_curve.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_roc_curves` & `plot_pr_curves`]* | 🟡 High | ✅ (PR #7 merged) |
 
 ### Trung *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
@@ -134,8 +134,8 @@ gantt
 ### Khang
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết `src/evaluation/confusion-matrix-plot.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_confusion_matrix`]* | 🟡 High | 🔲 |
-| Viết `src/evaluation/model-comparator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compare_models` để tạo bảng so sánh]* | 🟡 High | 🔲 |
+| Viết `src/evaluation/confusion_matrix_plot.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_confusion_matrix`]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
+| Viết `src/evaluation/model_comparator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compare_models` để tạo bảng so sánh]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
 
 ### Trung
 | Task | Ưu tiên | Trạng thái |
@@ -145,12 +145,12 @@ gantt
 ### Duy
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết phần Methodology: Preprocessing, Imbalance, Models (Word) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Chương 4 báo cáo Word]* | 🔴 Critical | 🔲 |
+| Viết phần Methodology: Preprocessing, Imbalance, Models (Word) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Chương 4 báo cáo Word]* | 🔴 Critical | 🔲 (có thể viết ngay, không cần Phase 05) |
 
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Cập nhật các slides non-tech (Dataset, Preprocessing, Models overview) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Slide 5-8 nháp PPT]* | 🟡 High | 🔲 |
+| Cập nhật các slides non-tech (Dataset, Preprocessing, Models overview) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Slide 5-8 nháp PPT]* | 🟡 High | ✅ (đã hoàn thiện đầy đủ 15 slides và PM Audit Sprint 3) |
 
 ---
 
@@ -181,7 +181,7 @@ gantt
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | 🔲 |
+| PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `reports/model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | 🔲 |
 | Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | 🔲 |
 
 ---
