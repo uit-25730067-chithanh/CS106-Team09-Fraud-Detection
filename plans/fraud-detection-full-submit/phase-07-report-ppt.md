@@ -119,8 +119,8 @@ xác nhận ổn định ngay từ vòng thứ nhất.
 
 - Google Slides thiết kế gốc: [Google Slides Link](https://docs.google.com/presentation/d/1GEibG9p26vu57G15NdChx8SQrG0zTD50LZBwpIXPU58/edit?usp=sharing).
 - File artifacts lưu trữ tại repo:
-  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pptx` (1.41 MB)
-  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pdf` (4.91 MB)
+  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pptx` (1.41 MB) — ⚠️ đã gỡ khỏi repo tại PR #21
+  - `draft/fraud-detection/reports/[Nhom9]_Slide_FraudDetection_Hon.pdf` (4.91 MB) — ⚠️ đã gỡ khỏi repo tại PR #21
 - Số lượng slide: **15 slides** hoàn chỉnh (Bìa, Mục lục, Đặt vấn đề & Thách thức, Dữ liệu PaySim, EDA Discoveries, Kiến trúc Pipeline, Tiền xử lý 14 features, Xử lý mất cân bằng, 3 Mô hình RF/XGB/AE, Tiêu chí đánh giá, Bảng so sánh đa tiêu chí, Ma trận nhầm lẫn & Feature Importance, Live Demo Streamlit, Tổng kết & Hướng phát triển, Q&A & Cảm ơn).
 - Nội dung xác minh: Đầy đủ 15 slides, tích hợp 100% metrics thực tế từ Phase 03–04, hình ảnh trực quan và phân tích nghiệp vụ sâu sắc.
 - Tài liệu bổ trợ (PR #13): Đã tích hợp bộ slide học thuật 24 trang song ngữ EN-VN (`draft/fraud-detection/slide/`) kèm bộ biểu đồ 300 DPI phục vụ làm tài liệu tham khảo và backup Q&A.

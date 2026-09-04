@@ -152,7 +152,7 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
 6. Comparison     ⏳ Chưa chạy chính thức; cần reports/model_comparison.csv + ROC/PR figures (Khang)
 7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
-8. Report         ✔ Báo cáo Word/PDF Chương 1–6 (28 trang, 2 hình, 10 bảng) (Duy) + Slide PPT 15 slides (Hôn) + Slide học thuật; → còn Chương 7 và Abstract
+8. Report         ✔ Báo cáo Word/PDF Chương 1–7 đầy đủ (Duy) + Slide học thuật 21 trang (Thanh, bản chính thức); → còn Abstract
 ```
 
 > ⚠️ **PM Audit (04/09):** Thiếu 3 notebooks: `02_imbalance_handling`, `03_model_random_forest`, `06_evaluation_comparison` — cần cho submit package.

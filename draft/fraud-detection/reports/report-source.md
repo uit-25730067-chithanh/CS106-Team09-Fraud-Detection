@@ -3,7 +3,7 @@
 **Môn học:** CS106 — Trí tuệ Nhân tạo  
 **Nhóm:** 9  
 **Người soạn bản nháp Sprint 3:** Vũ Văn Duy — MSSV 26410031 — Lớp A
-**Phiên bản:** Bản nháp Sprint 3 — Chương 1 đến Chương 6
+**Phiên bản:** Bản nháp Sprint 3 — Chương 1 đến Chương 7
 **Ngày cập nhật:** 04/09/2026
 
 | STT | Họ và tên | MSSV | Lớp |
@@ -16,7 +16,7 @@
 | 6 | Bùi Thị Mỷ Cẩm | 25730013 | B |
 | 7 | Hoàng Cao Sơn | 25730061 | B |
 
-> Phạm vi bản nháp Sprint 3: trình bày phần Giới thiệu, Phát biểu bài toán, Mô tả dữ liệu, Phương pháp thực hiện, Kết quả thực nghiệm và Thảo luận. Phần Kết luận và Tóm tắt sẽ được hoàn thiện sau khi bảng so sánh tổng hợp và các biểu đồ ROC, Precision–Recall của bước đánh giá chéo được kiểm tra thống nhất.
+> Phạm vi bản nháp Sprint 3: trình bày đầy đủ bảy chương nội dung, từ Giới thiệu đến Kết luận và hướng phát triển. Phần Tóm tắt sẽ được bổ sung, và các số liệu ở Chương 5, 6 sẽ được đối chiếu lần cuối với bảng so sánh tổng hợp cùng các biểu đồ ROC, Precision–Recall của bước đánh giá chéo.
 
 ---
 
@@ -474,6 +474,60 @@ Chương này cho thấy các chỉ số rất cao ở Chương 5 phản ánh ph
 
 ---
 
+# CHƯƠNG 7. KẾT LUẬN VÀ HƯỚNG PHÁT TRIỂN
+
+## 7.1. Tóm tắt công việc đã thực hiện
+
+Đồ án xây dựng và đánh giá một quy trình học máy hoàn chỉnh cho bài toán phát hiện giao dịch tài chính bất thường trên bộ dữ liệu mô phỏng PaySim.
+
+Quy trình gồm sáu bước: đọc và kiểm tra dữ liệu, lọc hai loại giao dịch có gian lận rồi downsampling về 200.000 bản ghi, chia phân tầng 80/20, xây dựng 14 đặc trưng trong đó có bảy đặc trưng dẫn xuất, xử lý mất cân bằng bằng SMOTENC và ADASYN trên riêng tập huấn luyện, cuối cùng huấn luyện và đánh giá ba họ mô hình. Thứ tự các bước được sắp xếp để tập kiểm tra không tham gia bất kỳ thao tác học tham số nào.
+
+Năm biến thể mô hình được đánh giá trên cùng một tập kiểm tra 40.000 giao dịch: Random Forest và XGBoost với hai phương pháp oversampling, cùng một Autoencoder theo hướng phát hiện bất thường. Toàn bộ chỉ số, hai biểu đồ và phép quy chiếu về tỷ lệ gian lận gốc đều tái lập được từ các tệp dự đoán đã lưu.
+
+## 7.2. Đối chiếu với mục tiêu đề ra
+
+Bảng 7.1 đối chiếu bảy mục tiêu cụ thể nêu tại Mục 1.3.2 với kết quả thực tế.
+
+**Bảng 7.1. Mức độ hoàn thành các mục tiêu cụ thể**
+
+| # | Mục tiêu | Kết quả | Vị trí |
+|---:|---|:---:|---|
+| 1 | Khảo sát và mô tả bộ dữ liệu PaySim | Hoàn thành | Chương 3 |
+| 2 | Quy trình tiền xử lý có thể tái sử dụng | Hoàn thành | Mục 3.5, 4.2 |
+| 3 | Khảo sát SMOTE và ADASYN trên tập huấn luyện | Hoàn thành | Mục 4.3, 5.4 |
+| 4 | Thử nghiệm ít nhất hai thuật toán | Hoàn thành cả ba | Mục 4.4, 4.5, 4.6 |
+| 5 | Đánh giá bằng Precision, Recall, F1-Score, ROC-AUC và biểu đồ | Hoàn thành | Chương 5 |
+| 6 | So sánh mô hình, phân tích hạn chế, đề xuất hướng phát triển | Hoàn thành | Chương 5, 6, 7 |
+| 7 | Giao diện minh họa nhập giao dịch và hiển thị dự đoán | Một phần | Giao diện đã dựng, chưa nạp mô hình thật |
+
+Sáu mục tiêu đã hoàn thành. Mục tiêu thứ bảy mới đạt phần giao diện, phần kết nối mô hình vào ứng dụng minh họa còn đang thực hiện.
+
+Về mặt định lượng, Random Forest kết hợp SMOTENC cho kết quả tốt nhất trên tập kiểm tra với Precision 0,9994, Recall 0,9951, F1-Score 0,9973, ROC-AUC 0,9994 và Average Precision 0,9983. Tuy nhiên, như Chương 6 đã chỉ ra, khoảng cách giữa bốn biến thể học có giám sát nằm trong sai số thống kê, và khi quy chiếu về tỷ lệ gian lận gốc của PaySim thì Precision của mô hình này giảm còn 0,9801.
+
+## 7.3. Đóng góp của đồ án
+
+Đóng góp về mặt kỹ thuật là một quy trình khép kín từ dữ liệu thô đến chỉ số đánh giá, trong đó mọi thao tác ngẫu nhiên đều cố định hạt giống và mọi con số trong báo cáo đều truy được về tệp dự đoán đã lưu.
+
+Đóng góp về mặt phương pháp luận nằm ở cách đọc kết quả. Thay vì dừng ở con số F1-Score cao, đồ án chỉ ra ba yếu tố của thiết lập thí nghiệm tạo ra con số đó, lượng hóa mức phụ thuộc vào nhóm đặc trưng số dư mà data card khuyến cáo không dùng, quy chiếu Precision về tỷ lệ lớp thật và kiểm tra xem thứ hạng giữa các mô hình có đủ tin cậy thống kê hay không. Kết luận rằng bốn biến thể học có giám sát thực chất tương đương nhau là một phát biểu thận trọng hơn nhưng đúng hơn so với việc công bố một mô hình chiến thắng.
+
+## 7.4. Hướng phát triển
+
+Thí nghiệm cần ưu tiên nhất là huấn luyện lại toàn bộ mô hình sau khi loại nhóm đặc trưng dẫn xuất từ số dư, rồi so sánh với kết quả hiện tại. Đây là cách duy nhất để tách phần hiệu năng đến từ hành vi gian lận khỏi phần đến từ cơ chế cập nhật số dư của bộ mô phỏng.
+
+Về thiết kế thí nghiệm, ba cải tiến nên thực hiện cùng nhau. Thứ nhất là chia dữ liệu theo thời gian hoặc theo tài khoản để kiểm chứng khả năng dự báo cho giai đoạn kế tiếp. Thứ hai là đặt SMOTENC và ADASYN vào một `imblearn.Pipeline` để việc sinh mẫu chạy độc lập trong từng fold. Thứ ba là lặp lại thí nghiệm trên nhiều hạt giống để có khoảng tin cậy cho thứ hạng giữa các mô hình thay vì dựa trên một lần chia dữ liệu.
+
+Về mô hình, hướng đáng thử là hiệu chuẩn xác suất đầu ra để ngưỡng quyết định gắn được với một ngân sách cảnh báo cụ thể, thay vì cố định ở 0,5. Bảng 6.1 cho thấy số cảnh báo nhầm trên mỗi triệu giao dịch là đại lượng mà một hệ thống thật quan tâm, nên chọn ngưỡng theo ngân sách kiểm tra sẽ sát nhu cầu vận hành hơn chọn theo F1-Score. Với Autoencoder, có thể thử tăng số chiều lớp bottleneck hoặc huấn luyện lâu hơn để xem mô hình có phủ được phần giao dịch khó mà các mô hình học có giám sát bỏ sót hay không.
+
+Cuối cùng, để kết quả có giá trị ngoài phạm vi học thuật, cần kiểm chứng lại quy trình trên một bộ dữ liệu giao dịch khác hoặc trên nhật ký thật đã khử định danh, vì mọi kết luận hiện tại đều gắn với đặc tính của bộ mô phỏng PaySim.
+
+## 7.5. Kết luận chung
+
+Đồ án đã hoàn thành mục tiêu xây dựng và đánh giá một quy trình phát hiện giao dịch gian lận trên PaySim, thử nghiệm đủ ba họ mô hình theo yêu cầu đề bài và báo cáo kết quả bằng những chỉ số phù hợp với dữ liệu mất cân bằng.
+
+Giá trị của kết quả nằm ở chỗ nó được trình bày kèm giới hạn. Các chỉ số rất cao trên tập kiểm tra không được diễn giải như năng lực phát hiện gian lận trong hệ thống thật, vì tập kiểm tra đã đổi tỷ lệ lớp, phép chia dữ liệu chưa theo thời gian và phần lớn quyết định của mô hình dựa vào nhóm đặc trưng mà chính nguồn dữ liệu khuyến cáo không nên dùng. Những giới hạn này không làm giảm giá trị của quy trình đã xây dựng, mà xác định rõ phạm vi mà kết luận của đồ án có hiệu lực.
+
+---
+
 # TÀI LIỆU THAM KHẢO
 
 Tài liệu tham khảo được đánh số theo thứ tự xuất hiện trong nội dung. Số tài liệu được đặt trong ngoặc vuông theo kiểu trích dẫn IEEE.
@@ -482,6 +536,7 @@ Tài liệu tham khảo được đánh số theo thứ tự xuất hiện trong
 
 - Trường Đại học Công nghệ Thông tin, “Đề tài môn Trí tuệ Nhân tạo”, mục Đề tài 7, 2026.
 - Đặng Chí Thanh, `notebooks/01_eda.ipynb`, output đã thực thi ngày 28/08/2026.
+- Hoàng Cao Sơn, `notebooks/02_imbalance_handling.ipynb` và `notebooks/03_model_random_forest.ipynb`, output đã thực thi cho bước xử lý mất cân bằng và huấn luyện Random Forest.
 - Nhóm 9, `draft/fraud-detection/data/processed/README.md`, mô tả các tệp dữ liệu đã xử lý.
 - Nhóm 9, `src/preprocessing/`, mã nguồn đọc dữ liệu, xây dựng đặc trưng, chia tập và xử lý mất cân bằng.
 - Nhóm 9, `src/models/`, mã nguồn huấn luyện Random Forest, XGBoost và Autoencoder.

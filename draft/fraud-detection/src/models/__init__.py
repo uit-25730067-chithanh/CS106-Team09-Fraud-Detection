@@ -9,23 +9,30 @@ from .random_forest_model import (
     save_feature_importance,
     save_model_summary,
 )
-from .xgboost_model import (
-    train_xgboost,
-    save_model as save_xgb_model,
-    load_model as load_xgb_model,
-    save_model_summary as save_xgb_model_summary,
-)
-from .autoencoder_model import (
-    build_autoencoder,
-    train_autoencoder,
-    compute_reconstruction_error,
-    find_threshold,
-    select_threshold_by_f1,
-    predict_autoencoder,
-    save_autoencoder,
-    load_autoencoder,
-    save_autoencoder_summary,
-)
+try:
+    from .xgboost_model import (
+        train_xgboost,
+        save_model as save_xgb_model,
+        load_model as load_xgb_model,
+        save_model_summary as save_xgb_model_summary,
+    )
+except ImportError:
+    pass
+
+try:
+    from .autoencoder_model import (
+        build_autoencoder,
+        train_autoencoder,
+        compute_reconstruction_error,
+        find_threshold,
+        select_threshold_by_f1,
+        predict_autoencoder,
+        save_autoencoder,
+        load_autoencoder,
+        save_autoencoder_summary,
+    )
+except ImportError:
+    pass
 
 __all__ = [
     # Random Forest (Phase 03)

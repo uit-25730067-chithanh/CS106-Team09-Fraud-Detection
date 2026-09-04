@@ -206,7 +206,7 @@ print(df_report.to_string(index=False))
 - [x] `data/processed/y_train_adasyn.pkl` tồn tại — fraud ratio 33.41%
 - [x] `y_train_smote.mean()` > `y_train.mean()` — 0.3333 > 0.0411 ✅
 - [x] `y_train_adasyn.mean()` > `y_train.mean()` — 0.3341 > 0.0411 ✅
-- [ ] Notebook `02_imbalance_handling.ipynb` chạy clean — ⏳ tạo sau
+- [x] Notebook `02_imbalance_handling.ipynb` chạy clean (đầy đủ biểu đồ so sánh phân phối và bảo toàn cờ nhị phân) ✅
 - [x] Summary table (Original vs SMOTE vs ADASYN) có trong output
 - [x] Binary features integrity validated — tất cả 4 cột nhị phân chỉ chứa 0/1
 
