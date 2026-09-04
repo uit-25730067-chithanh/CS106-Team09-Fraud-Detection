@@ -72,6 +72,7 @@ fraud-detection/
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
 ├── reports/               # ✅ Báo cáo nháp Chương 1–5 DOCX/PDF + Slide PPT + Predictions (RF, XGB, Autoencoder)
 │   ├── ch5_metrics_recomputed.csv  # Chỉ số Chương 5 tính lại (nháp — Phase 05 sẽ thay bằng model_comparison.csv)
+│   ├── ch6_prevalence_projection.csv # Precision quy chiếu về tỷ lệ gian lận gốc (Bảng 6.1)
 │   ├── _report_template.docx       # Khuôn định dạng (styles, header, footer, A4) cho build_report.py
 │   ├── _toc_pages.json             # Số trang mục lục do sync_toc_pages.py sinh ra
 │   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png)
@@ -147,12 +148,14 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 1. EDA            ✔ Phân tích phân phối, correlation, visualize imbalance (Thanh)
 2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
-4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm)
-5. Evaluation     ⏳ Templates merged, đang chạy so sánh metrics 3 mô hình (Phase 05 — Khang)
-6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
-7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Sẵn sàng nạp model weights (Trung)
-8. Report         ✔ Nháp Báo cáo Word/PDF (Chương 1–5, mục 5.1–5.6) (Duy) + Slide PPT 15 slides (Hôn); → chờ Phase 05 đối chiếu Results và bổ sung ROC/PR figures
+4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
+5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
+6. Comparison     ⏳ Chưa chạy chính thức; cần reports/model_comparison.csv + ROC/PR figures (Khang)
+7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
+8. Report         ✔ Báo cáo Word/PDF Chương 1–6 (28 trang, 2 hình, 10 bảng) (Duy) + Slide PPT 15 slides (Hôn) + Slide học thuật; → còn Chương 7 và Abstract
 ```
+
+> ⚠️ **PM Audit (04/09):** Thiếu 3 notebooks: `02_imbalance_handling`, `03_model_random_forest`, `06_evaluation_comparison` — cần cho submit package.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 

@@ -378,6 +378,8 @@ def build(blocks: list[dict], pages: dict[str, int]) -> Document:
         elif re.match(r"^\[\d+\]\s", block["text"]):
             paragraph.paragraph_format.left_indent = Twips(REFERENCE_HANGING_TWIPS)
             paragraph.paragraph_format.first_line_indent = Twips(-REFERENCE_HANGING_TWIPS)
+            # Căn đều làm giãn ký tự ở dòng chứa DOI dài không ngắt được.
+            paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
         add_runs(paragraph, block["text"])
 
     return document

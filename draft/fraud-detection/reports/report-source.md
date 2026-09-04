@@ -3,7 +3,7 @@
 **Môn học:** CS106 — Trí tuệ Nhân tạo  
 **Nhóm:** 9  
 **Người soạn bản nháp Sprint 3:** Vũ Văn Duy — MSSV 26410031 — Lớp A
-**Phiên bản:** Bản nháp Sprint 3 — Chương 1, 2, 3, 4 và 5
+**Phiên bản:** Bản nháp Sprint 3 — Chương 1 đến Chương 6
 **Ngày cập nhật:** 04/09/2026
 
 | STT | Họ và tên | MSSV | Lớp |
@@ -16,7 +16,7 @@
 | 6 | Bùi Thị Mỷ Cẩm | 25730013 | B |
 | 7 | Hoàng Cao Sơn | 25730061 | B |
 
-> Phạm vi bản nháp Sprint 3: trình bày phần Giới thiệu, Phát biểu bài toán, Mô tả dữ liệu, Phương pháp thực hiện và Kết quả thực nghiệm. Phần Thảo luận, Kết luận và Tóm tắt sẽ được hoàn thiện sau khi toàn bộ kết quả đánh giá và biểu đồ tổng hợp được kiểm tra thống nhất.
+> Phạm vi bản nháp Sprint 3: trình bày phần Giới thiệu, Phát biểu bài toán, Mô tả dữ liệu, Phương pháp thực hiện, Kết quả thực nghiệm và Thảo luận. Phần Kết luận và Tóm tắt sẽ được hoàn thiện sau khi bảng so sánh tổng hợp và các biểu đồ ROC, Precision–Recall của bước đánh giá chéo được kiểm tra thống nhất.
 
 ---
 
@@ -402,6 +402,78 @@ Các chỉ số rất cao phải được đọc cùng những nguy cơ ảnh h�
 
 ---
 
+# CHƯƠNG 6. THẢO LUẬN
+
+## 6.1. Trả lời các câu hỏi nghiên cứu
+
+Mục 2.5 đặt ra ba câu hỏi. Kết quả ở Chương 5 cho phép trả lời cả ba, trong phạm vi tập dữ liệu và cấu hình đã dùng.
+
+Với câu hỏi về kỹ thuật xử lý mất cân bằng, SMOTENC phù hợp hơn ADASYN trong quy trình hiện tại. Trên cả Random Forest và XGBoost, SMOTENC cho Precision và F1-Score cao hơn trong khi Recall không đổi. Nguyên nhân nằm ở cách xử lý bốn cột nhị phân: SMOTENC nội suy có nhận biết chiều phân loại, còn ADASYN sinh giá trị liên tục rồi mới làm tròn về 0/1, khiến một phần mẫu tổng hợp không nằm trên miền giá trị hợp lệ của dữ liệu gốc.
+
+Với câu hỏi về mô hình cân bằng tốt nhất giữa Precision và Recall, Random Forest kết hợp SMOTENC đứng đầu theo F1-Score. Tuy nhiên Mục 6.4 sẽ chỉ ra khoảng cách giữa bốn biến thể học có giám sát nằm trong sai số thống kê, nên kết luận này chỉ đúng ở mức xếp hạng trên một lần chia dữ liệu.
+
+Với câu hỏi về đặc trưng đóng góp nhiều nhất, cả hai mô hình đều đặt `errorBalanceOrig` ở vị trí đầu tiên và nhóm đặc trưng dẫn xuất từ số dư chiếm 90,50% mức đóng góp của Random Forest cùng 99,30% của XGBoost. Đây chính là nhóm đặc trưng mà data card của bộ dữ liệu [3] khuyến cáo không nên dùng, nên câu trả lời cho vế thứ hai của câu hỏi là có: mô hình nhiều khả năng đang khai thác dấu vết của cơ chế mô phỏng.
+
+## 6.2. Vì sao các chỉ số đạt mức rất cao
+
+F1-Score 0,9973 là con số bất thường đối với một bài toán phát hiện gian lận. Ba yếu tố cùng góp phần tạo ra mức này, và cả ba đều là đặc điểm của thiết lập thí nghiệm chứ không phải bằng chứng về năng lực tổng quát của mô hình.
+
+Thứ nhất là tín hiệu từ nhóm đặc trưng số dư. Trong PaySim, giao dịch bị phát hiện là gian lận có thể bị hủy, khiến các cột số dư mang dấu vết của chính nhãn cần dự đoán. Đặc trưng `errorBalanceOrig` đo phần số dư nguồn không khớp với số tiền giao dịch, tức đo trực tiếp sự bất thường trong bút toán. Mục 5.5 cho thấy quyết định của mô hình gần như hoàn toàn dựa vào nhóm này.
+
+Thứ hai là tỷ lệ lớp đã bị thay đổi. Tập kiểm tra có 4,1075% giao dịch gian lận, cao hơn 32 lần so với 0,129082% của dữ liệu gốc. Precision phụ thuộc trực tiếp vào tỷ lệ này, nên con số đo trên tập kiểm tra không phải con số sẽ quan sát được trên phân bố gốc. Mục 6.3 lượng hóa khoảng cách đó.
+
+Thứ ba là cách chia dữ liệu. Phép chia phân tầng ngẫu nhiên cho phép các giao dịch của cùng một khoảng thời gian nằm ở cả hai tập, nên bài toán trở nên dễ hơn so với tình huống thực tế là dự báo giao dịch của giai đoạn kế tiếp.
+
+Một quan sát khác củng cố nhận định trên. Bốn biến thể học có giám sát bỏ sót đúng cùng một nhóm 8 giao dịch, và Autoencoder bỏ sót 7 trong 8 giao dịch đó dù hoạt động theo nguyên lý hoàn toàn khác. Điều này cho thấy phần dễ của bài toán đã được giải gần như trọn vẹn nhờ một tín hiệu mạnh có sẵn trong đặc trưng, còn phần khó thì không mô hình nào chạm tới được.
+
+## 6.3. Hiệu năng ước tính trên tỷ lệ gian lận gốc
+
+Downsampling chỉ lấy mẫu ngẫu nhiên lớp bình thường nên không làm thay đổi phân bố có điều kiện của từng lớp. Nhờ đó, tỷ lệ phát hiện đúng và tỷ lệ báo động giả đo trên tập kiểm tra vẫn dùng được cho phân bố gốc, chỉ riêng Precision là phụ thuộc tỷ lệ lớp và cần quy chiếu lại. Bảng 6.1 trình bày kết quả quy chiếu về tỷ lệ 0,129082% của PaySim gốc, kèm khoảng tin cậy 95% tính theo phương pháp Clopper–Pearson cho tỷ lệ báo động giả.
+
+**Bảng 6.1. Precision quy chiếu về tỷ lệ gian lận gốc của PaySim**
+
+| Mô hình | FP trên test | Precision trên test | Precision quy chiếu | Khoảng tin cậy 95% | Cảnh báo nhầm trên mỗi triệu giao dịch |
+|---|---:|---:|---:|:---:|---:|
+| Random Forest + SMOTENC | 1 | 0,9994 | **0,9801** | 0,8985 – 0,9995 | 26 |
+| Random Forest + ADASYN | 3 | 0,9982 | 0,9427 | 0,8491 – 0,9876 | 78 |
+| XGBoost + SMOTENC | 4 | 0,9976 | 0,9250 | 0,8281 – 0,9784 | 104 |
+| XGBoost + ADASYN | 7 | 0,9957 | 0,8757 | 0,7738 – 0,9460 | 182 |
+| Autoencoder | 1.998 | 0,3822 | 0,0183 | 0,0176 – 0,0191 | 52.022 |
+
+Kết quả cho thấy hai điều. Một là chênh lệch nhỏ về số cảnh báo nhầm ở Chương 5 trở nên đáng kể khi đưa về phân bố thật. Khoảng cách giữa 1 và 7 cảnh báo nhầm trên tập kiểm tra tương ứng với khoảng cách hơn mười điểm phần trăm Precision trên phân bố gốc, vì mỗi cảnh báo nhầm khi đó phải chia cho một lượng giao dịch gian lận nhỏ hơn nhiều. Hai là Autoencoder ở ngưỡng hiện tại không dùng được như một bộ lọc độc lập, vì sẽ tạo khoảng 52.000 cảnh báo nhầm cho mỗi triệu giao dịch.
+
+Phép quy chiếu này giả định phân bố có điều kiện của lớp bình thường không đổi sau downsampling, điều đúng với cách lấy mẫu ngẫu nhiên đã dùng. Tuy vậy nó vẫn là ngoại suy từ một tập kiểm tra chỉ có 38.357 giao dịch bình thường, nên các con số trong bảng cần đọc cùng khoảng tin cậy chứ không đọc như giá trị điểm.
+
+## 6.4. Khác biệt giữa các mô hình có đủ tin cậy để xếp hạng không
+
+Bảng 6.1 cho thấy các khoảng tin cậy chồng lấn nhau rất nhiều. Khoảng của Random Forest kết hợp SMOTENC là 0,8985 đến 0,9995, còn của XGBoost kết hợp ADASYN là 0,7738 đến 0,9460. Hai khoảng này giao nhau, nghĩa là dữ liệu hiện có không đủ để khẳng định mô hình đứng đầu thực sự tốt hơn mô hình đứng cuối trong bốn biến thể học có giám sát.
+
+Nguyên nhân là số cảnh báo nhầm quá nhỏ. Ước lượng một tỷ lệ từ 1 lần xuất hiện trong 38.357 quan sát mang sai số rất lớn, nên thứ tự 1, 3, 4 và 7 chưa phải bằng chứng về chất lượng mà có thể chỉ là dao động ngẫu nhiên của một lần chia dữ liệu. Ở chiều Recall, bốn mô hình hoàn toàn không khác nhau vì cùng bỏ sót đúng một nhóm 8 giao dịch.
+
+Vì vậy phát biểu chính xác cho Chương 5 là: bốn biến thể học có giám sát đạt hiệu năng tương đương nhau trên tập kiểm tra này, trong đó Random Forest kết hợp SMOTENC có số cảnh báo nhầm thấp nhất. Muốn xếp hạng có căn cứ thống kê thì cần lặp lại thí nghiệm trên nhiều lần chia dữ liệu với nhiều hạt giống khác nhau, hoặc dùng tập kiểm tra lớn hơn nhiều lần.
+
+## 6.5. Vai trò của mô hình phát hiện bất thường
+
+Autoencoder kém hơn hẳn các mô hình học có giám sát trên mọi chỉ số phân loại. Điều này hợp lý vì nó không dùng nhãn gian lận khi huấn luyện, trong khi bài toán ở đây có nhãn đầy đủ.
+
+Tuy nhiên so sánh trực tiếp bằng F1-Score chưa phản ánh đúng giá trị của hướng tiếp cận này. Autoencoder chỉ cần dữ liệu giao dịch bình thường nên áp dụng được cho những dạng gian lận chưa từng được gán nhãn, còn Random Forest và XGBoost chỉ học được các dạng đã có trong tập huấn luyện. Trong một hệ thống thật, vai trò tự nhiên của nó là lớp sàng lọc thứ hai hoặc bộ phát hiện dạng gian lận mới, không phải bộ lọc chính.
+
+Dù vậy, trên bộ dữ liệu này Autoencoder không bổ sung được vùng phủ nào cho phần khó. Nó bỏ sót 7 trong 8 giao dịch mà các mô hình học có giám sát cũng bỏ sót, nên việc ghép hai hướng tiếp cận lại chưa đem lại lợi ích đo được. Kết quả này chỉ đúng với kiến trúc và ngưỡng hiện tại, và có thể thay đổi nếu tăng số chiều của lớp bottleneck hoặc huấn luyện lâu hơn.
+
+## 6.6. Hạn chế của nghiên cứu
+
+Hạn chế lớn nhất là nguy cơ rò rỉ nhãn qua nhóm đặc trưng số dư. Mục 5.5 đã định lượng mức phụ thuộc nhưng chưa chứng minh được tác động, vì việc đó đòi hỏi huấn luyện lại toàn bộ mô hình sau khi loại nhóm đặc trưng này rồi so sánh hiệu năng. Thí nghiệm đó nằm ngoài phạm vi bản báo cáo hiện tại và là việc cần làm trước khi công bố kết quả như một năng lực phát hiện gian lận.
+
+Bên cạnh đó, kết quả chỉ dựa trên một lần chia dữ liệu duy nhất với `random_state = 42`, nên không có ước lượng phương sai giữa các lần chạy. Phép chia phân tầng ngẫu nhiên cũng chưa thay thế được phép chia theo thời gian hoặc theo tài khoản, nên chưa kiểm chứng được khả năng dự báo cho giai đoạn tương lai và cho tài khoản chưa từng xuất hiện. Việc sinh mẫu tổng hợp thực hiện một lần trên toàn bộ tập huấn luyện thay vì độc lập trong từng fold khiến điểm cross-validation lạc quan hơn thực tế, dù các chỉ số trên tập kiểm tra vẫn không bị ảnh hưởng.
+
+Cuối cùng, PaySim là dữ liệu mô phỏng và không có thông tin vị trí, nên không thể xây dựng đặc trưng khoảng cách địa lý như đề bài gợi ý và cũng không thể khẳng định mô hình sẽ hoạt động tương tự trên nhật ký giao dịch thật.
+
+## 6.7. Kết luận chương
+
+Chương này cho thấy các chỉ số rất cao ở Chương 5 phản ánh phần lớn đặc điểm của thiết lập thí nghiệm chứ chưa phải năng lực tổng quát. Khi quy chiếu về tỷ lệ gian lận gốc, Precision của mô hình tốt nhất giảm từ 0,9994 xuống 0,9801, và khác biệt giữa bốn biến thể học có giám sát không đủ tin cậy để xếp hạng. Nhóm đặc trưng số dư vừa là nguồn sức mạnh vừa là nguy cơ chính đối với tính hợp lệ của kết quả. Chương 7 tóm tắt những gì đã đạt được và đề xuất các bước tiếp theo dựa trên những nhận định này.
+
+---
+
 # TÀI LIỆU THAM KHẢO
 
 Tài liệu tham khảo được đánh số theo thứ tự xuất hiện trong nội dung. Số tài liệu được đặt trong ngoặc vuông theo kiểu trích dẫn IEEE.
@@ -415,7 +487,7 @@ Tài liệu tham khảo được đánh số theo thứ tự xuất hiện trong
 - Nhóm 9, `src/models/`, mã nguồn huấn luyện Random Forest, XGBoost và Autoencoder.
 - Nhóm 9, `src/evaluation/`, mã nguồn tính chỉ số và trực quan hóa kết quả.
 - Nhóm 9, `reports/rf_smote_feature_importance.csv` và `reports/xgb_smote_feature_importance.csv`, mức đóng góp đặc trưng đã lưu của hai mô hình dùng SMOTENC.
-- Vũ Văn Duy, `run_report_metrics.py` và `reports/ch5_metrics_recomputed.csv`, kết quả tính lại toàn bộ chỉ số của Chương 5 từ nhãn thật và các tệp dự đoán đã lưu.
+- Vũ Văn Duy, `run_report_metrics.py`, `reports/ch5_metrics_recomputed.csv` và `reports/ch6_prevalence_projection.csv`, kết quả tính lại toàn bộ chỉ số của Chương 5 và phép quy chiếu Precision của Chương 6 từ nhãn thật cùng các tệp dự đoán đã lưu.
 
 ## Tài liệu tham khảo bên ngoài
 

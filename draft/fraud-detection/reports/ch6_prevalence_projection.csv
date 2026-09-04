@@ -1,0 +1,6 @@
+model,tpr,false_positives,fpr,precision_test,precision_original,precision_original_low,precision_original_high,false_alarms_per_million
+Random Forest + SMOTENC,0.9951,1,2.607e-05,0.9994,0.9801,0.8985,0.9995,26
+Random Forest + ADASYN,0.9951,3,7.821e-05,0.9982,0.9427,0.8491,0.9876,78
+XGBoost + SMOTENC,0.9951,4,1.043e-04,0.9976,0.925,0.8281,0.9784,104
+XGBoost + ADASYN,0.9951,7,1.825e-04,0.9957,0.8757,0.7738,0.946,182
+Autoencoder,0.7523,1998,5.209e-02,0.3822,0.0183,0.0176,0.0191,52022
