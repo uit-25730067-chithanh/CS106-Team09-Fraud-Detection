@@ -49,7 +49,7 @@ Final/
 | `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
 | `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features), data_splitter, **imbalance_handler** (SMOTENC + ADASYN) |
 | `src/models/` | ✅ Done — **random_forest_model.py**, **xgboost_model.py**, **autoencoder_model.py** |
-| Notebooks | ✅ `01_eda.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` hoàn chỉnh |
+| Notebooks | ✅ 5/6 notebooks hoàn thành: `01_eda.ipynb`, `02_imbalance_handling.ipynb`, `03_model_random_forest.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` (chỉ còn thiếu `06_evaluation_comparison.ipynb` của Khang) |
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
@@ -59,11 +59,10 @@ Final/
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `reports/model_comparison.csv` |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh (code, AppTest, local runtime); còn thiếu browser/pixel QA, model integration, comparison figures, screenshots, demo clip |
-| Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: 15 slides ✅ (Hôn) + Slide học thuật 24 trang ✅ (PR #13). Kịch bản thuyết trình chưa hoàn thiện |
-| Notebooks | ⚠️ **Thiếu 3 notebooks**: `02_imbalance_handling.ipynb` (Sơn), `03_model_random_forest.ipynb` (Sơn), `06_evaluation_comparison.ipynb` (Khang) — cần cho submit package |
+| Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: 15 slides ✅ (Hôn) + Slide học thuật 24 trang ✅ (PR #13) + Kịch bản thuyết trình toàn team 21 slide ✅ (PR #18) |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict (04/09): Phase 00–04 PASSED (5/9 = 55.6%). Toàn bộ 3 họ mô hình đã hoàn thành. Đang Sprint 3: Khang cần hoàn thành Phase 05 (2 scripts + notebook 06 + chạy metrics), Trung chờ model integration, Duy cần viết Chương 4-6. ⚠️ Sơn cần tạo 2 notebooks (02, 03) còn thiếu cho submit package.**
+> **Verdict (04/09): Phase 00–04 PASSED (5/9 = 55.6%). Toàn bộ 3 họ mô hình và 5/6 notebooks đã hoàn thành xuất sắc (Sơn đã bổ sung 02 & 03). Đang Sprint 3: Khang cần hoàn thành Phase 05 (2 scripts + notebook 06 + chạy metrics), Trung model integration, Duy viết Chương 4-6.**
 
 ---
 
@@ -222,7 +221,7 @@ Place in `Final/submit/` before zipping.
 
 > **⚠️ PM Audit 04/09/2026 — Checkpoint findings (by Hôn):**
 > - 5/9 phases passed (55.6%); Sprint 3 đúng tiến độ.
-> - **3 notebooks còn thiếu** cần tạo trước submit: `02_imbalance_handling.ipynb` (Sơn), `03_model_random_forest.ipynb` (Sơn), `06_evaluation_comparison.ipynb` (Khang).
+> - **1 notebook còn thiếu** cần tạo trước submit: `06_evaluation_comparison.ipynb` (Khang) — (Notebooks 02 và 03 của Sơn đã hoàn thành ✅).
 > - RF model `.pkl` files bị gitignore, chỉ có local — team cần reproduce hoặc Sơn share offline.
 > - `reports/figures/` chưa tồn tại — Khang sẽ tạo khi chạy Phase 05.
 > - Phase 08 checklist cần chỉnh: `autoencoder.h5` → `autoencoder_meta.json` (dùng MLPRegressor, không Keras).
@@ -243,7 +242,7 @@ Place in `Final/submit/` before zipping.
   - Best params: n_estimators=200, max_depth=20, max_features=sqrt, class_weight=balanced_subsample
   - Top feature: errorBalanceOrig (41.1%)
   - Models: rf_smote.pkl (9.2 MB), rf_adasyn.pkl (32.3 MB) — ⚠️ gitignored, local only
-- ⚠️ **Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` CẦN TẠO trước Sprint 4** (submit package cần 6 notebooks)
+- ✅ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` hoàn thành và lưu đầy đủ biểu đồ trực quan (Clean run)
 
 ### ✅ Cẩm — DONE (Phase 04 PASSED) — 01/09/2026
 - ✅ Huấn luyện & Tối ưu XGBoost trên SMOTE (`F1=0.9963, AUC=0.9993`, train time 41.6s) và ADASYN (`F1=0.9954, AUC=0.9994`)

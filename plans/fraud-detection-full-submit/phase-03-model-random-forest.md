@@ -234,7 +234,7 @@ print(f"RF (SMOTE) → F1: {f1:.4f}, AUC: {auc:.4f}")
 - [x] Feature importance có trong output — errorBalanceOrig #1 (41-47%)
 - [x] RF (SMOTE) F1-Score trên test set > 0.75 — **0.9973** ✅
 - [x] RF (SMOTE) ROC-AUC trên test set > 0.90 — **0.9994** ✅
-- [ ] Notebook `03_model_random_forest.ipynb` chạy clean — ⏳ tạo sau
+- [x] Notebook `03_model_random_forest.ipynb` chạy clean (đầy đủ biểu đồ Confusion Matrix, ROC Curve, Feature Importance & digits=4) ✅
 - [x] Training time được ghi nhận — SMOTE: 1187.7s, ADASYN: 1167.5s
 
 ## Success Criteria
