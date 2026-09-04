@@ -151,7 +151,7 @@ gantt
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Cập nhật các slides non-tech (Dataset, Preprocessing, Models overview) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Slide 5-8 nháp PPT]* | 🟡 High | ✅ (đã hoàn thiện đầy đủ 15 slides và PM Audit Sprint 3) |
+| Cập nhật các slides non-tech (Dataset, Preprocessing, Models overview) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Slide nháp PPT]* | 🟡 High | ✅ (Bộ slide học thuật 21 trang & Kịch bản toàn team đang xem xét; PM Audit Sprint 3) |
 
 ---
 

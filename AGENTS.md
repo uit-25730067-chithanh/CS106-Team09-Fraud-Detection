@@ -59,7 +59,7 @@ Final/
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts của Khang đã merge (metrics_calculator.py + plot_roc_curve.py, PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/model_comparison.csv`. Duy đã thêm plot_confusion_components.py + plot_feature_importance.py phục vụ báo cáo (branch riêng) |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh (code, AppTest, local runtime); còn thiếu browser/pixel QA, model integration, comparison figures, screenshots, demo clip |
-| Báo cáo & Slide | 🟡 Word: **Chương 1–7 ✅** (Duy — sinh tự động từ source, visual QA pass); **chỉ còn Abstract**. Slide: bộ học thuật 21 trang của Thanh là bản chính thức tại `slide/` (PR #18); bộ 15 slides của Hôn đã gỡ khỏi `reports/` theo PR #21. Kịch bản thuyết trình toàn team ✅ (PR #18) |
+| Báo cáo & Slide | 🟡 Word: **Chương 1–7 ✅** (Duy — sinh tự động từ source, visual QA pass); **chỉ còn Abstract**. Slide: bộ học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người, đang xem xét làm bản chính thức; đã dọn các bản nháp slide 15 trang cũ |
 | Notebooks | 🟡 5/6 — Sơn đã bổ sung `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb`; **còn thiếu** `06_evaluation_comparison.ipynb` (Khang) |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
@@ -282,11 +282,10 @@ Place in `Final/submit/` before zipping.
 8. ⏳ Cần Sơn/Cẩm hỗ trợ ablation loại nhóm đặc trưng số dư — bằng chứng quyết định cho Chương 6 (xem Mục 3.6.2 và 5.5)
 
 ### 🔄 Hôn — PM + PPT — PARTIALLY BLOCKED
-1. ✅ Đã hoàn thành bộ 15 slides PPTX/PDF; nhóm sau đó thống nhất dùng bộ học thuật 21 trang của Thanh làm bản chính thức và gỡ bộ 15 slides khỏi `reports/` (PR #21)
-2. ✅ Đã tích hợp bộ Slide học thuật 24 trang song ngữ EN-VN từ PR #13
-3. ✅ **PM Audit Sprint 3** hoàn thành — phát hiện 17 missed items (xem bảng trên)
-4. ⏳ Chuẩn bị kịch bản thuyết trình 10–12 phút
-5. ⏳ Phối hợp Trung chụp ảnh Demo UI → cập nhật Slide 13
-6. ⏳ Phase 08: Đóng gói submit package (blocked by Phase 05–07)
+1. 🟡 Thống nhất lựa chọn bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md`) (đang xem xét làm bản chính thức); Đã loại bỏ các file slide nháp 15 trang cũ.
+2. ✅ **PM Audit Sprint 3** hoàn thành — theo dõi và đốc thúc tiến độ Sprint 3.
+3. ⏳ Phối hợp các thành viên rà soát, luyện tập thuyết trình theo kịch bản 10–12 phút (đang xem xét).
+4. ⏳ Phối hợp Trung chụp ảnh Demo UI → cập nhật hình ảnh vào slide & báo cáo.
+5. ⏳ Phase 08: Đóng gói submit package (blocked by Phase 05–07).
 
 

@@ -3,7 +3,7 @@
 **Môn học:** CS106 — Trí tuệ Nhân tạo  
 **Nhóm:** 9  
 **Người soạn bản nháp Sprint 3:** Vũ Văn Duy — MSSV 26410031 — Lớp A
-**Phiên bản:** Bản nháp Sprint 3 — Chương 1 đến Chương 7
+**Phiên bản:** Bản nháp Sprint 3 — Tóm tắt và Chương 1 đến Chương 7
 **Ngày cập nhật:** 04/09/2026
 
 | STT | Họ và tên | MSSV | Lớp |
@@ -16,7 +16,19 @@
 | 6 | Bùi Thị Mỷ Cẩm | 25730013 | B |
 | 7 | Hoàng Cao Sơn | 25730061 | B |
 
-> Phạm vi bản nháp Sprint 3: trình bày đầy đủ bảy chương nội dung, từ Giới thiệu đến Kết luận và hướng phát triển. Phần Tóm tắt sẽ được bổ sung, và các số liệu ở Chương 5, 6 sẽ được đối chiếu lần cuối với bảng so sánh tổng hợp cùng các biểu đồ ROC, Precision–Recall của bước đánh giá chéo.
+> Phạm vi bản nháp Sprint 3: trình bày đầy đủ phần Tóm tắt và bảy chương nội dung, từ Giới thiệu đến Kết luận và hướng phát triển. Các số liệu ở Chương 5 và Chương 6 sẽ được đối chiếu lần cuối với bảng so sánh tổng hợp cùng các biểu đồ ROC, Precision–Recall của bước đánh giá chéo.
+
+---
+
+# TÓM TẮT
+
+Gian lận trong giao dịch tài chính điện tử gây thiệt hại trực tiếp cho tổ chức tài chính và người dùng, trong khi dữ liệu giao dịch thật hiếm khi được công bố vì tính riêng tư. Báo cáo này xây dựng và đánh giá một quy trình học máy phát hiện giao dịch bất thường trên bộ dữ liệu mô phỏng PaySim.
+
+Từ 6.362.620 giao dịch gốc, nhóm lọc hai loại `TRANSFER` và `CASH_OUT` là nơi tập trung toàn bộ gian lận, giữ nguyên 8.213 giao dịch gian lận và lấy mẫu ngẫu nhiên lớp bình thường để tạo tập làm việc 200.000 bản ghi. Dữ liệu được chia phân tầng 80/20 trước khi khớp bộ chuẩn hóa nhằm tránh rò rỉ, sau đó xây dựng 14 đặc trưng gồm bảy đặc trưng dẫn xuất từ thời gian, số tiền và biến động số dư. SMOTENC và ADASYN được áp dụng riêng trên tập huấn luyện. Nhóm huấn luyện năm biến thể mô hình thuộc ba họ là Random Forest, XGBoost và Autoencoder, rồi đánh giá tất cả trên cùng tập kiểm tra 40.000 giao dịch bằng Precision, Recall, F1-Score, ROC-AUC và Average Precision.
+
+Random Forest kết hợp SMOTENC đạt kết quả cao nhất với F1-Score 0,9973, ROC-AUC 0,9994 và Average Precision 0,9983. Tuy nhiên phân tích sâu cho thấy ba giới hạn quan trọng. Nhóm đặc trưng dẫn xuất từ số dư chiếm 90,50% mức đóng góp của Random Forest và 99,30% của XGBoost, đúng nhóm mà nguồn dữ liệu khuyến cáo không nên dùng để phát hiện gian lận. Khi quy chiếu về tỷ lệ gian lận gốc 0,129082%, Precision của mô hình tốt nhất giảm còn 0,9801. Khoảng tin cậy của bốn biến thể học có giám sát chồng lấn nhau nên chưa đủ căn cứ thống kê để xếp hạng chúng. Kết quả vì vậy chỉ có hiệu lực trên tập kiểm tra PaySim đã xử lý, không suy rộng thành hiệu năng trong hệ thống tài chính thật.
+
+**Từ khóa:** phát hiện gian lận, dữ liệu mất cân bằng, SMOTENC, ADASYN, Random Forest, XGBoost, Autoencoder, PaySim.
 
 ---
 

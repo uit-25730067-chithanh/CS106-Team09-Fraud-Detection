@@ -113,9 +113,9 @@ cp -r draft/fraud-detection/notebooks "$SUBMIT_DIR/code/"
 cp -r draft/fraud-detection/demo "$SUBMIT_DIR/code/"
 cp draft/fraud-detection/requirements.txt "$SUBMIT_DIR/code/"
 
-# Copy reports
+# Copy reports & slides
 cp draft/fraud-detection/reports/*.docx "$SUBMIT_DIR/report/"
-cp draft/fraud-detection/reports/*.pptx "$SUBMIT_DIR/slides/"
+cp draft/fraud-detection/slide/*.pptx "$SUBMIT_DIR/slides/"  # slide chính thức (đang xem xét)
 cp -r draft/fraud-detection/demo/screenshots "$SUBMIT_DIR/demo/"
 
 # Create ZIP
@@ -143,7 +143,7 @@ echo "ZIP created: [Project AI-UIT] - Nhom 9.zip"
 - [ ] `reports/model_comparison.csv` exists
 - [ ] `reports/figures/roc_curves_all.png` exists
 - [ ] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists
-- [ ] `reports/[Nhom9]_PPT_FraudDetection.pptx` exists
+- [ ] `slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` exists (hoặc bản slide chính thức được duyệt)
 
 **Submit package verification (Hôn):**
 - [ ] `[Project AI-UIT] - Nhom 9/` folder structure đúng
