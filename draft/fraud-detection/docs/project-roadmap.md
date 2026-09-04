@@ -87,8 +87,8 @@ gantt
 ### Khang *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết `src/evaluation/metrics-calculator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compute_metrics`]* | 🟡 High | ✅ (PR #7 merged) |
-| Viết `src/evaluation/plot-roc-curve.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_roc_curves` & `plot_pr_curves`]* | 🟡 High | ✅ (PR #7 merged) |
+| Viết `src/evaluation/metrics_calculator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compute_metrics`]* | 🟡 High | ✅ (PR #7 merged) |
+| Viết `src/evaluation/plot_roc_curve.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_roc_curves` & `plot_pr_curves`]* | 🟡 High | ✅ (PR #7 merged) |
 
 ### Trung *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
@@ -134,8 +134,8 @@ gantt
 ### Khang
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết `src/evaluation/confusion-matrix-plot.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_confusion_matrix`]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
-| Viết `src/evaluation/model-comparator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compare_models` để tạo bảng so sánh]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
+| Viết `src/evaluation/confusion_matrix_plot.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_confusion_matrix`]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
+| Viết `src/evaluation/model_comparator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compare_models` để tạo bảng so sánh]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
 
 ### Trung
 | Task | Ưu tiên | Trạng thái |
@@ -181,7 +181,7 @@ gantt
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | 🔲 |
+| PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `reports/model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | 🔲 |
 | Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | 🔲 |
 
 ---

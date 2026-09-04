@@ -58,7 +58,7 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 >
 > **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main`. Bộ Slide PPT chính thức (15 slides) và Slide học thuật 24 trang đã hoàn tất. Phase vẫn `pending` chờ Methodology (Chương 4 — Duy có thể viết ngay) và Results/Conclusion (Chương 5-6 — cần Phase 05).
 >
-> **PM Audit — Hôn — 04/09/2026:** Scout toàn bộ file tree phát hiện 17 items cần xử lý: 3 notebooks thiếu (02, 03, 06), 2 scripts evaluation chưa tạo, thư mục `reports/figures/` và `model_comparison.csv` chưa tồn tại, RF `.pkl` bị gitignore, và Phase 08 checklist tham chiếu sai (`autoencoder.h5` → `autoencoder_meta.json`). Tiến độ tổng thể 5/9 phases = 55.6%, đúng Sprint timeline.
+> **PM Audit — Hôn — 04/09/2026:** Scout toàn bộ file tree phát hiện 17 items cần xử lý: 3 notebooks thiếu (02, 03, 06), 2 scripts evaluation chưa tạo, thư mục `reports/figures/` và `reports/model_comparison.csv` chưa tồn tại, RF `.pkl` bị gitignore, và Phase 08 checklist tham chiếu sai (`autoencoder.h5` → `autoencoder_meta.json`). Tiến độ tổng thể 5/9 phases = 55.6%, đúng Sprint timeline.
 
 ## Git Convention
 

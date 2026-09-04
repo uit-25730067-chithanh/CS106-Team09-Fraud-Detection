@@ -142,7 +142,7 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
 4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
 5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
-6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + model_comparison.csv
+6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + reports/model_comparison.csv
 7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
 8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Slide PPT 15 slides (Hôn) + Slide học thuật 24 trang
 ```

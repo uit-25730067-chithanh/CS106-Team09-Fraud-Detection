@@ -57,7 +57,7 @@ Final/
 | `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (digits=4 chuẩn hóa từ PR #15) |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
-| Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `model_comparison.csv` |
+| Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `reports/model_comparison.csv` |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh (code, AppTest, local runtime); còn thiếu browser/pixel QA, model integration, comparison figures, screenshots, demo clip |
 | Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: 15 slides ✅ (Hôn) + Slide học thuật 24 trang ✅ (PR #13). Kịch bản thuyết trình chưa hoàn thiện |
 | Notebooks | ⚠️ **Thiếu 3 notebooks**: `02_imbalance_handling.ipynb` (Sơn), `03_model_random_forest.ipynb` (Sơn), `06_evaluation_comparison.ipynb` (Khang) — cần cho submit package |
@@ -262,7 +262,7 @@ Place in `Final/submit/` before zipping.
    - Viết `confusion_matrix_plot.py` — template có sẵn trong phase file
    - Viết `model_comparator.py` — template có sẵn trong phase file
    - Tạo `notebooks/06_evaluation_comparison.ipynb`
-   - Chạy evaluation cho cả 3 mô hình → xuất `reports/figures/` + `model_comparison.csv`
+   - Chạy evaluation cho cả 3 mô hình → xuất `reports/figures/` + `reports/model_comparison.csv`
 
 ### 🔄 Trung — Phase 06 (Demo UI Integration) — BLOCKED on Phase 05
 1. ✅ UI shell Revision 7.7 verified (code + AppTest + local runtime)
@@ -274,7 +274,7 @@ Place in `Final/submit/` before zipping.
 ### 🔄 Duy — Báo cáo Word — BLOCKED on Phase 05 (Results)
 1. ✅ Đã viết xong Chương 1, 2, 3 (merge vào `main`; source: `reports/report-source.md`)
 2. ⏳ Viết Chương 4 (Methodology) — **có thể viết ngay** (không cần kết quả Phase 05)
-3. ⏳ Viết Chương 5 (Results & Discussion) — cần `model_comparison.csv` + `reports/figures/`
+3. ⏳ Viết Chương 5 (Results & Discussion) — cần `reports/model_comparison.csv` + `reports/figures/`
 4. ⏳ Viết Chương 6 (Conclusion) + Abstract
 5. ⏳ Format Word + kiểm tra citation
 
