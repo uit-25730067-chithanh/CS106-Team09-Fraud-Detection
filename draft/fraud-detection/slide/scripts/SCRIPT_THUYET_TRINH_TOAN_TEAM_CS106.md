@@ -9,7 +9,7 @@
 
 ## 👥 BẢNG PHÂN CÔNG THUYẾT TRÌNH CHUẨN THEO TASKS ĐỒ ÁN FINAL
 
-_(Căn cứ theo phân công chính thức trong `assignments/Final/plans/fraud-detection-full-submit/plan.md` & `assignments/Final/AGENTS.md`)_
+_(Căn cứ theo phân công chính thức trong `plans/fraud-detection-full-submit/plan.md` & `AGENTS.md`)_
 
 | STT | Thành viên                        | Task chính trong Đồ án Final                                   | Slide phụ trách                   | Nội dung thuyết trình phụ trách                                                                                                                     |
 | :-- | :-------------------------------- | :------------------------------------------------------------- | :-------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |

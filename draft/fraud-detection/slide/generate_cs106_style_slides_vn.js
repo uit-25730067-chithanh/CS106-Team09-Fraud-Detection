@@ -866,10 +866,12 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Right Side: Metrics Comparison Chart
   const chartImgPath = path.join(__dirname, 'slide_assets', 'academic_metrics_comparison.png');
   const chartH = rightW / 2.118; // Natural aspect ratio 2220x1048
-  s.addImage({
-    path: chartImgPath,
-    x: rightX, y: 1.08, w: rightW, h: chartH
-  });
+  if (fs.existsSync(chartImgPath)) {
+    s.addImage({
+      path: chartImgPath,
+      x: rightX, y: 1.08, w: rightW, h: chartH
+    });
+  }
 
   // Right Bottom: Comparison Insights
   addHighlightBlock(s, {
@@ -899,10 +901,12 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   const actualImgW = actualImgH * 3.457;
   const imgX = M + (CW - actualImgW) / 2;
 
-  s.addImage({
-    path: cmImgPath,
-    x: imgX, y: 1.06, w: actualImgW, h: actualImgH
-  });
+  if (fs.existsSync(cmImgPath)) {
+    s.addImage({
+      path: cmImgPath,
+      x: imgX, y: 1.06, w: actualImgW, h: actualImgH
+    });
+  }
 
   // Bottom: 3 Detailed Insight Cards (RF, XGBoost, Autoencoder)
   const cardW = (CW - 0.3) / 3;
@@ -948,10 +952,12 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Left Side: Feature Importance Chart
   const fiImgPath = path.join(__dirname, 'slide_assets', 'academic_feature_importance.png');
   const chartH = leftW / 1.838; // 1926x1048 -> ~2.42"
-  s.addImage({
-    path: fiImgPath,
-    x: M, y: 1.08, w: leftW, h: chartH
-  });
+  if (fs.existsSync(fiImgPath)) {
+    s.addImage({
+      path: fiImgPath,
+      x: M, y: 1.08, w: leftW, h: chartH
+    });
+  }
 
   // Left Bottom: Engineering Insight Box
   addHighlightBlock(s, {
@@ -1008,10 +1014,12 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Left Side: Reconstruction Error Distribution Chart
   const aeImgPath = path.join(__dirname, 'slide_assets', 'academic_autoencoder_dist.png');
   const chartH = leftW / 1.918; // 2010x1048 -> ~2.32"
-  s.addImage({
-    path: aeImgPath,
-    x: M, y: 1.08, w: leftW, h: chartH
-  });
+  if (fs.existsSync(aeImgPath)) {
+    s.addImage({
+      path: aeImgPath,
+      x: M, y: 1.08, w: leftW, h: chartH
+    });
+  }
 
   // Left Bottom: Threshold Theory Box
   addHighlightBlock(s, {
