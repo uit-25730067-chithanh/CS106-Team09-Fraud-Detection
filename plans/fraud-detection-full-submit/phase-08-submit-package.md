@@ -29,7 +29,8 @@ Phase cuối: gộp tất cả, final verification, đóng gói ZIP, nộp bài.
 
 - `Restart & Run All` quan trọng — tránh trường hợp notebook chạy được vì có cached variables
 - Không commit dataset `paysim.csv` vào git (>100MB)
-- Cần kiểm tra `models/*.pkl` và `models/autoencoder.h5` tồn tại trước khi đóng gói
+- Cần kiểm tra `models/scaler.pkl`, `models/xgb_smote.json` và `models/autoencoder_meta.json` tồn tại trước khi đóng gói
+- ⚠️ RF models (`rf_smote.pkl`, `rf_adasyn.pkl`) bị gitignore — cần reproduce hoặc share offline
 
 ## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
 
@@ -135,9 +136,10 @@ echo "ZIP created: [Project AI-UIT] - Nhom 9.zip"
 - [ ] `streamlit run demo/app.py` → app starts OK
 
 **Artifacts verification:**
-- [ ] `models/rf_smote.pkl` exists
-- [ ] `models/xgb_smote.pkl` exists
-- [ ] `models/autoencoder.h5` exists
+- [ ] `models/scaler.pkl` exists
+- [ ] `models/xgb_smote.json` exists
+- [ ] `models/autoencoder_meta.json` exists
+- [ ] `models/rf_smote.pkl` exists (**cần reproduce — bị gitignore**)
 - [ ] `reports/model_comparison.csv` exists
 - [ ] `reports/figures/roc_curves_all.png` exists
 - [ ] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists
