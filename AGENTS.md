@@ -49,7 +49,7 @@ Final/
 | `src/utils/` | ✅ Done — helpers.py, constants, set_seeds() |
 | `src/preprocessing/` | ✅ Done — data_loader, feature_scaler (14 features), data_splitter, **imbalance_handler** (SMOTENC + ADASYN) |
 | `src/models/` | ✅ Done — **random_forest_model.py**, **xgboost_model.py**, **autoencoder_model.py** |
-| Notebooks | ✅ `01_eda.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` hoàn chỉnh |
+| Notebooks | ✅ Đầy đủ cả 5 notebooks: `01_eda.ipynb`, `02_imbalance_handling.ipynb`, `03_model_random_forest.ipynb`, `04_model_xgboost.ipynb`, `05_model_autoencoder.ipynb` |
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
@@ -235,7 +235,7 @@ Place in `Final/submit/` before zipping.
   - Best params: n_estimators=200, max_depth=20, max_features=sqrt, class_weight=balanced_subsample
   - Top feature: errorBalanceOrig (41.1%)
   - Models: rf_smote.pkl (9.2 MB), rf_adasyn.pkl (32.3 MB)
-- ⏳ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` cần tạo
+- ✅ Notebooks `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb` hoàn thành và lưu đầy đủ biểu đồ trực quan (Clean run)
 
 ### ✅ Cẩm — DONE (Phase 04 PASSED) — 01/09/2026
 - ✅ Huấn luyện & Tối ưu XGBoost trên SMOTE (`F1=0.9963, AUC=0.9993`, train time 41.6s) và ADASYN (`F1=0.9954, AUC=0.9994`)
