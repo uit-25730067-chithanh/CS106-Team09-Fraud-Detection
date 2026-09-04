@@ -54,7 +54,7 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
-> **Phase 06 — Trung — checkpoint 29/08/2026:** UI shell Revision 7.7 đã được xác minh ở cấp code, AppTest và local runtime. Phase vẫn `pending`; còn browser/pixel QA, tích hợp model và figures thật, screenshot và demo clip.
+> **Phase 06 — Trung — checkpoint 02/09/2026:** Đã tích hợp XGBoost-SMOTE và scaler thật, khóa contract 14 đặc trưng, trả probability/nhãn theo ngưỡng và vượt `6` inference tests. Phase vẫn `pending`; còn browser QA, figures/kết luận Phase 05, screenshot và demo clip.
 >
 > **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main`. Bộ Slide học thuật 21 trang và Kịch bản thuyết trình toàn team 7 người đã hoàn tất (đang xem xét làm bản chính thức; đã dọn dẹp các slide nháp 15 trang cũ). Phase vẫn `pending` chờ Methodology (Chương 4 — Duy có thể viết ngay) và Results/Conclusion (Chương 5-6 — cần Phase 05).
 >
