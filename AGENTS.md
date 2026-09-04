@@ -56,7 +56,7 @@ Final/
 | `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
-| Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; sẵn sàng nạp model thật |
+| Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng; còn browser QA, figures Phase 05 và demo clip |
 | Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) đã hoàn tất |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
@@ -251,9 +251,9 @@ Place in `Final/submit/` before zipping.
 3. Xuất bảng so sánh tổng hợp chéo (Cross-model comparison table) và biểu đồ ROC / PR curves so sánh 3 mô hình
 
 ### Trung — Bắt đầu Tích hợp Model vào Demo UI (Phase 06)
-1. Đã có weights mô hình: `models/xgb_smote.json` / `models/rf_smote.pkl` và `models/scaler.pkl`
-2. Kết nối pipeline inference vào `demo/app.py` để dự đoán xác suất gian lận thời gian thực
-3. Chụp screenshots QA và quay video demo clip
+1. ✅ Đã kết nối `models/xgb_smote.json` + `models/scaler.pkl` vào UI với contract 14 đặc trưng
+2. ✅ Đã hiển thị xác suất, ngưỡng tương tác và nhãn thật; kiểm thử form + 4 preset + ngưỡng không có exception
+3. ⏳ Nhận figures/kết luận model chính thức từ Phase 05, browser QA System/Sáng/Tối, chụp screenshot và quay demo clip
 
 ### Duy — Báo cáo Word
 1. ✅ Đã viết xong Chương 1, 2, 3
