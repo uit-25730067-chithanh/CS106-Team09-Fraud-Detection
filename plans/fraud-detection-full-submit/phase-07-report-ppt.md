@@ -1,7 +1,7 @@
 # Phase 07 — Báo cáo Word + PPT
 
 **Parent plan:** [plan.md](./plan.md)  
-**Depends on:** [Phase 05](./phase-05-evaluation-comparison.md) — PASSED *(chỉ phần Results & Discussion + điền số vào PPT — Sprint 4)*  
+**Depends on:** [Phase 05](./phase-05-evaluation-comparison.md) — `pending` *(chỉ phần Results & Discussion + điền số cuối vào PPT — Sprint 4)*
 **Early Start:** ~70% Word + PPT skeleton có thể viết từ **Sprint 2** — không cần kết quả  
 **Parallel with:** [Phase 06](./phase-06-demo-ui.md)  
 **Next phase:** [Phase 08 — Submit Package](./phase-08-submit-package.md)
@@ -29,8 +29,8 @@
 |------|--------|---------|------------|
 | Viết Introduction + Problem Statement | Sprint 2 | Không cần code | ✅ Hoàn thành |
 | Viết Dataset Description (Kaggle stats) | Sprint 2 | Dùng đề bài, Kaggle, PaySim paper và evidence Phase 01 | ✅ Hoàn thành |
-| Viết Methodology (thuật toán + preprocessing + imbalance) | Sprint 3 | Không cần kết quả | 🔲 Chưa bắt đầu |
-| Viết Results & Discussion (điền số từ Khang) | Sprint 4 | Cần output Phase 05 | 🔲 Chưa bắt đầu |
+| Viết Methodology (thuật toán + preprocessing + imbalance) | Sprint 3 | Dựa trên evidence Phase 01–04 | ✅ Hoàn thành |
+| Viết Results & Discussion (điền số từ Khang) | Sprint 3–4 | Results draft 5.1–5.6 đã tính lại và tái lập được qua `run_report_metrics.py`; Discussion, ROC/PR figures và ablation đặc trưng số dư chờ Phase 05 | 🟡 Đang thực hiện |
 | Viết Conclusion + References | Sprint 4 | Draft trước, hoàn thiện sau | 🔲 Chưa bắt đầu |
 | Format Word + Abstract + kiểm tra citation | Sprint 4 | | 🔲 Chưa bắt đầu |
 
@@ -41,9 +41,61 @@
 - Word draft: `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint2_Duy.docx`.
 - Phạm vi đã viết: Chương 1 — Giới thiệu; Chương 2 — Phát biểu bài toán; Chương 3 — Mô tả dữ liệu.
 - Evidence sử dụng: đề bài CS106, notebook EDA, Phase 01, PaySim paper và Kaggle data card.
-- Kiểm tra thực tế: citation validator PASS; DOCX package validation PASS; 131 paragraphs, 5 tables, đủ heading Chương 1–3.
-- Giới hạn xác minh: chưa render PDF vì máy không có LibreOffice/Pages; cần mở Word và cập nhật trường mục lục khi review thủ công.
+- Kiểm tra lại artifact hiện tại: DOCX package validation PASS; 132 paragraphs, 6 tables; PDF Sprint 2 tồn tại với 13 trang.
+- Quy trình dựng bản nộp đã được tự động hoá, không phải chỉnh tay trong trình soạn thảo.
 - Phase 07 tổng thể vẫn `pending`; Methodology, Results, Discussion, Conclusion và Abstract chờ Sprint 3–4.
+
+#### Quy trình dựng bản Word/PDF (Duy)
+
+Bản DOCX được sinh hoàn toàn từ `reports/report-source.md`, không chỉnh tay:
+
+```bash
+cd draft/fraud-detection
+python build_report.py        # dựng DOCX theo khuôn reports/_report_template.docx
+# xuất PDF từ DOCX
+python sync_toc_pages.py      # đọc số trang thật từ PDF
+python build_report.py        # dựng lại, mục lục đã có số trang đúng
+# xuất PDF lần cuối
+```
+
+`_report_template.docx` là bản Sprint 2 đã bị xoá sạch phần thân, chỉ giữ styles,
+header, footer, khổ A4 và lề. Nhờ vậy định dạng không đổi qua các sprint, còn nội
+dung luôn khớp source. Vòng lặp hai lần là để số trang trong mục lục hội tụ — đã
+xác nhận ổn định ngay từ vòng thứ nhất.
+
+#### Evidence Early Start — Duy, Sprint 3 (04/09/2026)
+
+- Branch riêng: `docs/vu-van-duy-sprint3-methodology` từ `origin/main` tại `646ca1d`.
+- Source đã đồng bộ: `draft/fraud-detection/reports/report-source.md`.
+- Word/PDF draft mới, giữ format của bản Sprint 2:
+  - `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.docx`.
+  - `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.pdf`.
+- Đã sửa mô tả pipeline từ 9 lên 14 đặc trưng và bổ sung đầy đủ 7 đặc trưng dẫn xuất. Nội dung báo cáo không còn trộn tên Phase, file plan hoặc tiến độ nội bộ vào phần trình bày khoa học.
+- Đã mô tả đúng thứ tự chống rò rỉ dữ liệu: chia train/test trước khi khớp `StandardScaler`, chỉ khớp scaler trên train rồi transform test, chỉ áp dụng SMOTENC/ADASYN trên train và giữ nguyên test để đánh giá.
+- Đã thêm Chương 4 gồm quy trình thực nghiệm, preprocessing, SMOTENC/ADASYN, Random Forest, XGBoost, Autoencoder, giao thức đánh giá, khả năng tái lập và giới hạn phương pháp.
+- Đã thêm bản nháp Chương 5 (5.1–5.6) từ `rf_predictions.pkl`, `xgb_predictions.pkl`, `autoencoder_predictions.pkl` và `y_test.pkl`: bảng 5 biến thể, biểu đồ bốn thành phần TN/FP/FN/TP, mức đóng góp đặc trưng và phân tích SMOTENC/ADASYN. Random Forest + SMOTENC tạm dẫn đầu với F1=0.9973.
+- Đã thêm `src/evaluation/plot_confusion_components.py` và `reports/figures/confusion_matrix_components.png`. Hình 5.1 dùng bốn đồ thị riêng, cùng trục hoành mô hình và trục tung số giao dịch để tránh TN/TP che khuất FP/FN. Hai panel FP và FN chuyển sang trục tung thang logarit vì giá trị chênh nhau tới ba bậc độ lớn (FP: 1 so với 1.998) — ở thang tuyến tính, các cột 1/3/4/7 bị dí sát trục và không so sánh được với nhau.
+- Đã rà soát lại thuật ngữ Chương 4 và 5, bỏ lối dịch sát nghĩa và thống nhất cách gọi trong toàn báo cáo: `random_state = 42` thay cho "hạt giống 42", `k_neighbors = 5` thay cho "năm láng giềng", `batch_size` / `learning_rate_init` / `max_iter` / epoch / early stopping thay cho "kích thước lô" / "tốc độ học" / "chu kỳ huấn luyện" / "điều kiện dừng sớm", cross-validation k-fold thay cho "kiểm định chéo k phần", oversampling và downsampling thay cho "sinh mẫu" và "giảm mẫu", tập validation thay cho "tập xác thực", "độ bất thuần Gini" thay cho "tạp chất", "xác suất đã hiệu chuẩn" thay cho "hiệu chỉnh", bottleneck và anomaly score giữ nguyên thuật ngữ gốc. Mục 4.7 đổi tiêu đề từ "Giao thức đánh giá" thành "Quy trình đánh giá".
+- Đã viết lại phần mô tả thuật toán cho đúng bản chất thay vì dịch máy móc tiêu đề bài báo: Random Forest nêu rõ bootstrap, tập con đặc trưng và cơ chế giảm phương sai; XGBoost nêu gradient boosting trên cây cùng ba cải tiến của bài báo gốc; Autoencoder giải thích vì sao bottleneck buộc mạng học biểu diễn nén. Mục 4.8 tách năm giới hạn thành danh sách có đánh thứ tự và trỏ sang bằng chứng ở Mục 5.5. Chương 5 bổ sung câu nối giải thích vì sao 8 giao dịch bỏ sót cần đặc trưng mới chứ không phải đổi thuật toán.
+- Đã thêm `src/evaluation/plot_feature_importance.py` và `reports/figures/feature_importance_comparison.png` (Hình 5.2). Hình vẽ đủ 14 đặc trưng của cả hai mô hình trên hai panel riêng vì Gini và gain là hai thang đo khác nhau, tô màu tách nhóm đặc trưng số dư và ghi thẳng tỷ lệ 90,50% / 99,30% lên panel. Kèm 8 test trong `tests/evaluation/test_plot_feature_importance.py`.
+- Đã mở rộng `run_report_metrics.py` để sinh lại **cả hai hình** của Chương 5 cùng lúc với bảng chỉ số, nên toàn bộ số và hình trong chương đều tái lập được bằng một lệnh.
+- ⚠️ Ghi chú cho Thanh/Hôn: `slide/slide_assets/academic_feature_importance.png` ghi nhãn trục là "Relative Importance (F-Score)", nhưng giá trị 0.499 / 0.472 chính là `feature_importances_` mặc định của XGBoost, tức **gain** chứ không phải F-Score (weight). Số liệu khớp với Bảng 5.2, chỉ sai nhãn.
+- Đã thêm `tests/evaluation/test_plot_confusion_components.py` (7 test: số bar khớp confusion matrix, quy tắc chuyển thang log, bỏ qua ghi file, hai nhánh lỗi đầu vào). Chạy `pytest tests/evaluation/` — 15 test pass, không có test nào của Khang bị ảnh hưởng.
+- Đã thêm `run_report_metrics.py` (gọi `compute_metrics` của Khang) và `reports/ch5_metrics_recomputed.csv`. Toàn bộ số liệu Chương 5 nay truy được về một nguồn duy nhất và chạy lại được. Bảng 5.1 bổ sung cột Average Precision cho cả 5 biến thể: RF-SMOTENC 0.9983, RF-ADASYN 0.9978, XGB-SMOTENC 0.9969, XGB-ADASYN 0.9976, Autoencoder 0.5973. Khoảng cách ROC-AUC 0.9318 so với AP 0.5973 của Autoencoder được phân tích tại Mục 5.2. Bảng này là bằng chứng nháp và sẽ được thay bằng `model_comparison.csv` của Phase 05.
+- Đã xác minh 8 giao dịch bị bỏ sót là **cùng một tập hợp** ở cả bốn mô hình học có giám sát (giao = hợp = 8), và Autoencoder bỏ sót 7/8 giao dịch đó. Kết luận này được viết vào Mục 5.3: phần gian lận chưa phát hiện là giới hạn của biểu diễn đặc trưng, không phải sai số ngẫu nhiên của từng mô hình.
+- Đã thêm Mục 5.5 trả lời câu hỏi nghiên cứu thứ ba tại Mục 2.5, gồm Bảng 5.2 và Hình 5.2, dùng `rf_smote_feature_importance.csv` và `xgb_smote_feature_importance.csv`. `errorBalanceOrig` đứng đầu ở cả hai mô hình. Nhóm đặc trưng số dư chiếm 74,41% (RF) và 98,54% (XGB) mức đóng góp, lên 90,50% và 99,30% nếu tính thêm `is_drain_account` và `amount_to_oldbalance_ratio`. Đây là bằng chứng định lượng cho cảnh báo tại Mục 3.6.2.
+- Đã sửa sơ đồ Pipeline Overview trong `AGENTS.md`: sơ đồ cũ ghi `feature_scaler.py` trước `data_splitter.py`, trái với `run_preprocessing.py` (split ở dòng 29, scale ở dòng 33) và trái với khẳng định chống rò rỉ dữ liệu tại Mục 2.3.3 và 4.1 của báo cáo.
+- Đã công khai giới hạn PaySim không có vị trí để tính khoảng cách địa lý; không tự sinh dữ liệu vị trí không có nguồn gốc.
+- Đã bổ sung nguồn gốc SMOTE, ADASYN, Random Forest, XGBoost và Autoencoder. Trích dẫn [1]–[8] được chuẩn hóa theo kiểu IEEE, đặt ngay sau tác giả, bộ dữ liệu, phương pháp hoặc mô hình được dẫn thay vì treo ở cuối đoạn. Danh mục tài liệu bên ngoài có đủ tác giả, tên công trình, nơi công bố, năm, trang và DOI/URL, đồng thời dùng thụt treo để dễ tra cứu.
+- Kiểm tra cấu trúc: DOCX đọc lại bằng python-docx PASS; 216 paragraphs, 9 tables, 1 hình; mục lục đủ 38 dòng, gồm toàn bộ mục 4.1–4.9 và 5.1–5.6, kế thừa đúng style Sprint 2; bảng feature 14 dòng dữ liệu; không còn placeholder hoặc stale text của Sprint 2 trong bản Sprint 3.
+- ✅ **DOCX/PDF đã dựng lại** từ source mới bằng `build_report.py`: Bảng 5.1 có cột Average Precision, có Mục 5.5 và Bảng 5.2, Mục 5.6 đánh số lại, Hình 5.1 dùng bản vẽ log-scale, danh mục tham khảo bỏ dấu ngoặc nhọn quanh URL và dùng thụt treo.
+- Định dạng nội dung Chương 1–5 đã thống nhất theo hệ không thụt đầu dòng, căn đều hai lề, line spacing 1,3 và cách đoạn 4 pt. Mục 4.1 trình bày 6 bước bằng bullet. Bảng đặc trưng dùng cột `#` hẹp, cột nội dung căn trái và hàng 9–10 không còn bị giãn ký tự.
+- Kiểm tra dấu câu: `report-source.md`, DOCX và PDF đều có 0 dấu chấm phẩy.
+- Kiểm tra render: PDF A4 gồm 24 trang, có text layer trên cả 24 trang, không trang nào trống, 2 hình được nhúng đúng vị trí.
+- Visual QA toàn bộ 23 trang: không có trang trắng, clipping, chồng chữ hoặc bảng vỡ; mục lục trang 2–3 có đủ 38 mục của Chương 1–5 và Tài liệu tham khảo; Chương 1 bắt đầu sạch ở trang 4; Hình 5.1 ở trang 19; footer chạy đúng `Page 1 of 23` đến `Page 23 of 23`; bản DOCX có 216 paragraph, 9 bảng, 1 hình.
+- Danh sách và mục tài liệu tham khảo đã căn trái và dùng thụt treo, không còn hiện tượng giãn ký tự ở các dòng chứa tên tệp dài.
+- ⚠️ Khác biệt duy nhất so với bản dựng tay trước đó: bảng 14 đặc trưng ở Mục 3.5 tách sang trang 12 mà không lặp lại hàng tiêu đề. XML đã đặt `tblHeader` đúng chuẩn nhưng Pages không áp dụng khi nhập từ DOCX. Có thể bật lại thủ công trong Pages (Table → Header rows) nếu cần.
+- Phase 07 tổng thể vẫn `pending`; Chương 5 cần đối chiếu `model_comparison.csv` và figures chính thức từ Phase 05 trước khi viết Discussion, Conclusion, Abstract và bản Word cuối.
 
 ### Hôn — PPT
 | Task | Sprint | Ghi chú | Trạng thái |
@@ -84,7 +136,7 @@ Duy viết báo cáo Word theo chuẩn Scientific Report. Hôn làm PPT cho bu�
 
 ## Key Insights
 
-- Hình ảnh: copy từ `reports/figures/*.png` (đã có sẵn, độ phân giải 150 DPI)
+- Hình ảnh: mọi hình trong báo cáo lấy từ `reports/figures/*.png`. Hiện có `confusion_matrix_components.png` (Hình 5.1, do Duy sinh bằng `src/evaluation/plot_confusion_components.py`). Các hình ROC và Precision–Recall tổng hợp sẽ được Phase 05 bổ sung vào cùng thư mục.
 - Abstract: viết sau cùng khi có kết quả đầy đủ
 
 ## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)

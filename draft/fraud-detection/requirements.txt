@@ -35,3 +35,9 @@ ipykernel>=6.25.0
 # Utilities
 tqdm>=4.65.0
 joblib>=1.3.0
+
+# Dựng báo cáo (Phase 07)
+# build_report.py sinh DOCX từ reports/report-source.md; sync_toc_pages.py đọc
+# số trang thật từ PDF đã xuất để điền vào mục lục.
+python-docx>=1.1.0
+pymupdf>=1.24.0

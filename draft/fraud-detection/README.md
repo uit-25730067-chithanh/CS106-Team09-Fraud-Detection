@@ -70,7 +70,11 @@ fraud-detection/
 │   ├── models/            ✔ random_forest_model.py, xgboost_model.py, autoencoder_model.py
 │   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp Docx/PDF + Slide PPT + Predictions (RF, XGB, Autoencoder)
+├── reports/               # ✅ Báo cáo nháp Chương 1–5 DOCX/PDF + Slide PPT + Predictions (RF, XGB, Autoencoder)
+│   ├── ch5_metrics_recomputed.csv  # Chỉ số Chương 5 tính lại (nháp — Phase 05 sẽ thay bằng model_comparison.csv)
+│   ├── _report_template.docx       # Khuôn định dạng (styles, header, footer, A4) cho build_report.py
+│   ├── _toc_pages.json             # Số trang mục lục do sync_toc_pages.py sinh ra
+│   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png)
 ├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Custom crystal logo + hero asset của revision cũ
@@ -83,6 +87,9 @@ fraud-detection/
 ├── run_random_forest.py   # Script train & evaluate Random Forest (Phase 03)
 ├── run_xgboost.py         # Script train & evaluate XGBoost (Phase 04)
 ├── run_autoencoder.py     # Script train & evaluate Autoencoder (Phase 04)
+├── run_report_metrics.py  # Script tính lại chỉ số + sinh lại 2 hình của Chương 5 (Phase 07)
+├── build_report.py        # Script dựng bản Word của báo cáo từ report-source.md (Phase 07)
+├── sync_toc_pages.py      # Script đọc số trang thật từ PDF để điền vào mục lục (Phase 07)
 ├── requirements.txt
 └── README.md
 ```
@@ -144,7 +151,7 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 5. Evaluation     ⏳ Templates merged, đang chạy so sánh metrics 3 mô hình (Phase 05 — Khang)
 6. Comparison     ⏳ Bảng so sánh hiệu năng các mô hình
 7. Demo UI        ✔ UI shell + 3 presets + safe-preview; → Sẵn sàng nạp model weights (Trung)
-8. Report         ✔ Nháp Báo cáo Word (Chương 1–3) (Duy) + Slide PPT 15 slides (Hôn)
+8. Report         ✔ Nháp Báo cáo Word/PDF (Chương 1–5, mục 5.1–5.6) (Duy) + Slide PPT 15 slides (Hôn); → chờ Phase 05 đối chiếu Results và bổ sung ROC/PR figures
 ```
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)

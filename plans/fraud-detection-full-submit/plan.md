@@ -7,7 +7,7 @@ effort: ~40h (7 người)
 branch: main
 tags: [cs106, fraud-detection, academic, python, ml, submit]
 created: 2026-08-24
-updated: 2026-09-03
+updated: 2026-09-04
 sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
 ---
 
@@ -49,14 +49,14 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `pending` | Templates merged (PR #7); sẵn sàng chạy cross-model evaluation |
 | 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | Streamlit/Gradio runs, predicts correctly |
-| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word nháp Chương 1-3 + PPT 15 slides hoàn chỉnh (Hôn) + Slide học thuật 24 trang (PR #13) |
+| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word/PDF nháp Chương 1–5 + PPT 15 slides hoàn chỉnh (Hôn) + Slide học thuật 24 trang (PR #13) |
 | 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | ZIP ready, all notebooks re-run clean |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
 > **Phase 06 — Trung — checkpoint 29/08/2026:** UI shell Revision 7.7 đã được xác minh ở cấp code, AppTest và local runtime. Phase vẫn `pending`; còn browser/pixel QA, tích hợp model và figures thật, screenshot và demo clip.
 >
-> **Phase 07 — Duy & Hôn — checkpoint 03/09/2026:** Bản nháp Báo cáo Word Sprint 2 (Chương 1, 2, 3 + Threats to Validity) của Duy đã hoàn thành và merge vào `main` (`report-source.md` và file docx/pdf). Bộ Slide PowerPoint thuyết trình chính thức (15 slides) của Hôn đã hoàn tất lưu tại `reports/` dạng `.pptx` và `.pdf`. Ngoài ra, bộ slide học thuật 24 trang song ngữ EN-VN của Thanh (PR #13) đã được tích hợp vào `slide/` làm tài liệu tham khảo & backup Q&A. Phase vẫn `pending` chờ Methodology (Sprint 3) và Results/Conclusion (Sprint 4).
+> **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Duy đã hoàn thành bản nháp Sprint 3 Chương 1–5, gồm Methodology và Results draft tái tính từ prediction artifacts; source + DOCX/PDF 24 trang giữ format Sprint 2, mục lục có đủ các mục nhỏ 4.1–4.9 và 5.1–5.6, Chương 5 có Hình 5.1 và Hình 5.2, không còn dấu chấm phẩy và đã qua visual QA toàn bộ trang. Bản Word nay được sinh tự động từ `report-source.md` bằng `build_report.py`, không chỉnh tay. Bộ Slide PowerPoint chính thức 15 slides của Hôn đã hoàn tất tại `reports/`; bộ slide học thuật 24 trang song ngữ EN-VN của Thanh (PR #13) nằm tại `slide/` để tham khảo và backup Q&A. Chương 5 nay tái lập được bằng `run_report_metrics.py` → `reports/ch5_metrics_recomputed.csv`, có thêm cột Average Precision và Mục 5.5 về mức đóng góp đặc trưng. Phase vẫn `pending` chờ Phase 05 xuất comparison CSV cùng ROC/PR figures để đối chiếu Chương 5, và chờ xuất lại DOCX/PDF theo source mới trước khi viết Discussion/Conclusion/Abstract.
 
 ## Git Convention
 

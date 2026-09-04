@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-09-01)
+## Current State (2026-09-04)
 
 | Component | Status |
 |-----------|--------|
@@ -59,7 +59,7 @@ Final/
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | 🟡 Phase 05 in progress — metrics_calculator.py & plot_roc_curve.py merged (PR #7); sẵn sàng chạy cross-model evaluation |
 | Demo UI | 🟡 Phase 06 `pending` — UI shell Revision 7.7 đã xác minh; sẵn sàng nạp model thật |
-| Báo cáo & Slide | ✅ Nháp Chương 1, 2, 3 Word/PDF (Duy) & Slide PPT 15 slides PPTX/PDF (Hôn) + Slide học thuật 24 trang (PR #13) đã hoàn tất |
+| Báo cáo & Slide | 🟡 Duy đã hoàn thành nháp Chương 1–5 + DOCX/PDF Sprint 3 (24 trang, mục lục đủ 4.1–4.9 và 5.1–5.6, 2 hình, sinh tự động từ source, visual QA pass) trên branch riêng; Hôn hoàn tất PPT 15 slides; slide học thuật 24 trang (PR #13) dùng làm tài liệu bổ trợ. Phase 07 chờ đối chiếu Results và viết Discussion/Conclusion sau Phase 05 |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
 > **Verdict: Phase 00, 01, 01b, 02, 03 & 04 PASSED. Toàn bộ 3 họ mô hình (Random Forest, XGBoost, Autoencoder) đã hoàn thành xuất sắc. Sẵn sàng cho Khang (Phase 05 - Evaluation) và Trung (Phase 06 - UI Integration).**
@@ -81,9 +81,9 @@ Final/
 
 ```
 paysim.csv
-  → [data_loader.py]        Load & validate CSV
-  → [feature_scaler.py]     StandardScaler on numericals, OHE on categorical Type, and Downsampling
-  → [data_splitter.py]      Stratified 80/20 split
+  → [data_loader.py]        Load & validate CSV + Downsampling (200k rows)
+  → [data_splitter.py]      Stratified 80/20 split  ← TRƯỚC khi fit scaler
+  → [feature_scaler.py]     Derived features + OHE type; StandardScaler fit trên TRAIN, transform TEST
   → [imbalance_handler.py]  SMOTE/ADASYN on train only (no leakage)
   → [random_forest_model.py / xgboost_model.py / autoencoder_model.py]
   → [metrics_calculator.py] F1, ROC-AUC, Precision, Recall
@@ -128,7 +128,7 @@ paysim.csv
 |--------|-----------|------------------|----------|
 | **Trần Hoàng Hôn** | PM + PPT template + Nộp bài | ✅ PPT template | ⏳ Số liệu kết quả |
 | **Nguyễn Duy Khang** | Viết evaluation scripts + Chạy metrics | ✅ Viết scripts | ⏳ Chạy sau Sprint 3 |
-| **Vũ Văn Duy** | Báo cáo Word (Intro+Method ngay, Results sau) | ✅ ~70% ngay | ⏳ Results |
+| **Vũ Văn Duy** | Báo cáo Word (Intro+Method ngay, Results sau) | ✅ Chương 1–4 | ⏳ Results từ Phase 05 |
 | **Phạm Thành Trung** | Demo UI shell + Kết nối model | ✅ UI shell ngay | ⏳ `.pkl` từ Cẩm |
 
 Pipeline dữ liệu có sự tuần tự giữa các thành viên phụ trách mô hình để đảm bảo tính nhất quán.
@@ -258,8 +258,13 @@ Place in `Final/submit/` before zipping.
 3. Chụp screenshots QA và quay video demo clip
 
 ### Duy — Báo cáo Word
-1. ✅ Đã viết xong Chương 1, 2, 3
-2. ⏳ Viết Chương 4 (Methodology) & Chương 5 (Experimental Results): Đã có toàn bộ số liệu của cả 3 mô hình (RF, XGB, Autoencoder)
+1. ✅ Đã viết xong Chương 1–4 và Results draft Chương 5 (5.1–5.6) trên branch `docs/vu-van-duy-sprint3-methodology`
+2. ✅ Toàn bộ số liệu Chương 5 tính lại được bằng `run_report_metrics.py` → `reports/ch5_metrics_recomputed.csv` (gồm Average Precision cho cả 5 biến thể)
+3. ✅ Mục 5.5 trả lời câu hỏi nghiên cứu về feature importance (Bảng 5.2 + Hình 5.2): nhóm đặc trưng số dư chiếm 90,5% (RF) và 99,3% (XGB) mức đóng góp
+4. ⏳ Chờ Phase 05 xuất `model_comparison.csv` và ROC/PR curves để đối chiếu Chương 5 rồi viết Discussion
+5. ✅ DOCX/PDF sinh tự động từ `report-source.md` bằng `build_report.py` + `sync_toc_pages.py` — Sprint 4 chỉ cần sửa source rồi chạy lại
+6. ⏳ Viết Conclusion, Abstract và tạo bản Word/PDF cuối sau khi Phase 05 pass
+7. ⏳ Cần Sơn/Cẩm hỗ trợ ablation loại nhóm đặc trưng số dư — bằng chứng quyết định cho phần Discussion (xem Mục 3.6.2 và 5.5)
 
 ### Hôn — Slide Thuyết trình PPT
 1. ✅ Đã hoàn thành 15 slides PPTX/PDF hoàn chỉnh (`[Nhom9]_Slide_FraudDetection_Hon.pptx`/`.pdf`) với đầy đủ số liệu thực nghiệm.
