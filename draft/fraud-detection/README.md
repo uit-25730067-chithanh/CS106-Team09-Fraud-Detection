@@ -132,7 +132,7 @@ streamlit run demo/app.py
 
 Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contract 14 đặc trưng, trả xác suất/nhãn theo ngưỡng và khóa an toàn nếu model, scaler hoặc schema lỗi.
 
-**Trạng thái:** Model integration đã vượt 6 tests và 6 AppTest flows, local runtime khởi động thành công. Phase 06 vẫn `pending`; còn browser/pixel QA, figures/kết luận Phase 05, screenshot và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
+**Trạng thái:** Model integration đã vượt 7 inference tests và 9 AppTest flows; local runtime và Browser QA System/Sáng/Tối đều đạt. Phase 06 vẫn `pending`; còn figures/kết luận Phase 05, screenshots và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
 
 ---
 
@@ -145,7 +145,7 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
 5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
 6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + reports/model_comparison.csv
-7. Demo UI        ✔ UI + 4 presets + XGBoost inference; → Chờ browser QA, figures và demo clip (Trung)
+7. Demo UI        ✔ UI + 4 presets + XGBoost inference + Browser QA; → Chờ figures và demo evidence (Trung)
 8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
 ```
 

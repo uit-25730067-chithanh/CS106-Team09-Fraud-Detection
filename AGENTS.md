@@ -22,18 +22,18 @@ Final/
 │   └── fraud-detection/    ← Working project
 │       ├── src/            ← Python source code
 │       │   ├── preprocessing/   ✅ data_loader, feature_scaler, data_splitter
-│       │   ├── models/          ⏳ random_forest_model, xgboost_model, autoencoder_model
-│       │   ├── evaluation/      ⏳ metrics_calculator, plot_roc_curve, model_comparator
+│       │   ├── models/          ✅ random_forest_model, xgboost_model, autoencoder_model
+│       │   ├── evaluation/      🟡 2/4 scripts: metrics_calculator, plot_roc_curve
 │       │   └── utils/           ✅ helpers.py, constants (RANDOM_STATE=42, TEST_SIZE=0.2)
-│       ├── notebooks/      ← Jupyter notebooks
-│       │   └── 01_eda.ipynb    ✅ Hoàn thành (6 biểu đồ, run clean)
+│       ├── notebooks/      ← ✅ 5/6 notebooks; còn thiếu 06_evaluation_comparison.ipynb
 │       ├── data/
 │       │   ├── raw/        ← paysim.csv (✅ đã tải, KHÔNG commit git — ~500MB)
 │       │   └── processed/  ← ✅ X_train/X_test/y_train/y_test.pkl + README.md (đã commit)
-│       ├── models/         ← ✅ scaler.pkl (đã commit); model lớn sẽ gitignored
+│       ├── models/         ← scaler + XGBoost đã commit; RF .pkl bị gitignore
 │       ├── docs/           ← ✅ 4 file kỹ thuật (overview, roadmap, architecture, code-standards)
-│       ├── reports/        ← Kết quả (trống — Sprint 3+)
-│       ├── demo/           ← ✅ Streamlit UI shell + wireframe; ⏳ model thật
+│       ├── reports/        ← Predictions + báo cáo nháp; ⏳ figures/comparison CSV
+│       ├── slide/          ← Bộ slide học thuật 21 trang + kịch bản toàn team
+│       ├── demo/           ← 🟡 Streamlit UI + XGBoost inference; chờ figures/clip
 │       ├── run_preprocessing.py  ← Script chạy lại pipeline nếu cần
 │       └── requirements.txt
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-09-04)
+## Current State (2026-09-05)
 
 | Component | Status |
 |-----------|--------|
@@ -53,16 +53,15 @@ Final/
 | Dataset (`paysim.csv`) | ✅ Downloaded và đã verify shape (6,362,620 × 11) |
 | Processed splits | ✅ X_train/X_test/y_train/y_test.pkl (160k/40k × 14) + **X_train_smote/adasyn.pkl** (230k × 14) |
 | `models/scaler.pkl` | ✅ Fitted StandardScaler lưu sẵn |
-| `models/rf_smote.pkl` | ✅ RF trained — F1=0.9973, AUC=0.9994 (digits=4 chuẩn hóa từ PR #15) |
-| `models/rf_adasyn.pkl` | ✅ RF trained — F1=0.9966, AUC=0.9992 (digits=4 chuẩn hóa từ PR #15) |
+| Random Forest | ✅ Đã train — SMOTE F1=0.9973/AUC=0.9994; ADASYN F1=0.9966/AUC=0.9992. Hai artifact `.pkl` bị gitignore và không có sau pull |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `reports/model_comparison.csv` |
 | Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: Bộ slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người (đang xem xét làm bản chính thức); Đã dọn dẹp các bản nháp slide 15 trang cũ của Hôn |
-| Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng; còn browser QA, figures Phase 05 và demo clip |
+| Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng, có probability/nhãn và mẫu test có nhãn; Browser QA System/Sáng/Tối ✅; còn figures Phase 05, screenshots và demo clip |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict (04/09): Phase 00–04 PASSED (5/9 = 55.6%). Toàn bộ 3 họ mô hình và 5/6 notebooks đã hoàn thành xuất sắc (Sơn đã bổ sung 02 & 03). Đang Sprint 3: Khang cần hoàn thành Phase 05 (2 scripts + notebook 06 + chạy metrics), Trung model integration, Duy viết Chương 4-6.**
+> **Verdict (05/09): Phase 00–04 PASSED (5/9 = 55.6%). Phase 05–08 vẫn `pending`. Khang cần hoàn thành 2 scripts, notebook 06 và cross-model evaluation; Trung đã xong model integration và Browser QA, còn figures/demo evidence; Duy còn Chương 4–6; Hôn tiếp tục duyệt slide và chuẩn bị đóng gói sau khi Phase 05–07 hoàn tất.**
 
 ---
 
@@ -129,7 +128,7 @@ paysim.csv
 | **Trần Hoàng Hôn** | PM + PPT template + Nộp bài | ✅ PPT template | ⏳ Số liệu kết quả |
 | **Nguyễn Duy Khang** | Viết evaluation scripts + Chạy metrics | ✅ Viết scripts | ⏳ Chạy sau Sprint 3 |
 | **Vũ Văn Duy** | Báo cáo Word (Intro+Method ngay, Results sau) | ✅ ~70% ngay | ⏳ Results |
-| **Phạm Thành Trung** | Demo UI shell + Kết nối model | ✅ UI shell ngay | ⏳ `.pkl` từ Cẩm |
+| **Phạm Thành Trung** | Demo UI shell + Kết nối model | ✅ UI + inference | ⏳ Figures/kết luận Phase 05 |
 
 Pipeline dữ liệu có sự tuần tự giữa các thành viên phụ trách mô hình để đảm bảo tính nhất quán.
 
@@ -263,10 +262,11 @@ Place in `Final/submit/` before zipping.
    - Tạo `notebooks/06_evaluation_comparison.ipynb`
    - Chạy evaluation cho cả 3 mô hình → xuất `reports/figures/` + `reports/model_comparison.csv`
 
-### Trung — Bắt đầu Tích hợp Model vào Demo UI (Phase 06)
+### 🔄 Trung — Phase 06 (Demo UI) — IN PROGRESS
 1. ✅ Đã kết nối `models/xgb_smote.json` + `models/scaler.pkl` vào UI với contract 14 đặc trưng
 2. ✅ Đã hiển thị xác suất, ngưỡng tương tác và nhãn thật; kiểm thử form + 4 preset + ngưỡng không có exception
-3. ⏳ Nhận figures/kết luận model chính thức từ Phase 05, browser QA System/Sáng/Tối, chụp screenshot và quay demo clip
+3. ✅ Đã Browser QA System/Sáng/Tối, xác nhận theme mặc định là Tối và chuyển theme không reload trang
+4. ⏳ Nhận figures/kết luận model chính thức từ Phase 05, chụp screenshot và quay demo clip
 
 ### 🔄 Duy — Báo cáo Word — BLOCKED on Phase 05 (Results)
 1. ✅ Đã viết xong Chương 1, 2, 3 (merge vào `main`; source: `reports/report-source.md`)
