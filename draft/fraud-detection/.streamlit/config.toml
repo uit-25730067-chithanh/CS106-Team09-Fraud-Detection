@@ -1,4 +1,5 @@
 [theme]
+base = "dark"
 showWidgetBorder = true
 showSidebarBorder = true
 baseRadius = "18px"
