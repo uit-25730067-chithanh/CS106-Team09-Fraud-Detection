@@ -4,14 +4,15 @@ Run from ``draft/fraud-detection`` with::
 
     streamlit run demo/app.py
 
-The current Sprint 2 version intentionally stops before model inference. It
-captures and validates a transaction preview while making the missing-model
-state explicit. Real prediction is connected in Sprint 4 after Phases 04–05.
+The Phase 06 version validates a transaction, reproduces the Phase 01 feature
+contract and returns a real XGBoost fraud probability from the Phase 04 model.
 """
 
 from __future__ import annotations
 
 import pickle
+import re
+import sys
 import warnings
 from dataclasses import asdict, dataclass
 from pathlib import Path
@@ -21,11 +22,29 @@ import pandas as pd
 import streamlit as st
 
 
+DEMO_DIR = Path(__file__).resolve().parent
+if str(DEMO_DIR) not in sys.path:
+    sys.path.insert(0, str(DEMO_DIR))
+
+from inference import (
+    PredictionResult,
+    load_xgboost_model,
+    predict_transaction,
+    reconstruct_transaction_input,
+)
+from evaluation_artifacts import (
+    EVALUATION_FIGURES,
+    find_evaluation_figures,
+    load_model_comparison,
+    missing_evaluation_figures,
+)
+
+
 st.set_page_config(
     page_title="Fraud Shield | Nhóm 9",
     page_icon=":material/shield:",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 st.html(
@@ -39,9 +58,267 @@ st.html(
 
     .st-key-theme_mode_menu {
         position: fixed;
-        left: 1.15rem;
+        left: 1.1rem;
         bottom: 1rem;
         z-index: 999;
+        width: min(17.7rem, calc(100vw - 2.2rem));
+    }
+
+    .st-key-theme_mode_menu button {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .st-key-theme_bootstrap {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    [data-testid="stSidebar"] {
+        border-right: 1px solid color-mix(in srgb, var(--st-primary-color) 14%, var(--st-border-color));
+        background:
+            radial-gradient(circle at 18% 4%, color-mix(in srgb, var(--st-primary-color) 13%, transparent), transparent 25%),
+            var(--st-secondary-background-color);
+    }
+
+    [data-testid="stSidebar"] [data-testid="stSidebarContent"] {
+        padding-bottom: 5.5rem;
+    }
+
+    .st-key-sidebar_brand {
+        margin: 0.1rem 0 1.35rem;
+        padding: 0.75rem;
+        border: 1px solid color-mix(in srgb, var(--st-primary-color) 20%, var(--st-border-color));
+        border-radius: 1.15rem;
+        background: linear-gradient(135deg, color-mix(in srgb, var(--st-primary-color) 10%, var(--st-background-color)), var(--st-background-color));
+        box-shadow: 0 12px 32px color-mix(in srgb, var(--st-primary-color) 8%, transparent);
+    }
+
+    .st-key-sidebar_brand [data-testid="stImage"] img {
+        border-radius: 0.85rem;
+        box-shadow: 0 8px 20px color-mix(in srgb, var(--st-primary-color) 22%, transparent);
+    }
+
+    .st-key-sidebar_brand p {
+        margin: 0;
+        line-height: 1.25;
+    }
+
+    [data-testid="stSidebar"] .stButton > button {
+        justify-content: flex-start;
+        min-height: 3.15rem;
+        padding-inline: 1rem;
+        border-radius: 0.9rem;
+        font-weight: 650;
+        transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
+    }
+
+    [data-testid="stSidebar"] .stButton > button[kind="secondary"] {
+        border-color: transparent;
+        background: transparent;
+        color: var(--st-text-color);
+    }
+
+    [data-testid="stSidebar"] .stButton > button[kind="secondary"]:hover {
+        transform: translateX(3px);
+        border-color: color-mix(in srgb, var(--st-primary-color) 22%, var(--st-border-color));
+        background: color-mix(in srgb, var(--st-primary-color) 7%, var(--st-background-color));
+    }
+
+    [data-testid="stSidebar"] .stButton > button[kind="primary"] {
+        position: relative;
+        border-color: color-mix(in srgb, var(--st-primary-color) 70%, white);
+        background: linear-gradient(112deg, var(--st-primary-color), color-mix(in srgb, var(--st-primary-color) 72%, #6366f1));
+        box-shadow: 0 10px 24px color-mix(in srgb, var(--st-primary-color) 25%, transparent);
+    }
+
+    [data-testid="stSidebar"] .stButton > button[kind="primary"]::before {
+        content: "";
+        position: absolute;
+        left: 0.38rem;
+        top: 30%;
+        bottom: 30%;
+        width: 3px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, 0.92);
+    }
+
+    .st-key-sidebar_presets {
+        margin-top: 1.15rem;
+        padding-top: 1rem;
+        border-top: 1px solid color-mix(in srgb, var(--st-primary-color) 15%, var(--st-border-color));
+    }
+
+    .st-key-preset_selector [data-testid="stPills"] {
+        gap: 0.42rem;
+    }
+
+    .risk-meter-card {
+        --score-color: #22c55e;
+        margin-bottom: 0.8rem;
+        padding: 1rem;
+        border: 1px solid color-mix(in srgb, var(--score-color) 36%, var(--st-border-color));
+        border-radius: var(--st-base-radius);
+        background: linear-gradient(135deg, color-mix(in srgb, var(--score-color) 7%, var(--st-secondary-background-color)), var(--st-background-color));
+    }
+
+    .risk-meter-card.risk-low { --score-color: #22c55e; }
+    .risk-meter-card.risk-medium { --score-color: #f97316; }
+    .risk-meter-card.risk-high { --score-color: #f43f5e; }
+
+    .risk-meter-card .fraud-score-label,
+    .risk-meter-card .fraud-score-title {
+        color: var(--score-color) !important;
+        -webkit-text-fill-color: var(--score-color) !important;
+        opacity: 1 !important;
+    }
+
+    .risk-meter-head {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 1rem;
+        margin-bottom: 0.9rem;
+    }
+
+    .fraud-score-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.46rem 0.76rem;
+        border: 1px solid color-mix(in srgb, var(--score-color) 68%, #ffffff);
+        border-radius: 999px;
+        color: var(--score-color);
+        background: linear-gradient(
+            135deg,
+            color-mix(in srgb, var(--score-color) 26%, #0b1220),
+            color-mix(in srgb, var(--score-color) 42%, #111827)
+        );
+        font-size: 1.1rem;
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: 0.075em;
+        text-shadow:
+            0 1px 2px rgba(0, 0, 0, 0.34),
+            0 0 12px color-mix(in srgb, var(--score-color) 44%, transparent);
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--score-color) 22%, transparent),
+            0 8px 24px color-mix(in srgb, var(--score-color) 32%, transparent),
+            inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    }
+
+    .fraud-score-label::before {
+        content: "";
+        width: 0.52rem;
+        height: 0.52rem;
+        flex: 0 0 0.52rem;
+        border-radius: 50%;
+        background: var(--score-color);
+        box-shadow:
+            0 0 0 4px color-mix(in srgb, var(--score-color) 18%, transparent),
+            0 0 12px color-mix(in srgb, var(--score-color) 58%, transparent);
+    }
+
+    .fraud-score-title {
+        margin: 0.58rem 0 0;
+        color: var(--score-color);
+        font: 800 1.55rem/1.2 var(--st-heading-font);
+        letter-spacing: -0.025em;
+        text-shadow: 0 0 18px color-mix(in srgb, var(--score-color) 24%, transparent);
+    }
+
+    .risk-meter-track {
+        position: relative;
+        height: 12px;
+        margin: 2.25rem 0 1.65rem;
+        border-radius: 999px;
+        background: linear-gradient(90deg, #22c55e 0 35%, #f59e0b 62%, #e11d48 100%);
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--st-border-color) 64%, transparent);
+    }
+
+    .risk-meter-score-tag {
+        position: absolute;
+        z-index: 2;
+        padding: 0.22rem 0.45rem;
+        border-radius: 0.45rem;
+        font-size: 0.66rem;
+        font-weight: 800;
+        line-height: 1;
+        white-space: nowrap;
+        transform: translateX(-50%);
+    }
+
+    .risk-meter-score-tag {
+        left: clamp(2.1rem, calc(var(--score) * 1%), calc(100% - 2.1rem));
+        bottom: calc(100% + 0.58rem);
+        color: white;
+        background: var(--score-color);
+        box-shadow: 0 5px 14px color-mix(in srgb, var(--score-color) 30%, transparent);
+    }
+
+    .risk-meter-score-tag::after {
+        content: "";
+        position: absolute;
+        top: 100%;
+        left: 50%;
+        border: 4px solid transparent;
+        border-top-color: var(--score-color);
+        transform: translateX(-50%);
+    }
+
+    .risk-meter-marker {
+        position: absolute;
+        top: 50%;
+        left: clamp(1%, calc(var(--score) * 1%), 99%);
+        width: 3px;
+        height: 19px;
+        border-radius: 999px;
+        background: var(--st-text-color);
+        box-shadow: 0 0 0 3px var(--st-background-color), 0 0 0 4px var(--score-color);
+        transform: translate(-50%, -50%);
+    }
+
+    .risk-meter-threshold {
+        position: absolute;
+        top: -3px;
+        bottom: -3px;
+        left: clamp(1%, calc(var(--threshold) * 1%), 99%);
+        width: 1px;
+        border-left: 1px dashed color-mix(in srgb, var(--st-text-color) 48%, transparent);
+    }
+
+    .risk-meter-tick {
+        position: absolute;
+        top: 100%;
+        left: calc(var(--tick) * 1%);
+        width: 1px;
+        height: 5px;
+        background: color-mix(in srgb, var(--st-text-color) 36%, transparent);
+        transform: translateX(-50%);
+    }
+
+    .risk-meter-axis {
+        position: absolute;
+        top: calc(100% + 0.48rem);
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: space-between;
+        color: var(--st-gray-text-color);
+        font-size: 0.58rem;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .risk-meter-scale {
+        display: flex;
+        justify-content: space-between;
+        color: var(--st-gray-text-color);
+        font-size: 0.62rem;
+        font-weight: 600;
     }
 
     @media (max-width: 768px) {
@@ -49,7 +326,15 @@ st.html(
             left: 0.85rem;
             bottom: 0.75rem;
         }
+
+        .risk-meter-head { align-items: flex-end; }
+        .fraud-score-label {
+            padding: 0.42rem 0.66rem;
+            font-size: 0.96rem;
+        }
+        .fraud-score-title { font-size: 1.3rem; }
     }
+
     </style>
     """
 )
@@ -58,13 +343,21 @@ st.html(
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 SCALER_PATH = PROJECT_ROOT / "models" / "scaler.pkl"
-LOGO_PATH = PROJECT_ROOT / "demo" / "assets" / "fraud-shield-logo.png"
+XGB_MODEL_PATH = PROJECT_ROOT / "models" / "xgb_smote.json"
+LOGO_PATH = DEMO_DIR / "assets" / "fraud-shield-logo.png"
 MODEL_CANDIDATES = (
-    PROJECT_ROOT / "models" / "xgb_smote.pkl",
+    XGB_MODEL_PATH,
     PROJECT_ROOT / "models" / "rf_smote.pkl",
-    PROJECT_ROOT / "models" / "random_forest_smote.pkl",
+    PROJECT_ROOT / "models" / "autoencoder.pkl",
 )
 COMPARISON_PATH = PROJECT_ROOT / "reports" / "model_comparison.csv"
+FIGURES_DIR = PROJECT_ROOT / "reports" / "figures"
+XGB_PREDICTIONS_PATH = PROJECT_ROOT / "reports" / "xgb_predictions.pkl"
+TRAINING_SUMMARIES = {
+    "Random Forest": PROJECT_ROOT / "reports" / "rf_smote_summary.txt",
+    "XGBoost": PROJECT_ROOT / "reports" / "xgb_smote_summary.txt",
+    "Autoencoder": PROJECT_ROOT / "reports" / "autoencoder_summary.txt",
+}
 
 THEME_SWITCHER = st.components.v2.component(
     "fraud_shield_theme_switcher",
@@ -202,22 +495,363 @@ export default function (component) {
   if (buttons.length !== 3 || !status) return
 
   const modes = ["System", "Light", "Dark"]
-  // Streamlit 1.59 persists the active mode per URL path with schema v2.
-  // Using the same key keeps this compact control independent of the native menu.
-  const storageKey = `stActiveTheme-${window.location.pathname}-v2`
-  const resolvedTheme = data?.current_theme === "dark" ? "Dark" : "Light"
-  let reloadTimer = null
+  const storageKey = `fraudShieldTheme-${window.location.pathname}-v2`
+  const appDocument = parentElement.ownerDocument
+  const root = appDocument.documentElement
+  const systemPreference = window.matchMedia("(prefers-color-scheme: dark)")
+  const palettes = {
+    Light: {
+      primary: "#6D28D9",
+      background: "#F4F6FB",
+      secondary: "#FFFFFF",
+      text: "#17213A",
+      border: "#CBD5E1",
+      gray: "#526078",
+      blue: "#2563EB",
+      green: "#16A34A",
+      orange: "#EA580C",
+      red: "#E11D48",
+      violet: "#7C3AED",
+      sidebar: "#140A2E",
+      sidebarSecondary: "#24124A",
+      sidebarText: "#F8FAFC",
+      sidebarBorder: "#4C2A7A",
+    },
+    Dark: {
+      primary: "#7C3AED",
+      background: "#090619",
+      secondary: "#1A1033",
+      text: "#F8FAFC",
+      border: "#3B2663",
+      gray: "#94A3B8",
+      blue: "#38BDF8",
+      green: "#34D399",
+      orange: "#FB923C",
+      red: "#FB7185",
+      violet: "#C084FC",
+      sidebar: "#060313",
+      sidebarSecondary: "#160B2D",
+      sidebarText: "#F1F5F9",
+      sidebarBorder: "#321A59",
+    },
+  }
+  const tokenNames = {
+    primary: "--st-primary-color",
+    background: "--st-background-color",
+    secondary: "--st-secondary-background-color",
+    text: "--st-text-color",
+    border: "--st-border-color",
+    gray: "--st-gray-text-color",
+    blue: "--st-blue-color",
+    green: "--st-green-color",
+    orange: "--st-orange-color",
+    red: "--st-red-color",
+    violet: "--st-violet-color",
+  }
+
+  const styleId = "fraud-shield-live-theme"
+  let liveStyle = appDocument.getElementById(styleId)
+  if (!liveStyle) {
+    liveStyle = appDocument.createElement("style")
+    liveStyle.id = styleId
+    liveStyle.textContent = `
+      html[data-fraud-shield-theme] body,
+      html[data-fraud-shield-theme] .stApp,
+      html[data-fraud-shield-theme] [data-testid="stAppViewContainer"],
+      html[data-fraud-shield-theme] [data-testid="stHeader"] {
+        background-color: var(--st-background-color) !important;
+        color: var(--st-text-color) !important;
+        transition: background-color 160ms ease, color 160ms ease;
+      }
+      html[data-fraud-shield-theme] [data-testid="stSidebar"] {
+        background-color: var(--fraud-sidebar-background) !important;
+        color: var(--fraud-sidebar-text) !important;
+        border-color: var(--fraud-sidebar-border) !important;
+        transition: background-color 160ms ease, color 160ms ease;
+      }
+      html[data-fraud-shield-theme] [data-testid="stSidebar"] [data-testid="stMarkdownContainer"],
+      html[data-fraud-shield-theme] [data-testid="stSidebar"] p,
+      html[data-fraud-shield-theme] [data-testid="stSidebar"] span {
+        color: inherit;
+      }
+      html[data-fraud-shield-theme] [data-testid="stExpandSidebarButton"] span {
+        color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stWidgetLabel"],
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stMetricLabel"],
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stMetricValue"] {
+        color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stMetricDelta"] {
+        color: var(--st-gray-text-color) !important;
+        background: color-mix(in srgb, var(--st-gray-text-color) 10%, transparent) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stMetricDelta"] svg {
+        fill: currentColor !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"],
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputStepDown"],
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputStepUp"] {
+        color: var(--st-text-color) !important;
+        background: var(--st-secondary-background-color) !important;
+        border-color: var(--st-border-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputField"] {
+        color: var(--st-text-color) !important;
+        background: transparent !important;
+        -webkit-text-fill-color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"] {
+        color: var(--st-text-color) !important;
+        background: var(--st-background-color) !important;
+        border-color: var(--st-border-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"][aria-checked="true"] {
+        color: var(--st-violet-color) !important;
+        background: color-mix(in srgb, var(--st-violet-color) 14%, var(--st-background-color)) !important;
+        border-color: var(--st-primary-color) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge {
+        color: #111827 !important;
+        font-weight: 750 !important;
+        letter-spacing: -0.01em;
+        text-shadow: none !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="124, 58, 237"] {
+        background-color: #ede9fe !important;
+        box-shadow: inset 0 0 0 1px #7c3aed, 0 5px 14px rgba(109, 40, 217, 0.15);
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="22, 163, 74"] {
+        background-color: #d1fae5 !important;
+        box-shadow: inset 0 0 0 1px #047857, 0 5px 14px rgba(4, 120, 87, 0.14);
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="37, 99, 235"] {
+        background-color: #dbeafe !important;
+        box-shadow: inset 0 0 0 1px #2563eb, 0 5px 14px rgba(37, 99, 235, 0.14);
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="100, 116, 139"] {
+        background-color: #e2e8f0 !important;
+        box-shadow: inset 0 0 0 1px #64748b, 0 5px 14px rgba(71, 85, 105, 0.13);
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="234, 88, 12"] {
+        background-color: #ffedd5 !important;
+        box-shadow: inset 0 0 0 1px #c2410c, 0 5px 14px rgba(194, 65, 12, 0.14);
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="225, 29, 72"] {
+        background-color: #ffe4e6 !important;
+        box-shadow: inset 0 0 0 1px #e11d48, 0 5px 14px rgba(225, 29, 72, 0.14);
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stAppViewContainer"] {
+        background:
+          radial-gradient(circle at 78% -8%, rgba(109, 40, 217, 0.12), transparent 30rem),
+          linear-gradient(180deg, #f8faff 0%, #f2f5fb 100%) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-hero_panel {
+        background: linear-gradient(135deg, #ffffff 0%, #faf7ff 62%, #eef6ff 100%) !important;
+        border-color: #c7d2fe !important;
+        box-shadow: 0 20px 48px rgba(43, 38, 98, 0.11) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-result_panel {
+        background: linear-gradient(155deg, #ffffff 0%, #f8faff 100%) !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-comparison_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_pending_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_empty_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_chart_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_signal_panel {
+        background: #ffffff !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
+        background: #ffffff !important;
+        border-color: #cbd5e1 !important;
+        border-top: 3px solid #7c3aed !important;
+        box-shadow: 0 10px 26px rgba(30, 41, 59, 0.08) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stMetricDelta"] {
+        color: #526078 !important;
+        background: #eef2ff !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stForm"] {
+        background: #ffffff !important;
+        border-color: #cbd5e1 !important;
+        box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"] {
+        color: #334155 !important;
+        background: #ffffff !important;
+        border-color: #cbd5e1 !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"][aria-checked="true"] {
+        color: #ffffff !important;
+        background: #6d28d9 !important;
+        border-color: #5b21b6 !important;
+        box-shadow: 0 6px 16px rgba(109, 40, 217, 0.22) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"] {
+        color: #17213a !important;
+        background: #f8fafc !important;
+        border-color: #b9c4d4 !important;
+        box-shadow: inset 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(30, 41, 59, 0.05) !important;
+        transition: border-color 140ms ease, box-shadow 140ms ease;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"]:hover {
+        border-color: #8b5cf6 !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"]:focus-within {
+        border-color: #6d28d9 !important;
+        box-shadow: 0 0 0 3px rgba(109, 40, 217, 0.16), 0 5px 14px rgba(91, 33, 182, 0.12) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputField"] {
+        color: #17213a !important;
+        background: #f8fafc !important;
+        -webkit-text-fill-color: #17213a !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputStepDown"],
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputStepUp"] {
+        color: #5b21b6 !important;
+        background: #eef2ff !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="124, 58, 237"] {
+        color: #c4b5fd !important;
+        background-color: rgba(124, 58, 237, 0.22) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="22, 163, 74"] {
+        color: #6ee7b7 !important;
+        background-color: rgba(16, 185, 129, 0.18) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="37, 99, 235"] {
+        color: #93c5fd !important;
+        background-color: rgba(59, 130, 246, 0.19) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="100, 116, 139"] {
+        color: #cbd5e1 !important;
+        background-color: rgba(148, 163, 184, 0.15) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="234, 88, 12"] {
+        color: #fdba74 !important;
+        background-color: rgba(249, 115, 22, 0.2) !important;
+        box-shadow: inset 0 0 0 1px rgba(251, 146, 60, 0.28);
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .stMarkdownBadge[style*="225, 29, 72"] {
+        color: #fda4af !important;
+        background-color: rgba(244, 63, 94, 0.2) !important;
+        box-shadow: inset 0 0 0 1px rgba(251, 113, 133, 0.28);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-workflow_steps {
+        margin: 0.15rem 0 0.8rem;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge {
+        min-height: 2rem;
+        padding: 0.48rem 0.72rem;
+        border-radius: 0.72rem;
+        font-size: 0.86rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.012em;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge {
+        color: #111827 !important;
+        transform: translateY(-1px);
+        text-shadow: none !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge[style*="124, 58, 237"] {
+        background-color: #ede9fe !important;
+        box-shadow: inset 0 0 0 2px #7c3aed, 0 7px 16px rgba(109, 40, 217, 0.16) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge[style*="37, 99, 235"] {
+        background-color: #dbeafe !important;
+        box-shadow: inset 0 0 0 2px #2563eb, 0 7px 16px rgba(37, 99, 235, 0.15) !important;
+      }
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge[style*="22, 163, 74"] {
+        background-color: #d1fae5 !important;
+        box-shadow: inset 0 0 0 2px #047857, 0 7px 16px rgba(4, 120, 87, 0.15) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stAppViewContainer"] {
+        background:
+          radial-gradient(circle at 82% -8%, rgba(124, 58, 237, 0.2), transparent 31rem),
+          radial-gradient(circle at 28% 58%, rgba(14, 165, 233, 0.06), transparent 28rem),
+          #090619 !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-hero_panel {
+        background: linear-gradient(135deg, rgba(22, 13, 49, 0.96), rgba(10, 7, 28, 0.98)) !important;
+        border-color: #58378a !important;
+        box-shadow: 0 22px 54px rgba(3, 2, 13, 0.48), inset 0 1px 0 rgba(192, 132, 252, 0.09) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-result_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-comparison_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-evaluation_pending_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_empty_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_chart_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_signal_panel {
+        background: linear-gradient(150deg, rgba(22, 13, 49, 0.95), rgba(12, 8, 30, 0.98)) !important;
+        border-color: #4b2e78 !important;
+        box-shadow: 0 16px 40px rgba(3, 2, 13, 0.4) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
+        background: linear-gradient(150deg, #160d31, #0d091f) !important;
+        border-color: #493073 !important;
+        border-top: 3px solid #8b5cf6 !important;
+        box-shadow: 0 12px 30px rgba(3, 2, 13, 0.38) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stForm"] {
+        background: linear-gradient(155deg, #130b2b, #0d081f) !important;
+        border-color: #4b2e78 !important;
+        box-shadow: 0 18px 44px rgba(3, 2, 13, 0.42) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"][aria-checked="true"] {
+        color: #ffffff !important;
+        background: linear-gradient(110deg, #6d28d9, #7c3aed) !important;
+        border-color: #a78bfa !important;
+        box-shadow: 0 7px 18px rgba(124, 58, 237, 0.3) !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"] {
+        border-color: #493073 !important;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
+        transition: border-color 140ms ease, box-shadow 140ms ease;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"]:hover {
+        border-color: #7c3aed !important;
+      }
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"]:focus-within {
+        border-color: #a78bfa !important;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18), 0 7px 18px rgba(3, 2, 13, 0.28) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stVegaLiteChart"] svg.marks {
+        background-color: transparent !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stVegaLiteChart"] svg text {
+        fill: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stVegaLiteChart"] svg .role-axis-grid line {
+        stroke: var(--st-border-color) !important;
+        stroke-opacity: 0.55 !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stAlert"] {
+        color: var(--st-text-color) !important;
+        border-color: var(--st-border-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stAlert"] * {
+        color: inherit !important;
+      }
+    `
+    appDocument.head.appendChild(liveStyle)
+  }
 
   const readStoredTheme = () => {
     try {
-      const storedTheme = JSON.parse(window.localStorage.getItem(storageKey) ?? "null")
+      const storedTheme = window.localStorage.getItem(storageKey)
       return modes.includes(storedTheme) ? storedTheme : null
     } catch {
       return null
     }
   }
 
-  let activeTheme = readStoredTheme() ?? resolvedTheme
+  let activeTheme = readStoredTheme() ?? "Dark"
 
   const setActiveTheme = (theme) => {
     activeTheme = theme
@@ -228,8 +862,33 @@ export default function (component) {
     })
   }
 
+  const applyTheme = (theme) => {
+    const resolvedMode = theme === "System"
+      ? (systemPreference.matches ? "Dark" : "Light")
+      : theme
+    const palette = palettes[resolvedMode]
+
+    Object.entries(tokenNames).forEach(([name, token]) => {
+      root.style.setProperty(token, palette[name])
+    })
+    root.style.setProperty("--fraud-sidebar-background", palette.sidebar)
+    root.style.setProperty("--fraud-sidebar-secondary", palette.sidebarSecondary)
+    root.style.setProperty("--fraud-sidebar-text", palette.sidebarText)
+    root.style.setProperty("--fraud-sidebar-border", palette.sidebarBorder)
+    root.dataset.fraudShieldTheme = resolvedMode.toLowerCase()
+    root.style.colorScheme = resolvedMode.toLowerCase()
+
+    const sidebar = appDocument.querySelector('[data-testid="stSidebar"]')
+    if (sidebar) {
+      sidebar.style.setProperty("--st-background-color", palette.sidebar)
+      sidebar.style.setProperty("--st-secondary-background-color", palette.sidebarSecondary)
+      sidebar.style.setProperty("--st-text-color", palette.sidebarText)
+      sidebar.style.setProperty("--st-border-color", palette.sidebarBorder)
+    }
+  }
+
   const showFallback = () => {
-    status.textContent = "Không đổi được giao diện. Hãy tải lại trang rồi thử lại."
+    status.textContent = "Trình duyệt đang chặn lưu lựa chọn giao diện."
     status.classList.add("is-visible")
   }
 
@@ -238,23 +897,27 @@ export default function (component) {
     if (!modes.includes(theme) || theme === activeTheme) return
 
     try {
-      window.localStorage.setItem(storageKey, JSON.stringify(theme))
+      window.localStorage.setItem(storageKey, theme)
       setActiveTheme(theme)
-      status.textContent = "Đang chuyển giao diện…"
-      status.classList.add("is-visible")
-      reloadTimer = window.setTimeout(() => window.location.reload(), 80)
+      applyTheme(theme)
     } catch {
       showFallback()
     }
   }
 
   setActiveTheme(activeTheme)
+  applyTheme(activeTheme)
   buttons.forEach((button) => {
     button.onclick = () => selectTheme(button.dataset.theme)
   })
 
+  const syncSystemTheme = () => {
+    if (activeTheme === "System") applyTheme("System")
+  }
+  systemPreference.addEventListener("change", syncSystemTheme)
+
   return () => {
-    window.clearTimeout(reloadTimer)
+    systemPreference.removeEventListener("change", syncSystemTheme)
     buttons.forEach((button) => {
       button.onclick = null
     })
@@ -262,9 +925,6 @@ export default function (component) {
 }
 """,
 )
-
-if LOGO_PATH.exists():
-    st.logo(LOGO_PATH, size="large", icon_image=LOGO_PATH)
 
 TRANSACTION_TYPES = ("TRANSFER", "CASH_OUT")
 TRANSACTION_LABELS = {
@@ -351,6 +1011,22 @@ TRANSACTION_PRESETS = {
             new_balance_destination=12_500_000.0,
         ),
     },
+    "drain": {
+        "title": "Cạn tài khoản",
+        "eyebrow": "TÍN HIỆU RỦI RO",
+        "description": "Chuyển toàn bộ 1.143.938 đơn vị khỏi tài khoản nguồn.",
+        "icon": ":material/crisis_alert:",
+        "color": "red",
+        "transaction": TransactionInput(
+            transaction_type="TRANSFER",
+            step=435,
+            amount=1_143_937.73,
+            old_balance_origin=1_143_937.73,
+            new_balance_origin=0.0,
+            old_balance_destination=0.0,
+            new_balance_destination=0.0,
+        ),
+    },
 }
 
 
@@ -380,6 +1056,18 @@ class DatasetSummary:
         return self.fraud / self.total if self.total else 0.0
 
 
+@dataclass(frozen=True)
+class LabeledTestCase:
+    """One real held-out transaction reconstructed for an explainable demo."""
+
+    title: str
+    description: str
+    transaction: TransactionInput
+    true_label: int
+    reference_probability: float
+    test_position: int
+
+
 @st.cache_resource(show_spinner=False)
 def load_scaler(path: Path):
     """Load the Phase 01 scaler and report a library-version mismatch."""
@@ -396,6 +1084,33 @@ def load_scaler(path: Path):
     return scaler, has_version_mismatch
 
 
+@st.cache_resource(show_spinner=False)
+def load_prediction_model(path: Path):
+    """Load one deployable model once per Streamlit process."""
+
+    return load_xgboost_model(path)
+
+
+def run_transaction_inference(
+    transaction: TransactionInput,
+    threshold: float,
+) -> tuple[PredictionResult | None, str | None]:
+    """Run inference fail-closed and return a user-facing error when unavailable."""
+
+    try:
+        scaler, _ = load_scaler(SCALER_PATH)
+        model = load_prediction_model(XGB_MODEL_PATH)
+        result = predict_transaction(
+            asdict(transaction),
+            scaler,
+            model,
+            threshold=threshold,
+        )
+    except (FileNotFoundError, ImportError, OSError, TypeError, ValueError) as error:
+        return None, str(error)
+    return result, None
+
+
 @st.cache_data(show_spinner=False)
 def load_dataset_summary(data_dir: Path) -> DatasetSummary:
     """Load only label artifacts and derive display statistics from real data."""
@@ -409,6 +1124,99 @@ def load_dataset_summary(data_dir: Path) -> DatasetSummary:
         test_total=len(y_test),
         test_fraud=int(y_test.sum()),
     )
+
+
+@st.cache_resource(show_spinner=False)
+def load_labeled_test_cases(
+    data_dir: Path,
+    predictions_path: Path,
+    scaler_path: Path,
+) -> dict[str, LabeledTestCase]:
+    """Load four deterministic XGBoost outcomes from the held-out test set."""
+
+    X_test = pd.read_pickle(data_dir / "X_test.pkl").reset_index(drop=True)
+    y_test = pd.Series(pd.read_pickle(data_dir / "y_test.pkl")).reset_index(drop=True)
+    with predictions_path.open("rb") as predictions_file:
+        prediction_artifact = pickle.load(predictions_file)["xgb_smote"]
+    y_pred = pd.Series(prediction_artifact["y_pred"])
+    y_prob = pd.Series(prediction_artifact["y_prob"])
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("ignore")
+        with scaler_path.open("rb") as scaler_file:
+            scaler = pickle.load(scaler_file)
+
+    definitions = (
+        (
+            "true_negative",
+            "Hợp lệ — dự đoán đúng",
+            "Nhãn thật 0, model dự đoán hợp lệ ở ngưỡng 50%.",
+            (y_test == 0) & (y_pred == 0),
+            "min",
+        ),
+        (
+            "true_positive",
+            "Gian lận — phát hiện đúng",
+            "Nhãn thật 1, model phát hiện bất thường ở ngưỡng 50%.",
+            (y_test == 1) & (y_pred == 1),
+            "max",
+        ),
+        (
+            "false_positive",
+            "Cảnh báo nhầm",
+            "Nhãn thật 0 nhưng model gắn cờ ở ngưỡng 50%.",
+            (y_test == 0) & (y_pred == 1),
+            "max",
+        ),
+        (
+            "false_negative",
+            "Bỏ sót gian lận",
+            "Nhãn thật 1 nhưng model chưa phát hiện ở ngưỡng 50%.",
+            (y_test == 1) & (y_pred == 0),
+            "min",
+        ),
+    )
+
+    cases: dict[str, LabeledTestCase] = {}
+    for key, title, description, mask, probability_order in definitions:
+        candidates = y_prob[mask]
+        if candidates.empty:
+            continue
+        position = int(
+            candidates.idxmin() if probability_order == "min" else candidates.idxmax()
+        )
+        raw_values = reconstruct_transaction_input(X_test.iloc[position], scaler)
+        cases[key] = LabeledTestCase(
+            title=title,
+            description=description,
+            transaction=TransactionInput(**raw_values),
+            true_label=int(y_test.iloc[position]),
+            reference_probability=float(y_prob.iloc[position]),
+            test_position=position,
+        )
+    return cases
+
+
+@st.cache_data(show_spinner=False)
+def load_training_metrics(path: Path) -> dict[str, float]:
+    """Read existing Phase 03/04 metrics without inventing evaluation data."""
+
+    content = path.read_text(encoding="utf-8")
+    metrics: dict[str, float] = {}
+    for key, label in (("f1", "F1-Score"), ("auc", "ROC-AUC")):
+        match = re.search(rf"{label}:\s+([0-9.]+)", content)
+        if match is None:
+            raise ValueError(f"Thiếu {label} trong {path.name}")
+        metrics[key] = float(match.group(1))
+    return metrics
+
+
+@st.cache_data(show_spinner=False)
+def load_comparison_for_display(path: Path, modified_ns: int) -> pd.DataFrame:
+    """Load a validated comparison table and refresh when its file changes."""
+
+    del modified_ns
+    return load_model_comparison(path)
 
 
 def format_money(
@@ -863,8 +1671,34 @@ def initialize_state() -> None:
 
     st.session_state.setdefault("last_transaction", None)
     st.session_state.setdefault("validation_notes", [])
-    st.session_state.setdefault("signal_motion_enabled", True)
     st.session_state.setdefault("active_preset", None)
+    st.session_state.setdefault("active_test_case", None)
+    st.session_state.setdefault("decision_threshold_percent", 50)
+    st.session_state.setdefault("active_view", "prediction")
+    st.session_state.setdefault("analysis_history", [])
+    st.session_state.setdefault("analysis_sequence", 0)
+
+
+def record_analysis(
+    transaction: TransactionInput,
+    prediction: PredictionResult,
+    validation_notes: list[str],
+) -> None:
+    """Add one successful model run to the current browser session."""
+
+    st.session_state["analysis_sequence"] += 1
+    entry = {
+        "sequence": st.session_state["analysis_sequence"],
+        "transaction_type": transaction.transaction_type,
+        "step": transaction.step,
+        "amount": transaction.amount,
+        "fraud_probability": prediction.fraud_probability,
+        "threshold": prediction.threshold,
+        "label": prediction.label,
+        "quality_warnings": len(validation_notes),
+    }
+    history = [*st.session_state["analysis_history"], entry]
+    st.session_state["analysis_history"] = history[-25:]
 
 
 def apply_transaction_preset(preset_key: str) -> None:
@@ -884,152 +1718,310 @@ def apply_transaction_preset(preset_key: str) -> None:
             "last_transaction": asdict(transaction),
             "validation_notes": validate_transaction(transaction),
             "active_preset": preset_key,
+            "active_test_case": None,
         }
     )
 
 
-def render_sidebar(summary: DatasetSummary | None) -> None:
-    """Render project-level status and resource readiness."""
+def apply_labeled_test_case(test_case_key: str) -> None:
+    """Populate the form with one held-out PaySim transaction."""
+
+    cases = load_labeled_test_cases(
+        PROCESSED_DATA_DIR,
+        XGB_PREDICTIONS_PATH,
+        SCALER_PATH,
+    )
+    test_case = cases[test_case_key]
+    transaction = test_case.transaction
+    st.session_state.update(
+        {
+            "transaction_type_input": transaction.transaction_type,
+            "transaction_step_input": transaction.step,
+            "transaction_amount_input": transaction.amount,
+            "old_balance_origin": transaction.old_balance_origin,
+            "new_balance_origin": transaction.new_balance_origin,
+            "old_balance_destination": transaction.old_balance_destination,
+            "new_balance_destination": transaction.new_balance_destination,
+            "last_transaction": asdict(transaction),
+            "validation_notes": validate_transaction(transaction),
+            "active_preset": None,
+            "active_test_case": test_case_key,
+        }
+    )
+
+
+def set_active_view(view_key: str) -> None:
+    """Switch the workspace without rendering inactive pages."""
+
+    st.session_state["active_view"] = view_key
+
+
+def render_sidebar_navigation() -> str:
+    """Render a focused, collapsible sidebar for primary navigation."""
+
+    navigation_items = (
+        (
+            "prediction",
+            "Phân tích giao dịch",
+            ":material/shield:",
+            "Nhập giao dịch và xem xác suất gian lận.",
+        ),
+        (
+            "results",
+            "Hiệu năng mô hình",
+            ":material/monitoring:",
+            "Theo dõi metric và kết quả đánh giá.",
+        ),
+        (
+            "history",
+            "Lịch sử phân tích",
+            ":material/history:",
+            "Rà soát các giao dịch đã phân tích trong phiên.",
+        ),
+    )
 
     with st.sidebar:
-        theme_type = st.context.theme.type
+        with st.container(
+            key="sidebar_brand",
+            horizontal=True,
+            vertical_alignment="center",
+            gap="small",
+        ):
+            if LOGO_PATH.exists():
+                st.image(LOGO_PATH, width=48)
+            st.markdown("**Fraud Shield**  \n:gray[AI fraud intelligence]")
 
-        st.title("Fraud Shield")
-        st.caption("SIGNAL UNIVERSE • NHÓM 9")
-        st.badge(
-            "Vibrant UI • Sprint 2",
-            icon=":material/auto_awesome:",
-            color="violet",
-        )
-        st.space("small")
-        with st.container(border=True):
-            st.markdown("**Trạng thái tài nguyên**")
-            if summary is not None:
-                st.badge(
-                    f"Processed data • {format_integer(summary.total)} dòng",
-                    icon=":material/database:",
-                    color="green",
-                )
-            else:
-                st.badge(
-                    "Chưa đọc được processed data",
-                    icon=":material/error:",
-                    color="red",
-                )
+        st.caption("KHÔNG GIAN LÀM VIỆC")
 
-            try:
-                scaler, has_version_mismatch = load_scaler(SCALER_PATH)
-                feature_count = getattr(scaler, "n_features_in_", 8)
-                if has_version_mismatch:
-                    st.badge(
-                        "Scaler cần scikit-learn 1.9",
-                        icon=":material/warning:",
-                        color="orange",
-                    )
+        active_view = st.session_state["active_view"]
+        for view_key, label, icon, help_text in navigation_items:
+            st.button(
+                label,
+                icon=icon,
+                key=f"nav_{view_key}",
+                type="primary" if active_view == view_key else "secondary",
+                help=help_text,
+                width="stretch",
+                on_click=set_active_view,
+                args=(view_key,),
+            )
+
+        if active_view == "prediction":
+            with st.container(key="sidebar_presets", gap="small"):
+                st.caption("KỊCH BẢN NHANH")
+                selected_preset = st.pills(
+                    "Chọn dữ liệu mẫu",
+                    options=tuple(TRANSACTION_PRESETS),
+                    format_func=lambda key: (
+                        f"{TRANSACTION_PRESETS[key]['icon']} "
+                        f"{TRANSACTION_PRESETS[key]['title']}"
+                    ),
+                    key="preset_selector",
+                    on_change=apply_selected_preset,
+                    label_visibility="collapsed",
+                    width="stretch",
+                    persist_state="session",
+                )
+                if selected_preset is None:
+                    st.caption("Chọn một mẫu để tự điền form.")
                 else:
-                    st.badge(
-                        f"Scaler sẵn sàng • {feature_count} biến",
-                        icon=":material/check_circle:",
-                        color="green",
+                    st.caption(
+                        TRANSACTION_PRESETS[selected_preset]["description"]
                     )
-            except (FileNotFoundError, OSError, pickle.UnpicklingError):
-                st.badge(
-                    "Chưa đọc được scaler",
-                    icon=":material/error:",
-                    color="red",
-                )
 
-            available_models = sum(path.exists() for path in MODEL_CANDIDATES)
-            if available_models:
-                st.badge(
-                    f"{available_models} model đã sẵn sàng",
-                    icon=":material/model_training:",
-                    color="green",
-                )
-            else:
-                st.badge(
-                    "Model đang chờ huấn luyện",
-                    icon=":material/schedule:",
-                    color="orange",
-                )
+                st.caption("MẪU KIỂM THỬ CÓ NHÃN")
+                try:
+                    labeled_cases = load_labeled_test_cases(
+                        PROCESSED_DATA_DIR,
+                        XGB_PREDICTIONS_PATH,
+                        SCALER_PATH,
+                    )
+                    selected_test_case = st.selectbox(
+                        "Chọn kết quả kiểm thử",
+                        options=tuple(labeled_cases),
+                        index=None,
+                        placeholder="Chọn mẫu từ X_test",
+                        format_func=lambda key: labeled_cases[key].title,
+                        key="test_case_selector",
+                        on_change=apply_selected_test_case,
+                        label_visibility="collapsed",
+                    )
+                    if selected_test_case is None:
+                        st.caption("Dùng nhãn thật để đối chiếu dự đoán.")
+                    else:
+                        st.caption(labeled_cases[selected_test_case].description)
+                except (FileNotFoundError, KeyError, OSError, ValueError):
+                    st.caption("Chưa đọc được artifact kiểm thử XGBoost.")
 
-            comparison_color = "green" if COMPARISON_PATH.exists() else "orange"
-            comparison_icon = (
-                ":material/check_circle:"
-                if COMPARISON_PATH.exists()
-                else ":material/schedule:"
+        with st.container(key="theme_bootstrap"):
+            THEME_SWITCHER(
+                key="fraud-shield-theme-bootstrap",
+                data={"current_theme": st.context.theme.type or "light"},
+                width="stretch",
+                height=0,
             )
-            comparison_label = (
-                "Bảng so sánh sẵn sàng"
-                if COMPARISON_PATH.exists()
-                else "Kết quả đang chờ Phase 05"
-            )
-            st.badge(
-                comparison_label,
-                icon=comparison_icon,
-                color=comparison_color,
-            )
-
-        st.markdown("**Tiến độ pipeline**")
-        st.progress(2 / 9, text="2/9 phase đã hoàn thành")
-        st.caption("Phase 00–01 đã passed. UI chưa chạy suy luận khi model chưa được bàn giao.")
-
-        with st.expander("Chuyển động giao diện", icon=":material/animation:"):
-            st.toggle(
-                "Nhịp tín hiệu sống",
-                key="signal_motion_enabled",
-                help="Tắt nếu bạn muốn giao diện đứng yên.",
-            )
-
-        st.space("small")
-        st.caption("UIT • CS106.F31.CN2.TTNT • 2026")
-        st.space(64)
 
         with st.popover(
             "Giao diện",
             icon=":material/contrast:",
             help="Chọn System, Sáng hoặc Tối.",
             type="secondary",
-            width="content",
+            width="stretch",
             key="theme_mode_menu",
         ):
             st.caption("SYSTEM • LIGHT • DARK")
             THEME_SWITCHER(
                 key="fraud-shield-theme-switcher",
-                data={"current_theme": theme_type or "light"},
+                data={"current_theme": st.context.theme.type or "light"},
                 width="stretch",
                 height="content",
             )
 
+    return st.session_state["active_view"]
 
-def render_signal_pulse(animated: bool) -> None:
-    """Render a subtle native motion cue without implying model inference."""
 
-    status_label = (
-        "Nhịp giao diện đang hoạt động"
-        if animated
-        else "Nhịp giao diện đã tạm dừng"
+def render_threshold_control() -> None:
+    """Render a useful decision-threshold control in place of decoration."""
+
+    st.caption("ĐIỀU KHIỂN PHÂN LOẠI")
+    with st.container(
+        horizontal=True,
+        horizontal_alignment="distribute",
+        vertical_alignment="center",
+    ):
+        st.markdown("#### Ngưỡng cảnh báo")
+        threshold = st.session_state["decision_threshold_percent"]
+        if threshold < 40:
+            st.badge("Ưu tiên phát hiện", icon=":material/radar:", color="blue")
+        elif threshold <= 60:
+            st.badge("Cân bằng", icon=":material/balance:", color="green")
+        else:
+            st.badge(
+                "Giảm cảnh báo nhầm",
+                icon=":material/filter_alt:",
+                color="orange",
+            )
+
+    st.slider(
+        "Ngưỡng xác suất",
+        min_value=10,
+        max_value=90,
+        step=5,
+        format="%d%%",
+        key="decision_threshold_percent",
+        help="Giao dịch có xác suất bằng hoặc cao hơn ngưỡng sẽ được gắn cờ.",
     )
-    status_state = "running" if animated else "complete"
+    st.caption(
+        "Hạ ngưỡng để tăng độ nhạy; nâng ngưỡng để giảm số cảnh báo nhầm."
+    )
 
-    with st.status(status_label, state=status_state, expanded=True):
-        st.caption("LIVE SIGNAL • VISUAL FLOW")
-        st.markdown(
-            ":blue-badge[01 • Nhận] :violet-badge[02 • Đối chiếu] "
-            ":green-badge[03 • Hiển thị]"
-        )
-        st.progress(1.0, text="INPUT → VALIDATE → VISUALIZE")
-        st.caption(
-            "Biểu tượng chuyển động chỉ tạo điểm nhấn; không phải kết quả model."
-        )
+
+def apply_selected_preset() -> None:
+    """Apply the scenario selected by the compact preset control."""
+
+    preset_key = st.session_state.get("preset_selector")
+    if preset_key in TRANSACTION_PRESETS:
+        apply_transaction_preset(preset_key)
+
+
+def apply_selected_test_case() -> None:
+    """Apply the held-out example selected in the sidebar."""
+
+    test_case_key = st.session_state.get("test_case_selector")
+    if test_case_key:
+        apply_labeled_test_case(test_case_key)
+
+
+def render_risk_meter(prediction: PredictionResult) -> None:
+    """Render a compact linear risk meter as the primary result."""
+
+    probability = prediction.fraud_probability * 100
+    if prediction.label == 1:
+        risk_class = "risk-high"
+        risk_label = "RỦI RO CAO"
+        decision_title = "Nghi vấn gian lận"
+    elif probability >= 20:
+        risk_class = "risk-medium"
+        risk_label = "CẦN LƯU Ý"
+        decision_title = "Chưa vượt ngưỡng"
+    else:
+        risk_class = "risk-low"
+        risk_label = "RỦI RO THẤP"
+        decision_title = "Không phát hiện gian lận"
+
+    st.html(
+        f"""
+        <div class="risk-meter-card {risk_class}" role="img"
+             aria-label="Xác suất gian lận {probability:.2f} phần trăm">
+          <div class="risk-meter-head">
+            <div>
+              <div class="fraud-score-label">{risk_label}</div>
+              <div class="fraud-score-title">{decision_title}</div>
+            </div>
+          </div>
+          <div class="risk-meter-track" style="--score: {probability:.4f}; --threshold: {prediction.threshold * 100:.2f}">
+            <span class="risk-meter-score-tag">{probability:.2f}%</span>
+            <span class="risk-meter-threshold" aria-hidden="true"></span>
+            <span class="risk-meter-marker"></span>
+            <span class="risk-meter-tick" style="--tick: 0"></span>
+            <span class="risk-meter-tick" style="--tick: 25"></span>
+            <span class="risk-meter-tick" style="--tick: 50"></span>
+            <span class="risk-meter-tick" style="--tick: 75"></span>
+            <span class="risk-meter-tick" style="--tick: 100"></span>
+            <div class="risk-meter-axis" aria-hidden="true">
+              <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
+            </div>
+          </div>
+          <div class="risk-meter-scale">
+            <span>Thấp</span><span>Cần lưu ý</span><span>Cao</span>
+          </div>
+        </div>
+        """
+    )
+
+
+def render_labeled_test_verdict(prediction: PredictionResult) -> None:
+    """Compare the current prediction with the selected held-out label."""
+
+    test_case_key = st.session_state.get("active_test_case")
+    if not test_case_key:
+        return
+
+    try:
+        test_case = load_labeled_test_cases(
+            PROCESSED_DATA_DIR,
+            XGB_PREDICTIONS_PATH,
+            SCALER_PATH,
+        )[test_case_key]
+    except (FileNotFoundError, KeyError, OSError, ValueError):
+        st.warning("Không đọc được nhãn thật của mẫu kiểm thử.")
+        return
+
+    true_text = "Bất thường" if test_case.true_label == 1 else "Hợp lệ"
+    predicted_text = "Bất thường" if prediction.label == 1 else "Hợp lệ"
+    is_correct = prediction.label == test_case.true_label
+
+    st.markdown("**Đối chiếu với nhãn thật**")
+    with st.container(horizontal=True):
+        st.metric("Nhãn trong X_test", true_text, border=True)
+        st.metric("XGBoost dự đoán", predicted_text, border=True)
+    st.badge(
+        "Dự đoán đúng" if is_correct else "Dự đoán sai",
+        icon=":material/check_circle:" if is_correct else ":material/error:",
+        color="green" if is_correct else "red",
+    )
+    st.caption(
+        f"Mẫu #{test_case.test_position + 1:,} trong tập test • "
+        f"Nhãn thật {test_case.true_label} • Ngưỡng hiện tại {prediction.threshold:.0%}"
+    )
 
 
 def render_header(summary: DatasetSummary | None) -> None:
     """Render the main page identity and high-level project facts."""
 
-    with st.container(border=True):
+    with st.container(key="hero_panel", border=True):
         hero_copy, signal_visual = st.columns(
-            [1.55, 0.85],
+            [1.6, 1],
             gap="large",
             vertical_alignment="center",
         )
@@ -1039,35 +2031,23 @@ def render_header(summary: DatasetSummary | None) -> None:
             st.title("Bản đồ tín hiệu giao dịch")
             st.markdown(
                 "Biến số tiền, thời điểm và biến động số dư thành một góc nhìn "
-                "**trực quan, dễ đọc**, sẵn sàng kết nối model thật của Nhóm 9."
+                "**trực quan, dễ đọc**, kèm dự đoán thật từ model của Nhóm 9."
             )
 
             with st.container(horizontal=True):
                 st.badge(
-                    "Phase 06 • Đang phát triển",
-                    icon=":material/rocket_launch:",
-                    color="violet",
-                )
-                st.badge(
-                    "Dữ liệu thật • Không kết quả giả",
-                    icon=":material/verified:",
+                    "XGBoost sẵn sàng",
+                    icon=":material/model_training:",
                     color="green",
                 )
-
-            with st.container(horizontal=True):
                 st.badge(
-                    "Model đang chờ bàn giao",
-                    icon=":material/model_training:",
-                    color="orange",
-                )
-                st.badge(
-                    "Inference đang khóa an toàn",
-                    icon=":material/lock:",
-                    color="gray",
+                    "Dữ liệu thật",
+                    icon=":material/verified:",
+                    color="blue",
                 )
 
         with signal_visual:
-            render_signal_pulse(st.session_state["signal_motion_enabled"])
+            render_threshold_control()
 
     total_label = format_integer(summary.total) if summary else "200.000"
     split_label = (
@@ -1080,77 +2060,51 @@ def render_header(summary: DatasetSummary | None) -> None:
     )
     available_models = sum(path.exists() for path in MODEL_CANDIDATES)
 
-    with st.container(horizontal=True):
-        st.metric(
-            "Dữ liệu đã xử lý",
-            f"{total_label} giao dịch",
-            split_label,
-            delta_color="off",
-            border=True,
-        )
-        st.metric(
-            "Tỷ lệ gian lận",
-            fraud_ratio_label,
-            "Tính từ y_train + y_test",
-            delta_color="off",
-            border=True,
-        )
-        st.metric(
-            "Không gian đặc trưng",
-            "9 biến",
-            "Đã scale & encode",
-            delta_color="off",
-            border=True,
-        )
-        st.metric(
+    metric_columns = st.columns(4, gap="small")
+    metric_specs = (
+        ("Dữ liệu đã xử lý", total_label, split_label),
+        ("Tỷ lệ gian lận", fraud_ratio_label, "Tính từ y_train + y_test"),
+        ("Không gian đặc trưng", "14", "10 số • 4 nhị phân"),
+        (
             "Model dự đoán",
-            f"{available_models}/3 sẵn sàng",
-            "Tích hợp sau Phase 05",
-            delta_color="off",
-            border=True,
-        )
+            f"{available_models}/3",
+            "Artifact đã tải",
+        ),
+    )
+    for column, (label, value, delta) in zip(metric_columns, metric_specs):
+        with column:
+            st.metric(
+                label,
+                value,
+                delta,
+                delta_color="off",
+                border=True,
+            )
 
 
 def render_transaction_form() -> None:
-    """Render the Sprint 2 input form and non-predictive preview."""
-
-    st.subheader("Kịch bản khám phá nhanh")
-    st.caption(
-        "Chạm một kịch bản để nạp dữ liệu mẫu và xem ba góc nhìn ngay lập tức. "
-        "Các kịch bản chỉ mô tả cấu trúc giao dịch, không gắn nhãn gian lận."
-    )
-    with st.container(horizontal=True):
-        for preset_key, preset in TRANSACTION_PRESETS.items():
-            is_active = st.session_state["active_preset"] == preset_key
-            with st.container(border=True):
-                st.badge(
-                    preset["eyebrow"],
-                    icon=preset["icon"],
-                    color=preset["color"],
-                )
-                st.markdown(f"#### {preset['title']}")
-                st.caption(preset["description"])
-                st.button(
-                    "Đang khám phá" if is_active else f"Mở {preset['title'].lower()}",
-                    key=f"preset_{preset_key}",
-                    type="primary" if is_active else "secondary",
-                    icon=":material/check:" if is_active else ":material/arrow_forward:",
-                    width="stretch",
-                    on_click=apply_transaction_preset,
-                    args=(preset_key,),
-                )
-
-    st.space("small")
+    """Render transaction inputs, signal visuals and real model inference."""
 
     form_column, preview_column = st.columns([1.55, 1], gap="large")
 
     with form_column:
         st.subheader("Nhập thông tin giao dịch")
-        st.caption("Các trường bám đúng schema PaySim đã dùng trong Phase 01.")
-        st.markdown(
-            ":violet-badge[01 • Nhập] :blue-badge[02 • Soi tín hiệu] "
-            ":gray-badge[03 • Chờ model thật]"
-        )
+        with st.container(key="workflow_steps", horizontal=True):
+            st.badge(
+                "01 • Nhập",
+                icon=":material/edit_note:",
+                color="violet",
+            )
+            st.badge(
+                "02 • Soi tín hiệu",
+                icon=":material/query_stats:",
+                color="blue",
+            )
+            st.badge(
+                "03 • Dự đoán thật",
+                icon=":material/model_training:",
+                color="green",
+            )
         active_preset = st.session_state["active_preset"]
         if active_preset is not None:
             st.badge(
@@ -1158,6 +2112,21 @@ def render_transaction_form() -> None:
                 icon=":material/auto_awesome:",
                 color=TRANSACTION_PRESETS[active_preset]["color"],
             )
+        active_test_case = st.session_state["active_test_case"]
+        if active_test_case is not None:
+            try:
+                test_case = load_labeled_test_cases(
+                    PROCESSED_DATA_DIR,
+                    XGB_PREDICTIONS_PATH,
+                    SCALER_PATH,
+                )[active_test_case]
+                st.badge(
+                    f"Mẫu X_test: {test_case.title}",
+                    icon=":material/fact_check:",
+                    color="blue",
+                )
+            except (FileNotFoundError, KeyError, OSError, ValueError):
+                st.badge("Không đọc được mẫu X_test", color="red")
 
         with st.form("transaction_form", border=True):
             st.badge(
@@ -1278,11 +2247,11 @@ def render_transaction_form() -> None:
                 )
 
             submitted = st.form_submit_button(
-                "Dựng bản đồ tín hiệu",
+                "Phân tích giao dịch",
                 type="primary",
-                icon=":material/radar:",
+                icon=":material/shield:",
                 width="stretch",
-                help="Kiểm tra dữ liệu nhập; chưa chạy mô hình trong Sprint 2.",
+                help="Kiểm tra dữ liệu, tạo 14 đặc trưng và chạy XGBoost-SMOTE.",
             )
 
         if submitted:
@@ -1298,16 +2267,31 @@ def render_transaction_form() -> None:
             st.session_state["last_transaction"] = asdict(transaction)
             st.session_state["validation_notes"] = validate_transaction(transaction)
             st.session_state["active_preset"] = None
-            st.toast(
-                "Đã dựng bản đồ tín hiệu giao dịch.",
-                icon=":material/query_stats:",
+            st.session_state["active_test_case"] = None
+            submitted_prediction, submitted_error = run_transaction_inference(
+                transaction,
+                st.session_state["decision_threshold_percent"] / 100,
             )
+            if submitted_prediction is not None:
+                record_analysis(
+                    transaction,
+                    submitted_prediction,
+                    st.session_state["validation_notes"],
+                )
+                st.toast(
+                    "Đã phân tích và lưu vào lịch sử phiên.",
+                    icon=":material/shield:",
+                )
+            else:
+                st.toast(
+                    f"Không thể lưu kết quả: {submitted_error}",
+                    icon=":material/error:",
+                )
 
     with preview_column:
-        st.subheader("Bản xem trước")
-        st.caption("Kết quả tại đây chỉ phản ánh dữ liệu đã nhập.")
+        st.subheader("Kết quả phân tích")
 
-        with st.container(border=True):
+        with st.container(key="result_panel", border=True):
             raw_transaction = st.session_state["last_transaction"]
             if raw_transaction is None:
                 st.badge(
@@ -1318,19 +2302,44 @@ def render_transaction_form() -> None:
                 st.markdown("#### Chưa có bản xem trước")
                 st.write(
                     "Hoàn tất biểu mẫu bên trái và chọn "
-                    "**Dựng bản đồ tín hiệu**."
+                    "**Phân tích giao dịch**."
                 )
-                st.caption(
-                    "Model chưa được huấn luyện nên hệ thống không hiển thị "
-                    "xác suất gian lận giả."
-                )
+                st.caption("Kết quả chỉ xuất hiện sau khi model chạy thành công.")
             else:
                 transaction = TransactionInput(**raw_transaction)
-                st.badge(
-                    "Chưa chạy mô hình",
-                    icon=":material/hourglass_top:",
-                    color="orange",
+                prediction, prediction_error = run_transaction_inference(
+                    transaction,
+                    st.session_state["decision_threshold_percent"] / 100,
                 )
+                if prediction is None:
+                    st.badge(
+                        "Inference tạm khóa",
+                        icon=":material/error:",
+                        color="red",
+                    )
+                    st.warning(
+                        "Không thể chạy model nên hệ thống không suy đoán kết quả. "
+                        f"Chi tiết: {prediction_error}",
+                        icon=":material/lock:",
+                    )
+                else:
+                    render_risk_meter(prediction)
+                    render_labeled_test_verdict(prediction)
+                    if prediction.label == 1:
+                        st.error(
+                            "Model phát hiện tín hiệu rủi ro cao. Giao dịch cần "
+                            "được kiểm tra trước khi xử lý tiếp.",
+                            icon=":material/gpp_maybe:",
+                        )
+                    else:
+                        st.success(
+                            "Model chưa phát hiện dấu hiệu gian lận ở giao dịch này.",
+                            icon=":material/shield:",
+                        )
+                    st.caption(
+                        "Đây là hỗ trợ phân loại từ mô hình học máy, không thay "
+                        "thế bước rà soát nghiệp vụ."
+                    )
                 st.markdown(
                     f"#### {TRANSACTION_LABELS[transaction.transaction_type]}"
                 )
@@ -1340,25 +2349,26 @@ def render_transaction_form() -> None:
                     transaction.new_balance_origin
                     - transaction.old_balance_origin
                 )
-                st.metric(
-                    "Số tiền giao dịch • đơn vị",
-                    format_money(transaction.amount, include_unit=False),
-                    border=True,
-                )
-                st.metric(
-                    "Biến động tài khoản nguồn • đơn vị",
-                    format_money(
-                        source_change,
-                        signed=True,
-                        include_unit=False,
-                    ),
-                    border=True,
-                )
+                with st.container(horizontal=True):
+                    st.metric(
+                        "Số tiền • đơn vị",
+                        format_money(transaction.amount, include_unit=False),
+                        border=True,
+                    )
+                    st.metric(
+                        "Biến động nguồn • đơn vị",
+                        format_money(
+                            source_change,
+                            signed=True,
+                            include_unit=False,
+                        ),
+                        border=True,
+                    )
 
                 visual_mode = st.segmented_control(
                     "Góc nhìn trực quan",
-                    ["Bản đồ tín hiệu", "Dòng tiền", "Sai lệch số dư"],
-                    default="Bản đồ tín hiệu",
+                    ["Tín hiệu", "Dòng tiền", "Số dư"],
+                    default="Tín hiệu",
                     key="transaction_visual_mode",
                     width="stretch",
                 )
@@ -1371,7 +2381,7 @@ def render_transaction_form() -> None:
                     st.caption(
                         "So sánh số dư trước và sau tại tài khoản nguồn, đích."
                     )
-                elif visual_mode == "Sai lệch số dư":
+                elif visual_mode == "Số dư":
                     st.altair_chart(
                         build_balance_error_chart(transaction),
                         width="stretch",
@@ -1465,17 +2475,16 @@ def render_transaction_form() -> None:
                         },
                     )
 
-        st.info(
-            "Xác suất và nhãn **Hợp lệ / Nghi vấn gian lận** sẽ được "
-            "mở khi model tốt nhất được bàn giao.",
-            icon=":material/lock:",
+        st.caption(
+            ":material/info: XGBoost-SMOTE là model triển khai tạm thời; lựa chọn "
+            "chính thức sẽ theo kết luận Phase 05."
         )
 
 
 def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
     """Render a lively, evidence-based snapshot before models are available."""
 
-    with st.container(border=True):
+    with st.container(key="evaluation_data_panel", border=True):
         with st.container(
             horizontal=True,
             horizontal_alignment="distribute",
@@ -1540,14 +2549,169 @@ def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
                 )
 
 
-def render_results_placeholder(summary: DatasetSummary | None) -> None:
-    """Render honest placeholders for Phase 05 outputs."""
+def render_model_comparison() -> bool:
+    """Render the validated Phase 05 comparison table when available."""
+
+    with st.container(key="comparison_panel", border=True):
+        st.markdown("#### Bảng so sánh chính thức")
+        if not COMPARISON_PATH.is_file():
+            st.badge(
+                "Đang chờ model_comparison.csv",
+                icon=":material/table_chart:",
+                color="orange",
+            )
+            st.caption(
+                "Phase 05 chưa bàn giao bảng 3 mô hình × 5 metrics. "
+                "UI không tạo số liệu thay thế."
+            )
+            return False
+
+        try:
+            comparison = load_comparison_for_display(
+                COMPARISON_PATH,
+                COMPARISON_PATH.stat().st_mtime_ns,
+            )
+        except (OSError, ValueError) as error:
+            st.badge(
+                "Artifact chưa hợp lệ",
+                icon=":material/error:",
+                color="red",
+            )
+            st.error(str(error), icon=":material/data_alert:")
+            return False
+
+        best_model = comparison.iloc[0]
+        st.badge(
+            "Đã đồng bộ Phase 05",
+            icon=":material/check_circle:",
+            color="green",
+        )
+        st.success(
+            f"F1 cao nhất: **{best_model['model']}** "
+            f"({best_model['f1_score']:.2%}).",
+            icon=":material/trophy:",
+        )
+        st.dataframe(
+            comparison,
+            hide_index=True,
+            column_order=(
+                "model",
+                "precision",
+                "recall",
+                "f1_score",
+                "roc_auc",
+                "pr_auc",
+            ),
+            column_config={
+                "model": st.column_config.TextColumn("Mô hình", pinned=True),
+                "precision": st.column_config.NumberColumn(
+                    "Precision",
+                    format="percent",
+                ),
+                "recall": st.column_config.NumberColumn("Recall", format="percent"),
+                "f1_score": st.column_config.NumberColumn(
+                    "F1-score",
+                    format="percent",
+                ),
+                "roc_auc": st.column_config.NumberColumn(
+                    "ROC-AUC",
+                    format="%.4f",
+                ),
+                "pr_auc": st.column_config.NumberColumn(
+                    "PR-AUC",
+                    format="%.4f",
+                ),
+            },
+            width="stretch",
+        )
+        st.caption(
+            "Bảng được đọc trực tiếp từ reports/model_comparison.csv; "
+            "Accuracy không được dùng làm metric chính."
+        )
+        return True
+
+
+def render_evaluation_figures() -> bool:
+    """Render every official Phase 05 figure currently available."""
+
+    figure_paths = find_evaluation_figures(FIGURES_DIR)
+    missing_filenames = missing_evaluation_figures(FIGURES_DIR)
+
+    st.subheader("Biểu đồ đánh giá")
+    if not figure_paths:
+        with st.container(key="evaluation_pending_panel", border=True):
+            st.badge(
+                "Đang chờ figures Phase 05",
+                icon=":material/monitoring:",
+                color="orange",
+            )
+            st.write(
+                "ROC, Precision–Recall và ma trận nhầm lẫn sẽ tự xuất hiện "
+                "khi Khang lưu đúng tên file vào `reports/figures/`."
+            )
+            st.caption("Không dùng biểu đồ minh họa thay cho kết quả thực nghiệm.")
+        return False
+
+    curve_specs = [
+        figure
+        for figure in EVALUATION_FIGURES
+        if figure.category == "curves" and figure.key in figure_paths
+    ]
+    if curve_specs:
+        curve_columns = st.columns(len(curve_specs), gap="large")
+        for column, figure in zip(curve_columns, curve_specs):
+            with column:
+                with st.container(border=True, height="stretch"):
+                    st.markdown(f"#### {figure.title}")
+                    st.image(
+                        figure_paths[figure.key],
+                        caption=figure.caption,
+                        width="stretch",
+                    )
+
+    confusion_specs = [
+        figure
+        for figure in EVALUATION_FIGURES
+        if figure.category == "confusion" and figure.key in figure_paths
+    ]
+    if confusion_specs:
+        st.markdown("#### Ma trận nhầm lẫn")
+        confusion_columns = st.columns(len(confusion_specs), gap="medium")
+        for column, figure in zip(confusion_columns, confusion_specs):
+            with column:
+                with st.container(border=True, height="stretch"):
+                    st.markdown(
+                        f"**{figure.title.replace('Ma trận nhầm lẫn — ', '')}**"
+                    )
+                    st.image(
+                        figure_paths[figure.key],
+                        caption=figure.caption,
+                        width="stretch",
+                    )
+
+    if missing_filenames:
+        st.warning(
+            "Còn thiếu: " + ", ".join(missing_filenames),
+            icon=":material/pending_actions:",
+        )
+        return False
+
+    st.badge(
+        "Đủ 5 figures Phase 05",
+        icon=":material/check_circle:",
+        color="green",
+    )
+    return True
+
+
+def render_model_performance(summary: DatasetSummary | None) -> None:
+    """Render training evidence and official Phase 05 outputs fail-closed."""
 
     st.caption("MODEL PERFORMANCE WORKSPACE")
     st.subheader("Hiệu năng và mức sẵn sàng")
     st.caption(
-        "Dữ liệu đánh giá đã sẵn sàng; metric mô hình sẽ tự động đọc artifact "
-        "do Khang bàn giao trong Phase 05."
+        "Metric huấn luyện được đọc từ Phase 03–04; bảng và figures tổng hợp "
+        "chỉ hiển thị khi artifacts Phase 05 hợp lệ."
     )
 
     render_dataset_snapshot(summary)
@@ -1555,78 +2719,242 @@ def render_results_placeholder(summary: DatasetSummary | None) -> None:
     st.subheader("Trạng thái mô hình")
 
     with st.container(horizontal=True):
-        st.metric("Random Forest", "Chưa có", "Phase 03", delta_color="off", border=True)
-        st.metric("XGBoost", "Chưa có", "Phase 04", delta_color="off", border=True)
-        st.metric("Autoencoder", "Chưa có", "Phase 04", delta_color="off", border=True)
+        for model_name, summary_path in TRAINING_SUMMARIES.items():
+            try:
+                metrics = load_training_metrics(summary_path)
+                st.metric(
+                    model_name,
+                    f"F1 {metrics['f1']:.4f}",
+                    f"ROC-AUC {metrics['auc']:.4f}",
+                    delta_color="off",
+                    border=True,
+                )
+            except (FileNotFoundError, OSError, ValueError):
+                st.metric(
+                    model_name,
+                    "Chưa có",
+                    "Chờ artifact",
+                    delta_color="off",
+                    border=True,
+                )
 
-    comparison_column, chart_column = st.columns(2, gap="large")
-    with comparison_column:
-        with st.container(border=True, height="stretch"):
-            st.badge(
-                "Đang chờ model_comparison.csv",
-                icon=":material/table_chart:",
-                color="orange",
+    comparison_ready = render_model_comparison()
+    figures_ready = render_evaluation_figures()
+    if comparison_ready and figures_ready:
+        st.success(
+            "Màn hình hiệu năng đã đồng bộ đầy đủ kết quả chính thức từ Phase 05.",
+            icon=":material/task_alt:",
+        )
+
+
+def render_analysis_history() -> None:
+    """Render a session-scoped review workspace for successful predictions."""
+
+    st.caption("SESSION ANALYSIS WORKSPACE")
+    st.subheader("Lịch sử phân tích")
+    st.caption(
+        "Theo dõi tối đa 25 giao dịch đã chạy model trong tab hiện tại. "
+        "Dữ liệu sẽ được xóa khi đóng phiên trình duyệt."
+    )
+
+    history = st.session_state["analysis_history"]
+    if not history:
+        with st.container(
+            key="history_empty_panel",
+            border=True,
+            horizontal_alignment="center",
+        ):
+            st.markdown("### :material/history: Chưa có giao dịch nào")
+            st.caption(
+                "Chạy một mẫu hoặc nhập giao dịch mới để bắt đầu tạo lịch sử."
             )
-            st.markdown("#### Bảng so sánh")
-            st.write("Khu vực này sẽ hiển thị Precision, Recall, F1-score và ROC-AUC.")
-            st.caption("Không dùng Accuracy làm metric chính do dữ liệu mất cân bằng.")
+            st.button(
+                "Phân tích giao dịch đầu tiên",
+                icon=":material/arrow_forward:",
+                type="primary",
+                on_click=set_active_view,
+                args=("prediction",),
+            )
+        return
 
+    history_frame = pd.DataFrame(history)
+    history_frame["analysis_label"] = history_frame["sequence"].map(
+        lambda sequence: f"#{sequence}"
+    )
+    fraud_count = int(history_frame["label"].sum())
+    average_probability = float(history_frame["fraud_probability"].mean())
+    latest_probability = float(history_frame.iloc[-1]["fraud_probability"])
+
+    with st.container(horizontal=True):
+        st.metric("Đã phân tích", len(history_frame), border=True)
+        st.metric(
+            "Cảnh báo rủi ro",
+            fraud_count,
+            f"{fraud_count / len(history_frame):.0%} lịch sử",
+            delta_color="off",
+            border=True,
+        )
+        st.metric(
+            "Xác suất trung bình",
+            f"{average_probability:.2%}",
+            border=True,
+        )
+        st.metric(
+            "Lần gần nhất",
+            f"{latest_probability:.2%}",
+            "Theo ngưỡng tại lúc phân tích",
+            delta_color="off",
+            border=True,
+        )
+
+    filter_mode = st.segmented_control(
+        "Lọc lịch sử",
+        ["Tất cả", "Cảnh báo", "Hợp lệ"],
+        default="Tất cả",
+        key="history_filter",
+        width="content",
+    )
+    if filter_mode == "Cảnh báo":
+        filtered_frame = history_frame[history_frame["label"] == 1]
+    elif filter_mode == "Hợp lệ":
+        filtered_frame = history_frame[history_frame["label"] == 0]
+    else:
+        filtered_frame = history_frame
+
+    chart_column, summary_column = st.columns([1.55, 1], gap="large")
     with chart_column:
-        with st.container(border=True, height="stretch"):
-            st.badge(
-                "Đang chờ figures",
-                icon=":material/monitoring:",
-                color="orange",
+        with st.container(key="history_chart_panel", border=True):
+            st.markdown("**Diễn biến xác suất gian lận**")
+            probability_chart = (
+                alt.Chart(history_frame)
+                .mark_area(
+                    line={"color": "#8B5CF6", "strokeWidth": 3},
+                    point={"filled": True, "size": 85},
+                    color=alt.Gradient(
+                        gradient="linear",
+                        stops=[
+                            alt.GradientStop(color="#8B5CF6", offset=0),
+                            alt.GradientStop(color="#8B5CF600", offset=1),
+                        ],
+                        x1=1,
+                        x2=1,
+                        y1=0,
+                        y2=1,
+                    ),
+                )
+                .encode(
+                    x=alt.X(
+                        "analysis_label:N",
+                        title="Lần phân tích",
+                        sort=alt.SortField("sequence", order="ascending"),
+                    ),
+                    y=alt.Y(
+                        "fraud_probability:Q",
+                        title="Xác suất",
+                        scale=alt.Scale(domain=[0, 1]),
+                        axis=alt.Axis(format="%"),
+                    ),
+                    tooltip=[
+                        alt.Tooltip("sequence:O", title="Lần"),
+                        alt.Tooltip("fraud_probability:Q", title="Xác suất", format=".2%"),
+                        alt.Tooltip("threshold:Q", title="Ngưỡng", format=".0%"),
+                        alt.Tooltip("amount:Q", title="Số tiền", format=",.0f"),
+                    ],
+                )
             )
-            st.markdown("#### Biểu đồ đánh giá")
-            st.write("ROC, Precision–Recall và confusion matrix sẽ xuất hiện tại đây.")
-            st.caption("UI không tự tạo số liệu mô phỏng để thay cho kết quả thực nghiệm.")
-
-
-def render_project_info(summary: DatasetSummary | None) -> None:
-    """Render concise project and pipeline information."""
-
-    overview_column, pipeline_column = st.columns([1, 1.35], gap="large")
-
-    with overview_column:
-        with st.container(border=True):
-            st.subheader("Về dự án")
-            processed_total = format_integer(summary.total) if summary else "200.000"
-            st.markdown(
-                f"""
-                **Bài toán:** Phân loại nhị phân giao dịch tài chính  
-                **Dữ liệu:** PaySim Mobile Money  
-                **Quy mô gốc:** 6.362.620 giao dịch  
-                **Sau preprocessing:** {processed_total} giao dịch  
-                **Mô hình:** Random Forest, XGBoost, Autoencoder  
-                **Metric chính:** F1-score, ROC-AUC, Precision, Recall
-                """
+            threshold_chart = (
+                alt.Chart(history_frame)
+                .mark_line(color="#F59E0B", strokeDash=[6, 5], strokeWidth=2)
+                .encode(
+                    x=alt.X(
+                        "analysis_label:N",
+                        sort=alt.SortField("sequence", order="ascending"),
+                    ),
+                    y=alt.Y("threshold:Q"),
+                )
             )
-
-        with st.container(border=True):
-            st.subheader("Phụ trách demo")
-            st.markdown("**Phạm Thành Trung • MSSV 26410141**")
-            st.caption("Wireframe → UI shell → Kết nối model → Demo clip")
-
-    with pipeline_column:
-        with st.container(border=True):
-            st.subheader("Pipeline thực hiện")
-            st.markdown(
-                """
-                1. :green-badge[Đã xong] EDA và preprocessing
-                2. :orange-badge[Đang chờ] SMOTE / ADASYN trên train set
-                3. :orange-badge[Đang chờ] Huấn luyện ba mô hình
-                4. :orange-badge[Đang chờ] Đánh giá và chọn mô hình tốt nhất
-                5. :blue-badge[Đang làm] Tích hợp Streamlit UI
-                6. :gray-badge[Cuối kỳ] Quay clip và đóng gói bản nộp
-                """
+            st.altair_chart(
+                (probability_chart + threshold_chart).properties(height=285),
+                width="stretch",
             )
+            st.caption("Đường nét đứt thể hiện ngưỡng cảnh báo của từng lần chạy.")
 
-            st.info(
-                "SMOTE/ADASYN chỉ áp dụng trên tập train; test set được giữ nguyên "
-                "để tránh rò rỉ dữ liệu.",
-                icon=":material/security:",
-            )
+    with summary_column:
+        with st.container(
+            key="history_signal_panel",
+            border=True,
+            height="stretch",
+        ):
+            st.markdown("**Tín hiệu phiên hiện tại**")
+            high_amount_count = int((history_frame["amount"] > 200_000).sum())
+            warning_count = int((history_frame["quality_warnings"] > 0).sum())
+            st.metric("Giao dịch lớn", high_amount_count, border=True)
+            st.metric("Đầu vào cần lưu ý", warning_count, border=True)
+            if fraud_count:
+                st.error(
+                    f"Có {fraud_count} giao dịch vượt ngưỡng và cần rà soát.",
+                    icon=":material/gpp_maybe:",
+                )
+            else:
+                st.success(
+                    "Chưa có giao dịch nào vượt ngưỡng cảnh báo.",
+                    icon=":material/verified_user:",
+                )
+
+    st.markdown("#### Chi tiết giao dịch")
+    if filtered_frame.empty:
+        st.info("Không có giao dịch phù hợp với bộ lọc này.", icon=":material/filter_alt:")
+        return
+
+    display_frame = filtered_frame.iloc[::-1].copy()
+    display_frame["Loại giao dịch"] = display_frame["transaction_type"].map(
+        TRANSACTION_LABELS
+    )
+    display_frame["Kết quả"] = display_frame["label"].map(
+        {0: "Hợp lệ", 1: "Cần rà soát"}
+    )
+    display_frame = display_frame.rename(
+        columns={
+            "sequence": "Lần",
+            "step": "Step",
+            "amount": "Số tiền",
+            "fraud_probability": "Xác suất",
+            "threshold": "Ngưỡng",
+            "quality_warnings": "Lưu ý dữ liệu",
+        }
+    )[
+        [
+            "Lần",
+            "Loại giao dịch",
+            "Step",
+            "Số tiền",
+            "Xác suất",
+            "Ngưỡng",
+            "Kết quả",
+            "Lưu ý dữ liệu",
+        ]
+    ]
+    st.dataframe(
+        display_frame,
+        hide_index=True,
+        width="stretch",
+        column_config={
+            "Số tiền": st.column_config.NumberColumn(format="%.0f"),
+            "Xác suất": st.column_config.ProgressColumn(
+                format="percent",
+                min_value=0,
+                max_value=1,
+            ),
+            "Ngưỡng": st.column_config.NumberColumn(format="percent"),
+        },
+    )
+    st.download_button(
+        "Tải lịch sử CSV",
+        data=display_frame.to_csv(index=False).encode("utf-8-sig"),
+        file_name="fraud-analysis-history.csv",
+        mime="text/csv",
+        icon=":material/download:",
+    )
 
 
 try:
@@ -1635,22 +2963,12 @@ except (FileNotFoundError, OSError, ValueError, pickle.UnpicklingError):
     dataset_summary = None
 
 initialize_state()
-render_sidebar(dataset_summary)
-render_header(dataset_summary)
+active_view = render_sidebar_navigation()
 
-prediction_tab, results_tab, info_tab = st.tabs(
-    [
-        ":material/shield: Phân tích giao dịch",
-        ":material/analytics: Hiệu năng mô hình",
-        ":material/info: Hồ sơ dự án",
-    ]
-)
-
-with prediction_tab:
+if active_view == "prediction":
+    render_header(dataset_summary)
     render_transaction_form()
-
-with results_tab:
-    render_results_placeholder(dataset_summary)
-
-with info_tab:
-    render_project_info(dataset_summary)
+elif active_view == "results":
+    render_model_performance(dataset_summary)
+else:
+    render_analysis_history()

@@ -4,7 +4,7 @@
 
 **Status:** `pending`
 
-**Updated:** 29/08/2026
+**Updated:** 05/09/2026
 
 **Dependencies:** Phase 04 (model artifacts) và Phase 05 (model comparison/figures)
 
@@ -17,53 +17,55 @@ Xây dựng giao diện Streamlit để nhập một giao dịch PaySim, trực 
 | Hạng mục | Trạng thái | Kết quả hiện tại |
 |----------|------------|------------------|
 | Wireframe và nhận diện UI | ✅ Hoàn thành | Signal Universe, custom logo, System/Sáng/Tối, responsive layout |
-| Form giao dịch | ✅ Hoàn thành | Đủ 7 trường PaySim, validation và 3 quick presets |
+| Form giao dịch | ✅ Hoàn thành | Đủ 7 trường PaySim, validation và 4 quick presets |
 | Trực quan dữ liệu đầu vào | ✅ Hoàn thành | Bản đồ tín hiệu, Dòng tiền, Sai lệch số dư và biểu đồ phân bố nhãn thật |
-| Safe-preview | ✅ Hoàn thành | Không hiển thị nhãn hoặc xác suất gian lận giả khi chưa có model |
-| Theme switcher | 🟡 Đã triển khai | Lưu theme native v2 của Streamlit; chờ click và pixel QA System/Sáng/Tối |
-| Model inference | ⏳ Chờ | Cần model được chọn từ Phase 04–05 |
-| Model results/figures | ⏳ Chờ | Cần comparison table và figures từ Phase 05 |
-| Demo evidence | ⏳ Chờ | Cần screenshot hiện tại và demo clip sau khi tích hợp model |
+| Inference fail-closed | ✅ Hoàn thành | Không suy đoán kết quả nếu model/scaler/schema lỗi |
+| Theme switcher | ✅ Hoàn thành | Browser QA đã xác nhận System/Sáng/Tối, mặc định Tối và chuyển theme không reload trang |
+| Model inference | ✅ Hoàn thành checkpoint | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
+| Mẫu kiểm thử có nhãn | ✅ Hoàn thành | Nạp mẫu từ X_test, đối chiếu nhãn thật với dự đoán và thể hiện đúng/sai |
+| Model results/figures | 🟡 Adapter hoàn thành | Đã validate/render CSV + 5 figures; chờ artifacts chính thức từ Phase 05 |
+| Demo evidence | 🟡 Đã có kịch bản | Quy ước 5 screenshots + clip 2–3 phút; chờ artifacts Phase 05 để ghi hình bản cuối |
 
 ## Deliverables
 
 ```text
-draft/fraud-detection/demo/
-├── app.py
-├── requirements-demo.txt
+draft/fraud-detection/
 ├── .streamlit/config.toml
-├── WIREFRAME.md
-├── assets/
-└── screenshots/
+└── demo/
+    ├── app.py
+    ├── DEMO-SCRIPT.md
+    ├── evaluation_artifacts.py
+    ├── inference.py
+    ├── requirements-demo.txt
+    ├── WIREFRAME.md
+    ├── assets/
+    └── screenshots/
 ```
 
-## Trạng thái Revision 7.7
+## Trạng thái tích hợp model
 
-- Nút **Giao diện** nằm gọn ở góc trái dưới và mở ba lựa chọn System/Sáng/Tối.
-- Theme được ghi trực tiếp theo cơ chế lưu native v2 của Streamlit rồi reload; không phụ thuộc menu DOM.
-- Toolbar dùng chế độ `minimal`, không hiển thị menu ba chấm góc phải.
-- Ba biểu đồ preview có vùng vẽ và khoảng đệm an toàn.
-- Giao diện tiếp tục khóa inference cho đến khi có model thật.
-
-## 💡 Ý tưởng Đề xuất & Cải tiến Nâng cao (từ MY_IDEAS)
-
-1. **Thanh trượt điều chỉnh ngưỡng quyết định linh hoạt (Threshold Slider $0.1 \rightarrow 0.9$):**
-   * Cho phép chuyên viên tài chính kéo thanh trượt `st.slider` để thay đổi Decision Threshold.
-   * Hiển thị biểu đồ tương tác thời gian thực: Khi hạ ngưỡng (ví dụ từ $0.5 \rightarrow 0.2$), tỷ lệ phát hiện gian lận (Recall) tăng lên bao nhiêu vs số lượng cảnh báo nhầm (False Positive) tăng bao nhiêu.
-2. **Minh bạch hóa AI với SHAP (Explainable AI Waterfall Plot):**
-   * Khi tích hợp model thật (XGBoost/RF), tích hợp biểu đồ **SHAP** để giải thích cho từng giao dịch: *"Tại sao giao dịch này bị gắn cờ là gian lận?"* (Ví dụ: `errorBalanceOrig` đóng góp +45% rủi ro, `amount` đóng góp +30%, `hour_of_day=2h` đóng góp +15%).
-3. **Mô phỏng dòng giao dịch thời gian thực (Real-time Transaction Simulation):**
-   * Bổ sung chế độ Stream simulation tự động đẩy các giao dịch mẫu từ tập test set theo chu kỳ 1 giây/giao dịch, tự động kích hoạt hiệu ứng còi/chuông cảnh báo khi phát hiện giao dịch có xác suất gian lận cao.
+- Đã tải `models/xgb_smote.json` và `models/scaler.pkl` bằng cache resource.
+- Đã tái tạo đúng thứ tự 14 đặc trưng từ payload PaySim trước khi inference.
+- Đã trả xác suất và nhãn phân loại theo ngưỡng do người dùng chọn.
+- Đã khóa fail-closed khi thiếu artifact hoặc sai schema; không tạo kết quả giả.
+- XGBoost-SMOTE là model triển khai hiện tại, chờ kết luận chính thức từ Phase 05.
+- Màn hình Hiệu năng tự đọc `model_comparison.csv` và 5 figures đúng contract Phase 05.
+- CSV sai schema, thiếu mô hình hoặc metric ngoài `[0, 1]` bị chặn fail-closed.
+- UI giữ placeholder trung thực khi Phase 05 chưa bàn giao artifacts.
+- Kịch bản quay demo 2–3 phút và quy ước tên evidence đã được chuẩn hóa.
 
 ## Evidence đã xác minh
 
 | Kiểm tra | Kết quả | Giới hạn xác nhận |
 |----------|---------|-------------------|
 | Python compile và dependencies | `py_compile` đạt; `pip check` không có dependency hỏng | Môi trường local Python 3.14 |
-| App regression | 4 luồng AppTest, `0 exceptions` | Presets, form, motion và preview |
-| Theme implementation | Direct native-theme storage; legacy menu bridge đã loại bỏ; toolbar `minimal` | Chưa thay thế click/pixel QA trên trình duyệt |
-| Runtime | Root `200`; health `200 ok` ngày 29/08/2026 | Local runtime tại thời điểm kiểm tra |
-| Visual safety | Contrast và spacing của 3 preview đạt kiểm tra hiện có | Cần ảnh Revision 7.7 để duyệt cuối |
+| Demo test suite | `13 passed` | Inference, artifact contract và regression cho 3 màn hình |
+| Toàn bộ test hiện có | `21 passed` | Chạy từ `draft/fraud-detection` trên Python 3.14 |
+| Streamlit AppTest | `0 exceptions` | Phân tích giao dịch, Hiệu năng mô hình và Lịch sử phân tích |
+| Phase 05 adapter | PASS với fixture | Nhận schema title-case/snake_case, sort F1, validate 3 models × 5 metrics và dò 5 PNG |
+| Xác suất preset | `0,00%`; `0,70%`; `16,67%`; `100,00%` | Kết quả local từ XGBoost-SMOTE, làm tròn 2 chữ số trên UI |
+| Browser QA | PASS System/Sáng/Tối ngày 05/09/2026 | Kiểm tra trực quan và thao tác bằng Playwright; 0 browser errors, mặc định Tối, chuyển theme không reload trang |
+| Runtime | Health endpoint trả `ok` tại `localhost:8501` ngày 05/09/2026 | Local runtime tại thời điểm kiểm tra |
 
 ## Acceptance Criteria
 
@@ -72,7 +74,9 @@ draft/fraud-detection/demo/
 - [x] Không tạo kết quả mô hình giả.
 - [x] Có ba chế độ System/Sáng/Tối và không hiện menu native góc phải.
 - [ ] Click và pixel QA System/Sáng/Tối trên trình duyệt.
-- [ ] Model thật trả nhãn và probability.
+- [x] Model thật trả nhãn và probability.
+- [x] UI có adapter fail-closed để nhận comparison CSV và 5 figures Phase 05.
+- [x] Browser QA System/Sáng/Tối, theme mặc định Tối và chuyển theme không reload.
 - [ ] Comparison table và model figures hiển thị đúng.
 - [ ] Screenshot hiện tại và demo clip được lưu trong thư mục demo.
 
@@ -87,16 +91,15 @@ py -3.14 -m streamlit run demo/app.py
 
 ## Việc tiếp theo của Trung
 
-1. Click và review pixel Revision 7.7 ở System/Sáng/Tối.
-2. Nhận model/comparison artifacts từ Phase 04–05 và tích hợp inference thật.
-3. Kiểm tra luồng nhập → dự đoán → giải thích kết quả.
-4. Chụp screenshot và quay demo clip.
+1. Nhận comparison table/figures và kết luận model chính thức từ Phase 05; adapter UI đã sẵn sàng.
+2. Render và QA lại màn hình Hiệu năng sau khi nhận artifacts chính thức.
+3. Chụp screenshots hiện tại và quay demo clip.
 
 ## Rủi ro và kiểm soát
 
 | Rủi ro | Kiểm soát |
 |--------|-----------|
-| Model hoặc schema đầu vào không khớp | Chỉ tích hợp sau khi xác nhận feature order, scaler và model contract |
+| Model hoặc schema đầu vào không khớp | Validate feature order, scaler, CSV metrics và tên figures trước khi hiển thị |
 | Theme thay đổi khi nâng Streamlit | Giữ phiên bản tối thiểu đã kiểm tra và chạy lại browser QA sau khi nâng |
 | Tài liệu vượt quá trạng thái thực tế | Giữ Phase 06 `pending` cho đến khi đủ model, figures và demo evidence |
 
@@ -106,8 +109,8 @@ py -3.14 -m streamlit run demo/app.py
 - Phase chưa hoàn thành nên không đổi trạng thái sang `passed`.
 - Không cập nhật `Final/README.md` vì trạng thái Sprint chung chưa thay đổi.
 - Không tạo hoặc thay đổi artifacts dữ liệu/model.
-- Chưa stage hoặc commit vì chưa có yêu cầu.
+- Checkpoint tích hợp model đã được commit trên branch Phase 06.
 
 ## Kết luận
 
-UI shell Revision 7.7 đã sẵn sàng cho bước browser QA và tích hợp model. Phase 06 vẫn `pending` cho đến khi hoàn tất inference thật, figures và demo evidence.
+Phần Phase 06 tự chủ đã hoàn tất: UI, XGBoost inference, mẫu test có nhãn, adapter kết quả Phase 05 và Browser QA đều đã có evidence. Phase vẫn `pending` do chưa có artifacts chính thức Phase 05, screenshots hiện tại và demo clip.

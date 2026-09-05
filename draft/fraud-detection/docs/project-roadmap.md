@@ -34,13 +34,13 @@ gantt
     section Sprint 3 (4/9 - 11/9)
     XGBoost & Autoencoder (Cẩm)          :done, s3_1, 2026-09-01, 7d
     Evaluation metrics execution (Khang) :active, s3_2, 2026-09-01, 7d
-    Tích hợp model thật vào UI (Trung)   :active, s3_3, 2026-09-01, 7d
+    Tích hợp model thật vào UI (Trung)   :done, s3_3, 2026-09-01, 4d
     Viết báo cáo Methodology (Duy)       :active, s3_4, 2026-09-01, 7d
     Cập nhật slides kết quả (Hôn)        :done, s3_5, 2026-09-01, 7d
 
     section Sprint 4 (11/9 - 18/9)
     Chạy evaluation & So sánh (Khang)   :s4_1, 2026-09-11, 4d
-    Kết nối model thật vào UI (Trung)    :s4_2, 2026-09-11, 4d
+    Figures & demo evidence (Trung)      :s4_2, 2026-09-11, 4d
     Báo cáo Results & Conclusion (Duy)   :s4_3, 2026-09-11, 6d
     Hoàn thiện PPT & Review (Hôn)        :s4_4, 2026-09-11, 6d
     Đóng gói & Nộp bài (Hôn)             :milestone, s4_5, 2026-09-18, 0d
@@ -94,7 +94,7 @@ gantt
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
 | Thiết kế wireframe UI (layout, input fields, output area) <br> *[Đầu vào: None \| Đầu ra: `demo/WIREFRAME.md`]* | 🟡 High | ✅ |
-| Implement Streamlit UI shell <br> *[Đầu vào: processed labels \| Đầu ra: `demo/app.py` với form, safe-preview, theme switcher và 3 góc nhìn giao dịch]* | 🟡 High | ✅ |
+| Implement Streamlit UI shell <br> *[Đầu vào: processed labels \| Đầu ra: `demo/app.py` với form, 4 presets, theme switcher và 3 góc nhìn giao dịch]* | 🟡 High | ✅ |
 
 ### Duy *(bắt đầu ngay, không cần chờ data)*
 | Task | Ưu tiên | Trạng thái |
@@ -111,8 +111,8 @@ gantt
 
 ## 🏃 Sprint 3 — 4/9 (Thứ 6) → 11/9 tối (Thứ 6)
 
-> **Mục tiêu Sprint 3:** Xử lý mất cân bằng, hoàn thiện huấn luyện các mô hình (Sơn + Cẩm). Lớp A viết xong Methodology và Trung hoàn thiện UI shell với safe-preview.
-> **Sprint Review:** Tối Thứ 6 11/9 — các file model `.pkl` / `.h5` được lưu trữ, UI Streamlit chạy được và không tạo kết quả dự đoán giả khi chưa có model.
+> **Mục tiêu Sprint 3:** Hoàn thiện các phần mô hình còn lại, evaluation scripts, Methodology và tích hợp model thật vào UI.
+> **Sprint Review:** Tối Thứ 6 11/9 — kiểm tra artifacts mô hình, tiến độ Phase 05, báo cáo và UI Streamlit sử dụng inference thật.
 
 ### Sơn
 | Task | Ưu tiên | Trạng thái |
@@ -140,7 +140,7 @@ gantt
 ### Trung
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Hoàn thiện safe-preview khi chưa có model <br> *[Đầu vào: transaction form \| Đầu ra: 3 preset, 3 góc nhìn trực quan, data-quality state và inference lock; không tạo probability giả]* | 🟡 High | ✅ |
+| Tích hợp XGBoost-SMOTE vào Streamlit và kiểm thử dự đoán <br> *[Đầu vào: `models/scaler.pkl`, `models/xgb_smote.json` \| Đầu ra: probability/nhãn theo contract 14 đặc trưng, 4 presets và mẫu X_test có nhãn]* | 🟡 High | ✅ |
 
 ### Duy
 | Task | Ưu tiên | Trạng thái |
@@ -156,7 +156,7 @@ gantt
 
 ## 🏃 Sprint 4 — 11/9 (Thứ 6) → 18/9 (Thứ 6, Nộp bài)
 
-> **Mục tiêu Sprint 4:** Chạy đánh giá và so sánh mô hình, kết nối model thật vào UI demo, hoàn thiện báo cáo Word/PPT và đóng gói nộp bài.
+> **Mục tiêu Sprint 4:** Chạy đánh giá và so sánh mô hình, hoàn tất browser QA/demo evidence, hoàn thiện báo cáo Word/PPT và đóng gói nộp bài.
 > ⚠️ **Nộp bài:** Đóng gói và upload trước tối Thứ 6 18/9.
 
 ### Khang *(cần model output từ Sơn/Cẩm)*
@@ -165,10 +165,11 @@ gantt
 | Run: Chạy các scripts tính toán metrics và vẽ biểu đồ ROC/PR/Ma trận nhầm lẫn cho cả 3 mô hình <br> *[Đầu vào: trained models in `models/` + test data \| Đầu ra: computed metrics, `reports/roc_curves_all.png`, `pr_curves_all.png`, `confusion_matrix_[model].png`]* | 🔴 Critical | 🔲 |
 | So sánh: Tổng hợp kết quả và xuất bảng so sánh hiệu năng các mô hình <br> *[Đầu vào: computed metrics \| Đầu ra: `reports/model_comparison.csv`]* | 🔴 Critical | 🔲 |
 
-### Trung *(cần model file từ Cẩm)*
+### Trung *(cần figures/kết luận từ Phase 05)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Kết nối model `.pkl` thật vào Streamlit UI và test dự đoán <br> *[Đầu vào: `models/scaler.pkl`, `models/xgb_smote.pkl` \| Đầu ra: App UI chạy với predictions từ model thật]* | 🟡 High | 🔲 |
+| Browser QA System/Sáng/Tối <br> *[Đầu vào: app đã tích hợp XGBoost \| Đầu ra: giao diện được kiểm tra trực quan trên ba theme]* | 🟡 High | ✅ |
+| Tích hợp figures/kết luận model <br> *[Đầu vào: output Phase 05 \| Đầu ra: UI hiển thị kết quả so sánh chính thức]* | 🟡 High | 🔲 |
 | Quay clip demo + viết hướng dẫn sử dụng UI ngắn <br> *[Đầu vào: Running Streamlit app \| Đầu ra: `demo/screenshots` hoặc video mp4]* | 🟢 Medium | 🔲 |
 
 ### Duy *(cần kết quả từ Khang)*

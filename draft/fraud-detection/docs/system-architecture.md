@@ -40,7 +40,7 @@
                       │
 ┌─────────────────────▼───────────────────────────────────┐
 │                   DEMO LAYER                             │
-│  Streamlit / Gradio UI — nhập giao dịch → dự đoán      │
+│  Streamlit UI → 14 features → scaler → XGBoost → kết quả│
 └─────────────────────────────────────────────────────────┘
 ```
 
