@@ -77,10 +77,11 @@ fraud-detection/
 │   ├── _toc_pages.json             # Số trang mục lục do sync_toc_pages.py sinh ra
 │   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png)
 ├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (đang xem xét)
-├── demo/                  # ✅ Signal Universe Streamlit UI shell (Phase 06 checkpoint)
+├── demo/                  # 🟡 Streamlit UI + XGBoost inference (Phase 06 checkpoint)
+│   ├── inference.py      # 14-feature contract + XGBoost probability
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
-│   ├── assets/           # Custom crystal logo + hero asset của revision cũ
-│   ├── screenshots/      # Revision 5 rendered QA evidence
+│   ├── assets/           # Logo và tài nguyên hình ảnh của demo
+│   ├── screenshots/      # Ảnh kiểm thử giao diện
 │   ├── WIREFRAME.md      # Bố cục và nguyên tắc giao diện
 │   └── requirements-demo.txt
 ├── docs/                  # Tài liệu dự án
@@ -137,9 +138,9 @@ pip install -r demo/requirements-demo.txt
 streamlit run demo/app.py
 ```
 
-UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệu/Dòng tiền/Sai lệch số dư và chế độ System/Sáng/Tối. Các visual hiện chỉ mô tả dữ liệu đầu vào; ứng dụng không hiển thị nhãn hoặc xác suất gian lận cho đến khi model thật từ Phase 04–05 được bàn giao.
+Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contract 14 đặc trưng, trả xác suất/nhãn theo ngưỡng và khóa an toàn nếu model, scaler hoặc schema lỗi.
 
-**Trạng thái:** UI shell đã được xác minh ở cấp code, AppTest và local runtime. Phase 06 vẫn `pending`; còn browser/pixel QA, tích hợp model/figures thật, screenshot và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
+**Trạng thái:** Model integration đã vượt 7 inference tests và 9 AppTest flows; local runtime và Browser QA System/Sáng/Tối đều đạt. Phase 06 vẫn `pending`; còn figures/kết luận Phase 05, screenshots và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
 
 ---
 
@@ -152,8 +153,8 @@ UI shell Revision 7.7 gồm form PaySim, 3 quick presets, Bản đồ tín hiệ
 4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
 5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
 6. Comparison     ⏳ Chưa chạy chính thức; cần reports/model_comparison.csv + ROC/PR figures (Khang)
-7. Demo UI        ✔ UI shell Rev 7.7 + 3 presets + safe-preview; → Chờ nạp model weights (Trung)
-8. Report         ✔ Báo cáo Word/PDF Chương 1–7 đầy đủ (Duy), còn Abstract + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
+7. Demo UI        ✔ UI + 4 presets + XGBoost inference + Browser QA; → Chờ figures và demo evidence (Trung)
+8. Report         ✔ Báo cáo Word/PDF Tóm tắt + Chương 1–7 đầy đủ, 32 trang (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
 ```
 
 > ⚠️ **PM Audit (04/09):** Đã có 5/6 notebooks (Sơn đã bổ sung 02, 03 qua PR #20); hiện chỉ còn thiếu notebook `06_evaluation_comparison` (Khang) cho submit package.
