@@ -37,7 +37,7 @@ def _is_numeric_column(rows: list[list[str]], column: int) -> bool:
     if not cells:
         return False
     numeric = sum(
-        bool(re.fullmatch(r"[\d.,%\s+-]+", clean_markdown_symbols(cell).strip("*")))
+        bool(re.fullmatch(r"[\d.,%\s+–—-]+", clean_markdown_symbols(cell).strip("*")))
         for cell in cells
     )
     return numeric >= max(1, round(0.6 * len(cells)))

@@ -23,8 +23,20 @@ import streamlit as st
 
 
 DEMO_DIR = Path(__file__).resolve().parent
+PROJECT_ROOT = DEMO_DIR.parent
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+try:
+    from src.utils import load_pickle_compat
+except Exception:
+    def load_pickle_compat(file_or_path):
+        if hasattr(file_or_path, "read"):
+            return pickle.load(file_or_path)
+        with open(file_or_path, "rb") as f:
+            return pickle.load(f)
 
 from inference import (
     PredictionResult,
@@ -1075,7 +1087,7 @@ def load_scaler(path: Path):
     with warnings.catch_warnings(record=True) as caught_warnings:
         warnings.simplefilter("always")
         with path.open("rb") as scaler_file:
-            scaler = pickle.load(scaler_file)
+            scaler = load_pickle_compat(scaler_file)
 
     has_version_mismatch = any(
         item.category.__name__ == "InconsistentVersionWarning"
@@ -1137,14 +1149,14 @@ def load_labeled_test_cases(
     X_test = pd.read_pickle(data_dir / "X_test.pkl").reset_index(drop=True)
     y_test = pd.Series(pd.read_pickle(data_dir / "y_test.pkl")).reset_index(drop=True)
     with predictions_path.open("rb") as predictions_file:
-        prediction_artifact = pickle.load(predictions_file)["xgb_smote"]
+        prediction_artifact = load_pickle_compat(predictions_file)["xgb_smote"]
     y_pred = pd.Series(prediction_artifact["y_pred"])
     y_prob = pd.Series(prediction_artifact["y_prob"])
 
     with warnings.catch_warnings():
         warnings.simplefilter("ignore")
         with scaler_path.open("rb") as scaler_file:
-            scaler = pickle.load(scaler_file)
+            scaler = load_pickle_compat(scaler_file)
 
     definitions = (
         (

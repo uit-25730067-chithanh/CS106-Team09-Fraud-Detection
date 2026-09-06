@@ -39,7 +39,7 @@ from src.evaluation import (
     project_to_original_prevalence,
     report_false_negative_overlap,
 )
-from src.utils import DATA_PROCESSED_DIR, get_project_root
+from src.utils import DATA_PROCESSED_DIR, get_project_root, load_pickle_compat
 
 REPORTS_DIR = "reports"
 OUTPUT_CSV = "ch5_metrics_recomputed.csv"
@@ -60,18 +60,8 @@ IMPORTANCE_SOURCES = {
 }
 
 
-class _CompatUnpickler(pickle.Unpickler):
-    """Cầu nối tương thích unpickle giữa NumPy 2.x (nguồn lưu) và NumPy 1.x."""
-
-    def find_class(self, module: str, name: str):
-        if module.startswith("numpy._core"):
-            module = module.replace("numpy._core", "numpy.core")
-        return super().find_class(module, name)
-
-
 def _load(path: str):
-    with open(path, "rb") as f:
-        return _CompatUnpickler(f).load()
+    return load_pickle_compat(path)
 
 
 def collect_predictions(reports_dir: str) -> dict[str, dict]:

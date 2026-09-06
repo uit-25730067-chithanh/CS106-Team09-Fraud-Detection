@@ -17,12 +17,16 @@ TOC_PAGE_COLUMN_TWIPS = 648
 def collect_toc_entries(blocks: list[dict]) -> list[dict]:
     """Mục lục gồm tiêu đề chương và các mục đánh số dạng x.y.
 
-    Bỏ qua tiêu đề bìa (block đầu tiên), heading cấp 3 và các mục không đánh số
+    Bỏ qua tiêu đề bìa (heading h1 đầu tiên), heading cấp 3 và các mục không đánh số
     trong phần tài liệu tham khảo.
     """
     entries = []
-    for index, block in enumerate(blocks):
-        if index == 0 or block["type"] not in ("h1", "h2"):
+    first_h1_skipped = False
+    for block in blocks:
+        if block["type"] == "h1" and not first_h1_skipped:
+            first_h1_skipped = True
+            continue
+        if block["type"] not in ("h1", "h2"):
             continue
         if block["type"] == "h2" and not re.match(r"^\d+\.\d+\.", block["text"]):
             continue

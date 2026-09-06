@@ -27,6 +27,7 @@ def build_document(
     document = Document(template_path)
     entries = collect_toc_entries(blocks)
     cover_done = False
+    cover_h1_done = False
 
     for index, block in enumerate(blocks):
         kind = block["type"]
@@ -40,11 +41,12 @@ def build_document(
             continue
 
         if kind == "h1":
-            if index == 0:
+            if not cover_h1_done:
                 paragraph = document.add_paragraph(
                     clean_markdown_symbols(block["text"]), style="CoverTitle"
                 )
                 paragraph.alignment = WD_ALIGN_PARAGRAPH.CENTER
+                cover_h1_done = True
             else:
                 document.add_paragraph(
                     clean_markdown_symbols(block["text"]), style="Heading 1"
