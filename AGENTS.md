@@ -56,12 +56,13 @@ Final/
 | Random Forest | ✅ Đã train — SMOTE F1=0.9973/AUC=0.9994; ADASYN F1=0.9966/AUC=0.9992. Hai artifact `.pkl` bị gitignore và không có sau pull |
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
-| Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts done (metrics_calculator.py + plot_roc_curve.py merged PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/figures/` và `reports/model_comparison.csv` |
-| Báo cáo & Slide | 🟡 Word: Chương 1-3 ✅ (Duy); **Chương 4-6 chưa viết** (cần kết quả Phase 05). PPT: Bộ slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người (đang xem xét làm bản chính thức); Đã dọn dẹp các bản nháp slide 15 trang cũ của Hôn |
+| Evaluation (`src/evaluation/`) | 🟡 Phase 05 `pending` — 2/4 scripts của Khang đã merge (metrics_calculator.py + plot_roc_curve.py, PR #7); **còn thiếu** confusion_matrix_plot.py + model_comparator.py; chưa chạy cross-model evaluation; chưa có `reports/model_comparison.csv`. Duy đã thêm plot_confusion_components.py + plot_feature_importance.py phục vụ báo cáo |
 | Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng, có probability/nhãn và mẫu test có nhãn; Browser QA System/Sáng/Tối ✅; còn figures Phase 05, screenshots và demo clip |
+| Báo cáo & Slide | 🟡 Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang, sinh tự động từ source, visual QA pass); nội dung đã đủ, chờ đối chiếu số liệu với Phase 05. Slide: bộ học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người, đang xem xét làm bản chính thức |
+| Notebooks | 🟡 5/6 — Sơn đã bổ sung `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb`; **còn thiếu** `06_evaluation_comparison.ipynb` (Khang) |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict (05/09): Phase 00–04 PASSED (5/9 = 55.6%). Phase 05–08 vẫn `pending`. Khang cần hoàn thành 2 scripts, notebook 06 và cross-model evaluation; Trung đã xong model integration và Browser QA, còn figures/demo evidence; Duy còn Chương 4–6; Hôn tiếp tục duyệt slide và chuẩn bị đóng gói sau khi Phase 05–07 hoàn tất.**
+> **Verdict (05/09): Phase 00–04 PASSED (5/9 = 55.6%). Phase 05–08 vẫn `pending`. Khang cần hoàn thành 2 scripts, notebook 06 và cross-model evaluation; Trung đã xong model integration và Browser QA, còn figures/demo evidence; Duy đã hoàn tất Tóm tắt và Chương 1–7, chờ đối chiếu số liệu với Phase 05; Hôn tiếp tục duyệt slide và chuẩn bị đóng gói sau khi Phase 05–07 hoàn tất.**
 
 ---
 
@@ -80,9 +81,9 @@ Final/
 
 ```
 paysim.csv
-  → [data_loader.py]        Load & validate CSV
-  → [feature_scaler.py]     StandardScaler on numericals, OHE on categorical Type, and Downsampling
-  → [data_splitter.py]      Stratified 80/20 split
+  → [data_loader.py]        Load & validate CSV + Downsampling (200k rows)
+  → [data_splitter.py]      Stratified 80/20 split  ← TRƯỚC khi fit scaler
+  → [feature_scaler.py]     Derived features + OHE type; StandardScaler fit trên TRAIN, transform TEST
   → [imbalance_handler.py]  SMOTE/ADASYN on train only (no leakage)
   → [random_forest_model.py / xgboost_model.py / autoencoder_model.py]
   → [metrics_calculator.py] F1, ROC-AUC, Precision, Recall
@@ -127,7 +128,7 @@ paysim.csv
 |--------|-----------|------------------|----------|
 | **Trần Hoàng Hôn** | PM + PPT template + Nộp bài | ✅ PPT template | ⏳ Số liệu kết quả |
 | **Nguyễn Duy Khang** | Viết evaluation scripts + Chạy metrics | ✅ Viết scripts | ⏳ Chạy sau Sprint 3 |
-| **Vũ Văn Duy** | Báo cáo Word (Intro+Method ngay, Results sau) | ✅ ~70% ngay | ⏳ Results |
+| **Vũ Văn Duy** | Báo cáo Word (Intro+Method ngay, Results sau) | ✅ Tóm tắt + Chương 1–7 | ⏳ Đối chiếu Phase 05 |
 | **Phạm Thành Trung** | Demo UI shell + Kết nối model | ✅ UI + inference | ⏳ Figures/kết luận Phase 05 |
 
 Pipeline dữ liệu có sự tuần tự giữa các thành viên phụ trách mô hình để đảm bảo tính nhất quán.
@@ -268,12 +269,15 @@ Place in `Final/submit/` before zipping.
 3. ✅ Đã Browser QA System/Sáng/Tối, xác nhận theme mặc định là Tối và chuyển theme không reload trang
 4. ⏳ Nhận figures/kết luận model chính thức từ Phase 05, chụp screenshot và quay demo clip
 
-### 🔄 Duy — Báo cáo Word — BLOCKED on Phase 05 (Results)
-1. ✅ Đã viết xong Chương 1, 2, 3 (merge vào `main`; source: `reports/report-source.md`)
-2. ⏳ Viết Chương 4 (Methodology) — **có thể viết ngay** (không cần kết quả Phase 05)
-3. ⏳ Viết Chương 5 (Results & Discussion) — cần `reports/model_comparison.csv` + `reports/figures/`
-4. ⏳ Viết Chương 6 (Conclusion) + Abstract
-5. ⏳ Format Word + kiểm tra citation
+### Duy — Báo cáo Word
+1. ✅ Đã viết xong toàn bộ Chương 1–7 trên branch `docs/vu-van-duy-sprint3-methodology`
+2. ✅ Toàn bộ số liệu Chương 5 tính lại được bằng `run_report_metrics.py` → `reports/ch5_metrics_recomputed.csv` (gồm Average Precision cho cả 5 biến thể) và sinh lại được 2 hình
+3. ✅ Mục 5.5 trả lời câu hỏi nghiên cứu về feature importance (Bảng 5.2 + Hình 5.2): nhóm đặc trưng số dư chiếm 90,5% (RF) và 99,3% (XGB) mức đóng góp
+4. ✅ DOCX/PDF sinh tự động từ `report-source.md` bằng `build_report.py` + `sync_toc_pages.py` — Sprint 4 chỉ cần sửa source rồi chạy lại
+5. ✅ Chương 6 (Thảo luận) hoàn thành: trả lời 3 câu hỏi nghiên cứu, quy chiếu Precision về tỷ lệ gian lận gốc (Bảng 6.1) và chỉ ra khác biệt giữa 4 biến thể chưa đủ tin cậy thống kê. Còn chờ `model_comparison.csv` + ROC/PR curves của Phase 05 để đối chiếu lần cuối
+6. ✅ Chương 7 (Kết luận và hướng phát triển) hoàn thành, gồm Bảng 7.1 đối chiếu 7 mục tiêu của Mục 1.3.2 (6 hoàn thành, 1 một phần do demo chưa nạp model)
+7. ⏳ Viết Abstract và đối chiếu lần cuối với artifact của Phase 05
+8. ⏳ Cần Sơn/Cẩm hỗ trợ ablation loại nhóm đặc trưng số dư — bằng chứng quyết định cho Chương 6 (xem Mục 3.6.2 và 5.5)
 
 ### 🔄 Hôn — PM + PPT — PARTIALLY BLOCKED
 1. 🟡 Thống nhất lựa chọn bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md`) (đang xem xét làm bản chính thức); Đã loại bỏ các file slide nháp 15 trang cũ.

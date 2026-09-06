@@ -35,7 +35,7 @@ gantt
     XGBoost & Autoencoder (Cẩm)          :done, s3_1, 2026-09-01, 7d
     Evaluation metrics execution (Khang) :active, s3_2, 2026-09-01, 7d
     Tích hợp model thật vào UI (Trung)   :done, s3_3, 2026-09-01, 4d
-    Viết báo cáo Methodology (Duy)       :active, s3_4, 2026-09-01, 7d
+    Viết Methodology + Results (Duy)      :done, s3_4, 2026-09-01, 4d
     Cập nhật slides kết quả (Hôn)        :done, s3_5, 2026-09-01, 7d
 
     section Sprint 4 (11/9 - 18/9)
@@ -145,7 +145,8 @@ gantt
 ### Duy
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết phần Methodology: Preprocessing, Imbalance, Models (Word) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Chương 4 báo cáo Word]* | 🔴 Critical | 🔲 (có thể viết ngay, không cần Phase 05) |
+| Viết phần Methodology: Preprocessing, Imbalance, Models (Word) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Chương 4 trong `report-source.md` + bản Word Sprint 3]* | 🔴 Critical | ✅ |
+| Viết Results từ prediction artifacts <br> *[Đầu vào: `reports/*_predictions.pkl` + `y_test.pkl` \| Đầu ra: Chương 5 (5.1–5.6), `run_report_metrics.py` → `reports/ch5_metrics_recomputed.csv`, Hình 5.1, Hình 5.2 và hai bảng kết quả trong DOCX/PDF Sprint 3]* | 🔴 Critical | ✅ |
 
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
@@ -175,8 +176,8 @@ gantt
 ### Duy *(cần kết quả từ Khang)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết phần Results & Discussion (Word) <br> *[Đầu vào: `reports/model_comparison.csv` + plots \| Đầu ra: Chương 5 báo cáo Word]* | 🔴 Critical | 🔲 |
-| Viết Conclusion + References, tóm tắt Abstract <br> *[Đầu vào: Final outcomes \| Đầu ra: Chương 6, Tóm tắt & tài liệu tham khảo]* | 🟡 High | 🔲 |
+| Đối chiếu Results draft và viết Discussion (Word) <br> *[Đầu vào: `reports/model_comparison.csv` + plots \| Đầu ra: Chương 5 đã xác nhận + Chương 6 Thảo luận]* | 🔴 Critical | 🟡 Chương 6 đã viết xong, chờ Phase 05 đối chiếu |
+| Viết Conclusion + References, tóm tắt Abstract <br> *[Đầu vào: Final outcomes \| Đầu ra: Chương 7, Tóm tắt & tài liệu tham khảo]* | 🟡 High | 🔲 |
 | Format báo cáo Word & kiểm tra tài liệu tham khảo <br> *[Đầu vào: All text segments \| Đầu ra: `reports/[Nhom9]_BaoCao_FraudDetection.docx` hoàn chỉnh]* | 🟡 High | 🔲 |
 
 ### Hôn

@@ -70,7 +70,12 @@ fraud-detection/
 │   ├── models/            ✔ random_forest_model.py, xgboost_model.py, autoencoder_model.py
 │   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
-├── reports/               # ✅ Báo cáo nháp Docx/PDF + Predictions (RF, XGB, Autoencoder)
+├── reports/               # ✅ Báo cáo Chương 1–7 DOCX/PDF + Predictions (RF, XGB, Autoencoder)
+│   ├── ch5_metrics_recomputed.csv  # Chỉ số Chương 5 tính lại (nháp — Phase 05 sẽ thay bằng model_comparison.csv)
+│   ├── ch6_prevalence_projection.csv # Precision quy chiếu về tỷ lệ gian lận gốc (Bảng 6.1)
+│   ├── _report_template.docx       # Khuôn định dạng (styles, header, footer, A4) cho build_report.py
+│   ├── _toc_pages.json             # Số trang mục lục do sync_toc_pages.py sinh ra
+│   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png)
 ├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (đang xem xét)
 ├── demo/                  # 🟡 Streamlit UI + XGBoost inference (Phase 06 checkpoint)
 │   ├── inference.py      # 14-feature contract + XGBoost probability
@@ -85,6 +90,9 @@ fraud-detection/
 ├── run_random_forest.py   # Script train & evaluate Random Forest (Phase 03)
 ├── run_xgboost.py         # Script train & evaluate XGBoost (Phase 04)
 ├── run_autoencoder.py     # Script train & evaluate Autoencoder (Phase 04)
+├── run_report_metrics.py  # Script tính lại chỉ số + sinh lại 2 hình của Chương 5 (Phase 07)
+├── build_report.py        # Script dựng bản Word của báo cáo từ report-source.md (Phase 07)
+├── sync_toc_pages.py      # Script đọc số trang thật từ PDF để điền vào mục lục (Phase 07)
 ├── requirements.txt
 └── README.md
 ```
@@ -144,9 +152,9 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
 4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
 5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
-6. Comparison     ⏳ Chưa chạy; cần tạo reports/figures/ + reports/model_comparison.csv
+6. Comparison     ⏳ Chưa chạy chính thức; cần reports/model_comparison.csv + ROC/PR figures (Khang)
 7. Demo UI        ✔ UI + 4 presets + XGBoost inference + Browser QA; → Chờ figures và demo evidence (Trung)
-8. Report         ✔ Nháp Báo cáo Word Ch.1-3 (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
+8. Report         ✔ Báo cáo Word/PDF Tóm tắt + Chương 1–7 đầy đủ, 32 trang (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
 ```
 
 > ⚠️ **PM Audit (04/09):** Đã có 5/6 notebooks (Sơn đã bổ sung 02, 03 qua PR #20); hiện chỉ còn thiếu notebook `06_evaluation_comparison` (Khang) cho submit package.
