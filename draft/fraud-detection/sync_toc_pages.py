@@ -26,7 +26,7 @@ from build_report import SOURCE_MD, TOC_PAGES, collect_toc_entries, parse_markdo
 
 REPORTS_DIR = os.path.dirname(TOC_PAGES)
 PDF_PATH = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.pdf")
-# Trang bìa và các trang mục lục không được tính là nơi tiêu đề xuất hiện.
+# Trang bìa và các trang mục lục (trang 1-3) không được tính là nơi tiêu đề xuất hiện.
 BODY_STARTS_AT_PAGE = 4
 
 
@@ -34,6 +34,7 @@ def find_heading_pages(pdf_path: str, entries: list[dict]) -> dict[str, int]:
     pages: dict[str, int] = {}
     with pymupdf.open(pdf_path) as document:
         for entry in entries:
+            # Quét từ trang thân bài (trang 4) trở đi để không bị trùng với chính mục lục
             for page_number in range(BODY_STARTS_AT_PAGE - 1, document.page_count):
                 if document[page_number].search_for(entry["text"], quads=False):
                     pages[entry["text"]] = page_number + 1
