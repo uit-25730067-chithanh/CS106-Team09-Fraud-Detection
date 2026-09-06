@@ -510,9 +510,9 @@ Bảng 7.1 đối chiếu bảy mục tiêu cụ thể nêu tại Mục 1.3.2 v�
 | 4 | Thử nghiệm ít nhất hai thuật toán | Hoàn thành cả ba | Mục 4.4, 4.5, 4.6 |
 | 5 | Đánh giá bằng Precision, Recall, F1-Score, ROC-AUC và biểu đồ | Hoàn thành | Chương 5 |
 | 6 | So sánh mô hình, phân tích hạn chế, đề xuất hướng phát triển | Hoàn thành | Chương 5, 6, 7 |
-| 7 | Giao diện minh họa nhập giao dịch và hiển thị dự đoán | Một phần | Giao diện đã dựng, chưa nạp mô hình thật |
+| 7 | Giao diện minh họa nhập giao dịch và hiển thị dự đoán | Hoàn thành | Giao diện Streamlit đã tích hợp mô hình XGBoost-SMOTE và scaler thật |
 
-Sáu mục tiêu đã hoàn thành. Mục tiêu thứ bảy mới đạt phần giao diện, phần kết nối mô hình vào ứng dụng minh họa còn đang thực hiện.
+Toàn bộ bảy mục tiêu cụ thể đã hoàn thành. Trong đó mục tiêu thứ bảy đã tích hợp mô hình XGBoost-SMOTE cùng bộ tiền xử lý và scaler thật vào giao diện tương tác Streamlit, hỗ trợ 4 kịch bản thử nghiệm và vượt qua kiểm thử Browser QA.
 
 Về mặt định lượng, Random Forest kết hợp SMOTENC cho kết quả tốt nhất trên tập kiểm tra với Precision 0,9994, Recall 0,9951, F1-Score 0,9973, ROC-AUC 0,9994 và Average Precision 0,9983. Tuy nhiên, như Chương 6 đã chỉ ra, khoảng cách giữa bốn biến thể học có giám sát nằm trong sai số thống kê, và khi quy chiếu về tỷ lệ gian lận gốc của PaySim thì Precision của mô hình này giảm còn 0,9801.
 
