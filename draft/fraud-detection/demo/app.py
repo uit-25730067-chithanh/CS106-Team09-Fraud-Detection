@@ -3245,8 +3245,15 @@ def render_analysis_history() -> None:
             "Lưu ý dữ liệu",
         ]
     ]
+    try:
+        formatted_table = display_frame.style.format({"Số tiền": format_currency})
+    except (AttributeError, ImportError):
+        display_frame = display_frame.copy()
+        display_frame["Số tiền"] = display_frame["Số tiền"].map(format_currency)
+        formatted_table = display_frame
+
     st.dataframe(
-        display_frame.style.format({"Số tiền": format_currency}),
+        formatted_table,
         hide_index=True,
         width="stretch",
         column_config={

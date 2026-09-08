@@ -1,8 +1,9 @@
 """Unit tests for the modularized reporting pipeline."""
 
-from __future__ import annotations
+import pytest
 
-from docx import Document
+docx = pytest.importorskip("docx")
+Document = docx.Document
 
 from src.reporting.docx_table_builder import add_spacer, add_table
 from src.reporting.markdown_parser import add_runs, clean_markdown_symbols, parse_markdown
