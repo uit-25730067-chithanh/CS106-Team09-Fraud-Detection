@@ -48,6 +48,18 @@
 - Số liệu tính ra khớp 100% với `reports/ch5_metrics_recomputed.csv` (Duy) vì cùng dùng `compute_metrics()` trên cùng artifact — xác nhận tính nhất quán giữa Phase 05 và báo cáo Chương 5.
 - Output đã lưu: `reports/model_comparison.csv`, `reports/figures/roc_curves_all.png`, `pr_curves_all.png`, `confusion_matrix_rf-smotenc.png`, `confusion_matrix_rf-adasyn.png`, `confusion_matrix_xgb-smotenc.png`, `confusion_matrix_xgb-adasyn.png`, `confusion_matrix_autoencoder.png`.
 
+### Post-review fixes — Khang (06/09/2026, sau code review)
+
+Review phát hiện 4 vấn đề kỹ thuật xác đáng (đã verify từng cái trước khi sửa), đã fix toàn bộ:
+
+- **Critical — Contract Phase 06 bị vỡ:** `demo/evaluation_artifacts.py` (Trung) hard-code 3 tên file cố định `confusion_matrix_rf.png`/`confusion_matrix_xgb.png`/`confusion_matrix_autoencoder.png`. Notebook chỉ tạo bản có hậu tố biến thể (`-smotenc`/`-adasyn`) nên demo chỉ nhận diện được Autoencoder. Fix: notebook 06 tạo thêm 2 file alias (copy bản SMOTENC — biến thể tốt nhất) sang `confusion_matrix_rf.png`/`confusion_matrix_xgb.png`, không đụng code Phase 06. Verify bằng tích hợp thật: `find_evaluation_figures()`/`missing_evaluation_figures()` của `demo/evaluation_artifacts.py` chạy trên `reports/figures/` thật → `missing = ()`.
+- **Medium — Notebook không hiển thị hình khi xem trên GitHub:** cell Confusion Matrix/ROC/PR gọi `show=False` và kết quả bị bỏ qua (`_ = ...` hoặc trong vòng lặp) nên không có `image/png` trong output đã lưu. Fix: thêm `%matplotlib inline` + `IPython.display.display(fig)` cho từng figure. Verify: đọc lại JSON notebook sau khi chạy, xác nhận cell 8/10/12 đều có `image/png` trong output.
+- **Medium — `plt.close(figure)` nằm trong `if show:` (Dòng 69–73):** sâu hơn báo cáo nêu — `confusion_matrix_plot.py` không mirror đúng pattern của `plot_roc_curve.py` (dùng `Figure()` thô bất kể `show`, khiến `plt.show()` thực chất không làm gì khi `show=True`). Fix: thêm `_create_figure(show)` y hệt sibling module (`plt.subplots()` khi `show=True`, `Figure()` thô khi `show=False`) + đưa `plt.close(figure)` ra ngoài điều kiện. Thêm 2 test hồi quy (`test_plot_confusion_matrix_show_true_uses_a_pyplot_managed_figure`, `test_plot_confusion_matrix_does_not_leak_pyplot_figures`) — xác nhận RED trên code cũ, GREEN sau fix.
+- **Low — Viết hoa cột `roc_auc`/`pr_auc`:** `title()` sinh ra "Roc Auc"/"Pr Auc". Verify trước khi sửa: `demo/evaluation_artifacts.py` normalize header nên không hỏng contract dù giữ nguyên, nhưng sai quy chuẩn viết tắt học thuật. Fix: thêm mapping tường minh `_COLUMN_LABELS` → "ROC-AUC"/"PR-AUC" trong `model_comparator.py`.
+- **Low — Commit message "saved" trống thân bài:** Không sửa — commit `649cdc5` đã merge vào `main` qua PR #26, và PR #26 thực tế đã có mô tả chi tiết. Rewrite lịch sử git đã merge/shared là việc cần user quyết định, không tự ý làm.
+- Thêm `tests/conftest.py` (force `matplotlib.use("Agg")`) — cần thiết vì test `show=True` mới sẽ treo trên backend GUI tương tác của máy dev nếu không ép headless.
+- Toàn bộ suite sau fix: `tests/evaluation` + `tests/demo` = **68 passed, 1 skipped** (skip do thiếu `python-docx`, không liên quan).
+
 ## Context
 
 Khang implement toàn bộ evaluation module: metrics, visualizations, và bảng so sánh tổng hợp. Output của phase này là figures và tables dùng trong báo cáo Word + PPT.
