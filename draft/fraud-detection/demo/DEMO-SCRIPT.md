@@ -19,6 +19,15 @@
 
 ## Luồng trình bày
 
+### Nhập thời gian và tiền tệ
+
+- Chọn trực tiếp **Ngày** và **Giờ** giao dịch trong khoảng thời gian mô phỏng; giao diện chỉ nhận giờ tròn.
+- PaySim không có ngày lịch gốc, vì vậy ngày giờ trên giao diện là mốc mô phỏng và được quy đổi ngầm sang đặc trưng thời gian mà model yêu cầu.
+- Số tiền và bốn ô số dư tự phân tách hàng nghìn khi rời ô nhập: `250000` → `250.000`. Phần lẻ dùng dấu phẩy, ví dụ `1.143.937,73`; đơn vị là tiền mô phỏng PaySim.
+- Nhấn **Phân tích giao dịch** để chạy model. Đổi ngày giờ hoặc định dạng tiền không tự tạo dự đoán mới. Lịch sử hiển thị ngày giờ mô phỏng; CSV giữ số tiền dạng số để tái sử dụng.
+
+### Kịch bản ghi hình
+
 | Thời gian | Thao tác | Nội dung nói |
 |-----------|----------|--------------|
 | 00:00–00:20 | Mở trang Phân tích giao dịch | Giới thiệu PaySim, 14 đặc trưng và XGBoost-SMOTE đang được triển khai |
