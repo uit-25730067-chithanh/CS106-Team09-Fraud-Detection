@@ -13,7 +13,7 @@
 |-------|-------|
 | Owner | **Khang** |
 | Priority | P0 — Required for báo cáo |
-| Status | `pending` |
+| Status | `passed` ✅ |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 2–3 giờ |
 | Sprint | Sprint 2–3 (viết scripts), Sprint 4 (chạy metrics) |
@@ -26,10 +26,10 @@
 |------|--------|---------|------------|
 | Viết `src/evaluation/metrics_calculator.py` template | Sprint 2 | Test với dummy predictions | ✅ Hoàn thành |
 | Viết `src/evaluation/plot_roc_curve.py` template | Sprint 2 | Test với dummy scores | ✅ Hoàn thành |
-| Viết `src/evaluation/confusion_matrix_plot.py` template | Sprint 3 | | 🔲 Chưa bắt đầu |
-| Viết `src/evaluation/model_comparator.py` template | Sprint 3 | | 🔲 Chưa bắt đầu |
-| Chạy metrics cho cả 3 models (cần `.pkl` từ Cẩm) | Sprint 4 | | 🔲 Chưa bắt đầu |
-| Tổng hợp bảng so sánh + export CSV | Sprint 4 | | 🔲 Chưa bắt đầu |
+| Viết `src/evaluation/confusion_matrix_plot.py` template | Sprint 3 | TDD, 3 tests pass | ✅ Hoàn thành |
+| Viết `src/evaluation/model_comparator.py` template | Sprint 3 | TDD, 3 tests pass | ✅ Hoàn thành |
+| Chạy metrics cho cả 5 biến thể model (RF/XGB × SMOTENC/ADASYN + Autoencoder) | Sprint 4 | Dùng artifact `reports/*_predictions.pkl` có sẵn, không train lại | ✅ Hoàn thành |
+| Tổng hợp bảng so sánh + export CSV | Sprint 4 | `reports/model_comparison.csv` | ✅ Hoàn thành |
 
 ### Evidence Early Start — Khang, Sprint 2 (29/08/2026)
 
@@ -38,6 +38,15 @@
 - Đã export bốn hàm Sprint 2 qua `src/evaluation/__init__.py`.
 - Kiểm thử dummy predictions/scores: `7 passed` trên Python 3.12.10, scikit-learn 1.9.0.
 - Phase 05 vẫn `pending`; chưa chạy metrics model thật, chưa tạo figures báo cáo hoặc comparison CSV.
+
+### Evidence Sprint 4 — Khang (06/09/2026)
+
+- Đã tạo `src/evaluation/confusion_matrix_plot.py` (`plot_confusion_matrix`) và `src/evaluation/model_comparator.py` (`compare_models`, `save_comparison`) bằng TDD (viết test trước, xác nhận RED, rồi code tối thiểu để GREEN).
+- Cả 2 module export qua `src/evaluation/__init__.py`. Toàn bộ `tests/evaluation` + `tests/demo`: **45 passed, 1 skipped** (skip do thiếu `python-docx`, không liên quan) trên Python 3.12.10 (venv dự án).
+- Đã tạo `notebooks/06_evaluation_comparison.ipynb`, chạy **Restart & Run All** không lỗi (`jupyter nbconvert --execute`), không có cell nào raise exception.
+- Notebook đọc `reports/rf_predictions.pkl`, `xgb_predictions.pkl`, `autoencoder_predictions.pkl` (bàn giao từ Sơn/Cẩm) + `data/processed/y_test.pkl` — KHÔNG train lại model.
+- Số liệu tính ra khớp 100% với `reports/ch5_metrics_recomputed.csv` (Duy) vì cùng dùng `compute_metrics()` trên cùng artifact — xác nhận tính nhất quán giữa Phase 05 và báo cáo Chương 5.
+- Output đã lưu: `reports/model_comparison.csv`, `reports/figures/roc_curves_all.png`, `pr_curves_all.png`, `confusion_matrix_rf-smotenc.png`, `confusion_matrix_rf-adasyn.png`, `confusion_matrix_xgb-smotenc.png`, `confusion_matrix_xgb-adasyn.png`, `confusion_matrix_autoencoder.png`.
 
 ## Context
 
@@ -310,33 +319,35 @@ def save_comparison(df: pd.DataFrame, path: str = "reports/model_comparison.csv"
 
 ## Checklist
 
-- [ ] `src/evaluation/` — 4 scripts tạo xong
-- [ ] Metrics computed cho RF (SMOTE), XGBoost (SMOTE), Autoencoder
-- [ ] Confusion matrix figures saved: `rf`, `xgb`, `autoencoder`
-- [ ] `reports/figures/roc_curves_all.png` saved
-- [ ] `reports/figures/pr_curves_all.png` saved
-- [ ] `reports/model_comparison.csv` saved
-- [ ] Notebook chạy Restart & Run All không lỗi
-- [ ] Bảng so sánh có đủ 3 models × 5 metrics
-- [ ] Kết luận chọn best model có giải thích rõ ràng
+- [x] `src/evaluation/` — 4 scripts tạo xong
+- [x] Metrics computed cho cả 5 biến thể: RF-SMOTENC, RF-ADASYN, XGB-SMOTENC, XGB-ADASYN, Autoencoder
+- [x] Confusion matrix figures saved: `rf-smotenc`, `rf-adasyn`, `xgb-smotenc`, `xgb-adasyn`, `autoencoder`
+- [x] `reports/figures/roc_curves_all.png` saved
+- [x] `reports/figures/pr_curves_all.png` saved
+- [x] `reports/model_comparison.csv` saved
+- [x] Notebook chạy Restart & Run All không lỗi (`jupyter nbconvert --execute`, 0 cell lỗi)
+- [x] Bảng so sánh có đủ 5 models × 5 metrics
+- [x] Kết luận chọn best model có giải thích rõ ràng
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| All 3 models evaluated | ✅ | ___________ |
-| Best model F1 (fraud) | > 0.80 | ___________ |
-| Comparison CSV exported | ✅ | ___________ |
-| All figures saved | 5 PNGs | ___________ |
+| All models evaluated | ✅ | 5/5 biến thể (RF×2, XGB×2, Autoencoder) — xem notebook 06 §2 |
+| Best model F1 (fraud) | > 0.80 | RF-SMOTENC F1 = 0.9973 |
+| Comparison CSV exported | ✅ | `reports/model_comparison.csv`, 5 hàng × 6 cột |
+| All figures saved | 5 PNGs | 2 combined (ROC/PR) + 5 confusion matrix = 7 PNGs |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
-RF SMOTE   — Precision: ____  Recall: ____  F1: ____  ROC-AUC: ____  PR-AUC: ____
-XGB SMOTE  — Precision: ____  Recall: ____  F1: ____  ROC-AUC: ____  PR-AUC: ____
-Autoencoder— Precision: ____  Recall: ____  F1: ____  ROC-AUC: ____  PR-AUC: ____
-Best model: ____________________
-Saved figures: __________________ (count)
+RF SMOTENC  — Precision: 0.9994  Recall: 0.9951  F1: 0.9973  ROC-AUC: 0.9994  PR-AUC: 0.9983
+RF ADASYN   — Precision: 0.9982  Recall: 0.9951  F1: 0.9966  ROC-AUC: 0.9992  PR-AUC: 0.9978
+XGB SMOTENC — Precision: 0.9976  Recall: 0.9951  F1: 0.9963  ROC-AUC: 0.9993  PR-AUC: 0.9969
+XGB ADASYN  — Precision: 0.9957  Recall: 0.9951  F1: 0.9954  ROC-AUC: 0.9994  PR-AUC: 0.9976
+Autoencoder — Precision: 0.3822  Recall: 0.7523  F1: 0.5069  ROC-AUC: 0.9318  PR-AUC: 0.5973
+Best model: Random Forest + SMOTENC
+Saved figures: 7 (roc_curves_all, pr_curves_all, confusion_matrix_{rf-smotenc,rf-adasyn,xgb-smotenc,xgb-adasyn,autoencoder})
 ```
 
 ## Risk Assessment
@@ -349,14 +360,16 @@ Saved figures: __________________ (count)
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ⬜ Chưa hoàn thành
+> ✅ Hoàn thành
 
 ```
-Hoàn thành: __/__/2026
+Hoàn thành: 06/09/2026
 Người thực hiện: Khang
-Best model: ____________________
+Best model: Random Forest + SMOTENC (F1=0.9973, ROC-AUC=0.9994)
 Key findings:
-- ...
+- Cả 4 biến thể có giám sát (RF/XGB × SMOTENC/ADASYN) đạt F1 > 0.995 và ROC-AUC > 0.999 — sát nhau, khác biệt chưa chắc có ý nghĩa thống kê (xem ch6_prevalence_projection.csv của Duy).
+- Autoencoder (không giám sát) đạt Recall=0.7523/ROC-AUC=0.9318 nhưng Precision chỉ 0.3822 — đánh đổi hợp lý để không cần nhãn fraud khi train.
+- Toàn bộ số liệu tái lập 100% khớp reports/ch5_metrics_recomputed.csv (Duy) vì dùng chung compute_metrics() trên cùng artifact dự đoán — không có sai lệch giữa Phase 05 và báo cáo Chương 5.
 ```
 
 ## Commit
