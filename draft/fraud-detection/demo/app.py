@@ -15,6 +15,7 @@ import re
 import sys
 import warnings
 from dataclasses import asdict, dataclass
+from datetime import datetime
 from pathlib import Path
 
 import altair as alt
@@ -50,6 +51,10 @@ from evaluation_artifacts import (
     load_model_comparison,
     missing_evaluation_figures,
 )
+from input_formatting import (
+    MIN_STEP, MAX_STEP, step_to_datetime, datetime_to_step,
+    format_currency, parse_currency,
+)
 
 
 st.set_page_config(
@@ -66,6 +71,36 @@ st.html(
     [data-testid="stMainMenuPopover"] {
         visibility: hidden !important;
         pointer-events: none !important;
+    }
+
+    /* Preserve a balanced reading width on 34-inch ultrawide displays while
+       remaining fully fluid on laptops and smaller screens. */
+    [data-testid="stMainBlockContainer"] {
+        width: min(100%, 1760px);
+        max-width: 1760px;
+        margin-inline: auto;
+        padding-inline: clamp(1rem, 2vw, 2.25rem);
+    }
+
+    .st-key-analyze_transaction {
+        width: min(100%, 680px);
+        margin-inline: auto;
+    }
+
+    .st-key-transaction_form [data-testid="stTextInputRootElement"],
+    .st-key-transaction_form [data-testid="stNumberInputContainer"],
+    .st-key-transaction_form [data-baseweb="select"] > div {
+        min-height: 2.85rem;
+    }
+
+    .st-key-transaction_form [data-testid="stButtonGroup"] button[role="radio"],
+    .st-key-analyze_transaction button {
+        min-height: 2.85rem;
+    }
+
+    .st-key-result_panel {
+        min-height: 220px;
+        padding: 1.25rem !important;
     }
 
     .st-key-theme_mode_menu {
@@ -146,17 +181,6 @@ st.html(
         border-color: color-mix(in srgb, var(--st-primary-color) 70%, white);
         background: linear-gradient(112deg, var(--st-primary-color), color-mix(in srgb, var(--st-primary-color) 72%, #6366f1));
         box-shadow: 0 10px 24px color-mix(in srgb, var(--st-primary-color) 25%, transparent);
-    }
-
-    [data-testid="stSidebar"] .stButton > button[kind="primary"]::before {
-        content: "";
-        position: absolute;
-        left: 0.38rem;
-        top: 30%;
-        bottom: 30%;
-        width: 3px;
-        border-radius: 999px;
-        background: rgba(255, 255, 255, 0.92);
     }
 
     .st-key-sidebar_presets {
@@ -333,7 +357,41 @@ st.html(
         font-weight: 600;
     }
 
+    @media (min-width: 1800px) {
+        html {
+            font-size: 15px;
+        }
+
+        [data-testid="stMainBlockContainer"] {
+            width: min(100%, 1900px);
+            max-width: 1900px;
+            padding-inline: clamp(1.5rem, 2.2vw, 2.75rem);
+        }
+
+        .st-key-analyze_transaction {
+            width: min(100%, 720px);
+        }
+
+        .st-key-result_panel {
+            min-height: 232px;
+        }
+    }
+
     @media (max-width: 768px) {
+        [data-testid="stMainBlockContainer"] {
+            width: 100%;
+            padding-inline: 0.85rem;
+        }
+
+        [data-testid="stMainBlockContainer"] h1 {
+            font-size: 2.25rem;
+        }
+
+        .st-key-result_panel {
+            min-height: 190px;
+            padding: 1rem !important;
+        }
+
         .st-key-theme_mode_menu {
             left: 0.85rem;
             bottom: 0.75rem;
@@ -528,6 +586,11 @@ export default function (component) {
       sidebarSecondary: "#24124A",
       sidebarText: "#F8FAFC",
       sidebarBorder: "#4C2A7A",
+      inputBackground: "#F8FAFC",
+      inputBorder: "rgba(99, 102, 241, 0.28)",
+      inputHover: "#818CF8",
+      inputFocus: "#6366F1",
+      inputGlow: "rgba(99, 102, 241, 0.16)",
     },
     Dark: {
       primary: "#7C3AED",
@@ -545,6 +608,11 @@ export default function (component) {
       sidebarSecondary: "#160B2D",
       sidebarText: "#F1F5F9",
       sidebarBorder: "#321A59",
+      inputBackground: "#151827",
+      inputBorder: "rgba(99, 102, 241, 0.38)",
+      inputHover: "#818CF8",
+      inputFocus: "#8B5CF6",
+      inputGlow: "rgba(139, 92, 246, 0.18)",
     },
   }
   const tokenNames = {
@@ -608,6 +676,43 @@ export default function (component) {
         background: var(--st-secondary-background-color) !important;
         border-color: var(--st-border-color) !important;
       }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stTextInputRootElement"],
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="input"],
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="base-input"],
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="select"] > div {
+        color: var(--st-text-color) !important;
+        background: var(--fraud-input-background) !important;
+        border-color: var(--fraud-input-border) !important;
+        transition: border-color 140ms ease, box-shadow 140ms ease, background 140ms ease;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form input,
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stTextInputIcon"],
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="select"] [data-baseweb="value-container"],
+      html[data-fraud-shield-theme] .st-key-transaction_form svg {
+        color: var(--st-text-color) !important;
+        -webkit-text-fill-color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form input {
+        background: transparent !important;
+        font-variant-numeric: tabular-nums;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form input:disabled {
+        opacity: 0.55;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stTextInputRootElement"]:focus-within {
+        border-color: var(--fraud-input-focus) !important;
+        box-shadow: 0 0 0 3px var(--fraud-input-glow) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stTextInputRootElement"]:hover,
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="input"]:hover,
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="select"] > div:hover {
+        border-color: var(--fraud-input-hover) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="input"]:focus-within,
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-baseweb="select"] > div:focus-within {
+        border-color: var(--fraud-input-focus) !important;
+        box-shadow: 0 0 0 3px var(--fraud-input-glow) !important;
+      }
       html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputField"] {
         color: var(--st-text-color) !important;
         background: transparent !important;
@@ -660,12 +765,12 @@ export default function (component) {
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-hero_panel {
         background: linear-gradient(135deg, #ffffff 0%, #faf7ff 62%, #eef6ff 100%) !important;
-        border-color: #c7d2fe !important;
+        border-color: rgba(99, 102, 241, 0.3) !important;
         box-shadow: 0 20px 48px rgba(43, 38, 98, 0.11) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-result_panel {
         background: linear-gradient(155deg, #ffffff 0%, #f8faff 100%) !important;
-        border-color: #cbd5e1 !important;
+        border-color: rgba(99, 102, 241, 0.3) !important;
         box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
@@ -675,22 +780,22 @@ export default function (component) {
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_chart_panel,
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_signal_panel {
         background: #ffffff !important;
-        border-color: #cbd5e1 !important;
+        border-color: rgba(99, 102, 241, 0.3) !important;
         box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
         background: #ffffff !important;
-        border-color: #cbd5e1 !important;
-        border-top: 3px solid #7c3aed !important;
+        border-color: rgba(99, 102, 241, 0.3) !important;
+        border-top: 3px solid #6366f1 !important;
         box-shadow: 0 10px 26px rgba(30, 41, 59, 0.08) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stMetricDelta"] {
         color: #526078 !important;
         background: #eef2ff !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stForm"] {
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-transaction_form {
         background: #ffffff !important;
-        border-color: #cbd5e1 !important;
+        border-color: rgba(99, 102, 241, 0.3) !important;
         box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"] {
@@ -790,7 +895,7 @@ export default function (component) {
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-hero_panel {
         background: linear-gradient(135deg, rgba(22, 13, 49, 0.96), rgba(10, 7, 28, 0.98)) !important;
-        border-color: #58378a !important;
+        border-color: rgba(99, 102, 241, 0.48) !important;
         box-shadow: 0 22px 54px rgba(3, 2, 13, 0.48), inset 0 1px 0 rgba(192, 132, 252, 0.09) !important;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-result_panel,
@@ -801,18 +906,18 @@ export default function (component) {
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_chart_panel,
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_signal_panel {
         background: linear-gradient(150deg, rgba(22, 13, 49, 0.95), rgba(12, 8, 30, 0.98)) !important;
-        border-color: #4b2e78 !important;
+        border-color: rgba(99, 102, 241, 0.48) !important;
         box-shadow: 0 16px 40px rgba(3, 2, 13, 0.4) !important;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
         background: linear-gradient(150deg, #160d31, #0d091f) !important;
-        border-color: #493073 !important;
-        border-top: 3px solid #8b5cf6 !important;
+        border-color: rgba(99, 102, 241, 0.48) !important;
+        border-top: 3px solid #6366f1 !important;
         box-shadow: 0 12px 30px rgba(3, 2, 13, 0.38) !important;
       }
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stForm"] {
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-transaction_form {
         background: linear-gradient(155deg, #130b2b, #0d081f) !important;
-        border-color: #4b2e78 !important;
+        border-color: rgba(99, 102, 241, 0.48) !important;
         box-shadow: 0 18px 44px rgba(3, 2, 13, 0.42) !important;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"][aria-checked="true"] {
@@ -820,6 +925,22 @@ export default function (component) {
         background: linear-gradient(110deg, #6d28d9, #7c3aed) !important;
         border-color: #a78bfa !important;
         box-shadow: 0 7px 18px rgba(124, 58, 237, 0.3) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_type_input [role="radiogroup"] > button:nth-of-type(1)[aria-checked="true"] {
+        color: #ffffff !important;
+        background: linear-gradient(110deg, #1d4ed8, #2563eb) !important;
+        border-color: #60a5fa !important;
+        box-shadow: 0 7px 18px rgba(37, 99, 235, 0.28) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_type_input [role="radiogroup"] > button:nth-of-type(2)[aria-checked="true"] {
+        color: #ffffff !important;
+        background: linear-gradient(110deg, #b45309, #d97706) !important;
+        border-color: #f59e0b !important;
+        box-shadow: 0 6px 16px rgba(217, 119, 6, 0.2) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_type_input [role="radiogroup"] > button[aria-checked="true"] * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"] {
         border-color: #493073 !important;
@@ -832,6 +953,63 @@ export default function (component) {
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"]:focus-within {
         border-color: #a78bfa !important;
         box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18), 0 7px 18px rgba(3, 2, 13, 0.28) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-analyze_transaction button:not(:disabled) {
+        color: #ffffff !important;
+        background: #047857 !important;
+        border-color: #059669 !important;
+        box-shadow: 0 4px 14px rgba(4, 120, 87, 0.18) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-analyze_transaction button:not(:disabled):hover {
+        background: #065f46 !important;
+        border-color: #34d399 !important;
+      }
+      html[data-fraud-shield-theme] .st-key-analyze_transaction button:focus-visible {
+        outline: 2px solid #34d399 !important;
+        outline-offset: 3px;
+      }
+      @property --fraud-threshold-fill {
+        syntax: "<percentage>";
+        inherits: true;
+        initial-value: 50%;
+      }
+      html[data-fraud-shield-theme="light"] .st-key-decision_threshold_percent[data-threshold-mode="detection"] {
+        --fraud-threshold-color: #2563eb;
+      }
+      html[data-fraud-shield-theme="light"] .st-key-decision_threshold_percent[data-threshold-mode="balanced"] {
+        --fraud-threshold-color: #16a34a;
+      }
+      html[data-fraud-shield-theme="light"] .st-key-decision_threshold_percent[data-threshold-mode="precision"] {
+        --fraud-threshold-color: #d97706;
+      }
+      html[data-fraud-shield-theme="dark"] .st-key-decision_threshold_percent[data-threshold-mode="detection"] {
+        --fraud-threshold-color: #38bdf8;
+      }
+      html[data-fraud-shield-theme="dark"] .st-key-decision_threshold_percent[data-threshold-mode="balanced"] {
+        --fraud-threshold-color: #34d399;
+      }
+      html[data-fraud-shield-theme="dark"] .st-key-decision_threshold_percent[data-threshold-mode="precision"] {
+        --fraud-threshold-color: #fb923c;
+      }
+      .st-key-decision_threshold_percent {
+        transition: --fraud-threshold-fill 45ms linear;
+      }
+      .st-key-decision_threshold_percent [data-testid="stSlider"] [role="group"] > div > div:first-child {
+        background: linear-gradient(
+          to right,
+          var(--fraud-threshold-color) 0%,
+          var(--fraud-threshold-color) var(--fraud-threshold-fill),
+          color-mix(in srgb, var(--fraud-threshold-color) 22%, var(--st-border-color)) var(--fraud-threshold-fill),
+          color-mix(in srgb, var(--fraud-threshold-color) 22%, var(--st-border-color)) 100%
+        ) !important;
+      }
+      .st-key-decision_threshold_percent [data-testid="stSlider"] [role="group"] > div > div:nth-child(2) {
+        background: var(--fraud-threshold-color) !important;
+        box-shadow: 0 0 0 4px color-mix(in srgb, var(--fraud-threshold-color) 18%, transparent) !important;
+      }
+      .st-key-decision_threshold_percent [data-testid="stSliderThumbValue"] p {
+        color: var(--fraud-threshold-color) !important;
+        font-weight: 800;
       }
       html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stVegaLiteChart"] svg.marks {
         background-color: transparent !important;
@@ -887,6 +1065,11 @@ export default function (component) {
     root.style.setProperty("--fraud-sidebar-secondary", palette.sidebarSecondary)
     root.style.setProperty("--fraud-sidebar-text", palette.sidebarText)
     root.style.setProperty("--fraud-sidebar-border", palette.sidebarBorder)
+    root.style.setProperty("--fraud-input-background", palette.inputBackground)
+    root.style.setProperty("--fraud-input-border", palette.inputBorder)
+    root.style.setProperty("--fraud-input-hover", palette.inputHover)
+    root.style.setProperty("--fraud-input-focus", palette.inputFocus)
+    root.style.setProperty("--fraud-input-glow", palette.inputGlow)
     root.dataset.fraudShieldTheme = resolvedMode.toLowerCase()
     root.style.colorScheme = resolvedMode.toLowerCase()
 
@@ -933,6 +1116,87 @@ export default function (component) {
     buttons.forEach((button) => {
       button.onclick = null
     })
+  }
+}
+""",
+)
+
+THRESHOLD_SLIDER_ENHANCER = st.components.v2.component(
+    "fraud_shield_threshold_slider_enhancer",
+    html="""
+<span class="threshold-slider-enhancer" aria-hidden="true"></span>
+""",
+    css="""
+:host,
+.threshold-slider-enhancer {
+  display: block;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+""",
+    js="""
+export default function (component) {
+  const { data, parentElement } = component
+  const appDocument = parentElement.ownerDocument
+  let wrapper = null
+  let slider = null
+  let sliderObserver = null
+
+  const syncVisualState = () => {
+    if (!wrapper || !slider) return
+    const rawValue = slider.value || data?.value
+    const value = Number(rawValue)
+    if (!Number.isFinite(value)) return
+
+    const fill = Math.min(100, Math.max(0, ((value - 10) / 80) * 100))
+    wrapper.style.setProperty("--fraud-threshold-fill", `${fill}%`)
+    wrapper.dataset.thresholdMode = value < 40
+      ? "detection"
+      : value <= 60 ? "balanced" : "precision"
+  }
+
+  const detachSlider = () => {
+    sliderObserver?.disconnect()
+    sliderObserver = null
+    slider?.removeEventListener("input", syncVisualState)
+    slider?.removeEventListener("change", syncVisualState)
+  }
+
+  const connectSlider = () => {
+    const nextWrapper = appDocument.querySelector(
+      ".st-key-decision_threshold_percent"
+    )
+    const nextSlider = nextWrapper?.querySelector('input[type="range"]')
+    if (!nextWrapper || !nextSlider) return
+    if (slider === nextSlider) {
+      syncVisualState()
+      return
+    }
+
+    detachSlider()
+    wrapper = nextWrapper
+    slider = nextSlider
+    slider.addEventListener("input", syncVisualState, { passive: true })
+    slider.addEventListener("change", syncVisualState, { passive: true })
+    sliderObserver = new MutationObserver(syncVisualState)
+    sliderObserver.observe(slider, {
+      attributes: true,
+      attributeFilter: ["value"],
+    })
+    syncVisualState()
+  }
+
+  const documentObserver = new MutationObserver(connectSlider)
+  documentObserver.observe(appDocument.body, {
+    childList: true,
+    subtree: true,
+  })
+  connectSlider()
+
+  return () => {
+    documentObserver.disconnect()
+    detachSlider()
   }
 }
 """,
@@ -1026,7 +1290,7 @@ TRANSACTION_PRESETS = {
     "drain": {
         "title": "Cạn tài khoản",
         "eyebrow": "TÍN HIỆU RỦI RO",
-        "description": "Chuyển toàn bộ 1.143.938 đơn vị khỏi tài khoản nguồn.",
+        "description": "Chuyển toàn bộ 1.143.937,73 đơn vị khỏi tài khoản nguồn.",
         "icon": ":material/crisis_alert:",
         "color": "red",
         "transaction": TransactionInput(
@@ -1241,7 +1505,7 @@ def format_money(
 
     prefix = "+" if signed and value > 0 else ""
     unit = " đơn vị" if include_unit else ""
-    return f"{prefix}{value:,.0f}{unit}".replace(",", ".")
+    return f"{prefix}{format_currency(value)}{unit}"
 
 
 def format_integer(value: int) -> str:
@@ -1713,6 +1977,73 @@ def record_analysis(
     st.session_state["analysis_history"] = history[-25:]
 
 
+def sync_time_from_step() -> None:
+    value = st.session_state.get("transaction_step_input")
+    if value is not None:
+        converted = step_to_datetime(value)
+        st.session_state["transaction_date_input"] = converted.date()
+        st.session_state["transaction_time_input"] = converted.time()
+
+
+def sync_step_from_time() -> None:
+    day = st.session_state.get("transaction_date_input")
+    hour = st.session_state.get("transaction_time_input")
+    if day is not None and hour is not None:
+        try:
+            st.session_state["transaction_step_input"] = datetime_to_step(
+                datetime.combine(day, hour)
+            )
+        except ValueError:
+            pass  # The input area displays the error and disables analysis.
+
+
+MONEY_DEFAULTS = {
+    "transaction_amount_input": 250_000.0,
+    "old_balance_origin": 1_000_000.0,
+    "new_balance_origin": 750_000.0,
+    "old_balance_destination": 500_000.0,
+    "new_balance_destination": 750_000.0,
+}
+
+
+def sync_money_text(key: str) -> None:
+    text_key = f"{key}_text"
+    try:
+        raw = st.session_state[text_key]
+        current = st.session_state[key]
+        # Merely displaying a reconstructed X_test value must not round it.
+        value = current if raw == format_currency(current) else parse_currency(raw)
+        st.session_state[key] = value
+        st.session_state[text_key] = format_currency(value)
+    except ValueError:
+        pass  # Keep invalid input visible for correction.
+
+
+def money_input(label: str, key: str, icon: str | None = None) -> float | None:
+    st.session_state.setdefault(key, MONEY_DEFAULTS[key])
+    text_key = f"{key}_text"
+    st.session_state.setdefault(text_key, format_currency(st.session_state[key]))
+    raw = st.text_input(
+        label, key=text_key, icon=icon,
+        help="Dấu chấm phân tách hàng nghìn, dấu phẩy cho phần lẻ. Ví dụ: 1.143.937,73. Đơn vị tiền mô phỏng PaySim.",
+        on_change=sync_money_text, args=(key,),
+        persist_state="session",
+    )
+    try:
+        parsed = parse_currency(raw)
+        current = st.session_state[key]
+        return current if raw == format_currency(current) else parsed
+    except ValueError as error:
+        st.error(str(error))
+        return None
+
+
+def sync_form_display() -> None:
+    sync_time_from_step()
+    for key in MONEY_DEFAULTS:
+        st.session_state[f"{key}_text"] = format_currency(st.session_state[key])
+
+
 def apply_transaction_preset(preset_key: str) -> None:
     """Populate the form and preview with a descriptive sample scenario."""
 
@@ -1733,6 +2064,9 @@ def apply_transaction_preset(preset_key: str) -> None:
             "active_test_case": None,
         }
     )
+
+
+    sync_form_display()
 
 
 def apply_labeled_test_case(test_case_key: str) -> None:
@@ -1762,6 +2096,9 @@ def apply_labeled_test_case(test_case_key: str) -> None:
     )
 
 
+    sync_form_display()
+
+
 def set_active_view(view_key: str) -> None:
     """Switch the workspace without rendering inactive pages."""
 
@@ -1776,19 +2113,16 @@ def render_sidebar_navigation() -> str:
             "prediction",
             "Phân tích giao dịch",
             ":material/shield:",
-            "Nhập giao dịch và xem xác suất gian lận.",
         ),
         (
             "results",
             "Hiệu năng mô hình",
             ":material/monitoring:",
-            "Theo dõi metric và kết quả đánh giá.",
         ),
         (
             "history",
             "Lịch sử phân tích",
             ":material/history:",
-            "Rà soát các giao dịch đã phân tích trong phiên.",
         ),
     )
 
@@ -1806,13 +2140,12 @@ def render_sidebar_navigation() -> str:
         st.caption("KHÔNG GIAN LÀM VIỆC")
 
         active_view = st.session_state["active_view"]
-        for view_key, label, icon, help_text in navigation_items:
+        for view_key, label, icon in navigation_items:
             st.button(
                 label,
                 icon=icon,
                 key=f"nav_{view_key}",
                 type="primary" if active_view == view_key else "secondary",
-                help=help_text,
                 width="stretch",
                 on_click=set_active_view,
                 args=(view_key,),
@@ -1876,7 +2209,6 @@ def render_sidebar_navigation() -> str:
         with st.popover(
             "Giao diện",
             icon=":material/contrast:",
-            help="Chọn System, Sáng hoặc Tối.",
             type="secondary",
             width="stretch",
             key="theme_mode_menu",
@@ -1918,10 +2250,16 @@ def render_threshold_control() -> None:
         "Ngưỡng xác suất",
         min_value=10,
         max_value=90,
-        step=5,
+        step=1,
         format="%d%%",
         key="decision_threshold_percent",
         help="Giao dịch có xác suất bằng hoặc cao hơn ngưỡng sẽ được gắn cờ.",
+    )
+    THRESHOLD_SLIDER_ENHANCER(
+        key="fraud-shield-threshold-slider-enhancer",
+        data={"value": threshold},
+        width="content",
+        height=0,
     )
     st.caption(
         "Hạ ngưỡng để tăng độ nhạy; nâng ngưỡng để giảm số cảnh báo nhầm."
@@ -2097,7 +2435,7 @@ def render_header(summary: DatasetSummary | None) -> None:
 def render_transaction_form() -> None:
     """Render transaction inputs, signal visuals and real model inference."""
 
-    form_column, preview_column = st.columns([1.55, 1], gap="large")
+    form_column, preview_column = st.columns([1.48, 1.07], gap="large")
 
     with form_column:
         st.subheader("Nhập thông tin giao dịch")
@@ -2140,7 +2478,7 @@ def render_transaction_form() -> None:
             except (FileNotFoundError, KeyError, OSError, ValueError):
                 st.badge("Không đọc được mẫu X_test", color="red")
 
-        with st.form("transaction_form", border=True):
+        with st.container(key="transaction_form", border=True, gap="medium"):
             st.badge(
                 "01 • Giao dịch",
                 icon=":material/receipt_long:",
@@ -2161,111 +2499,68 @@ def render_transaction_form() -> None:
                 key="transaction_type_input",
             )
 
-            timing_column, amount_column = st.columns([1, 1.4])
-            with timing_column:
-                step = st.number_input(
-                    "Thời điểm (step)",
-                    min_value=1,
-                    max_value=744,
-                    value=(
-                        None
-                        if "transaction_step_input" in st.session_state
-                        else 120
-                    ),
-                    step=1,
-                    help="Số giờ tính từ đầu mô phỏng PaySim.",
-                    icon=":material/schedule:",
-                    key="transaction_step_input",
+            st.session_state.setdefault("transaction_step_input", 120)
+            if "transaction_date_input" not in st.session_state:
+                sync_time_from_step()
+            st.markdown("**Thời điểm giao dịch**")
+            date_column, hour_column = st.columns(2, gap="medium")
+            with date_column:
+                selected_date = st.date_input(
+                    "Ngày", value=None, format="DD/MM/YYYY",
+                    min_value=step_to_datetime(MIN_STEP).date(),
+                    max_value=step_to_datetime(MAX_STEP).date(),
+                    key="transaction_date_input",
+                    on_change=sync_step_from_time,
+                    persist_state="session",
                 )
-            with amount_column:
-                amount = st.number_input(
-                    "Số tiền giao dịch",
-                    min_value=0.0,
-                    value=(
-                        None
-                        if "transaction_amount_input" in st.session_state
-                        else 250_000.0
-                    ),
-                    step=10_000.0,
-                    format="%.0f",
-                    icon=":material/payments:",
-                    key="transaction_amount_input",
+            with hour_column:
+                selected_time = st.time_input(
+                    "Giờ", value=None, step=3600,
+                    key="transaction_time_input",
+                    on_change=sync_step_from_time,
+                    persist_state="session",
                 )
+            time_error = None
+            try:
+                if selected_date is None or selected_time is None:
+                    raise ValueError("Chọn đủ ngày và giờ giao dịch.")
+                step = datetime_to_step(datetime.combine(selected_date, selected_time))
+            except ValueError as error:
+                time_error = str(error)
+                st.error(time_error)
+            amount = money_input(
+                "Số tiền giao dịch", "transaction_amount_input", ":material/payments:"
+            )
 
             st.badge(
                 "02 • Tài khoản nguồn",
-                icon=":material/account_balance_wallet:",
-                color="gray",
+                icon=":material/account_balance_wallet:", color="gray",
             )
-            source_before, source_after = st.columns(2)
+            source_before, source_after = st.columns(2, gap="medium")
             with source_before:
-                old_balance_origin = st.number_input(
-                    "Số dư trước giao dịch",
-                    min_value=0.0,
-                    value=(
-                        None
-                        if "old_balance_origin" in st.session_state
-                        else 1_000_000.0
-                    ),
-                    step=10_000.0,
-                    format="%.0f",
-                    key="old_balance_origin",
-                )
+                old_balance_origin = money_input("Số dư trước giao dịch", "old_balance_origin")
             with source_after:
-                new_balance_origin = st.number_input(
-                    "Số dư sau giao dịch",
-                    min_value=0.0,
-                    value=(
-                        None
-                        if "new_balance_origin" in st.session_state
-                        else 750_000.0
-                    ),
-                    step=10_000.0,
-                    format="%.0f",
-                    key="new_balance_origin",
-                )
+                new_balance_origin = money_input("Số dư sau giao dịch", "new_balance_origin")
 
             st.badge(
                 "03 • Tài khoản đích",
-                icon=":material/account_balance:",
-                color="gray",
+                icon=":material/account_balance:", color="gray",
             )
-            destination_before, destination_after = st.columns(2)
+            destination_before, destination_after = st.columns(2, gap="medium")
             with destination_before:
-                old_balance_destination = st.number_input(
-                    "Số dư trước khi nhận",
-                    min_value=0.0,
-                    value=(
-                        None
-                        if "old_balance_destination" in st.session_state
-                        else 500_000.0
-                    ),
-                    step=10_000.0,
-                    format="%.0f",
-                    key="old_balance_destination",
-                )
+                old_balance_destination = money_input("Số dư trước khi nhận", "old_balance_destination")
             with destination_after:
-                new_balance_destination = st.number_input(
-                    "Số dư sau khi nhận",
-                    min_value=0.0,
-                    value=(
-                        None
-                        if "new_balance_destination" in st.session_state
-                        else 750_000.0
-                    ),
-                    step=10_000.0,
-                    format="%.0f",
-                    key="new_balance_destination",
-                )
+                new_balance_destination = money_input("Số dư sau khi nhận", "new_balance_destination")
 
-            submitted = st.form_submit_button(
-                "Phân tích giao dịch",
-                type="primary",
-                icon=":material/shield:",
-                width="stretch",
+            submitted = st.button(
+                "Phân tích giao dịch", key="analyze_transaction",
+                type="primary", icon=":material/shield:", width="stretch",
+                disabled=time_error is not None or any(value is None for value in (
+                    amount, old_balance_origin, new_balance_origin,
+                    old_balance_destination, new_balance_destination,
+                )),
                 help="Kiểm tra dữ liệu, tạo 14 đặc trưng và chạy XGBoost-SMOTE.",
             )
-
         if submitted:
             transaction = TransactionInput(
                 transaction_type=transaction_type or "TRANSFER",
@@ -2303,7 +2598,7 @@ def render_transaction_form() -> None:
     with preview_column:
         st.subheader("Kết quả phân tích")
 
-        with st.container(key="result_panel", border=True):
+        with st.container(key="result_panel", border=True, gap="medium"):
             raw_transaction = st.session_state["last_transaction"]
             if raw_transaction is None:
                 st.badge(
@@ -2355,7 +2650,10 @@ def render_transaction_form() -> None:
                 st.markdown(
                     f"#### {TRANSACTION_LABELS[transaction.transaction_type]}"
                 )
-                st.caption(f"Thời điểm mô phỏng: step {transaction.step}")
+                st.caption(
+                    f"{step_to_datetime(transaction.step):%d/%m/%Y %H:%M} "
+                    "· thời gian mô phỏng"
+                )
 
                 source_change = (
                     transaction.new_balance_origin
@@ -2454,23 +2752,22 @@ def render_transaction_form() -> None:
                     st.dataframe(
                         [
                             {"Trường": "type", "Giá trị": transaction.transaction_type},
-                            {"Trường": "step", "Giá trị": str(transaction.step)},
-                            {"Trường": "amount", "Giá trị": f"{transaction.amount:.0f}"},
+                            {"Trường": "amount", "Giá trị": str(transaction.amount)},
                             {
                                 "Trường": "oldbalanceOrg",
-                                "Giá trị": f"{transaction.old_balance_origin:.0f}",
+                                "Giá trị": str(transaction.old_balance_origin),
                             },
                             {
                                 "Trường": "newbalanceOrig",
-                                "Giá trị": f"{transaction.new_balance_origin:.0f}",
+                                "Giá trị": str(transaction.new_balance_origin),
                             },
                             {
                                 "Trường": "oldbalanceDest",
-                                "Giá trị": f"{transaction.old_balance_destination:.0f}",
+                                "Giá trị": str(transaction.old_balance_destination),
                             },
                             {
                                 "Trường": "newbalanceDest",
-                                "Giá trị": f"{transaction.new_balance_destination:.0f}",
+                                "Giá trị": str(transaction.new_balance_destination),
                             },
                         ],
                         hide_index=True,
@@ -2919,6 +3216,9 @@ def render_analysis_history() -> None:
         return
 
     display_frame = filtered_frame.iloc[::-1].copy()
+    display_frame["Ngày giờ minh họa"] = display_frame["step"].map(
+        lambda value: step_to_datetime(int(value)).strftime("%d/%m/%Y %H:%M")
+    )
     display_frame["Loại giao dịch"] = display_frame["transaction_type"].map(
         TRANSACTION_LABELS
     )
@@ -2928,7 +3228,6 @@ def render_analysis_history() -> None:
     display_frame = display_frame.rename(
         columns={
             "sequence": "Lần",
-            "step": "Step",
             "amount": "Số tiền",
             "fraud_probability": "Xác suất",
             "threshold": "Ngưỡng",
@@ -2938,7 +3237,7 @@ def render_analysis_history() -> None:
         [
             "Lần",
             "Loại giao dịch",
-            "Step",
+            "Ngày giờ minh họa",
             "Số tiền",
             "Xác suất",
             "Ngưỡng",
@@ -2947,11 +3246,10 @@ def render_analysis_history() -> None:
         ]
     ]
     st.dataframe(
-        display_frame,
+        display_frame.style.format({"Số tiền": format_currency}),
         hide_index=True,
         width="stretch",
         column_config={
-            "Số tiền": st.column_config.NumberColumn(format="%.0f"),
             "Xác suất": st.column_config.ProgressColumn(
                 format="percent",
                 min_value=0,
