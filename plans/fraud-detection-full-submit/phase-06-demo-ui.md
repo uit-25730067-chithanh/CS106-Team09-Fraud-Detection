@@ -23,8 +23,8 @@ Xây dựng giao diện Streamlit để nhập một giao dịch PaySim, trực 
 | Theme switcher | ✅ Hoàn thành | Browser QA đã xác nhận System/Sáng/Tối, mặc định Tối và chuyển theme không reload trang |
 | Model inference | ✅ Hoàn thành checkpoint | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
 | Mẫu kiểm thử có nhãn | ✅ Hoàn thành | Nạp mẫu từ X_test, đối chiếu nhãn thật với dự đoán và thể hiện đúng/sai |
-| Model results/figures | ✅ Hoàn thành | Đã kết nối và hiển thị `reports/model_comparison.csv` cùng 5 figures của Phase 05 qua `evaluation_artifacts.py` |
-| Demo evidence | 🟡 Đang hoàn thiện | Đã chuẩn hóa kịch bản `demo/DEMO-SCRIPT.md`; chờ chụp 5 screenshots và quay video demo clip 2–3 phút |
+| Model results/figures | ✅ Hoàn thành | Đã render comparison CSV + 9 biểu đồ độc lập; có chuyển SMOTENC/ADASYN, Feature Importance và so sánh TP/FP/FN |
+| Demo evidence | 🟡 Đang hoàn thiện | Đã chuẩn hóa `demo/DEMO-SCRIPT.md` và Browser QA bố cục mới đạt; còn lưu 5 screenshots và quay clip 2–3 phút |
 
 ## Deliverables
 
@@ -49,7 +49,9 @@ draft/fraud-detection/
 - Đã trả xác suất và nhãn phân loại theo ngưỡng do người dùng chọn.
 - Đã khóa fail-closed khi thiếu artifact hoặc sai schema; không tạo kết quả giả.
 - XGBoost-SMOTE là model triển khai hiện tại, chờ kết luận chính thức từ Phase 05.
-- Màn hình Hiệu năng tự đọc `model_comparison.csv` và 5 figures đúng contract Phase 05.
+- Màn hình Hiệu năng tự đọc `model_comparison.csv` và 9 biểu đồ độc lập đúng contract Phase 05/báo cáo.
+- Ma trận Random Forest/XGBoost chuyển được giữa `SMOTENC • Chính thức` và `ADASYN • Đối chứng`; Autoencoder hiển thị riêng.
+- Đã bổ sung `feature_importance_comparison.png` và `confusion_matrix_components.png`.
 - CSV sai schema, thiếu mô hình hoặc metric ngoài `[0, 1]` bị chặn fail-closed.
 - UI giữ placeholder trung thực khi Phase 05 chưa bàn giao artifacts.
 - Kịch bản quay demo 2–3 phút và quy ước tên evidence đã được chuẩn hóa.
@@ -59,13 +61,13 @@ draft/fraud-detection/
 | Kiểm tra | Kết quả | Giới hạn xác nhận |
 |----------|---------|-------------------|
 | Python compile và dependencies | `py_compile` đạt; `pip check` không có dependency hỏng | Môi trường local Python 3.14 |
-| Demo test suite | `13 passed` | Inference, artifact contract và regression cho 3 màn hình |
-| Toàn bộ test hiện có | `21 passed` | Chạy từ `draft/fraud-detection` trên Python 3.14 |
-| Streamlit AppTest | `0 exceptions` | Phân tích giao dịch, Hiệu năng mô hình và Lịch sử phân tích |
-| Phase 05 adapter | PASS với fixture | Nhận schema title-case/snake_case, sort F1, validate 3 models × 5 metrics và dò 5 PNG |
+| Demo test suite | `45 passed` | Inference, artifact contract, chuyển SMOTENC/ADASYN, lịch sử SQLite và regression cho 3 màn hình |
+| Toàn bộ test hiện có | `87 passed` | Chạy từ repository trên Python 3.14 ngày 09/09/2026 |
+| Streamlit AppTest | `0 exceptions` | Hiển thị 7 hình trong một chế độ (9 artifact tổng), chuyển ADASYN và giữ Autoencoder |
+| Phase 05 adapter | PASS với artifact thật | Validate 5 biến thể × 5 metrics và dò đủ 9 PNG độc lập |
 | Xác suất preset | `0,00%`; `0,70%`; `16,67%`; `100,00%` | Kết quả local từ XGBoost-SMOTE, làm tròn 2 chữ số trên UI |
 | Browser QA | PASS System/Sáng/Tối ngày 05/09/2026 | Kiểm tra trực quan và thao tác bằng Playwright; 0 browser errors, mặc định Tối, chuyển theme không reload trang |
-| Runtime | Health endpoint trả `ok` tại `localhost:8501` ngày 05/09/2026 | Local runtime tại thời điểm kiểm tra |
+| Runtime | Health endpoint trả `ok` tại `localhost:8501` ngày 09/09/2026 | Browser QA bố cục Hiệu năng và Lịch sử mới đạt trên giao diện Sáng/Tối; 0 console errors |
 
 ## Acceptance Criteria
 
@@ -73,12 +75,12 @@ draft/fraud-detection/
 - [x] Form và safe-preview hoạt động với dữ liệu đầu vào.
 - [x] Không tạo kết quả mô hình giả.
 - [x] Có ba chế độ System/Sáng/Tối và không hiện menu native góc phải.
-- [x] Click và pixel QA System/Sáng/Tối trên trình duyệt.
+- [x] Click và pixel QA bố cục mới trên System/Sáng/Tối.
 - [x] Model thật trả nhãn và probability.
-- [x] UI có adapter fail-closed để nhận comparison CSV và 5 figures Phase 05.
+- [x] UI có adapter fail-closed để nhận comparison CSV và 9 figures Phase 05/báo cáo.
 - [x] Browser QA System/Sáng/Tối, theme mặc định Tối và chuyển theme không reload.
-- [x] Comparison table và model figures hiển thị đúng (kết nối trực tiếp Phase 05 artifacts).
-- [ ] Screenshot hiện tại và demo clip được lưu trong thư mục demo (Missed item - Sprint 4 kickoff).
+- [x] Comparison table và model figures hiển thị đúng qua AppTest, gồm SMOTENC/ADASYN, Feature Importance và TP/FP/FN.
+- [ ] Lưu đủ 5 screenshots và demo clip 2–3 phút trong thư mục `demo/`.
 
 ## Cách chạy
 
@@ -111,4 +113,4 @@ py -3.14 -m streamlit run demo/app.py
 
 ## Kết luận
 
-Phần chức năng của Phase 06 đã hoàn tất 100%: UI, XGBoost inference, mẫu test có nhãn, kết nối artifacts Phase 05, mapping datetime PaySim và định dạng tiền tệ VNĐ (PR #27). Phase vẫn giữ trạng thái `pending` cho đến khi bổ sung đủ 5 screenshots và video clip demo.
+Phần chức năng của Phase 06 đã hoàn tất: UI, XGBoost inference, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison/9 figures, lịch sử SQLite và Browser QA bố cục mới. Phase vẫn giữ trạng thái `pending` cho đến khi bổ sung đủ 5 screenshots và video clip demo.
