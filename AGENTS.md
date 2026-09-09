@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-09-06)
+## Current State (2026-09-09)
 
 | Component | Status |
 |-----------|--------|
@@ -57,12 +57,12 @@ Final/
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | ✅ Phase 05 `passed` (06/09) — 4/4 scripts của Khang xong (metrics_calculator.py, plot_roc_curve.py [PR #7], confusion_matrix_plot.py, model_comparator.py, TDD); `notebooks/06_evaluation_comparison.ipynb` chạy Restart&Run All sạch; `reports/model_comparison.csv` + 7 figures (roc/pr/5×confusion matrix) đã xuất, khớp 100% `ch5_metrics_recomputed.csv`. Duy đã thêm plot_confusion_components.py + plot_feature_importance.py phục vụ báo cáo |
-| Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng, có probability/nhãn và mẫu test có nhãn; Browser QA System/Sáng/Tối ✅; Phase 05 output đã sẵn sàng để tích hợp; còn screenshots và demo clip |
+| Demo UI | 🟡 Phase 06 `pending` — đã tích hợp XGBoost-SMOTE + scaler theo contract 14 đặc trưng, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN, Feature Importance và TP/FP/FN; lịch sử SQLite; Browser QA bố cục mới đạt; `45` demo tests pass; còn screenshots và demo clip |
 | Báo cáo & Slide | 🟡 Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang, sinh tự động từ source, visual QA pass); Phase 05 đã xuất xong `model_comparison.csv` + ROC/PR figures chính thức để đối chiếu lần cuối. Slide: bộ học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người, đang xem xét làm bản chính thức |
 | Notebooks | ✅ 6/6 — Sơn đã bổ sung `02_imbalance_handling.ipynb` và `03_model_random_forest.ipynb`; Khang đã hoàn thành `06_evaluation_comparison.ipynb` |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict (06/09): Phase 00–05 PASSED (6/9 = 66.7%). Phase 06–08 vẫn `pending`. Trung có thể tích hợp figures/model_comparison.csv chính thức của Phase 05 vào demo UI; Duy có thể đối chiếu lần cuối Chương 5–6 với `reports/model_comparison.csv`; Hôn tiếp tục duyệt slide và chuẩn bị đóng gói sau khi Phase 06–07 hoàn tất.**
+> **Verdict (09/09): Phase 00–05 PASSED (6/9 = 66.7%). Phase 06–08 vẫn `pending`. Trung đã tích hợp figures/model_comparison.csv chính thức, lịch sử SQLite và hoàn tất Browser QA bố cục mới; còn screenshots/clip demo. Duy có thể đối chiếu lần cuối Chương 5–6 với `reports/model_comparison.csv`; Hôn tiếp tục duyệt slide và chuẩn bị đóng gói sau khi Phase 06–07 hoàn tất.**
 
 ---
 
@@ -262,7 +262,9 @@ Place in `Final/submit/` before zipping.
 1. ✅ Đã kết nối `models/xgb_smote.json` + `models/scaler.pkl` vào UI với contract 14 đặc trưng
 2. ✅ Đã hiển thị xác suất, ngưỡng tương tác và nhãn thật; kiểm thử form + 4 preset + ngưỡng không có exception
 3. ✅ Đã Browser QA System/Sáng/Tối, xác nhận theme mặc định là Tối và chuyển theme không reload trang
-4. ⏳ Nhận figures/kết luận model chính thức từ Phase 05, chụp screenshot và quay demo clip
+4. ✅ Đã tích hợp comparison + 9 figures, gồm chuyển SMOTENC/ADASYN, Feature Importance và so sánh TP/FP/FN
+5. ✅ Đã Browser QA bố cục mới trên giao diện Sáng/Tối và xác nhận không còn nhãn tiến độ nội bộ
+6. ⏳ Chụp screenshot và quay demo clip
 
 ### Duy — Báo cáo Word
 1. ✅ Đã viết xong toàn bộ Chương 1–7 trên branch `docs/vu-van-duy-sprint3-methodology`

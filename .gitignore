@@ -36,5 +36,8 @@ models/*.joblib
 *.swp
 .env
 
+# Local Streamlit demo state
+**/demo/.data/
+
 # Office temp lock files
 ~$*
