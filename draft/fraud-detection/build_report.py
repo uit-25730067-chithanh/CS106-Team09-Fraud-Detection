@@ -32,6 +32,7 @@ SOURCE_MD = os.path.join(REPORTS_DIR, "report-source.md")
 TEMPLATE = os.path.join(REPORTS_DIR, "_report_template.docx")
 TOC_PAGES = os.path.join(REPORTS_DIR, "_toc_pages.json")
 OUTPUT = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.docx")
+FINAL_OUTPUT = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection.docx")
 
 
 def build(blocks: list[dict], pages: dict[str, int]):
@@ -55,6 +56,7 @@ def main() -> None:
 
     document = build(blocks, pages)
     document.save(OUTPUT)
+    document.save(FINAL_OUTPUT)
 
     counts = {
         "paragraphs": len(document.paragraphs),
@@ -62,7 +64,15 @@ def main() -> None:
         "toc entries": len(collect_toc_entries(blocks)),
     }
     print("Saved -> reports/" + os.path.basename(OUTPUT))
+    print("Saved -> reports/" + os.path.basename(FINAL_OUTPUT))
     print("  " + " | ".join(f"{key}: {value}" for key, value in counts.items()))
+
+    sprint3_pdf = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.pdf")
+    final_pdf = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection.pdf")
+    if os.path.exists(sprint3_pdf):
+        import shutil
+        shutil.copy2(sprint3_pdf, final_pdf)
+        print("Synced -> reports/" + os.path.basename(final_pdf))
 
 
 if __name__ == "__main__":
