@@ -43,8 +43,8 @@ def test_compare_models_renames_columns_for_readability() -> None:
         "Precision Fraud",
         "Recall Fraud",
         "F1 Fraud",
-        "Roc Auc",
-        "Pr Auc",
+        "ROC-AUC",
+        "PR-AUC",
     ]
 
 

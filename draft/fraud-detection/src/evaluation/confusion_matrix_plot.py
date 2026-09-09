@@ -21,6 +21,16 @@ def _slug(model_name: str) -> str:
     return model_name.lower().replace(" ", "_")
 
 
+def _create_figure(show: bool) -> tuple[Figure, Any]:
+    if show:
+        import matplotlib.pyplot as plt
+
+        return plt.subplots(figsize=(6, 5))
+
+    figure = Figure(figsize=(6, 5))
+    return figure, figure.subplots()
+
+
 def plot_confusion_matrix(
     y_true: Any,
     y_pred: Any,
@@ -35,8 +45,7 @@ def plot_confusion_matrix(
 
     cm = confusion_matrix(y_true, y_pred, labels=[0, 1])
 
-    figure = Figure(figsize=(6, 5))
-    axis = figure.subplots()
+    figure, axis = _create_figure(show)
     image = axis.imshow(cm, cmap="Blues")
     figure.colorbar(image, ax=axis)
 
@@ -66,10 +75,10 @@ def plot_confusion_matrix(
         output_path.parent.mkdir(parents=True, exist_ok=True)
         figure.savefig(output_path, dpi=150, bbox_inches="tight")
 
-    if show:
-        import matplotlib.pyplot as plt
+    import matplotlib.pyplot as plt
 
+    if show:
         plt.show()
-        plt.close(figure)
+    plt.close(figure)
 
     return figure

@@ -42,3 +42,36 @@ def test_plot_confusion_matrix_rejects_mismatched_lengths() -> None:
 
     with pytest.raises(ValueError, match="same number of samples"):
         plot_confusion_matrix([0, 1], [0], model_name="RF", show=False)
+
+
+def test_plot_confusion_matrix_show_true_uses_a_pyplot_managed_figure(tmp_path: Path) -> None:
+    """show=True must go through pyplot so plt.show() actually renders something."""
+    import matplotlib.pyplot as plt
+
+    plt.close("all")
+
+    figure = plot_confusion_matrix(
+        Y_TRUE,
+        Y_PRED,
+        model_name="RF",
+        output_dir=tmp_path,
+        show=True,
+    )
+
+    assert hasattr(figure, "number")
+
+
+def test_plot_confusion_matrix_does_not_leak_pyplot_figures(tmp_path: Path) -> None:
+    import matplotlib.pyplot as plt
+
+    plt.close("all")
+
+    plot_confusion_matrix(
+        Y_TRUE,
+        Y_PRED,
+        model_name="RF",
+        output_dir=tmp_path,
+        show=True,
+    )
+
+    assert plt.get_fignums() == []

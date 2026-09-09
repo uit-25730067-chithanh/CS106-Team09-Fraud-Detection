@@ -257,6 +257,7 @@ Place in `Final/submit/` before zipping.
 3. ✅ `notebooks/06_evaluation_comparison.ipynb` — load predictions có sẵn (không train lại), chạy Restart & Run All sạch (`jupyter nbconvert --execute`, 0 lỗi).
 4. ✅ Đánh giá đủ 5 biến thể: RF-SMOTENC (F1=0.9973, best model), RF-ADASYN, XGB-SMOTENC, XGB-ADASYN, Autoencoder (Recall=0.7523, Precision=0.3822).
 5. ✅ Output: `reports/model_comparison.csv` + 7 figures (`roc_curves_all.png`, `pr_curves_all.png`, 5× `confusion_matrix_*.png`) — số liệu khớp 100% với `reports/ch5_metrics_recomputed.csv` (Duy).
+6. ✅ Post-review fixes: alias `confusion_matrix_rf.png`/`confusion_matrix_xgb.png` (khớp contract cố định của `demo/evaluation_artifacts.py` — Trung); notebook hiện `image/png` inline (`%matplotlib inline` + `display(fig)`); `confusion_matrix_plot.py` mirror đúng pattern pyplot của `plot_roc_curve.py` (sửa `show=True` không hoạt động + đóng figure đúng cách); cột CSV đổi thành `ROC-AUC`/`PR-AUC`. Chi tiết: xem phase-05 doc.
 
 ### 🔄 Trung — Phase 06 (Demo UI) — IN PROGRESS
 1. ✅ Đã kết nối `models/xgb_smote.json` + `models/scaler.pkl` vào UI với contract 14 đặc trưng
