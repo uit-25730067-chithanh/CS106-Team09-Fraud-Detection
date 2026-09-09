@@ -1,7 +1,7 @@
 # Phase 07 — Báo cáo Word + PPT
 
 **Parent plan:** [plan.md](./plan.md)  
-**Depends on:** [Phase 05](./phase-05-evaluation-comparison.md) — `pending` *(chỉ phần Results & Discussion + điền số cuối vào PPT — Sprint 4)*
+**Depends on:** [Phase 05](./phase-05-evaluation-comparison.md) — `passed` ✅ *(Số liệu `model_comparison.csv` và biểu đồ đã bàn giao đầy đủ)*
 **Early Start:** ~70% Word + PPT skeleton có thể viết từ **Sprint 2** — không cần kết quả  
 **Parallel with:** [Phase 06](./phase-06-demo-ui.md)  
 **Next phase:** [Phase 08 — Submit Package](./phase-08-submit-package.md)
@@ -30,9 +30,9 @@
 | Viết Introduction + Problem Statement | Sprint 2 | Không cần code | ✅ Hoàn thành |
 | Viết Dataset Description (Kaggle stats) | Sprint 2 | Dùng đề bài, Kaggle, PaySim paper và evidence Phase 01 | ✅ Hoàn thành |
 | Viết Methodology (thuật toán + preprocessing + imbalance) | Sprint 3 | Dựa trên evidence Phase 01–04 | ✅ Hoàn thành |
-| Viết Results & Discussion (điền số từ Khang) | Sprint 3–4 | Chương 5 (5.1–5.6) và Chương 6 (6.1–6.7) đã viết xong và tái lập được qua `run_report_metrics.py`; còn đối chiếu với ROC/PR figures của Phase 05 và ablation đặc trưng số dư | ✅ Hoàn thành bản nháp |
-| Viết Conclusion + References | Sprint 4 | Draft trước, hoàn thiện sau | 🔲 Chưa bắt đầu |
-| Format Word + Abstract + kiểm tra citation | Sprint 4 | | 🔲 Chưa bắt đầu |
+| Viết Results & Discussion (điền số từ Khang) | Sprint 3–4 | Chương 5 (5.1–5.6) và Chương 6 (6.1–6.7) hoàn thành; khớp 100% `reports/model_comparison.csv` và figures | ✅ Hoàn thành |
+| Viết Conclusion + References | Sprint 4 | Chương 7 hoàn thành (Bảng 7.1 đối chiếu 7 mục tiêu) + [1]–[8] IEEE chuẩn | ✅ Hoàn thành |
+| Format Word + Abstract + xuất bản submit | Sprint 4 | Tự động hóa qua `build_report.py`; xuất `[Nhom9]_BaoCao_FraudDetection.docx` | 🟡 Đang xuất bản cuối |
 
 #### Evidence Early Start — Duy, Sprint 2 (29/08/2026)
 
@@ -122,7 +122,7 @@ xác nhận ổn định ngay từ vòng thứ nhất.
   - `draft/fraud-detection/slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf` (High-res export)
   - `draft/fraud-detection/slide/scripts/SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md` (Kịch bản 7 thành viên)
 - Số lượng slide: **21 slides** hoàn chỉnh chuẩn học thuật UIT (Bìa, Giới thiệu & Thách thức, PaySim EDA, Anti-leakage Pipeline, 14 Features, SMOTENC & ADASYN, Random Forest, XGBoost, Autoencoder, So sánh đa tiêu chí, Ma trận nhầm lẫn & ROC, Live Demo UI, Threats to Validity, Q&A & Đóng góp thành viên).
-- Trạng thái: **Đang xem xét** làm bộ slide và kịch bản thuyết trình chính thức của nhóm; các bản nháp slide 15 trang cũ của Hôn đã được dọn sạch khỏi repo.
+- Trạng thái: **Chính thức phê duyệt** — PM Hôn đã nghiệm thu và phê chuẩn bộ slide 21 trang cùng kịch bản bảo vệ toàn team làm sản phẩm nộp bài và thuyết trình chính thức của Nhóm 9 (PR #29). Các bản nháp 15 trang cũ đã dọn sạch.
 
 ## Context
 

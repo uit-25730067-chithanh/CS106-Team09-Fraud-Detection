@@ -64,20 +64,21 @@ fraud-detection/
 │   ├── 03_model_random_forest.ipynb ✔ Hoàn thành (Random Forest & Tuning)
 │   ├── 04_model_xgboost.ipynb ✔ Hoàn thành (XGBoost SMOTE/ADASYN)
 │   ├── 05_model_autoencoder.ipynb ✔ Hoàn thành (Autoencoder Anomaly Detection)
-│   └── 06_evaluation_comparison.ipynb
+│   └── 06_evaluation_comparison.ipynb ✔ Hoàn thành (Model Comparison & Evaluation)
 ├── src/
 │   ├── preprocessing/     ✔ data_loader, feature_scaler, data_splitter, imbalance_handler
 │   ├── models/            ✔ random_forest_model.py, xgboost_model.py, autoencoder_model.py
-│   ├── evaluation/        ⏳ Metrics và đánh giá (metrics_calculator, plot_roc_curve)
+│   ├── evaluation/        ✔ metrics_calculator, plot_roc_curve, confusion_matrix_plot, model_comparator (4/4 scripts)
 │   └── utils/             ✔ helpers.py, constants, set_seeds()
 ├── reports/               # ✅ Báo cáo Chương 1–7 DOCX/PDF + Predictions (RF, XGB, Autoencoder)
-│   ├── ch5_metrics_recomputed.csv  # Chỉ số Chương 5 tính lại (nháp — Phase 05 sẽ thay bằng model_comparison.csv)
+│   ├── model_comparison.csv        # Bảng so sánh 5 biến thể chính thức (Phase 05 output)
+│   ├── ch5_metrics_recomputed.csv  # Chỉ số Chương 5 tái lập (khớp 100% model_comparison.csv)
 │   ├── ch6_prevalence_projection.csv # Precision quy chiếu về tỷ lệ gian lận gốc (Bảng 6.1)
 │   ├── _report_template.docx       # Khuôn định dạng (styles, header, footer, A4) cho build_report.py
 │   ├── _toc_pages.json             # Số trang mục lục do sync_toc_pages.py sinh ra
-│   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png)
-├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (đang xem xét)
-├── demo/                  # 🟡 Streamlit UI + XGBoost inference (Phase 06 checkpoint)
+│   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png, 7 ROC/PR/Confusion plots)
+├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (PM chính thức phê duyệt)
+├── demo/                  # 🟡 Streamlit UI + XGBoost inference + mapping datetime/VNĐ (chờ screenshots & video clip)
 │   ├── inference.py      # 14-feature contract + XGBoost probability
 │   ├── app.py            # Quick presets + signal/flow/error views + native motion
 │   ├── assets/           # Logo và tài nguyên hình ảnh của demo
@@ -140,7 +141,7 @@ streamlit run demo/app.py
 
 Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contract 14 đặc trưng, trả xác suất/nhãn theo ngưỡng và khóa an toàn nếu model, scaler hoặc schema lỗi.
 
-**Trạng thái:** Model integration, comparison CSV và 9 figures đã tích hợp; có chuyển SMOTENC/ADASYN, Feature Importance, so sánh TP/FP/FN và lịch sử SQLite. Browser QA bố cục mới đạt; `45` demo tests và `85` tests toàn project pass. Phase 06 vẫn `pending`; còn screenshots và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
+**Trạng thái:** Model integration, comparison CSV và 9 figures đã tích hợp; có chuyển SMOTENC/ADASYN, Feature Importance, so sánh TP/FP/FN và lịch sử SQLite. Browser QA bố cục mới đạt; `45` demo tests và `87` tests toàn project pass. Phase 06 vẫn `pending`; còn screenshots và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
 
 ---
 
@@ -151,13 +152,13 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 2. Preprocessing  ✔ Feature Engineering (14 features), chuẩn hóa, train/test split (Thanh)
 3. Imbalance      ✔ SMOTENC & ADASYN trên tập train (Phase 02 — Sơn)
 4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
-5. Evaluation     ⏳ 2/4 scripts done (PR #7); còn confusion_matrix_plot + model_comparator (Khang)
-6. Comparison     ⏳ Chưa chạy chính thức; cần reports/model_comparison.csv + ROC/PR figures (Khang)
-7. Demo UI        ✔ UI + inference + comparison/9 figures + Browser QA; → Chờ screenshots/clip (Trung)
-8. Report         ✔ Báo cáo Word/PDF Tóm tắt + Chương 1–7 đầy đủ, 32 trang (Duy) + Bộ Slide học thuật 21 trang & Kịch bản toàn team (đang xem xét)
+5. Evaluation     ✔ 4/4 scripts done (PR #7, #26, #28); 74 tests pass (Khang)
+6. Comparison     ✔ Bảng reports/model_comparison.csv + 7 figures ROC/PR/Confusion Matrix (Khang)
+7. Demo UI        ✔ UI + inference + mapping datetime/VNĐ + comparison/9 figures + SQLite + Browser QA; → Chờ screenshots/clip (Trung)
+8. Report         ✔ Báo cáo Word/PDF Tóm tắt + Chương 1–7 đầy đủ, 32 trang (Duy) + Bộ Slide 21 trang đã duyệt chính thức (Hôn)
 ```
 
-> ⚠️ **PM Audit (04/09):** Đã có 5/6 notebooks (Sơn đã bổ sung 02, 03 qua PR #20); hiện chỉ còn thiếu notebook `06_evaluation_comparison` (Khang) cho submit package.
+> ⚠️ **PM Audit (09/09):** Đầy đủ 6/6 notebooks hoàn thành và chạy sạch (01–06); Phase 00–05 đạt 66.7%. Đang hoàn thiện evidence Demo UI và chuẩn bị đóng gói nộp bài cho Sprint 4.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 
