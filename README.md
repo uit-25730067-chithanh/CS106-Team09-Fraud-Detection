@@ -67,10 +67,10 @@ Final/
 | Sprint | Nội dung công việc | Trạng thái | Người phụ trách |
 |--------|-------------------|-----------|------------------|
 | **Sprint 1 (25/8 – 28/8)** | Khởi tạo Repo, phân công & thiết kế khung dự án | ✅ Xong | Thanh + Hôn |
-| **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, XGBoost & Autoencoder ✅ (Cẩm xong sớm), Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT 21 slides học thuật & Kịch bản toàn team (đang xem xét) ✅, Streamlit UI Shell Rev 7.7 ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
-| **Sprint 3 (4/9 – 11/9)** | Notebooks 02, 03 hoàn thành (Sơn ✅); Báo cáo Tóm tắt + Chương 1–7 ✅ (Duy — DOCX/PDF 32 trang); XGBoost inference UI và Browser QA đã hoàn thành, còn figures/demo evidence (Trung); Evaluation scripts 2/4 ✅, còn confusion matrix + comparator + notebook 06 (Khang); PM Audit ✅ (Hôn). | 🔄 Đang triển khai (5/9 phase passed — 55.6%) | Khang + Trung + Duy + Sơn + Hôn |
-| **Sprint 4 (11/9 – 18/9)** | Đánh giá tổng kết, hoàn thiện báo cáo Word/PPT & diễn tập thuyết trình | 🔲 Chưa làm | Cả nhóm |
-| **Nộp bài (18/9)** | Đóng gói zip & Nộp bài chính thức trước deadline | 🔲 Chưa làm | Hôn |
+| **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, XGBoost & Autoencoder ✅, Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT 21 slides học thuật & Kịch bản toàn team ✅, Streamlit UI Shell ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
+| **Sprint 3 (4/9 – 11/9)** | Đầy đủ 6/6 notebooks hoàn thành & chạy sạch; Phase 05 Evaluation hoàn tất (Khang ✅); Báo cáo Tóm tắt + Chương 1–7 (32 trang DOCX/PDF, số liệu khớp 100% Phase 05); Demo UI kết nối model thật + mapping datetime/VNĐ (Trung ✅); Slide 21 trang & Kịch bản 7 người chính thức duyệt (Hôn ✅); PM Audit Sprint 3 Closing (Hôn ✅). | 🔄 Hoàn tất Sprint 3 (6/9 phases passed — 66.7%) | Cả nhóm |
+| **Sprint 4 (11/9 – 18/9)** | Thu thập 5 screenshots & video clip Demo UI; xuất bản báo cáo tên chuẩn; diễn tập thuyết trình 10–12 phút; đóng gói ZIP nộp bài | 🔄 Chuẩn bị kickoff | Cả nhóm |
+| **Nộp bài (18/9)** | Đóng gói zip `[Project AI-UIT] - Nhom 9.zip` & Nộp bài chính thức trước deadline | 🔲 Chờ Sprint 4 | Hôn |
 
 ---
 
