@@ -4,7 +4,7 @@
 
 **Status:** `pending`
 
-**Updated:** 05/09/2026
+**Updated:** 09/09/2026
 
 **Dependencies:** Phase 04 (model artifacts) và Phase 05 (model comparison/figures)
 
@@ -17,14 +17,14 @@ Xây dựng giao diện Streamlit để nhập một giao dịch PaySim, trực 
 | Hạng mục | Trạng thái | Kết quả hiện tại |
 |----------|------------|------------------|
 | Wireframe và nhận diện UI | ✅ Hoàn thành | Signal Universe, custom logo, System/Sáng/Tối, responsive layout |
-| Form giao dịch | ✅ Hoàn thành | Đủ 7 trường PaySim, validation và 4 quick presets |
+| Form giao dịch | ✅ Hoàn thành | Đủ 7 trường PaySim, validation, 4 quick presets, định dạng tiền VNĐ & mapping thời gian (PR #27) |
 | Trực quan dữ liệu đầu vào | ✅ Hoàn thành | Bản đồ tín hiệu, Dòng tiền, Sai lệch số dư và biểu đồ phân bố nhãn thật |
 | Inference fail-closed | ✅ Hoàn thành | Không suy đoán kết quả nếu model/scaler/schema lỗi |
 | Theme switcher | ✅ Hoàn thành | Browser QA đã xác nhận System/Sáng/Tối, mặc định Tối và chuyển theme không reload trang |
 | Model inference | ✅ Hoàn thành checkpoint | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
 | Mẫu kiểm thử có nhãn | ✅ Hoàn thành | Nạp mẫu từ X_test, đối chiếu nhãn thật với dự đoán và thể hiện đúng/sai |
-| Model results/figures | 🟡 Adapter hoàn thành | Đã validate/render CSV + 5 figures; chờ artifacts chính thức từ Phase 05 |
-| Demo evidence | 🟡 Đã có kịch bản | Quy ước 5 screenshots + clip 2–3 phút; chờ artifacts Phase 05 để ghi hình bản cuối |
+| Model results/figures | ✅ Hoàn thành | Đã kết nối và hiển thị `reports/model_comparison.csv` cùng 5 figures của Phase 05 qua `evaluation_artifacts.py` |
+| Demo evidence | 🟡 Đang hoàn thiện | Đã chuẩn hóa kịch bản `demo/DEMO-SCRIPT.md`; chờ chụp 5 screenshots và quay video demo clip 2–3 phút |
 
 ## Deliverables
 
@@ -73,12 +73,12 @@ draft/fraud-detection/
 - [x] Form và safe-preview hoạt động với dữ liệu đầu vào.
 - [x] Không tạo kết quả mô hình giả.
 - [x] Có ba chế độ System/Sáng/Tối và không hiện menu native góc phải.
-- [ ] Click và pixel QA System/Sáng/Tối trên trình duyệt.
+- [x] Click và pixel QA System/Sáng/Tối trên trình duyệt.
 - [x] Model thật trả nhãn và probability.
 - [x] UI có adapter fail-closed để nhận comparison CSV và 5 figures Phase 05.
 - [x] Browser QA System/Sáng/Tối, theme mặc định Tối và chuyển theme không reload.
-- [ ] Comparison table và model figures hiển thị đúng.
-- [ ] Screenshot hiện tại và demo clip được lưu trong thư mục demo.
+- [x] Comparison table và model figures hiển thị đúng (kết nối trực tiếp Phase 05 artifacts).
+- [ ] Screenshot hiện tại và demo clip được lưu trong thư mục demo (Missed item - Sprint 4 kickoff).
 
 ## Cách chạy
 
@@ -91,9 +91,9 @@ py -3.14 -m streamlit run demo/app.py
 
 ## Việc tiếp theo của Trung
 
-1. Nhận comparison table/figures và kết luận model chính thức từ Phase 05; adapter UI đã sẵn sàng.
-2. Render và QA lại màn hình Hiệu năng sau khi nhận artifacts chính thức.
-3. Chụp screenshots hiện tại và quay demo clip.
+1. Chụp 5 ảnh screenshots UI (System, Sáng, Tối, Form nhập liệu, Hiệu năng mô hình) và lưu vào `demo/screenshots/`.
+2. Quay video demo clip 2–3 phút theo `demo/DEMO-SCRIPT.md`.
+3. Hoàn tất đóng gói Phase 06 và chuyển trạng thái sang `passed`.
 
 ## Rủi ro và kiểm soát
 
@@ -101,16 +101,14 @@ py -3.14 -m streamlit run demo/app.py
 |--------|-----------|
 | Model hoặc schema đầu vào không khớp | Validate feature order, scaler, CSV metrics và tên figures trước khi hiển thị |
 | Theme thay đổi khi nâng Streamlit | Giữ phiên bản tối thiểu đã kiểm tra và chạy lại browser QA sau khi nâng |
-| Tài liệu vượt quá trạng thái thực tế | Giữ Phase 06 `pending` cho đến khi đủ model, figures và demo evidence |
+| Tài liệu vượt quá trạng thái thực tế | Giữ Phase 06 `pending` cho đến khi đủ screenshots và demo clip |
 
 ## Tuân thủ quy tắc project
 
 - Chỉ cập nhật công việc của Phạm Thành Trung/Phase 06.
 - Phase chưa hoàn thành nên không đổi trạng thái sang `passed`.
-- Không cập nhật `Final/README.md` vì trạng thái Sprint chung chưa thay đổi.
-- Không tạo hoặc thay đổi artifacts dữ liệu/model.
-- Checkpoint tích hợp model đã được commit trên branch Phase 06.
+- Checkpoint tích hợp model và cải tiến UX đã được commit trên main.
 
 ## Kết luận
 
-Phần Phase 06 tự chủ đã hoàn tất: UI, XGBoost inference, mẫu test có nhãn, adapter kết quả Phase 05 và Browser QA đều đã có evidence. Phase vẫn `pending` do chưa có artifacts chính thức Phase 05, screenshots hiện tại và demo clip.
+Phần chức năng của Phase 06 đã hoàn tất 100%: UI, XGBoost inference, mẫu test có nhãn, kết nối artifacts Phase 05, mapping datetime PaySim và định dạng tiền tệ VNĐ (PR #27). Phase vẫn giữ trạng thái `pending` cho đến khi bổ sung đủ 5 screenshots và video clip demo.

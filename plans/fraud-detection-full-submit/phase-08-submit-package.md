@@ -127,34 +127,39 @@ echo "ZIP created: [Project AI-UIT] - Nhom 9.zip"
 ## Final Verification Checklist
 
 **Code verification (Thanh + all):**
-- [ ] `notebooks/01_eda.ipynb` — Restart & Run All → 0 errors
-- [ ] `notebooks/02_imbalance_handling.ipynb` — Restart & Run All → 0 errors
-- [ ] `notebooks/03_model_random_forest.ipynb` — Restart & Run All → 0 errors
-- [ ] `notebooks/04_model_xgboost.ipynb` — Restart & Run All → 0 errors
-- [ ] `notebooks/05_model_autoencoder.ipynb` — Restart & Run All → 0 errors
-- [ ] `notebooks/06_evaluation_comparison.ipynb` — Restart & Run All → 0 errors
-- [ ] `streamlit run demo/app.py` → app starts OK
+- [x] `notebooks/01_eda.ipynb` — Restart & Run All → 0 errors
+- [x] `notebooks/02_imbalance_handling.ipynb` — Restart & Run All → 0 errors
+- [x] `notebooks/03_model_random_forest.ipynb` — Restart & Run All → 0 errors
+- [x] `notebooks/04_model_xgboost.ipynb` — Restart & Run All → 0 errors
+- [x] `notebooks/05_model_autoencoder.ipynb` — Restart & Run All → 0 errors
+- [x] `notebooks/06_evaluation_comparison.ipynb` — Restart & Run All → 0 errors
+- [x] `streamlit run demo/app.py` → app starts OK (74 tests pass)
 
 **Artifacts verification (thực hiện từ thư mục `draft/fraud-detection/`):**
-- [ ] `models/scaler.pkl` exists
-- [ ] `models/xgb_smote.json` exists
-- [ ] `models/autoencoder_meta.json` exists
-- [ ] `models/rf_smote.pkl` exists (**cần reproduce — bị gitignore**)
-- [ ] `reports/model_comparison.csv` exists
-- [ ] `reports/figures/roc_curves_all.png` exists
-- [ ] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists
-- [ ] `slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` exists (hoặc bản slide chính thức được duyệt)
+- [x] `models/scaler.pkl` exists
+- [x] `models/xgb_smote.json` exists
+- [x] `models/autoencoder_meta.json` exists
+- [ ] `models/rf_smote.pkl` exists (**reproduce khi cần via `run_random_forest.py` — gitignore**)
+- [x] `reports/model_comparison.csv` exists
+- [x] `reports/figures/roc_curves_all.png` exists
+- [x] `slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` exists (Đã duyệt chính thức)
+- [ ] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists (Đang xuất bản cuối từ `report-source.md`)
+
+**Security & Sanitization Gate (Hôn — Audit 09/09):**
+- [x] Dataset `paysim.csv` (470MB) được loại bỏ khỏi Git và gói nộp ZIP
+- [ ] Loại bỏ tệp nhạy cảm `.env` (chứa KAGGLE_API_TOKEN) khỏi cây nộp bài
+- [x] Git remote URL sử dụng đúng alias học thuật `github.com-uit`
 
 **Submit package verification (Hôn):**
 - [ ] `[Project AI-UIT] - Nhom 9/` folder structure đúng
-- [ ] `code/notebooks/` có 6 notebooks
-- [ ] `report/` có Word file
-- [ ] `slides/` có PPT file
+- [x] `code/notebooks/` có đủ 6/6 notebooks
+- [ ] `report/` có Word file bản nộp chính thức
+- [x] `slides/` có PPT file chính thức 21 slide
 - [ ] `demo/` có screenshots hoặc clip
 - [ ] ZIP tạo thành công: `[Project AI-UIT] - Nhom 9.zip`
-- [ ] ZIP size hợp lý (không bao gồm paysim.csv)
+- [ ] ZIP size hợp lý (< 500MB, loại bỏ paysim.csv)
 - [ ] Test unzip và kiểm tra nội dung
-- [ ] Nộp đúng hạn
+- [ ] Nộp đúng hạn (trước 18/9/2026)
 
 ## Success Criteria
 
