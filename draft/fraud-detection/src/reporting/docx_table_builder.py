@@ -1,109 +1,232 @@
-"""Word table builder with fixed column widths, alignment, and repeating headers."""
+"""
+Smart Table Builder for UIT Academic Documents.
+Features:
+- Fixed printable width: 16.0 cm (matching A4 21.0cm - 3.0cm left - 2.0cm right)
+- Pure black text (#000000) for all cells
+- Clean neutral header shading (#F2F2F2) with thin borders
+- Row protection: <w:cantSplit/> prevents awkward page breaks mid-row
+- Header repetition: <w:tblHeader/> on row 0 repeats header across page breaks
+- Smart cell alignment: numbers/ranges right-aligned, short codes/percentages centered, text left-aligned
+- Backward compatibility: add_table, add_spacer, _is_numeric_column, _fix_layout
+"""
 
 from __future__ import annotations
 
 import re
+from typing import Callable
 
+import docx
+from docx.shared import Pt, Cm, Twips, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
-from docx.oxml.ns import qn
-from docx.shared import Pt, Twips
+from docx.enum.table import WD_TABLE_ALIGNMENT, WD_ALIGN_VERTICAL
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
 
-from .markdown_parser import add_runs, clean_markdown_symbols
+COLOR_TEXT_MAIN = RGBColor(0, 0, 0)
+COLOR_BG_HEADER = "F2F2F2"
+COLOR_BG_ZEBRA = "FAFAFA"
+COLOR_BORDER = "CCCCCC"
 
-# Bề rộng vùng in: khổ A4 11906 twips trừ lề trái 1701 và lề phải 1134.
 CONTENT_WIDTH_TWIPS = 9071
-NARROW_HEADERS = frozenset({"#", "STT", "Hạng"})
-NARROW_WIDTH_TWIPS = 700
-TABLE_FONT_PT = 9.5
 
 
-def _column_widths(header: list[str], rows: list[list[str]]) -> list[int]:
-    """Chia bề rộng theo độ dài nội dung, cột số thứ tự giữ hẹp cố định."""
-    weights = []
-    for column in range(len(header)):
-        cells = [header[column]] + [row[column] for row in rows if column < len(row)]
-        weights.append(max(len(clean_markdown_symbols(cell)) for cell in cells))
-
-    narrow = header[0] in NARROW_HEADERS
-    available = CONTENT_WIDTH_TWIPS - (NARROW_WIDTH_TWIPS if narrow else 0)
-    scalable = weights[1:] if narrow else weights
-    total = sum(scalable) or 1
-    widths = [round(available * weight / total) for weight in scalable]
-    return ([NARROW_WIDTH_TWIPS] + widths) if narrow else widths
+def is_numeric_or_range(val: str) -> bool:
+    """Check if cell content represents numbers, ranges, percentages, or metrics."""
+    cleaned = val.strip().replace('**', '').replace('*', '').replace(',', '.').replace('%', '').strip()
+    if re.match(r'^-?\d+(\.\d+)?$', cleaned):
+        return True
+    if re.match(r'^-?\d+(\.\d+)?\s*[-–—]\s*-?\d+(\.\d+)?$', cleaned):
+        return True
+    if re.match(r'^\d{1,3}(\.\d{3})*(,\d+)?$', val.strip()):
+        return True
+    return False
 
 
-def _is_numeric_column(rows: list[list[str]], column: int) -> bool:
-    cells = [row[column] for row in rows if column < len(row)]
-    if not cells:
+def _is_numeric_column(rows: list[list[str]], col_index: int) -> bool:
+    """Backward-compatible helper checking if a column consists mostly of numeric/range cells."""
+    if not rows:
         return False
-    numeric = sum(
-        bool(re.fullmatch(r"[\d.,%\s+–—-]+", clean_markdown_symbols(cell).strip("*")))
-        for cell in cells
-    )
-    return numeric >= max(1, round(0.6 * len(cells)))
+    matched = sum(1 for row in rows if col_index < len(row) and is_numeric_or_range(row[col_index]))
+    return matched / len(rows) >= 0.6
 
 
-def add_spacer(document):
-    """Đệm mỏng sau bảng: đủ tách khỏi đoạn kế tiếp, không tạo dòng trống thừa."""
-    spacer = document.add_paragraph()
-    spacer.paragraph_format.space_before = Pt(0)
-    spacer.paragraph_format.space_after = Pt(0)
-    spacer.paragraph_format.line_spacing = 1.0
-    spacer.add_run().font.size = Pt(6)
-    return spacer
-
-
-def _repeat_header(table) -> None:
-    """Lặp lại hàng tiêu đề khi bảng bị tách sang trang sau."""
-    header_pr = table.rows[0]._tr.get_or_add_trPr()
-    header_pr.append(header_pr.makeelement(qn("w:tblHeader"), {qn("w:val"): "true"}))
+def _fix_layout(table, col_widths: list[int]) -> None:
+    """Backward-compatible column width setter."""
     for row in table.rows:
-        row_pr = row._tr.get_or_add_trPr()
-        row_pr.append(row_pr.makeelement(qn("w:cantSplit"), {}))
+        for idx, width in enumerate(col_widths):
+            if idx < len(row.cells):
+                row.cells[idx].width = Twips(width)
 
 
-def _fix_layout(table, widths: list[int]) -> None:
-    """Khoá bề rộng cột."""
+def add_spacer(doc: docx.Document):
+    """Backward-compatible spacing paragraph."""
+    p = doc.add_paragraph()
+    p.paragraph_format.line_spacing = 1.0
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.space_after = Pt(4)
+    return p
+
+
+def add_table(doc: docx.Document, header: list[str], rows: list[list[str]]):
+    """Backward-compatible table creator returning Table Grid styled table."""
+    table = doc.add_table(rows=len(rows) + 1, cols=len(header))
+    try:
+        table.style = "Table Grid"
+    except Exception:
+        pass
+    for c_idx, h in enumerate(header):
+        table.cell(0, c_idx).text = h
+    for r_idx, row in enumerate(rows):
+        for c_idx, val in enumerate(row):
+            table.cell(r_idx + 1, c_idx).text = val
+    return table
+
+
+def set_cell_margins_and_border(cell, top_pt=4, bottom_pt=4, left_pt=6, right_pt=6):
+    """Set inner cell padding and subtle border."""
+    tcPr = cell._tc.get_or_add_tcPr()
+    tcMar = parse_xml(
+        f'<w:tcMar {nsdecls("w")}>'
+        f'<w:top w:w="{int(top_pt * 20)}" w:type="dxa"/>'
+        f'<w:bottom w:w="{int(bottom_pt * 20)}" w:type="dxa"/>'
+        f'<w:left w:w="{int(left_pt * 20)}" w:type="dxa"/>'
+        f'<w:right w:w="{int(right_pt * 20)}" w:type="dxa"/>'
+        f'</w:tcMar>'
+    )
+    tcPr.append(tcMar)
+
+
+def add_styled_table(
+    doc: docx.Document,
+    headers: list[str],
+    body_rows: list[list[str]],
+    caption: str | None = None,
+    parse_inline_func: Callable | None = None
+) -> docx.table.Table:
+    """
+    Construct a professional, strictly-formatted academic table conforming to UIT standards.
+    """
+    num_cols = len(headers)
+    num_rows = len(body_rows) + 1
+
+    # Optional table caption preceding table
+    if caption:
+        p_cap = doc.add_paragraph()
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.paragraph_format.keep_with_next = True
+        p_cap.paragraph_format.space_before = Pt(8)
+        p_cap.paragraph_format.space_after = Pt(4)
+        r_cap = p_cap.add_run(caption.strip())
+        r_cap.font.name = "Times New Roman"
+        r_cap.font.size = Pt(11)
+        r_cap.bold = True
+        r_cap.font.color.rgb = COLOR_TEXT_MAIN
+
+    table = doc.add_table(rows=num_rows, cols=num_cols)
+    table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
-    for column, width in zip(table.columns, widths):
-        column.width = Twips(width)
 
+    # Standard UIT printable table width: 16.0 cm
+    total_width_cm = 16.0
+    col_width_cm = total_width_cm / max(1, num_cols)
 
-def add_table(document, header: list[str], rows: list[list[str]]):
-    """Thêm bảng vào tài liệu Word với style Table Grid và căn chỉnh tự động."""
-    table = document.add_table(rows=1 + len(rows), cols=len(header))
-    # Dùng style name "Table Grid" thay vì style_id "TableGrid" để tránh cảnh báo deprecation
-    table.style = "Table Grid"
+    # Detect column alignment heuristics
+    col_alignments = []
+    for c_idx in range(num_cols):
+        numeric_count = 0
+        total_cells = len(body_rows)
+        for r in body_rows:
+            if c_idx < len(r) and is_numeric_or_range(r[c_idx]):
+                numeric_count += 1
+        if total_cells > 0 and (numeric_count / total_cells) >= 0.6:
+            col_alignments.append(WD_ALIGN_PARAGRAPH.RIGHT)
+        elif headers[c_idx].strip().lower() in ["stt", "mã", "id", "#", "phase", "bước", "nhãn", "lớp"]:
+            col_alignments.append(WD_ALIGN_PARAGRAPH.CENTER)
+        else:
+            col_alignments.append(WD_ALIGN_PARAGRAPH.LEFT)
 
-    widths = _column_widths(header, rows)
-    _fix_layout(table, widths)
-    _repeat_header(table)
+    # Style Table Header Row (Row 0)
+    hdr_row = table.rows[0]
+    trPr0 = hdr_row._tr.get_or_add_trPr()
+    trPr0.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
+    trPr0.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
 
-    narrow_first = header[0] in NARROW_HEADERS
-    alignments = [
-        WD_ALIGN_PARAGRAPH.CENTER if narrow_first else WD_ALIGN_PARAGRAPH.LEFT
-    ] + [
-        WD_ALIGN_PARAGRAPH.CENTER if _is_numeric_column(rows, column) else WD_ALIGN_PARAGRAPH.LEFT
-        for column in range(1, len(header))
-    ]
+    for c_idx, h_text in enumerate(headers):
+        cell = hdr_row.cells[c_idx]
+        cell.width = Cm(col_width_cm)
+        cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+        set_cell_margins_and_border(cell, top_pt=5, bottom_pt=5, left_pt=6, right_pt=6)
 
-    for column, title in enumerate(header):
-        cell = table.cell(0, column)
-        cell.width = Twips(widths[column])
-        paragraph = cell.paragraphs[0]
-        paragraph.alignment = alignments[column]
-        add_runs(paragraph, title, bold=True, size_pt=TABLE_FONT_PT)
+        # Header Shading (clean light gray #F2F2F2, pure black text)
+        tcPr = cell._tc.get_or_add_tcPr()
+        tcPr.append(parse_xml(f'<w:shd {nsdecls("w")} w:fill="{COLOR_BG_HEADER}"/>'))
 
-    for row_index, row in enumerate(rows, start=1):
-        for column in range(len(header)):
-            cell = table.cell(row_index, column)
-            cell.width = Twips(widths[column])
-            paragraph = cell.paragraphs[0]
-            paragraph.alignment = alignments[column]
-            add_runs(
-                paragraph,
-                row[column] if column < len(row) else "",
-                size_pt=TABLE_FONT_PT,
-            )
+        p = cell.paragraphs[0]
+        p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p.paragraph_format.space_before = Pt(2)
+        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.line_spacing = 1.15
+
+        if parse_inline_func:
+            parse_inline_func(p, h_text, base_font_size=10.5, is_bold=True, base_color=COLOR_TEXT_MAIN)
+        else:
+            r = p.add_run(h_text.strip())
+            r.font.name = "Times New Roman"
+            r.font.size = Pt(10.5)
+            r.bold = True
+            r.font.color.rgb = COLOR_TEXT_MAIN
+
+    # Style Body Rows
+    for r_idx, row_data in enumerate(body_rows):
+        b_row = table.rows[r_idx + 1]
+        trPr = b_row._tr.get_or_add_trPr()
+        trPr.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+
+        is_zebra = (r_idx % 2 == 1)
+        shd_hex = COLOR_BG_ZEBRA if is_zebra else "FFFFFF"
+
+        for c_idx in range(num_cols):
+            cell = b_row.cells[c_idx]
+            cell.width = Cm(col_width_cm)
+            cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
+            set_cell_margins_and_border(cell, top_pt=4, bottom_pt=4, left_pt=6, right_pt=6)
+
+            tcPr = cell._tc.get_or_add_tcPr()
+            if shd_hex != "FFFFFF":
+                tcPr.append(parse_xml(f'<w:shd {nsdecls("w")} w:fill="{shd_hex}"/>'))
+
+            c_text = row_data[c_idx] if c_idx < len(row_data) else ""
+            p = cell.paragraphs[0]
+            p.alignment = col_alignments[c_idx]
+            p.paragraph_format.space_before = Pt(2)
+            p.paragraph_format.space_after = Pt(2)
+            p.paragraph_format.line_spacing = 1.15
+
+            if parse_inline_func:
+                parse_inline_func(p, c_text, base_font_size=10.0, base_color=COLOR_TEXT_MAIN)
+            else:
+                r = p.add_run(c_text.strip())
+                r.font.name = "Times New Roman"
+                r.font.size = Pt(10.0)
+                r.font.color.rgb = COLOR_TEXT_MAIN
+
+    # Table Borders: subtle gray borders
+    tblPr = table._tbl.tblPr
+    borders_xml = parse_xml(
+        f'<w:tblBorders {nsdecls("w")}>'
+        f'<w:top w:val="single" w:sz="6" w:space="0" w:color="{COLOR_BORDER}"/>'
+        f'<w:bottom w:val="single" w:sz="6" w:space="0" w:color="{COLOR_BORDER}"/>'
+        f'<w:insideH w:val="single" w:sz="4" w:space="0" w:color="{COLOR_BORDER}"/>'
+        f'<w:insideV w:val="none"/>'
+        f'<w:left w:val="none"/>'
+        f'<w:right w:val="none"/>'
+        f'</w:tblBorders>'
+    )
+    tblPr.append(borders_xml)
+
+    # Trailing spacing paragraph
+    p_after = doc.add_paragraph()
+    p_after.paragraph_format.space_before = Pt(0)
+    p_after.paragraph_format.space_after = Pt(6)
 
     return table
