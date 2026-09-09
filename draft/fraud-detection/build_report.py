@@ -34,8 +34,6 @@ TEMPLATE = os.path.join(REPORTS_DIR, "_report_template.docx")
 
 OUTPUT_DOCX = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection.docx")
 OUTPUT_PDF = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection.pdf")
-SPRINT3_DOCX = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.docx")
-SPRINT3_PDF = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.pdf")
 
 
 def main() -> None:
@@ -54,7 +52,6 @@ def main() -> None:
     # 2. Biên dịch DOCX lượt 1
     print("[*] Đang biên dịch bản Word (DOCX)...")
     doc = build_document(SOURCE_MD, OUTPUT_DOCX, meta_path=META_YAML, page_mapping=pages)
-    shutil.copy2(OUTPUT_DOCX, SPRINT3_DOCX)
     print(f"[✓] Đã tạo DOCX: reports/{os.path.basename(OUTPUT_DOCX)}")
 
     # 3. Xuất PDF lượt 1 để đo số trang thực tế
@@ -62,7 +59,6 @@ def main() -> None:
     pdf_ok = export_docx_to_pdf(OUTPUT_DOCX, OUTPUT_PDF)
 
     if pdf_ok:
-        shutil.copy2(OUTPUT_PDF, SPRINT3_PDF)
         print(f"[✓] Đã xuất PDF: reports/{os.path.basename(OUTPUT_PDF)}")
 
         # 4. Trích xuất số trang chính xác qua PyMuPDF
@@ -80,12 +76,10 @@ def main() -> None:
             # 5. Tái biên dịch DOCX với số trang chuẩn
             print("[*] Tái biên dịch DOCX với số trang mục lục khớp 100%...")
             doc = build_document(SOURCE_MD, OUTPUT_DOCX, meta_path=META_YAML, page_mapping=new_mapping)
-            shutil.copy2(OUTPUT_DOCX, SPRINT3_DOCX)
 
             # 6. Tái xuất PDF lần cuối
             print("[*] Xuất bản PDF chính thức lần cuối...")
             export_docx_to_pdf(OUTPUT_DOCX, OUTPUT_PDF)
-            shutil.copy2(OUTPUT_PDF, SPRINT3_PDF)
             print(f"[✓] Hoàn tất xuất bản PDF chính thức: reports/{os.path.basename(OUTPUT_PDF)}")
         except Exception as e:
             print(f"[!] Lỗi trong quá trình đồng bộ số trang: {e}")
