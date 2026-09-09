@@ -186,25 +186,13 @@ def add_styled_table(
     Construct a professional, strictly-formatted academic table conforming to UIT standards.
     Features:
     - Smart content-aware column widths preventing line wraps on identifiers
-    - Zero page-split protection: all rows from 0 to N-2 have keep_with_next = True
+    - Zero page-split protection: rows keep_with_next dính liền với nhau và dính với caption ở dưới
+    - Table caption nằm DƯỚI bảng, in nghiêng, căn giữa, chữ đen 10.5pt
     - Row cantSplit prevents page break mid-row
     - Clean neutral shading and subtle borders in 100% pure black text
     """
     num_cols = len(headers)
     num_rows = len(body_rows) + 1
-
-    # Optional table caption preceding table (dính liền với table)
-    if caption:
-        p_cap = doc.add_paragraph()
-        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        p_cap.paragraph_format.keep_with_next = True
-        p_cap.paragraph_format.space_before = Pt(8)
-        p_cap.paragraph_format.space_after = Pt(4)
-        r_cap = p_cap.add_run(caption.strip())
-        r_cap.font.name = "Times New Roman"
-        r_cap.font.size = Pt(11)
-        r_cap.bold = True
-        r_cap.font.color.rgb = COLOR_TEXT_MAIN
 
     table = doc.add_table(rows=num_rows, cols=num_cols)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
@@ -262,6 +250,7 @@ def add_styled_table(
             r.font.color.rgb = COLOR_TEXT_MAIN
 
     # Style Body Rows
+    has_bottom_caption = bool(caption and caption.strip())
     for r_idx, row_data in enumerate(body_rows):
         b_row = table.rows[r_idx + 1]
         trPr = b_row._tr.get_or_add_trPr()
@@ -270,6 +259,8 @@ def add_styled_table(
         is_zebra = (r_idx % 2 == 1)
         shd_hex = COLOR_BG_ZEBRA if is_zebra else "FFFFFF"
         is_not_last_row = (r_idx < len(body_rows) - 1)
+        # Nếu có caption dưới bảng: hàng cuối cùng CŨNG dính liền với caption
+        should_keep_row = is_not_last_row or has_bottom_caption
 
         for c_idx in range(num_cols):
             cell = b_row.cells[c_idx]
@@ -287,9 +278,8 @@ def add_styled_table(
             p.paragraph_format.space_before = Pt(2)
             p.paragraph_format.space_after = Pt(2)
             p.paragraph_format.line_spacing = 1.15
-            # ĐẶC BIỆT: Giữ các hàng body dính liền với hàng tiếp theo, TRỪ hàng cuối cùng
-            # Điều này đảm bảo toàn bộ bảng không bao giờ bị cắt đôi giữa 2 trang!
-            if is_not_last_row:
+
+            if should_keep_row:
                 p.paragraph_format.keep_with_next = True
 
             if parse_inline_func:
@@ -314,9 +304,23 @@ def add_styled_table(
     )
     tblPr.append(borders_xml)
 
-    # Trailing spacing paragraph
-    p_after = doc.add_paragraph()
-    p_after.paragraph_format.space_before = Pt(0)
-    p_after.paragraph_format.space_after = Pt(6)
+    # Table Caption nằm DƯỚI bảng, in nghiêng, căn giữa (đồng nhất với Hình)
+    if has_bottom_caption:
+        p_cap = doc.add_paragraph()
+        p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        p_cap.paragraph_format.space_before = Pt(4)
+        p_cap.paragraph_format.space_after = Pt(8)
+        p_cap.paragraph_format.line_spacing = 1.15
+        r_cap = p_cap.add_run(caption.strip())
+        r_cap.font.name = "Times New Roman"
+        r_cap.font.size = Pt(10.5)
+        r_cap.italic = True
+        r_cap.bold = False
+        r_cap.font.color.rgb = COLOR_TEXT_MAIN
+    else:
+        # Trailing spacing paragraph nếu không có caption
+        p_after = doc.add_paragraph()
+        p_after.paragraph_format.space_before = Pt(0)
+        p_after.paragraph_format.space_after = Pt(6)
 
     return table

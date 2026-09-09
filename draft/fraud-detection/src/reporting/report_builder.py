@@ -741,6 +741,7 @@ def build_body_section(
                 body_rows = rows_data[1:]
 
                 cap = None
+                # Case A: Caption placed before table
                 if len(doc.paragraphs) > 0:
                     last_p_text = doc.paragraphs[-1].text.strip()
                     if last_p_text.startswith("Bảng ") or last_p_text.startswith("Table "):
@@ -748,23 +749,32 @@ def build_body_section(
                         p_elem = doc.paragraphs[-1]._p
                         p_elem.getparent().remove(p_elem)
 
+                # Case B: Caption placed directly after table
+                if not cap and i < len(lines):
+                    next_stripped = lines[i].strip()
+                    if re.match(r'^(\*\*|\*)?(Bảng|Table)\s+\d+.*(\*\*|\*)?$', next_stripped):
+                        cap = re.sub(r'[*_]', '', next_stripped).strip()
+                        i += 1
+
                 add_styled_table(
                     doc, header, body_rows, caption=cap,
                     parse_inline_func=lambda p, txt, **kw: parse_inline_formatting(p, txt, **kw)
                 )
             continue
 
-        # 11. Standalone Table Caption: **Bảng X.Y...**
-        if re.match(r'^\*\*Bảng\s+\d+.*?\*\*$', stripped):
+        # 11. Standalone Table Caption: **Bảng X.Y...** or *Bảng X.Y...*
+        if re.match(r'^(\*\*|\*)?Bảng\s+\d+.*?(\*\*|\*)?$', stripped):
             p_cap = doc.add_paragraph()
             p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
-            p_cap.paragraph_format.keep_with_next = True
-            p_cap.paragraph_format.space_before = Pt(8)
-            p_cap.paragraph_format.space_after = Pt(3)
-            r_cap = p_cap.add_run(stripped.strip('*').strip())
+            p_cap.paragraph_format.space_before = Pt(4)
+            p_cap.paragraph_format.space_after = Pt(8)
+            p_cap.paragraph_format.line_spacing = 1.15
+            clean_cap = re.sub(r'[*_]', '', stripped).strip()
+            r_cap = p_cap.add_run(clean_cap)
             r_cap.font.name = "Times New Roman"
-            r_cap.font.size = Pt(11)
-            r_cap.bold = True
+            r_cap.font.size = Pt(10.5)
+            r_cap.italic = True
+            r_cap.bold = False
             r_cap.font.color.rgb = COLOR_TEXT_MAIN
             i += 1
             continue
