@@ -96,6 +96,85 @@ def set_cell_margins_and_border(cell, top_pt=4, bottom_pt=4, left_pt=6, right_pt
     tcPr.append(tcMar)
 
 
+def get_table_column_widths(
+    headers: list[str],
+    body_rows: list[list[str]],
+    total_width_cm: float = 16.0
+) -> list[float]:
+    """
+    Calculate smart, content-aware column widths conforming to UIT 16.0cm printable width.
+    Prevents awkward word breaks on long feature names and compacts short index columns.
+    """
+    num_cols = len(headers)
+    if num_cols <= 0:
+        return []
+
+    norm_headers = [re.sub(r'[*`_]', '', h).strip().lower() for h in headers]
+
+    # 1. Exact preset matches for project academic tables
+    # Table 4: Feature cuối & Nguồn/xử lý (Ảnh gửi kèm)
+    if norm_headers == ["#", "feature cuối", "nguồn/xử lý"]:
+        return [1.0, 6.0, 9.0]
+
+    # Table 1: Thuộc tính PaySim gốc
+    if norm_headers == ["thuộc tính", "kiểu/nhóm", "ý nghĩa"]:
+        return [3.2, 3.0, 9.8]
+
+    # Table 2: Loại giao dịch PaySim
+    if norm_headers == ["loại giao dịch", "normal", "fraud", "tổng"]:
+        return [4.0, 4.0, 3.5, 4.5]
+
+    # Table 3: Tập dữ liệu & Fraud ratio
+    if norm_headers == ["tập dữ liệu", "normal", "fraud", "tổng", "fraud ratio"]:
+        return [3.8, 3.0, 2.8, 3.4, 3.0]
+
+    # Table 5: So sánh hiệu năng mô hình (Bảng 5.2 / 5.1)
+    if norm_headers == ["mô hình", "precision", "recall", "f1-score", "roc-auc", "average precision"]:
+        return [5.0, 2.2, 2.2, 2.2, 2.2, 2.2]
+
+    # Table 6: Feature Importance (Bảng 5.3 / 5.2)
+    if norm_headers == ["hạng", "random forest + smotenc", "mức đóng góp", "xgboost + smotenc", "mức đóng góp"]:
+        return [1.2, 4.5, 2.9, 4.5, 2.9]
+
+    # Table 7: FP trên test & Prevalence Projection (Bảng 6.1)
+    if len(norm_headers) == 6 and norm_headers[0] == "mô hình" and any("fp trên test" in nh for nh in norm_headers):
+        return [4.0, 1.6, 2.3, 2.4, 2.7, 3.0]
+
+    # Table 8: Mức độ hoàn thành các mục tiêu cụ thể (Bảng 7.1)
+    if norm_headers == ["#", "mục tiêu", "kết quả", "vị trí"]:
+        return [1.0, 8.5, 3.0, 3.5]
+
+    # 2. Dynamic heuristic fallback for any other table
+    col_max_lens = []
+    for c in range(num_cols):
+        h_len = len(headers[c].strip())
+        b_len = max((len(r[c].strip()) for r in body_rows if c < len(r)), default=0)
+        col_max_lens.append(max(h_len, b_len, 3))
+
+    assigned_widths = [0.0] * num_cols
+    remaining_width = total_width_cm
+    remaining_cols = list(range(num_cols))
+
+    if norm_headers[0] in ["#", "stt", "hạng", "id", "bước", "no."]:
+        assigned_widths[0] = 1.0 if col_max_lens[0] <= 4 else 1.2
+        remaining_width -= assigned_widths[0]
+        remaining_cols.remove(0)
+
+    total_rem_weight = sum(col_max_lens[c] for c in remaining_cols)
+    if total_rem_weight <= 0:
+        uniform = remaining_width / len(remaining_cols)
+        for c in remaining_cols:
+            assigned_widths[c] = uniform
+    else:
+        for c in remaining_cols:
+            assigned_widths[c] = round(remaining_width * (col_max_lens[c] / total_rem_weight), 2)
+
+        diff = round(total_width_cm - sum(assigned_widths), 2)
+        assigned_widths[remaining_cols[-1]] = round(assigned_widths[remaining_cols[-1]] + diff, 2)
+
+    return assigned_widths
+
+
 def add_styled_table(
     doc: docx.Document,
     headers: list[str],
@@ -105,11 +184,16 @@ def add_styled_table(
 ) -> docx.table.Table:
     """
     Construct a professional, strictly-formatted academic table conforming to UIT standards.
+    Features:
+    - Smart content-aware column widths preventing line wraps on identifiers
+    - Zero page-split protection: all rows from 0 to N-2 have keep_with_next = True
+    - Row cantSplit prevents page break mid-row
+    - Clean neutral shading and subtle borders in 100% pure black text
     """
     num_cols = len(headers)
     num_rows = len(body_rows) + 1
 
-    # Optional table caption preceding table
+    # Optional table caption preceding table (dính liền với table)
     if caption:
         p_cap = doc.add_paragraph()
         p_cap.alignment = WD_ALIGN_PARAGRAPH.CENTER
@@ -126,9 +210,8 @@ def add_styled_table(
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
 
-    # Standard UIT printable table width: 16.0 cm
-    total_width_cm = 16.0
-    col_width_cm = total_width_cm / max(1, num_cols)
+    # Smart column widths allocation
+    col_widths_cm = get_table_column_widths(headers, body_rows, total_width_cm=16.0)
 
     # Detect column alignment heuristics
     col_alignments = []
@@ -153,7 +236,7 @@ def add_styled_table(
 
     for c_idx, h_text in enumerate(headers):
         cell = hdr_row.cells[c_idx]
-        cell.width = Cm(col_width_cm)
+        cell.width = Cm(col_widths_cm[c_idx])
         cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
         set_cell_margins_and_border(cell, top_pt=5, bottom_pt=5, left_pt=6, right_pt=6)
 
@@ -166,6 +249,8 @@ def add_styled_table(
         p.paragraph_format.space_before = Pt(2)
         p.paragraph_format.space_after = Pt(2)
         p.paragraph_format.line_spacing = 1.15
+        # Header row luôn dính liền với body rows (Zero page-split)
+        p.paragraph_format.keep_with_next = True
 
         if parse_inline_func:
             parse_inline_func(p, h_text, base_font_size=10.5, is_bold=True, base_color=COLOR_TEXT_MAIN)
@@ -184,10 +269,11 @@ def add_styled_table(
 
         is_zebra = (r_idx % 2 == 1)
         shd_hex = COLOR_BG_ZEBRA if is_zebra else "FFFFFF"
+        is_not_last_row = (r_idx < len(body_rows) - 1)
 
         for c_idx in range(num_cols):
             cell = b_row.cells[c_idx]
-            cell.width = Cm(col_width_cm)
+            cell.width = Cm(col_widths_cm[c_idx])
             cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
             set_cell_margins_and_border(cell, top_pt=4, bottom_pt=4, left_pt=6, right_pt=6)
 
@@ -201,6 +287,10 @@ def add_styled_table(
             p.paragraph_format.space_before = Pt(2)
             p.paragraph_format.space_after = Pt(2)
             p.paragraph_format.line_spacing = 1.15
+            # ĐẶC BIỆT: Giữ các hàng body dính liền với hàng tiếp theo, TRỪ hàng cuối cùng
+            # Điều này đảm bảo toàn bộ bảng không bao giờ bị cắt đôi giữa 2 trang!
+            if is_not_last_row:
+                p.paragraph_format.keep_with_next = True
 
             if parse_inline_func:
                 parse_inline_func(p, c_text, base_font_size=10.0, base_color=COLOR_TEXT_MAIN)

@@ -28,7 +28,7 @@ from .docx_table_builder import add_styled_table
 from .toc_generator import build_toc_section, collect_toc_entries
 
 COLOR_TEXT_MAIN = RGBColor(0, 0, 0)
-COLOR_TEXT_MUTED = RGBColor(80, 80, 80)
+COLOR_TEXT_MUTED = RGBColor(0, 0, 0)
 COLOR_HEX_BLACK = "000000"
 
 
@@ -327,18 +327,19 @@ def build_cover_page(doc: docx.Document, meta: dict, base_dir: str) -> None:
     # 7. Topic Title
     p_top_label = doc.add_paragraph()
     p_top_label.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_top_label.paragraph_format.space_before = Pt(2)
+    p_top_label.paragraph_format.space_before = Pt(4)
     p_top_label.paragraph_format.space_after = Pt(2)
-    r_top_lbl = p_top_label.add_run("ĐỀ TÀI:")
+    top_label_text = meta.get("topic_label", "ĐỀ TÀI SỐ 7:")
+    r_top_lbl = p_top_label.add_run(top_label_text)
     r_top_lbl.font.name = "Times New Roman"
-    r_top_lbl.font.size = Pt(12.5)
+    r_top_lbl.font.size = Pt(13)
     r_top_lbl.bold = True
     r_top_lbl.font.color.rgb = COLOR_TEXT_MAIN
 
     p_top_val = doc.add_paragraph()
     p_top_val.alignment = WD_ALIGN_PARAGRAPH.CENTER
     p_top_val.paragraph_format.space_before = Pt(0)
-    p_top_val.paragraph_format.space_after = Pt(18)
+    p_top_val.paragraph_format.space_after = Pt(16)
     p_top_val.paragraph_format.line_spacing = 1.25
     topic_text = meta.get("topic", "HỆ THỐNG PHÁT HIỆN GIAO DỊCH TÀI CHÍNH BẤT THƯỜNG VÀ NGHI VẤN GIAN LẬN")
     r_top_val = p_top_val.add_run(f'“{topic_text}”'.upper())
@@ -347,90 +348,99 @@ def build_cover_page(doc: docx.Document, meta: dict, base_dir: str) -> None:
     r_top_val.bold = True
     r_top_val.font.color.rgb = COLOR_TEXT_MAIN
 
-    # 8. Roster & Instructor Table (2 columns, borderless)
-    table = doc.add_table(rows=2, cols=2)
+    # 8. Roster & Instructor Block (Single centered 1-column layout)
+    table = doc.add_table(rows=1, cols=1)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
 
-    for row in table.rows:
-        row.cells[0].width = Cm(7.0)
-        row.cells[1].width = Cm(9.0)
+    cell = table.cell(0, 0)
+    cell.width = Cm(12.0)
 
-    # Column Headers (Row 0)
-    c0 = table.cell(0, 0)
-    p0 = c0.paragraphs[0]
-    p0.paragraph_format.space_after = Pt(3)
-    p0.paragraph_format.line_spacing = 1.15
-    r0 = p0.add_run("GIẢNG VIÊN HƯỚNG DẪN:")
-    r0.font.name = "Times New Roman"
-    r0.font.size = Pt(11.5)
-    r0.bold = True
-    r0.font.color.rgb = COLOR_TEXT_MAIN
+    # Remove cell borders
+    tcPr = cell._tc.get_or_add_tcPr()
+    borders_xml = parse_xml(
+        f'<w:tcBorders {nsdecls("w")}>'
+        f'<w:top w:val="none"/><w:left w:val="none"/><w:bottom w:val="none"/><w:right w:val="none"/>'
+        f'</w:tcBorders>'
+    )
+    tcPr.append(borders_xml)
 
-    c1 = table.cell(0, 1)
-    p1 = c1.paragraphs[0]
-    p1.paragraph_format.space_after = Pt(3)
-    p1.paragraph_format.line_spacing = 1.15
-    r1 = p1.add_run("SINH VIÊN THỰC HIỆN:")
-    r1.font.name = "Times New Roman"
-    r1.font.size = Pt(11.5)
-    r1.bold = True
-    r1.font.color.rgb = COLOR_TEXT_MAIN
+    # 8.1 Giảng viên hướng dẫn
+    p_gv = cell.paragraphs[0]
+    p_gv.paragraph_format.space_before = Pt(4)
+    p_gv.paragraph_format.space_after = Pt(1)
+    p_gv.paragraph_format.line_spacing = 1.15
+    r_gvh = p_gv.add_run("GIẢNG VIÊN HƯỚNG DẪN:")
+    r_gvh.font.name = "Times New Roman"
+    r_gvh.font.size = Pt(11.5)
+    r_gvh.bold = True
+    r_gvh.font.color.rgb = COLOR_TEXT_MAIN
 
-    # Column Details (Row 1)
-    c0_body = table.cell(1, 0)
-    p0_b = c0_body.paragraphs[0]
-    p0_b.paragraph_format.space_after = Pt(0)
-    p0_b.paragraph_format.line_spacing = 1.2
-
+    p_gvn = cell.add_paragraph()
+    p_gvn.paragraph_format.space_before = Pt(0)
+    p_gvn.paragraph_format.space_after = Pt(10)
+    p_gvn.paragraph_format.line_spacing = 1.15
     inst = meta.get("instructor", {})
     inst_name = inst.get("name", "Nguyễn Đình Hiển") if isinstance(inst, dict) else str(inst)
     inst_title = inst.get("title", "PGS.TS.") if isinstance(inst, dict) else ""
-    r0_b = p0_b.add_run(f"{inst_title} {inst_name}".strip())
-    r0_b.font.name = "Times New Roman"
-    r0_b.font.size = Pt(12)
-    r0_b.bold = True
-    r0_b.font.color.rgb = COLOR_TEXT_MAIN
+    r_gvn = p_gvn.add_run(f"{inst_title} {inst_name}".strip())
+    r_gvn.font.name = "Times New Roman"
+    r_gvn.font.size = Pt(12)
+    r_gvn.bold = True
+    r_gvn.font.color.rgb = COLOR_TEXT_MAIN
 
-    c1_body = table.cell(1, 1)
-    p1_b = c1_body.paragraphs[0]
-    p1_b.paragraph_format.space_after = Pt(0)
-    p1_b.paragraph_format.line_spacing = 1.2
+    # 8.2 Nhóm sinh viên thực hiện
+    p_svh = cell.add_paragraph()
+    p_svh.paragraph_format.space_before = Pt(0)
+    p_svh.paragraph_format.space_after = Pt(1)
+    p_svh.paragraph_format.line_spacing = 1.15
+    r_svh = p_svh.add_run("NHÓM SINH VIÊN THỰC HIỆN:")
+    r_svh.font.name = "Times New Roman"
+    r_svh.font.size = Pt(11.5)
+    r_svh.bold = True
+    r_svh.font.color.rgb = COLOR_TEXT_MAIN
 
     group_name = meta.get("group_name", "Nhóm 9")
-    r_grp = p1_b.add_run(f"{group_name}:\n")
+    p_grp = cell.add_paragraph()
+    p_grp.paragraph_format.space_before = Pt(0)
+    p_grp.paragraph_format.space_after = Pt(3)
+    p_grp.paragraph_format.line_spacing = 1.15
+    r_grp = p_grp.add_run(group_name)
     r_grp.font.name = "Times New Roman"
     r_grp.font.size = Pt(11.5)
     r_grp.bold = True
     r_grp.font.color.rgb = COLOR_TEXT_MAIN
+
+    # 8.3 Danh sách thành viên (không danh xưng lớp học nội bộ)
+    p_sts = cell.add_paragraph()
+    p_sts.paragraph_format.space_before = Pt(0)
+    p_sts.paragraph_format.space_after = Pt(4)
+    p_sts.paragraph_format.line_spacing = 1.25
 
     students = meta.get("students", [])
     for idx, st in enumerate(students, 1):
         s_name = st.get("name", "")
         s_id = st.get("student_id", "")
         s_role = st.get("role", "")
-        s_class = st.get("class_id", "")
 
         extra_info = []
-        if s_role and s_role.lower() != "thành viên":
+        if s_role and "trưởng nhóm" in s_role.lower():
             extra_info.append(s_role)
-        if s_class:
-            extra_info.append(s_class)
-        extra_str = f" ({' - '.join(extra_info)})" if extra_info else ""
+        extra_str = f" ({', '.join(extra_info)})" if extra_info else ""
 
         line_str = f"{idx}. {s_name} - {s_id}{extra_str}"
         if idx < len(students):
             line_str += "\n"
 
-        r_st = p1_b.add_run(line_str)
+        r_st = p_sts.add_run(line_str)
         r_st.font.name = "Times New Roman"
         r_st.font.size = Pt(11.0)
-        r_st.bold = ("Trưởng nhóm" in s_role)
+        r_st.bold = ("trưởng nhóm" in s_role.lower())
         r_st.font.color.rgb = COLOR_TEXT_MAIN
 
     # 9. Bottom Date & Location
     p_date = doc.add_paragraph()
-    p_date.paragraph_format.space_before = Pt(24)
+    p_date.paragraph_format.space_before = Pt(20)
     p_date.paragraph_format.space_after = Pt(0)
     p_date.alignment = WD_ALIGN_PARAGRAPH.CENTER
     r_date = p_date.add_run(meta.get("date", "TP. HỒ CHÍ MINH - THÁNG 09/2026"))
