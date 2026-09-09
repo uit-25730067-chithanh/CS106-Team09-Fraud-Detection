@@ -13,45 +13,17 @@ from __future__ import annotations
 
 import re
 import docx
-from docx.shared import Pt, Cm, Twips, RGBColor
+from docx.shared import Pt, Cm, Twips
 from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT, WD_TAB_LEADER, WD_BREAK
-from docx.oxml import parse_xml
-from docx.oxml.ns import nsdecls
 
-COLOR_TEXT_MAIN = RGBColor(0, 0, 0)
-COLOR_HEX_BLACK = "000000"
+from .hyperlink_helpers import COLOR_TEXT_MAIN, COLOR_HEX_BLACK, add_internal_hyperlink
+
 TOC_FIRST_PAGE_ROWS = 20
 TOC_PAGE_COLUMN_TWIPS = 648
 CONTENT_WIDTH_TWIPS = 9071
 
-
-def add_hyperlink_run(
-    paragraph,
-    target_anchor: str,
-    text: str,
-    font_name="Times New Roman",
-    font_size=12.0,
-    is_bold=False,
-    is_italic=False,
-    color_hex="000000"
-) -> None:
-    """Add an internal clickable hyperlink run targeting a bookmark anchor in pure black."""
-    escaped_text = text.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;').replace('"', '&quot;')
-    hl = parse_xml(f'<w:hyperlink {nsdecls("w")} w:anchor="{target_anchor}"/>')
-    r = parse_xml(
-        f'<w:r {nsdecls("w")}>'
-        f'<w:rPr>'
-        f'<w:rFonts w:ascii="{font_name}" w:hAnsi="{font_name}"/>'
-        f'<w:sz w:val="{int(font_size * 2)}"/>'
-        f'{"<w:b/>" if is_bold else ""}'
-        f'{"<w:i/>" if is_italic else ""}'
-        f'<w:color w:val="{color_hex}"/>'
-        f'</w:rPr>'
-        f'<w:t xml:space="preserve">{escaped_text}</w:t>'
-        f'</w:r>'
-    )
-    hl.append(r)
-    paragraph._p.append(hl)
+# Backward-compatible alias — callers within this module now use add_internal_hyperlink
+add_hyperlink_run = add_internal_hyperlink
 
 
 def collect_toc_entries(blocks: list[dict] | list[str]) -> list[dict]:
