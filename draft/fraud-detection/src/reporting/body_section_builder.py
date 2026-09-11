@@ -263,7 +263,7 @@ def _handle_heading(
     doc, raw_text: str, level: int, anchor_by_title: dict, bookmark_counter: int
 ) -> int:
     """Add a heading paragraph with optional bookmark anchor."""
-    h_text = raw_text.strip().replace("\u2014", " - ").replace("\u2013", "-")
+    h_text = raw_text.strip()
     cfg = _HEADING_CONFIG[level]
 
     p_h = doc.add_paragraph()
