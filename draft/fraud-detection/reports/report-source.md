@@ -45,7 +45,7 @@ Xây dựng và đánh giá một quy trình học máy có khả năng phân lo
 6. So sánh mô hình, phân tích hạn chế và đề xuất hướng phát triển.
 7. Chuẩn bị một giao diện minh họa để nhập thông tin giao dịch và hiển thị dự đoán khi mô hình cuối đã sẵn sàng.
 
-> Bản nháp hiện tại đã mô tả quy trình tiền xử lý, xử lý mất cân bằng và ba họ mô hình. Các kết luận thực nghiệm vẫn được giới hạn trong tập kiểm tra PaySim đã xử lý và sẽ được rà soát lại trước khi hoàn thiện báo cáo cuối.
+> Báo cáo đã trình bày quy trình tiền xử lý, xử lý mất cân bằng và cả ba họ mô hình. Các kết luận thực nghiệm được giới hạn trong tập kiểm tra PaySim đã xử lý, không suy rộng sang dữ liệu giao dịch thực tế.
 
 ## 1.4. Đối tượng và phạm vi nghiên cứu
 
@@ -225,7 +225,7 @@ Fraud ratio tăng từ 0,129082% lên khoảng 4,1065% sau downsample. Do Precis
 
 ### 3.6.2. Cảnh báo về các cột balance
 
-Data card của Kaggle [3] lưu ý rằng giao dịch bị phát hiện là gian lận trong bộ mô phỏng có thể bị hủy và khuyến cáo không sử dụng các cột `oldbalanceOrg`, `newbalanceOrig`, `oldbalanceDest`, `newbalanceDest` để phát hiện gian lận. Quy trình hiện tại vẫn sử dụng các cột số dư và hai đặc trưng sai lệch số dư. Vì vậy, mô hình có thể học tín hiệu phát sinh từ cơ chế cập nhật hoặc hủy giao dịch của bộ mô phỏng. Mục 5.5 cho thấy nhóm đặc trưng này thực sự chiếm phần lớn mức đóng góp của cả Random Forest và XGBoost. Báo cáo xem đây là một nguy cơ ảnh hưởng tính hợp lệ. Phép kiểm tra dứt điểm là huấn luyện lại mô hình sau khi loại nhóm đặc trưng số dư rồi so sánh hiệu năng. Thí nghiệm này nằm ngoài phạm vi bản nháp hiện tại và được ghi nhận như một hướng kiểm chứng cần thực hiện trước khi khẳng định kết quả.
+Data card của Kaggle [3] lưu ý rằng giao dịch bị phát hiện là gian lận trong bộ mô phỏng có thể bị hủy và khuyến cáo không sử dụng các cột `oldbalanceOrg`, `newbalanceOrig`, `oldbalanceDest`, `newbalanceDest` để phát hiện gian lận. Quy trình hiện tại vẫn sử dụng các cột số dư và hai đặc trưng sai lệch số dư. Vì vậy, mô hình có thể học tín hiệu phát sinh từ cơ chế cập nhật hoặc hủy giao dịch của bộ mô phỏng. Mục 5.5 cho thấy nhóm đặc trưng này thực sự chiếm phần lớn mức đóng góp của cả Random Forest và XGBoost. Báo cáo xem đây là một nguy cơ ảnh hưởng tính hợp lệ. Phép kiểm tra dứt điểm là huấn luyện lại mô hình sau khi loại nhóm đặc trưng số dư rồi so sánh hiệu năng. Thí nghiệm này nằm ngoài phạm vi đồ án và được ghi nhận tại Mục 7.4 như hướng kiểm chứng cần thực hiện trước khi khẳng định kết quả.
 
 ### 3.6.3. Dữ liệu tổng hợp
 

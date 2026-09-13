@@ -164,7 +164,7 @@ def build_cover_page(doc: docx.Document, meta: dict, base_dir: str) -> None:
         "topic",
         "HỆ THỐNG PHÁT HIỆN GIAO DỊCH TÀI CHÍNH BẤT THƯỜNG VÀ NGHI VẤN GIAN LẬN",
     )
-    r_top_val = p_top_val.add_run(f'"{topic_text}"'.upper())
+    r_top_val = p_top_val.add_run(topic_text.upper())
     r_top_val.font.name = "Times New Roman"
     r_top_val.font.size = Pt(13.5)
     r_top_val.bold = True

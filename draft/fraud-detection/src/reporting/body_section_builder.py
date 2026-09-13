@@ -290,13 +290,18 @@ def _handle_heading(
 
 
 def _handle_list_item(doc, list_match) -> None:
-    """Add a bullet or numbered list item."""
+    """Add a bullet or numbered list item.
+
+    Danh sách căn trái thay vì căn đều. Các mục thường chứa đường dẫn tệp hoặc
+    tên định danh dài không có chỗ ngắt dòng, nên căn đều sẽ kéo giãn ký tự của
+    những dòng còn lại trong cùng mục.
+    """
     indent_spaces = len(list_match.group(1))
     bullet_sym = list_match.group(2)
     content = list_match.group(3)
 
     p_l = doc.add_paragraph()
-    p_l.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p_l.alignment = WD_ALIGN_PARAGRAPH.LEFT
     level = indent_spaces // 2
     p_l.paragraph_format.left_indent = Cm(1.27 + level * 0.4)
     p_l.paragraph_format.first_line_indent = Cm(-0.5)
@@ -320,7 +325,7 @@ def _handle_reference(doc, ref_match, bookmark_counter: int) -> int:
     ref_body = ref_match.group(2)
 
     p_ref = doc.add_paragraph()
-    p_ref.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p_ref.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p_ref.paragraph_format.left_indent = Cm(0.8)
     p_ref.paragraph_format.first_line_indent = Cm(-0.8)
     p_ref.paragraph_format.space_before = Pt(2)
