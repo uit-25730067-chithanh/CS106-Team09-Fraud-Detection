@@ -38,7 +38,7 @@
 
 - Branch riêng: `docs/vu-van-duy-sprint2-report`.
 - Source có thể review bằng Git: `draft/fraud-detection/reports/report-source.md`.
-- Word draft: `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint2_Duy.docx`.
+- Word draft: `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint2_Duy.docx` — đã gỡ khỏi repo sau khi có bản chính thức `[Nhom9]_BaoCao_FraudDetection.docx`.
 - Phạm vi đã viết: Chương 1 — Giới thiệu; Chương 2 — Phát biểu bài toán; Chương 3 — Mô tả dữ liệu.
 - Evidence sử dụng: đề bài CS106, notebook EDA, Phase 01, PaySim paper và Kaggle data card.
 - Kiểm tra lại artifact hiện tại: DOCX package validation PASS; 132 paragraphs, 6 tables; PDF Sprint 2 tồn tại với 13 trang.
@@ -76,8 +76,8 @@ xác nhận ổn định ngay từ vòng thứ nhất.
 - Branch riêng: `docs/vu-van-duy-sprint3-methodology` từ `origin/main` tại `646ca1d`.
 - Source đã đồng bộ: `draft/fraud-detection/reports/report-source.md`.
 - Word/PDF draft mới, giữ format của bản Sprint 2:
-  - `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.docx`.
-  - `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.pdf`.
+  - `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.docx` — đã gỡ khỏi repo sau khi có bản chính thức.
+  - `draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection_Sprint3_Duy.pdf` — đã gỡ khỏi repo sau khi có bản chính thức.
 - Đã sửa mô tả pipeline từ 9 lên 14 đặc trưng và bổ sung đầy đủ 7 đặc trưng dẫn xuất. Nội dung báo cáo không còn trộn tên Phase, file plan hoặc tiến độ nội bộ vào phần trình bày khoa học.
 - Đã mô tả đúng thứ tự chống rò rỉ dữ liệu: chia train/test trước khi khớp `StandardScaler`, chỉ khớp scaler trên train rồi transform test, chỉ áp dụng SMOTENC/ADASYN trên train và giữ nguyên test để đánh giá.
 - Đã thêm Chương 4 gồm quy trình thực nghiệm, preprocessing, SMOTENC/ADASYN, Random Forest, XGBoost, Autoencoder, giao thức đánh giá, khả năng tái lập và giới hạn phương pháp.
