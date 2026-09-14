@@ -25,6 +25,17 @@ def export_docx_to_pdf(docx_path: str, pdf_path: str) -> bool:
         print(f"[!] Error: Source DOCX file not found: {abs_docx}")
         return False
 
+    # 0. Try Windows Microsoft Word via docx2pdf
+    if sys.platform == "win32":
+        try:
+            from docx2pdf import convert
+            convert(abs_docx, abs_pdf)
+            if os.path.exists(abs_pdf):
+                print(f"[✓] Successfully exported official PDF via Windows Microsoft Word (docx2pdf): {abs_pdf}")
+                return True
+        except Exception as e:
+            print(f"[!] Windows docx2pdf export failed: {e}")
+
     # 1. Try macOS Microsoft Word via AppleScript
     if sys.platform == "darwin":
         tmp_in = "/tmp/uit_report_in.docx"

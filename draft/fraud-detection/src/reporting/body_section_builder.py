@@ -253,9 +253,9 @@ def _add_figure_caption(doc, caption_text: str) -> None:
 
 
 _HEADING_CONFIG = {
-    1: {"font_size": 13.5, "space_before": 12, "space_after": 4, "italic": False},
-    2: {"font_size": 13.0, "space_before": 8, "space_after": 3, "italic": False},
-    3: {"font_size": 13.0, "space_before": 6, "space_after": 2, "italic": True},
+    1: {"font_size": 15.0, "space_before": 24, "space_after": 12, "italic": False},
+    2: {"font_size": 14.0, "space_before": 18, "space_after": 6, "italic": False},
+    3: {"font_size": 13.0, "space_before": 12, "space_after": 6, "italic": True},
 }
 
 
@@ -272,7 +272,10 @@ def _handle_heading(
     p_h.paragraph_format.space_after = Pt(cfg["space_after"])
     p_h.paragraph_format.line_spacing = 1.15
     p_h.paragraph_format.first_line_indent = Cm(0)
-    p_h.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    if level == 1:
+        p_h.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    else:
+        p_h.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     anchor = anchor_by_title.get(h_text.lower())
     if anchor:
