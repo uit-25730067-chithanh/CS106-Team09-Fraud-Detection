@@ -77,8 +77,46 @@ def export_docx_to_pdf(docx_path: str, pdf_path: str) -> bool:
         except Exception as e:
             print(f"[!] LibreOffice execution error: {e}")
 
-    print("[!] Warning: Could not export PDF. Please install Microsoft Word or LibreOffice.")
+    # 3. Fallback to Apple Pages — có sẵn trên macOS khi máy không cài Word
+    #    hay LibreOffice. Pages phải đang chạy thì AppleScript mới gọi được,
+    #    nếu không osascript trả lỗi -600 "Application isn't running".
+    if sys.platform == "darwin" and _pages_bundle_installed():
+        try:
+            subprocess.run(["open", "-ga", "-b", "com.apple.Pages"], timeout=30)
+            script = f'''
+            tell application id "com.apple.Pages"
+                launch
+                delay 2
+                set theDoc to open (POSIX file "{abs_docx}" as alias)
+                delay 2
+                export theDoc to (POSIX file "{abs_pdf}") as PDF
+                delay 1
+                close theDoc saving no
+            end tell
+            '''
+            res = subprocess.run(
+                ["osascript", "-e", script], capture_output=True, text=True, timeout=180
+            )
+            if res.returncode == 0 and os.path.exists(abs_pdf):
+                print(f"[✓] Successfully exported PDF via Apple Pages: {abs_pdf}")
+                return True
+            print(f"[!] Apple Pages export failed: {res.stderr.strip()}")
+        except Exception as e:
+            print(f"[!] Apple Pages execution error: {e}")
+
+    print("[!] Warning: Could not export PDF. Please install Microsoft Word, LibreOffice or Pages.")
     return False
+
+
+def _pages_bundle_installed() -> bool:
+    """Pages có thể được cài dưới tên bundle khác, ví dụ Pages Creator Studio."""
+
+    res = subprocess.run(
+        ["osascript", "-e", 'POSIX path of (path to application id "com.apple.Pages")'],
+        capture_output=True,
+        text=True,
+    )
+    return res.returncode == 0 and bool(res.stdout.strip())
 
 
 if __name__ == "__main__":
