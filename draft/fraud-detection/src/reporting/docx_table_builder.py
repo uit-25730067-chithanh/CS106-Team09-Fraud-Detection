@@ -219,8 +219,11 @@ def add_styled_table(
     # Style Table Header Row (Row 0)
     hdr_row = table.rows[0]
     trPr0 = hdr_row._tr.get_or_add_trPr()
-    trPr0.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
+    # Lược đồ OOXML quy định cantSplit đứng trước tblHeader trong trPr. Đặt sai
+    # thứ tự thì Word bỏ qua tblHeader và hàng tiêu đề không lặp lại khi bảng
+    # tách trang.
     trPr0.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
+    trPr0.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
 
     for c_idx, h_text in enumerate(headers):
         cell = hdr_row.cells[c_idx]
@@ -302,7 +305,13 @@ def add_styled_table(
         f'<w:right w:val="none"/>'
         f'</w:tblBorders>'
     )
-    tblPr.append(borders_xml)
+    # tblBorders phải nằm trước tblLayout, tblCellMar và tblLook theo lược đồ.
+    # Nếu append vào cuối, Word coi tblPr không hợp lệ và bỏ qua toàn bộ đường
+    # viền, khiến bảng mất hết khung khi mở bằng Word.
+    tblPr.insert_element_before(
+        borders_xml, "w:shd", "w:tblLayout", "w:tblCellMar", "w:tblLook",
+        "w:tblCaption", "w:tblDescription", "w:tblPrChange",
+    )
 
     # Table Caption nằm DƯỚI bảng, in nghiêng, căn giữa (đồng nhất với Hình)
     if has_bottom_caption:
