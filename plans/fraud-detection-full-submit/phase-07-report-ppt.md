@@ -14,7 +14,7 @@
 |-------|-------|
 | Owner | **Duy** (Word) + **Hôn** (PPT) |
 | Priority | P0 — Required for submission |
-| Status | `pending` |
+| Status | `passed` ✅ |
 | Review | ⬜ Not reviewed |
 | Estimated effort | 4–6 giờ tổng (2 người) |
 | Sprint | Sprint 2–3 (phần không cần kết quả), Sprint 4 (Results & Hoàn thiện) |
@@ -32,7 +32,7 @@
 | Viết Methodology (thuật toán + preprocessing + imbalance) | Sprint 3 | Dựa trên evidence Phase 01–04 | ✅ Hoàn thành |
 | Viết Results & Discussion (điền số từ Khang) | Sprint 3–4 | Chương 5 (5.1–5.6) và Chương 6 (6.1–6.7) hoàn thành; khớp 100% `reports/model_comparison.csv` và figures | ✅ Hoàn thành |
 | Viết Conclusion + References | Sprint 4 | Chương 7 hoàn thành (Bảng 7.1 đối chiếu 7 mục tiêu) + [1]–[8] IEEE chuẩn | ✅ Hoàn thành |
-| Format Word + Abstract + xuất bản submit | Sprint 4 | Tự động hóa qua `build_report.py`; xuất `[Nhom9]_BaoCao_FraudDetection.docx` | 🟡 Đang xuất bản cuối |
+| Format Word + Abstract + xuất bản submit | Sprint 4 | Tự động hóa qua `build_report.py`; xuất `[Nhom9]_BaoCao_FraudDetection.docx` | ✅ Hoàn thành |
 
 #### Evidence Early Start — Duy, Sprint 2 (29/08/2026)
 
@@ -299,44 +299,44 @@ Slide 13: Q&A + Cảm ơn
 ## Checklist
 
 **Word (Duy):**
-- [ ] File Word được lưu: `reports/[Nhom9]_BaoCao_FraudDetection.docx`
-- [ ] Có đủ 8 sections chính (TT → GTTK → ... → TLTK)
-- [ ] Bảng so sánh models được chèn (từ Phase 05)
-- [ ] Ít nhất 3 figures được chèn (ROC curves, confusion matrix, ...)
-- [ ] Tài liệu tham khảo có ≥ 5 nguồn
-- [ ] Abstract viết sau khi có kết quả (không phải plan)
-- [ ] Đọc lại pass 1 lần trước khi commit
+- [x] File Word được lưu: `reports/[Nhom9]_BaoCao_FraudDetection.docx`
+- [x] Có đủ 8 sections chính (TT → GTTK → ... → TLTK)
+- [x] Bảng so sánh models được chèn (từ Phase 05)
+- [x] Ít nhất 3 figures được chèn (ROC curves, confusion matrix, ...)
+- [x] Tài liệu tham khảo có ≥ 5 nguồn
+- [x] Abstract viết sau khi có kết quả (không phải plan)
+- [x] Đọc lại pass 1 lần trước khi commit
 
 **PPT (Hôn):**
-- [ ] File PPT được lưu: `reports/[Nhom9]_PPT_FraudDetection.pptx`
-- [ ] Có đủ 12–15 slides
-- [ ] Slide kết quả có bảng so sánh models
-- [ ] Slide kết quả có ít nhất 1 chart (ROC hoặc confusion matrix)
-- [ ] Slide demo có screenshot từ app
-- [ ] Font size body ≥ 18pt (readable từ xa)
-- [ ] Consistent design theme (không dùng quá nhiều màu)
+- [x] File PPT được lưu: `reports/[Nhom9]_PPT_FraudDetection.pptx` (đã lưu tên `[Nhom9]_Slide_FraudDetection_Academic_VN.pptx`)
+- [x] Có đủ 12–15 slides (thực tế: 21 slides)
+- [x] Slide kết quả có bảng so sánh models
+- [x] Slide kết quả có ít nhất 1 chart (ROC hoặc confusion matrix)
+- [x] Slide demo có screenshot từ app
+- [x] Font size body ≥ 18pt (readable từ xa)
+- [x] Consistent design theme (không dùng quá nhiều màu)
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| Word file exists | .docx saved | ___________ |
-| PPT file exists | .pptx saved | ___________ |
-| Word has sections | 8 sections | ___________ |
-| PPT slide count | 12–15 slides | ___________ |
-| Metrics in Word | correct values from Phase 05 | ___________ |
+| Word file exists | .docx saved | `[Nhom9]_BaoCao_FraudDetection.docx` |
+| PPT file exists | .pptx saved | `[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` |
+| Word has sections | 8 sections | Có 8 section, 323 paragraphs |
+| PPT slide count | 12–15 slides | 21 slides |
+| Metrics in Word | correct values from Phase 05 | Khớp 100% Phase 05 (F1=0.9973) |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
 Word file: reports/[Nhom9]_BaoCao_FraudDetection.docx
-  - Pages: ____
-  - Figures inserted: ____ figures
-  - Tables: ____ tables
+  - Pages: 32 trang
+  - Figures inserted: 9 figures
+  - Tables: 9 tables
   
-PPT file: reports/[Nhom9]_PPT_FraudDetection.pptx
-  - Slides: ____
-  - Estimated time: ____ phút
+PPT file: reports/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx
+  - Slides: 21
+  - Estimated time: 10-12 phút (đã có SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md)
 ```
 
 ## Risk Assessment
@@ -349,13 +349,13 @@ PPT file: reports/[Nhom9]_PPT_FraudDetection.pptx
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
-> ⬜ Chưa hoàn thành
+> ✅ Hoàn thành
 
 ```
-Hoàn thành: __/__/2026
-Duy: Word ____pages, ____figures
-Hôn: PPT ____slides, ____min estimated
-Kết quả best model ghi trong báo cáo: ____________________
+Hoàn thành: 15/09/2026
+Duy: Word 32 pages, 9 figures
+Hôn: PPT 21 slides, 10-12 min estimated
+Kết quả best model ghi trong báo cáo: Random Forest SMOTENC (F1=0.9973, AUC=0.9994)
 ```
 
 ## Commit

@@ -58,10 +58,10 @@ Final/
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | ✅ Phase 05 `passed` (PR #26 & #28) — 4/4 scripts của Khang xong (metrics_calculator.py, plot_roc_curve.py, confusion_matrix_plot.py, model_comparator.py); `notebooks/06_evaluation_comparison.ipynb` chạy sạch; `reports/model_comparison.csv` + 7 figures đã xuất, khớp 100% `ch5_metrics_recomputed.csv`. Thêm 2 scripts vẽ đồ thị báo cáo |
 | Demo UI | 🟡 Phase 06 `pending` — XGBoost-SMOTE + scaler kết nối hoàn chỉnh; hỗ trợ mapping thời gian PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN và lịch sử SQLite; Browser QA bố cục mới đạt; `45` demo tests pass; còn screenshots và demo clip |
-| Báo cáo & Slide | 🟡 Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang, sinh tự động từ source, khớp 100% Phase 05 `model_comparison.csv`). Slide: bộ học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) kèm Kịch bản toàn team 7 người **chính thức được PM duyệt làm slide bảo vệ** |
+| Báo cáo & Slide | ✅ Phase 07 `passed` (15/09) — Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang chuẩn định dạng UIT, khớp 100% Phase 05). Slide: bộ học thuật 21 trang kèm Kịch bản toàn team 7 người **đã duyệt chính thức**. |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict (09/09): Phase 00–05 PASSED (6/9 = 66.7%). Phase 06–08 đang hoàn thiện (Sprint 3 closing / Sprint 4 kickoff). 6/6 notebooks hoàn tất. Trung đã hoàn tất chức năng và Browser QA của Demo UI; còn screenshots/clip. Nhóm tiếp tục duyệt báo cáo cuối và chuẩn bị kịch bản diễn tập thuyết trình.**
+> **Verdict (15/09): Phase 00–05, 07 PASSED (7/9 = 77.8%). Phase 06, 08 đang hoàn thiện. Báo cáo Word & Slide đã hoàn tất hoàn toàn. Trung đã hoàn tất chức năng và Browser QA của Demo UI; còn screenshots/clip. Nhóm chuẩn bị kịch bản diễn tập thuyết trình và đóng gói nộp bài.**
 
 ---
 
@@ -269,11 +269,11 @@ Place in `Final/submit/` before zipping.
 5. ✅ Đã Browser QA bố cục mới trên giao diện Sáng/Tối và xác nhận không còn nhãn tiến độ nội bộ
 6. ⏳ **Hành động cần làm:** Chụp 5 ảnh screenshots lưu vào `demo/screenshots/` và quay video demo clip 2–3 phút.
 
-### 🔄 Duy — Phase 07 (Báo cáo Word) — NEAR COMPLETE
+### ✅ Duy — DONE (Phase 07 PASSED)
 1. ✅ Đã viết xong toàn bộ Chương 1–7 trong `report-source.md`, xuất bản DOCX/PDF 32 trang
 2. ✅ Toàn bộ số liệu Chương 5 khớp 100% `reports/model_comparison.csv` của Phase 05
 3. ✅ Bổ sung phân tích Clopper-Pearson 95%, quy chiếu tỷ lệ gian lận gốc (Bảng 6.1) và Bảng 7.1 đối chiếu mục tiêu
-4. ⏳ **Hành động cần làm:** Rà soát lần cuối Abstract và chuẩn bị bản DOCX với tên chuẩn `[Nhom9]_BaoCao_FraudDetection.docx` phục vụ submit.
+4. ✅ Đã xuất bản tự động DOCX/PDF chuẩn định dạng báo cáo UIT với tên chuẩn `[Nhom9]_BaoCao_FraudDetection.docx` phục vụ submit.
 
 ### 🔄 Hôn — Phase 07 & 08 (PM, PPT & Đóng gói) — IN PROGRESS
 1. ✅ **Chính thức phê duyệt** bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người.
