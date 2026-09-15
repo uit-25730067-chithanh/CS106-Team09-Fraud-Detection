@@ -10,8 +10,10 @@ contract and returns a real XGBoost fraud probability from the Phase 04 model.
 
 from __future__ import annotations
 
+import os
 import pickle
 import re
+import sqlite3
 import sys
 import warnings
 from dataclasses import asdict, dataclass
@@ -25,6 +27,12 @@ import streamlit as st
 
 DEMO_DIR = Path(__file__).resolve().parent
 PROJECT_ROOT = DEMO_DIR.parent
+HISTORY_DATABASE_PATH = Path(
+    os.environ.get(
+        "FRAUD_SHIELD_HISTORY_DB",
+        DEMO_DIR / ".data" / "analysis_history.sqlite3",
+    )
+)
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
 if str(PROJECT_ROOT) not in sys.path:
@@ -55,10 +63,15 @@ from input_formatting import (
     MIN_STEP, MAX_STEP, step_to_datetime, datetime_to_step,
     format_currency, parse_currency,
 )
+from history_store import (
+    delete_analysis,
+    load_analysis_history,
+    save_analysis,
+)
 
 
 st.set_page_config(
-    page_title="Fraud Shield | Nhóm 9",
+    page_title="Fraud Shield",
     page_icon=":material/shield:",
     layout="wide",
     initial_sidebar_state="auto",
@@ -87,6 +100,7 @@ st.html(
         margin-inline: auto;
     }
 
+    .st-key-transaction_form [data-testid="stDateInput"] [data-baseweb="input"],
     .st-key-transaction_form [data-testid="stTextInputRootElement"],
     .st-key-transaction_form [data-testid="stNumberInputContainer"],
     .st-key-transaction_form [data-baseweb="select"] > div {
@@ -415,11 +429,6 @@ PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
 SCALER_PATH = PROJECT_ROOT / "models" / "scaler.pkl"
 XGB_MODEL_PATH = PROJECT_ROOT / "models" / "xgb_smote.json"
 LOGO_PATH = DEMO_DIR / "assets" / "fraud-shield-logo.png"
-MODEL_CANDIDATES = (
-    XGB_MODEL_PATH,
-    PROJECT_ROOT / "models" / "rf_smote.pkl",
-    PROJECT_ROOT / "models" / "autoencoder.pkl",
-)
 COMPARISON_PATH = PROJECT_ROOT / "reports" / "model_comparison.csv"
 FIGURES_DIR = PROJECT_ROOT / "reports" / "figures"
 XGB_PREDICTIONS_PATH = PROJECT_ROOT / "reports" / "xgb_predictions.pkl"
@@ -774,6 +783,8 @@ export default function (component) {
         box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-feature_importance_panel,
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-confusion_components_panel,
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-comparison_panel,
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_pending_panel,
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_empty_panel,
@@ -900,6 +911,8 @@ export default function (component) {
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-result_panel,
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-feature_importance_panel,
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-confusion_components_panel,
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-comparison_panel,
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-evaluation_pending_panel,
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_empty_panel,
@@ -942,6 +955,22 @@ export default function (component) {
         color: #ffffff !important;
         -webkit-text-fill-color: #ffffff !important;
       }
+      html[data-fraud-shield-theme] .st-key-confusion_sampling_method [role="radiogroup"] > button:first-of-type[aria-checked="true"] {
+        color: #ffffff !important;
+        background: linear-gradient(110deg, #1d4ed8, #2563eb) !important;
+        border-color: #60a5fa !important;
+        box-shadow: 0 7px 18px rgba(37, 99, 235, 0.24) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-confusion_sampling_method [role="radiogroup"] > button:nth-of-type(2)[aria-checked="true"] {
+        color: #ffffff !important;
+        background: linear-gradient(110deg, #b45309, #d97706) !important;
+        border-color: #f59e0b !important;
+        box-shadow: 0 7px 18px rgba(217, 119, 6, 0.22) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-confusion_sampling_method [role="radiogroup"] > button[aria-checked="true"] * {
+        color: #ffffff !important;
+        -webkit-text-fill-color: #ffffff !important;
+      }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"] {
         border-color: #493073 !important;
         box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.035) !important;
@@ -953,6 +982,29 @@ export default function (component) {
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"]:focus-within {
         border-color: #a78bfa !important;
         box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.18), 0 7px 18px rgba(3, 2, 13, 0.28) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stNumberInputContainer"] {
+        color: var(--st-text-color) !important;
+        background: var(--fraud-input-background) !important;
+        border-color: var(--fraud-input-border) !important;
+        box-shadow: none !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stNumberInputField"] {
+        color: var(--st-text-color) !important;
+        background: transparent !important;
+        -webkit-text-fill-color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stNumberInputStepDown"],
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stNumberInputStepUp"] {
+        color: var(--st-text-color) !important;
+        background: transparent !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stNumberInputContainer"]:hover {
+        border-color: var(--fraud-input-hover) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-transaction_form [data-testid="stNumberInputContainer"]:focus-within {
+        border-color: var(--fraud-input-focus) !important;
+        box-shadow: 0 0 0 3px var(--fraud-input-glow) !important;
       }
       html[data-fraud-shield-theme] .st-key-analyze_transaction button:not(:disabled) {
         color: #ffffff !important;
@@ -1202,6 +1254,221 @@ export default function (component) {
 """,
 )
 
+HISTORY_TABLE = st.components.v2.component(
+    "fraud_shield_history_table",
+    html="""
+<div class="history-table-shell">
+  <div class="history-table" role="table" aria-label="Chi tiết lịch sử giao dịch">
+    <div class="history-grid history-header" role="row">
+      <div role="columnheader">Lần</div>
+      <div role="columnheader">Loại giao dịch</div>
+      <div role="columnheader">Ngày giờ minh họa</div>
+      <div role="columnheader">Số tiền</div>
+      <div role="columnheader">Xác suất</div>
+      <div role="columnheader">Ngưỡng</div>
+      <div role="columnheader">Kết quả</div>
+      <div role="columnheader">Lưu ý dữ liệu</div>
+      <div role="columnheader">Xóa</div>
+    </div>
+    <div class="history-body"></div>
+  </div>
+</div>
+""",
+    css="""
+:host {
+  display: block;
+  width: 100%;
+  color: var(--st-text-color);
+  font-family: var(--st-font);
+}
+.history-table-shell {
+  --history-text: #17213a;
+  --history-surface: #ffffff;
+  --history-header-start: #f3efff;
+  --history-header-end: #eef2ff;
+  --history-border: rgba(99, 102, 241, .3);
+  --history-divider: rgba(99, 102, 241, .16);
+  --history-row: #f8fafc;
+  --history-hover: #f7f5ff;
+  --history-track: #e9e7f8;
+  --history-shadow: rgba(30, 41, 59, .09);
+  width: 100%;
+  overflow-x: auto;
+  color: var(--history-text);
+  border: 1px solid var(--history-border);
+  border-radius: 1.15rem;
+  background: var(--history-surface);
+  box-shadow: 0 10px 28px var(--history-shadow);
+}
+.history-table-shell[data-theme="dark"] {
+  --history-text: #f8fafc;
+  --history-surface: linear-gradient(155deg, #130b2b, #0d081f);
+  --history-header-start: #241444;
+  --history-header-end: #19133b;
+  --history-border: rgba(99, 102, 241, .48);
+  --history-divider: rgba(99, 102, 241, .2);
+  --history-row: #151827;
+  --history-hover: #1b1138;
+  --history-track: #30204f;
+  --history-shadow: rgba(3, 2, 13, .42);
+}
+.history-table {
+  min-width: 900px;
+  width: 100%;
+}
+.history-grid {
+  display: grid;
+  grid-template-columns: .55fr 1.05fr 1.3fr .85fr 1.35fr .75fr .8fr 1fr 64px;
+  align-items: center;
+}
+.history-header {
+  min-height: 40px;
+  color: var(--history-text);
+  background: linear-gradient(
+    105deg,
+    var(--history-header-start),
+    var(--history-header-end)
+  );
+  border-bottom: 1px solid var(--history-border);
+  font-size: .86rem;
+  font-weight: 650;
+}
+.history-header > div,
+.history-row > div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  height: 100%;
+  padding: .55rem .45rem;
+  text-align: center;
+  border-right: 1px solid var(--history-divider);
+}
+.history-header > div:last-child,
+.history-row > div:last-child {
+  border-right: 0;
+}
+.history-row {
+  min-height: 46px;
+  font-size: .88rem;
+  background: var(--history-row);
+  border-bottom: 1px solid var(--history-divider);
+  transition: background 140ms ease;
+}
+.history-row:last-child { border-bottom: 0; }
+.history-row:hover {
+  background: var(--history-hover);
+}
+.probability-cell { gap: .5rem; }
+.probability-track {
+  flex: 1;
+  min-width: 44px;
+  height: 6px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--history-track);
+}
+.probability-fill {
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #7c3aed, #6366f1);
+}
+.delete-button {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  color: color-mix(in srgb, var(--st-text-color) 76%, #ef4444);
+  border: 0;
+  border-radius: .55rem;
+  background: transparent;
+  cursor: pointer;
+  transition: color 140ms ease, background 140ms ease, transform 140ms ease;
+}
+.delete-button:hover {
+  color: #ef4444;
+  background: color-mix(in srgb, #ef4444 12%, transparent);
+  transform: translateY(-1px);
+}
+.delete-button svg { width: 17px; height: 17px; }
+@media (max-width: 760px) {
+  .history-table { min-width: 820px; }
+  .history-header, .history-row { font-size: .8rem; }
+}
+""",
+    js="""
+export default function (component) {
+  const { data, parentElement, setTriggerValue } = component
+  const body = parentElement.querySelector(".history-body")
+  const shell = parentElement.querySelector(".history-table-shell")
+  if (!body || !shell) return
+  const appRoot = parentElement.ownerDocument.documentElement
+  const syncTheme = () => {
+    shell.dataset.theme = appRoot.dataset.fraudShieldTheme === "dark"
+      ? "dark"
+      : "light"
+  }
+  const themeObserver = new MutationObserver(syncTheme)
+  themeObserver.observe(appRoot, {
+    attributes: true,
+    attributeFilter: ["data-fraud-shield-theme"],
+  })
+  syncTheme()
+  body.replaceChildren()
+
+  const textCell = (value, className = "") => {
+    const cell = document.createElement("div")
+    cell.className = className
+    cell.textContent = String(value ?? "")
+    return cell
+  }
+
+  for (const item of data?.rows ?? []) {
+    const row = document.createElement("div")
+    row.className = "history-grid history-row"
+    row.setAttribute("role", "row")
+    row.append(textCell(item.sequence))
+    row.append(textCell(item.transaction_type))
+    row.append(textCell(item.simulated_datetime))
+    row.append(textCell(item.amount))
+
+    const probability = document.createElement("div")
+    probability.className = "probability-cell"
+    const track = document.createElement("span")
+    track.className = "probability-track"
+    const fill = document.createElement("span")
+    fill.className = "probability-fill"
+    fill.style.width = `${Math.min(100, Math.max(0, Number(item.probability_value) * 100))}%`
+    track.append(fill)
+    probability.append(track, document.createTextNode(item.probability))
+    row.append(probability)
+
+    row.append(textCell(item.threshold))
+    row.append(textCell(item.result))
+    row.append(textCell(item.quality_warnings))
+
+    const action = document.createElement("div")
+    const button = document.createElement("button")
+    button.type = "button"
+    button.className = "delete-button"
+    button.title = `Xóa giao dịch #${item.sequence}`
+    button.setAttribute("aria-label", button.title)
+    button.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12Zm3.46-7.12 1.41-1.41L12 11.59l1.12-1.12 1.41 1.41L13.41 13l1.12 1.12-1.41 1.41L12 14.41l-1.12 1.12-1.41-1.41L10.59 13l-1.13-1.12ZM15.5 4l-1-1h-5l-1 1H5v2h14V4z"/></svg>'
+    button.onclick = () => setTriggerValue("deleted", Number(item.sequence))
+    action.append(button)
+    row.append(action)
+    body.append(row)
+  }
+
+  return () => {
+    themeObserver.disconnect()
+    body.querySelectorAll("button").forEach((button) => { button.onclick = null })
+  }
+}
+""",
+)
+
 TRANSACTION_TYPES = ("TRANSFER", "CASH_OUT")
 TRANSACTION_LABELS = {
     "TRANSFER": "Chuyển khoản",
@@ -1426,28 +1693,28 @@ def load_labeled_test_cases(
         (
             "true_negative",
             "Hợp lệ — dự đoán đúng",
-            "Nhãn thật 0, model dự đoán hợp lệ ở ngưỡng 50%.",
+            "Nhãn thật 0, mô hình dự đoán hợp lệ ở ngưỡng 50%.",
             (y_test == 0) & (y_pred == 0),
             "min",
         ),
         (
             "true_positive",
             "Gian lận — phát hiện đúng",
-            "Nhãn thật 1, model phát hiện bất thường ở ngưỡng 50%.",
+            "Nhãn thật 1, mô hình phát hiện bất thường ở ngưỡng 50%.",
             (y_test == 1) & (y_pred == 1),
             "max",
         ),
         (
             "false_positive",
             "Cảnh báo nhầm",
-            "Nhãn thật 0 nhưng model gắn cờ ở ngưỡng 50%.",
+            "Nhãn thật 0 nhưng mô hình gắn cờ ở ngưỡng 50%.",
             (y_test == 0) & (y_pred == 1),
             "max",
         ),
         (
             "false_negative",
             "Bỏ sót gian lận",
-            "Nhãn thật 1 nhưng model chưa phát hiện ở ngưỡng 50%.",
+            "Nhãn thật 1 nhưng mô hình chưa phát hiện ở ngưỡng 50%.",
             (y_test == 1) & (y_pred == 0),
             "min",
         ),
@@ -1951,20 +2218,32 @@ def initialize_state() -> None:
     st.session_state.setdefault("active_test_case", None)
     st.session_state.setdefault("decision_threshold_percent", 50)
     st.session_state.setdefault("active_view", "prediction")
-    st.session_state.setdefault("analysis_history", [])
-    st.session_state.setdefault("analysis_sequence", 0)
+    refresh_analysis_history()
+
+
+def refresh_analysis_history() -> None:
+    """Reload persistent history so restarts and other tabs stay in sync."""
+
+    try:
+        history = load_analysis_history(HISTORY_DATABASE_PATH)
+    except (OSError, sqlite3.Error, ValueError) as error:
+        st.session_state.setdefault("analysis_history", [])
+        st.session_state["history_storage_error"] = str(error)
+        return
+
+    st.session_state["analysis_history"] = history
+    st.session_state["history_storage_error"] = None
 
 
 def record_analysis(
     transaction: TransactionInput,
     prediction: PredictionResult,
     validation_notes: list[str],
-) -> None:
-    """Add one successful model run to the current browser session."""
+) -> bool:
+    """Persist one successful model run and refresh the current view."""
 
-    st.session_state["analysis_sequence"] += 1
     entry = {
-        "sequence": st.session_state["analysis_sequence"],
+        "created_at": datetime.now().astimezone().isoformat(timespec="seconds"),
         "transaction_type": transaction.transaction_type,
         "step": transaction.step,
         "amount": transaction.amount,
@@ -1973,8 +2252,31 @@ def record_analysis(
         "label": prediction.label,
         "quality_warnings": len(validation_notes),
     }
-    history = [*st.session_state["analysis_history"], entry]
-    st.session_state["analysis_history"] = history[-25:]
+    try:
+        save_analysis(HISTORY_DATABASE_PATH, entry)
+    except (OSError, sqlite3.Error, KeyError, TypeError, ValueError) as error:
+        st.session_state["history_storage_error"] = str(error)
+        return False
+
+    refresh_analysis_history()
+    return True
+
+
+def delete_history_row() -> None:
+    """Delete only the history row whose inline icon was clicked."""
+
+    component_state = st.session_state.get("history_table")
+    if not component_state:
+        return
+    analysis_id = component_state.get("deleted")
+    if analysis_id is None:
+        return
+    try:
+        delete_analysis(HISTORY_DATABASE_PATH, int(analysis_id))
+    except (OSError, sqlite3.Error, TypeError, ValueError) as error:
+        st.session_state["history_storage_error"] = str(error)
+        return
+    refresh_analysis_history()
 
 
 def sync_time_from_step() -> None:
@@ -2185,7 +2487,7 @@ def render_sidebar_navigation() -> str:
                         "Chọn kết quả kiểm thử",
                         options=tuple(labeled_cases),
                         index=None,
-                        placeholder="Chọn mẫu từ X_test",
+                        placeholder="Chọn tình huống kiểm thử",
                         format_func=lambda key: labeled_cases[key].title,
                         key="test_case_selector",
                         on_change=apply_selected_test_case,
@@ -2196,7 +2498,7 @@ def render_sidebar_navigation() -> str:
                     else:
                         st.caption(labeled_cases[selected_test_case].description)
                 except (FileNotFoundError, KeyError, OSError, ValueError):
-                    st.caption("Chưa đọc được artifact kiểm thử XGBoost.")
+                    st.caption("Dữ liệu kiểm thử chưa sẵn sàng.")
 
         with st.container(key="theme_bootstrap"):
             THEME_SWITCHER(
@@ -2213,7 +2515,7 @@ def render_sidebar_navigation() -> str:
             width="stretch",
             key="theme_mode_menu",
         ):
-            st.caption("SYSTEM • LIGHT • DARK")
+            st.caption("CHẾ ĐỘ HIỂN THỊ")
             THEME_SWITCHER(
                 key="fraud-shield-theme-switcher",
                 data={"current_theme": st.context.theme.type or "light"},
@@ -2353,7 +2655,7 @@ def render_labeled_test_verdict(prediction: PredictionResult) -> None:
 
     st.markdown("**Đối chiếu với nhãn thật**")
     with st.container(horizontal=True):
-        st.metric("Nhãn trong X_test", true_text, border=True)
+        st.metric("Nhãn thực tế", true_text, border=True)
         st.metric("XGBoost dự đoán", predicted_text, border=True)
     st.badge(
         "Dự đoán đúng" if is_correct else "Dự đoán sai",
@@ -2361,7 +2663,7 @@ def render_labeled_test_verdict(prediction: PredictionResult) -> None:
         color="green" if is_correct else "red",
     )
     st.caption(
-        f"Mẫu #{test_case.test_position + 1:,} trong tập test • "
+        f"Mã mẫu kiểm thử #{test_case.test_position + 1:,} • "
         f"Nhãn thật {test_case.true_label} • Ngưỡng hiện tại {prediction.threshold:.0%}"
     )
 
@@ -2381,7 +2683,7 @@ def render_header(summary: DatasetSummary | None) -> None:
             st.title("Bản đồ tín hiệu giao dịch")
             st.markdown(
                 "Biến số tiền, thời điểm và biến động số dư thành một góc nhìn "
-                "**trực quan, dễ đọc**, kèm dự đoán thật từ model của Nhóm 9."
+                "**trực quan, dễ đọc**, kèm dự đoán từ mô hình đã huấn luyện."
             )
 
             with st.container(horizontal=True):
@@ -2401,24 +2703,25 @@ def render_header(summary: DatasetSummary | None) -> None:
 
     total_label = format_integer(summary.total) if summary else "200.000"
     split_label = (
-        f"{summary.train_total // 1000}k train • {summary.test_total // 1000}k test"
+        f"{summary.train_total // 1000}k huấn luyện • "
+        f"{summary.test_total // 1000}k kiểm thử"
         if summary
-        else "160k train • 40k test"
+        else "160k huấn luyện • 40k kiểm thử"
     )
     fraud_ratio_label = (
         format_percentage(summary.fraud_ratio) if summary else "4,11%"
     )
-    available_models = sum(path.exists() for path in MODEL_CANDIDATES)
+    model_ready = XGB_MODEL_PATH.is_file() and SCALER_PATH.is_file()
 
     metric_columns = st.columns(4, gap="small")
     metric_specs = (
         ("Dữ liệu đã xử lý", total_label, split_label),
-        ("Tỷ lệ gian lận", fraud_ratio_label, "Tính từ y_train + y_test"),
+        ("Tỷ lệ gian lận", fraud_ratio_label, "Trên toàn bộ dữ liệu"),
         ("Không gian đặc trưng", "14", "10 số • 4 nhị phân"),
         (
-            "Model dự đoán",
-            f"{available_models}/3",
-            "Artifact đã tải",
+            "Mô hình phân tích",
+            "Sẵn sàng" if model_ready else "Chưa sẵn sàng",
+            "XGBoost đang hoạt động" if model_ready else "Kiểm tra dữ liệu mô hình",
         ),
     )
     for column, (label, value, delta) in zip(metric_columns, metric_specs):
@@ -2471,12 +2774,12 @@ def render_transaction_form() -> None:
                     SCALER_PATH,
                 )[active_test_case]
                 st.badge(
-                    f"Mẫu X_test: {test_case.title}",
+                    f"Mẫu kiểm thử: {test_case.title}",
                     icon=":material/fact_check:",
                     color="blue",
                 )
             except (FileNotFoundError, KeyError, OSError, ValueError):
-                st.badge("Không đọc được mẫu X_test", color="red")
+                st.badge("Mẫu kiểm thử chưa sẵn sàng", color="red")
 
         with st.container(key="transaction_form", border=True, gap="medium"):
             st.badge(
@@ -2503,7 +2806,7 @@ def render_transaction_form() -> None:
             if "transaction_date_input" not in st.session_state:
                 sync_time_from_step()
             st.markdown("**Thời điểm giao dịch**")
-            date_column, hour_column = st.columns(2, gap="medium")
+            date_column, hour_column, step_column = st.columns(3, gap="medium")
             with date_column:
                 selected_date = st.date_input(
                     "Ngày", value=None, format="DD/MM/YYYY",
@@ -2520,11 +2823,27 @@ def render_transaction_form() -> None:
                     on_change=sync_step_from_time,
                     persist_state="session",
                 )
+            with step_column:
+                selected_step = st.number_input(
+                    "Step",
+                    min_value=MIN_STEP,
+                    max_value=MAX_STEP,
+                    step=1,
+                    key="transaction_step_input",
+                    on_change=sync_time_from_step,
+                    help=(
+                        "Mỗi step tương ứng 1 giờ trong mô phỏng PaySim. "
+                        "Thay đổi Step sẽ tự cập nhật Ngày và Giờ."
+                    ),
+                    persist_state="session",
+                )
             time_error = None
             try:
                 if selected_date is None or selected_time is None:
                     raise ValueError("Chọn đủ ngày và giờ giao dịch.")
                 step = datetime_to_step(datetime.combine(selected_date, selected_time))
+                if step != int(selected_step):
+                    raise ValueError("Step và Ngày/Giờ chưa đồng bộ.")
             except ValueError as error:
                 time_error = str(error)
                 st.error(time_error)
@@ -2559,7 +2878,7 @@ def render_transaction_form() -> None:
                     amount, old_balance_origin, new_balance_origin,
                     old_balance_destination, new_balance_destination,
                 )),
-                help="Kiểm tra dữ liệu, tạo 14 đặc trưng và chạy XGBoost-SMOTE.",
+                help="Kiểm tra dữ liệu, tạo 14 đặc trưng và phân tích giao dịch.",
             )
         if submitted:
             transaction = TransactionInput(
@@ -2580,15 +2899,16 @@ def render_transaction_form() -> None:
                 st.session_state["decision_threshold_percent"] / 100,
             )
             if submitted_prediction is not None:
-                record_analysis(
+                history_saved = record_analysis(
                     transaction,
                     submitted_prediction,
                     st.session_state["validation_notes"],
                 )
-                st.toast(
-                    "Đã phân tích và lưu vào lịch sử phiên.",
-                    icon=":material/shield:",
-                )
+                if not history_saved:
+                    st.toast(
+                        "Đã phân tích nhưng chưa lưu được lịch sử.",
+                        icon=":material/error:",
+                    )
             else:
                 st.toast(
                     f"Không thể lưu kết quả: {submitted_error}",
@@ -2611,10 +2931,10 @@ def render_transaction_form() -> None:
                     "Hoàn tất biểu mẫu bên trái và chọn "
                     "**Phân tích giao dịch**."
                 )
-                st.caption("Kết quả chỉ xuất hiện sau khi model chạy thành công.")
+                st.caption("Kết quả chỉ xuất hiện sau khi mô hình phân tích thành công.")
             else:
                 transaction = TransactionInput(**raw_transaction)
-                prediction, prediction_error = run_transaction_inference(
+                prediction, _prediction_error = run_transaction_inference(
                     transaction,
                     st.session_state["decision_threshold_percent"] / 100,
                 )
@@ -2625,8 +2945,8 @@ def render_transaction_form() -> None:
                         color="red",
                     )
                     st.warning(
-                        "Không thể chạy model nên hệ thống không suy đoán kết quả. "
-                        f"Chi tiết: {prediction_error}",
+                        "Không thể phân tích giao dịch. Vui lòng kiểm tra "
+                        "dữ liệu mô hình và thử lại.",
                         icon=":material/lock:",
                     )
                 else:
@@ -2634,7 +2954,7 @@ def render_transaction_form() -> None:
                     render_labeled_test_verdict(prediction)
                     if prediction.label == 1:
                         st.error(
-                            "Model phát hiện tín hiệu rủi ro cao. Giao dịch cần "
+                            "Hệ thống phát hiện tín hiệu rủi ro cao. Giao dịch cần "
                             "được kiểm tra trước khi xử lý tiếp.",
                             icon=":material/gpp_maybe:",
                         )
@@ -2784,12 +3104,6 @@ def render_transaction_form() -> None:
                         },
                     )
 
-        st.caption(
-            ":material/info: XGBoost-SMOTE là model triển khai tạm thời; lựa chọn "
-            "chính thức sẽ theo kết luận Phase 05."
-        )
-
-
 def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
     """Render a lively, evidence-based snapshot before models are available."""
 
@@ -2801,19 +3115,18 @@ def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
         ):
             st.markdown("#### Nền dữ liệu đánh giá")
             st.badge(
-                "Số liệu thật • Phase 01",
+                "Dữ liệu đã xác thực",
                 icon=":material/verified:",
                 color="green",
             )
 
         st.caption(
-            "Phân bố dưới đây được đọc trực tiếp từ y_train.pkl và y_test.pkl; "
-            "không phải dữ liệu minh họa."
+            "Phân bố lớp được tính từ tập dữ liệu đánh giá đã xử lý."
         )
 
         if summary is None:
             st.warning(
-                "Chưa đọc được processed labels để tạo trực quan hóa.",
+                "Dữ liệu đánh giá chưa sẵn sàng.",
                 icon=":material/database_off:",
             )
             return
@@ -2822,6 +3135,11 @@ def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
             "Phạm vi dữ liệu",
             ["Toàn bộ", "Train", "Test"],
             default="Toàn bộ",
+            format_func=lambda value: {
+                "Toàn bộ": "Toàn bộ",
+                "Train": "Huấn luyện",
+                "Test": "Kiểm thử",
+            }[value],
             key="dataset_scope",
             width="stretch",
         )
@@ -2835,7 +3153,7 @@ def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
             )
 
         with distribution_column:
-            st.markdown("**Stratified split giữ tỷ lệ ổn định**")
+            st.markdown("**Tách dữ liệu phân tầng giữ tỷ lệ ổn định**")
             st.altair_chart(
                 build_split_distribution_chart(summary),
                 width="stretch",
@@ -2843,14 +3161,14 @@ def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
             )
             with st.container(horizontal=True):
                 st.metric(
-                    "Fraud train",
+                    "Gian lận — huấn luyện",
                     format_integer(summary.train_fraud),
                     format_percentage(summary.train_fraud / summary.train_total),
                     delta_color="off",
                     border=True,
                 )
                 st.metric(
-                    "Fraud test",
+                    "Gian lận — kiểm thử",
                     format_integer(summary.test_fraud),
                     format_percentage(summary.test_fraud / summary.test_total),
                     delta_color="off",
@@ -2862,16 +3180,15 @@ def render_model_comparison() -> bool:
     """Render the validated Phase 05 comparison table when available."""
 
     with st.container(key="comparison_panel", border=True):
-        st.markdown("#### Bảng so sánh chính thức")
+        st.markdown("#### So sánh hiệu năng mô hình")
         if not COMPARISON_PATH.is_file():
             st.badge(
-                "Đang chờ model_comparison.csv",
+                "Dữ liệu so sánh chưa sẵn sàng",
                 icon=":material/table_chart:",
                 color="orange",
             )
             st.caption(
-                "Phase 05 chưa bàn giao bảng 3 mô hình × 5 metrics. "
-                "UI không tạo số liệu thay thế."
+                "Hệ thống không hiển thị số liệu thay thế khi kết quả đánh giá bị thiếu."
             )
             return False
 
@@ -2880,18 +3197,21 @@ def render_model_comparison() -> bool:
                 COMPARISON_PATH,
                 COMPARISON_PATH.stat().st_mtime_ns,
             )
-        except (OSError, ValueError) as error:
+        except (OSError, ValueError):
             st.badge(
-                "Artifact chưa hợp lệ",
+                "Dữ liệu đánh giá không hợp lệ",
                 icon=":material/error:",
                 color="red",
             )
-            st.error(str(error), icon=":material/data_alert:")
+            st.error(
+                "Không thể đọc kết quả so sánh mô hình.",
+                icon=":material/data_alert:",
+            )
             return False
 
         best_model = comparison.iloc[0]
         st.badge(
-            "Đã đồng bộ Phase 05",
+            "Dữ liệu đánh giá đã sẵn sàng",
             icon=":material/check_circle:",
             color="green",
         )
@@ -2934,8 +3254,8 @@ def render_model_comparison() -> bool:
             width="stretch",
         )
         st.caption(
-            "Bảng được đọc trực tiếp từ reports/model_comparison.csv; "
-            "Accuracy không được dùng làm metric chính."
+            "So sánh tập trung vào Precision, Recall, F1-score, ROC-AUC và PR-AUC; "
+            "Accuracy không được dùng làm chỉ số chính."
         )
         return True
 
@@ -2950,13 +3270,13 @@ def render_evaluation_figures() -> bool:
     if not figure_paths:
         with st.container(key="evaluation_pending_panel", border=True):
             st.badge(
-                "Đang chờ figures Phase 05",
+                "Biểu đồ đánh giá chưa sẵn sàng",
                 icon=":material/monitoring:",
                 color="orange",
             )
             st.write(
-                "ROC, Precision–Recall và ma trận nhầm lẫn sẽ tự xuất hiện "
-                "khi Khang lưu đúng tên file vào `reports/figures/`."
+                "ROC, Precision–Recall và ma trận nhầm lẫn sẽ hiển thị "
+                "khi dữ liệu đánh giá đầy đủ."
             )
             st.caption("Không dùng biểu đồ minh họa thay cho kết quả thực nghiệm.")
         return False
@@ -2978,49 +3298,101 @@ def render_evaluation_figures() -> bool:
                         width="stretch",
                     )
 
-    confusion_specs = [
+    importance_specs = [
         figure
         for figure in EVALUATION_FIGURES
-        if figure.category == "confusion" and figure.key in figure_paths
+        if figure.category == "importance" and figure.key in figure_paths
     ]
-    if confusion_specs:
+    for figure in importance_specs:
+        st.markdown("#### Đặc trưng quyết định mô hình")
+        with st.container(key="feature_importance_panel", border=True):
+            st.badge(
+                "GIẢI THÍCH MÔ HÌNH",
+                icon=":material/psychology:",
+                color="violet",
+            )
+            st.image(
+                figure_paths[figure.key],
+                caption=figure.caption,
+                width="stretch",
+            )
+
+    confusion_available = any(
+        figure.category == "confusion" and figure.key in figure_paths
+        for figure in EVALUATION_FIGURES
+    )
+    if confusion_available:
         st.markdown("#### Ma trận nhầm lẫn")
-        confusion_columns = st.columns(len(confusion_specs), gap="medium")
+        st.caption(
+            "Chuyển phương pháp cân bằng để đối chiếu Random Forest "
+            "và XGBoost; Autoencoder không dùng tái lấy mẫu."
+        )
+        sampling_method = st.segmented_control(
+            "Phương pháp cân bằng dữ liệu",
+            options=("SMOTENC", "ADASYN"),
+            default="SMOTENC",
+            required=True,
+            format_func=lambda value: (
+                "SMOTENC • Chính thức"
+                if value == "SMOTENC"
+                else "ADASYN • Đối chứng"
+            ),
+            key="confusion_sampling_method",
+            width="stretch",
+            persist_state="session",
+        )
+        selected_keys = {
+            "SMOTENC": ("confusion_rf_smotenc", "confusion_xgb_smotenc"),
+            "ADASYN": ("confusion_rf_adasyn", "confusion_xgb_adasyn"),
+        }[sampling_method or "SMOTENC"]
+        visible_keys = (*selected_keys, "confusion_autoencoder")
+        confusion_specs = [
+            figure
+            for figure in EVALUATION_FIGURES
+            if figure.key in visible_keys and figure.key in figure_paths
+        ]
+        confusion_columns = st.columns(3, gap="medium")
         for column, figure in zip(confusion_columns, confusion_specs):
             with column:
                 with st.container(border=True, height="stretch"):
-                    st.markdown(
-                        f"**{figure.title.replace('Ma trận nhầm lẫn — ', '')}**"
-                    )
+                    st.markdown(f"**{figure.title}**")
                     st.image(
                         figure_paths[figure.key],
                         caption=figure.caption,
                         width="stretch",
                     )
 
+    component_specs = [
+        figure
+        for figure in EVALUATION_FIGURES
+        if figure.category == "components" and figure.key in figure_paths
+    ]
+    for figure in component_specs:
+        with st.container(key="confusion_components_panel", border=True):
+            st.markdown(f"**{figure.title}**")
+            st.image(
+                figure_paths[figure.key],
+                caption=figure.caption,
+                width="stretch",
+            )
+
     if missing_filenames:
         st.warning(
-            "Còn thiếu: " + ", ".join(missing_filenames),
+            f"Còn {len(missing_filenames)} biểu đồ chưa sẵn sàng.",
             icon=":material/pending_actions:",
         )
         return False
 
-    st.badge(
-        "Đủ 5 figures Phase 05",
-        icon=":material/check_circle:",
-        color="green",
-    )
     return True
 
 
 def render_model_performance(summary: DatasetSummary | None) -> None:
     """Render training evidence and official Phase 05 outputs fail-closed."""
 
-    st.caption("MODEL PERFORMANCE WORKSPACE")
+    st.caption("PHÂN TÍCH HIỆU NĂNG")
     st.subheader("Hiệu năng và mức sẵn sàng")
     st.caption(
-        "Metric huấn luyện được đọc từ Phase 03–04; bảng và figures tổng hợp "
-        "chỉ hiển thị khi artifacts Phase 05 hợp lệ."
+        "Theo dõi chỉ số huấn luyện, so sánh mô hình và các biểu đồ đánh giá."
     )
 
     render_dataset_snapshot(summary)
@@ -3042,29 +3414,31 @@ def render_model_performance(summary: DatasetSummary | None) -> None:
                 st.metric(
                     model_name,
                     "Chưa có",
-                    "Chờ artifact",
+                    "Dữ liệu chưa sẵn sàng",
                     delta_color="off",
                     border=True,
                 )
 
-    comparison_ready = render_model_comparison()
-    figures_ready = render_evaluation_figures()
-    if comparison_ready and figures_ready:
-        st.success(
-            "Màn hình hiệu năng đã đồng bộ đầy đủ kết quả chính thức từ Phase 05.",
-            icon=":material/task_alt:",
-        )
+    render_model_comparison()
+    render_evaluation_figures()
 
 
 def render_analysis_history() -> None:
-    """Render a session-scoped review workspace for successful predictions."""
+    """Render the persistent review workspace for successful predictions."""
 
-    st.caption("SESSION ANALYSIS WORKSPACE")
+    st.caption("THEO DÕI GIAO DỊCH")
     st.subheader("Lịch sử phân tích")
     st.caption(
-        "Theo dõi tối đa 25 giao dịch đã chạy model trong tab hiện tại. "
-        "Dữ liệu sẽ được xóa khi đóng phiên trình duyệt."
+        "Theo dõi tối đa 250 giao dịch đã được phân tích. Lịch sử được lưu trên "
+        "thiết bị và vẫn còn sau khi khởi động lại ứng dụng."
     )
+
+    storage_error = st.session_state.get("history_storage_error")
+    if storage_error:
+        st.error(
+            "Không thể truy cập nơi lưu lịch sử trên thiết bị. Vui lòng thử lại.",
+            icon=":material/database_off:",
+        )
 
     history = st.session_state["analysis_history"]
     if not history:
@@ -3245,18 +3619,26 @@ def render_analysis_history() -> None:
             "Lưu ý dữ liệu",
         ]
     ]
-    st.dataframe(
-        display_frame.style.format({"Số tiền": format_currency}),
-        hide_index=True,
+    display_frame["Số tiền"] = display_frame["Số tiền"].map(format_currency)
+    component_rows = [
+        {
+            "sequence": int(row["Lần"]),
+            "transaction_type": row["Loại giao dịch"],
+            "simulated_datetime": row["Ngày giờ minh họa"],
+            "amount": row["Số tiền"],
+            "probability": f"{float(row['Xác suất']):.0%}",
+            "probability_value": float(row["Xác suất"]),
+            "threshold": f"{float(row['Ngưỡng']):.0%}",
+            "result": row["Kết quả"],
+            "quality_warnings": int(row["Lưu ý dữ liệu"]),
+        }
+        for _, row in display_frame.iterrows()
+    ]
+    HISTORY_TABLE(
+        data={"rows": component_rows},
+        key="history_table",
         width="stretch",
-        column_config={
-            "Xác suất": st.column_config.ProgressColumn(
-                format="percent",
-                min_value=0,
-                max_value=1,
-            ),
-            "Ngưỡng": st.column_config.NumberColumn(format="percent"),
-        },
+        on_deleted_change=delete_history_row,
     )
     st.download_button(
         "Tải lịch sử CSV",

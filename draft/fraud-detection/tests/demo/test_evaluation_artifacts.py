@@ -99,3 +99,16 @@ def test_figure_discovery_reports_present_and_missing_files(tmp_path: Path):
     assert figures == {available.key: tmp_path / available.filename}
     assert available.filename not in missing
     assert len(missing) == len(EVALUATION_FIGURES) - 1
+
+
+def test_figure_contract_covers_all_nine_distinct_evaluation_views():
+    figure_map = {figure.key: figure.filename for figure in EVALUATION_FIGURES}
+
+    assert len(EVALUATION_FIGURES) == 9
+    assert len(set(figure_map.values())) == 9
+    assert figure_map["feature_importance"] == "feature_importance_comparison.png"
+    assert figure_map["confusion_components"] == "confusion_matrix_components.png"
+    assert figure_map["confusion_rf_smotenc"] == "confusion_matrix_rf-smotenc.png"
+    assert figure_map["confusion_xgb_smotenc"] == "confusion_matrix_xgb-smotenc.png"
+    assert figure_map["confusion_rf_adasyn"] == "confusion_matrix_rf-adasyn.png"
+    assert figure_map["confusion_xgb_adasyn"] == "confusion_matrix_xgb-adasyn.png"

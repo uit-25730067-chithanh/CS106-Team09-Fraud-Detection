@@ -7,7 +7,7 @@ effort: ~40h (7 người)
 branch: main
 tags: [cs106, fraud-detection, academic, python, ml, submit]
 created: 2026-08-24
-updated: 2026-09-06
+updated: 2026-09-09
 sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
 ---
 
@@ -24,8 +24,8 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 |--------|----------|---------------|---------------|
 | **Sprint 1** | 25/8 – 28/8 | Setup repo + Scaffold, phân chia công việc | Tối Thứ 6 28/8 |
 | **Sprint 2** | 28/8 – 4/9 | Tải dữ liệu, EDA, Preprocessing, Phân tích imbalance. Mã nguồn đánh giá mẫu & UI shell | Tối Thứ 6 4/9 |
-| **Sprint 3** | 4/9 – 11/9 | Xử lý imbalance (SMOTE/ADASYN), Modeling (RF, XGBoost, Autoencoder). Viết Methodology | Tối Thứ 6 11/9 |
-| **Sprint 4** | 11/9 – 18/9 | Evaluation, Demo UI browser QA + figures + evidence, Báo cáo & PPT hoàn thiện, Đóng gói nộp bài | Deadline 18/9 |
+| **Sprint 3** | 4/9 – 11/9 | Xử lý imbalance (SMOTE/ADASYN), Modeling (RF, XGBoost, Autoencoder). Viết Methodology, hoàn thành 6/6 notebooks & Evaluation | Tối Thứ 6 11/9 |
+| **Sprint 4** | 11/9 – 18/9 | Demo UI screenshots & clip, hoàn thiện báo cáo Word/PPT, diễn tập thuyết trình, đóng gói nộp bài | Deadline 18/9 |
 
 > ⚡ Nhóm Đánh giá, Báo cáo & Demo (Khang, Trung, Duy, Hôn) bắt đầu triển khai song song từ Sprint 2.
 > Phase files 05–07 có mục `Early Start Tasks` cho các thành viên thực hiện trước.
@@ -48,17 +48,17 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `passed` ✅ | RF-SMOTE F1=0.9973 AUC=0.9994, RF-ADASYN F1=0.9966 AUC=0.9992 (digits=4 synced) |
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `passed` ✅ | 4/4 scripts done; notebook 06 chạy Restart&Run All sạch; `model_comparison.csv` + 7 figures xuất xong, khớp ch5_metrics_recomputed.csv |
-| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI, inference, adapter Phase 05 và Browser QA đã xong; chờ artifacts chính thức + screenshots/clip |
-| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), chờ đối chiếu Phase 05; PPT: bộ slide học thuật 21 trang & Kịch bản toàn team (đang xem xét) |
-| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 05–07; Đã có 5/6 notebooks (chỉ còn thiếu 06 của Khang) |
+| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI, inference, mapping datetime/VNĐ, comparison + 9 figures, SQLite và Browser QA đã xong; chờ screenshots/clip |
+| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 06–07; Đã có 6/6 notebooks (100% hoàn thành) |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
-> **Phase 06 — Trung — checkpoint 05/09/2026:** Đã hoàn tất UI, XGBoost inference, mẫu test có nhãn, adapter fail-closed cho comparison CSV + 5 figures và Browser QA System/Sáng/Tối; `13` demo tests và `21` tests toàn project đều pass. Phase vẫn `pending`; còn artifacts chính thức Phase 05, screenshots hiện tại và demo clip.
+> **Phase 06 — Trung — checkpoint 09/09/2026:** Đã hoàn tất UI, XGBoost inference, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN, lịch sử SQLite và Browser QA bố cục mới; `45` demo tests và `87` tests toàn project đều pass. Phase vẫn `pending`; còn 5 screenshots và demo clip 2–3 phút.
 >
-> **Phase 07 — Duy & Hôn — checkpoint 04/09/2026:** Duy đã hoàn thành Chương 1–7 của báo cáo. Chương 4 Phương pháp và Chương 5 Kết quả được tái tính từ prediction artifacts, Chương 6 Thảo luận bổ sung phép quy chiếu Precision về tỷ lệ gian lận gốc cùng phân tích khoảng tin cậy cho thấy khác biệt giữa bốn biến thể học có giám sát chưa đủ tin cậy để xếp hạng, Chương 7 Kết luận có Bảng 7.1 đối chiếu bảy mục tiêu của Mục 1.3.2. Bản DOCX/PDF 31 trang được sinh tự động từ `report-source.md` bằng `build_report.py`, và toàn bộ số liệu tái lập được bằng `run_report_metrics.py`. Bộ slide học thuật 21 trang cùng Kịch bản toàn team đang được xem xét làm bản chính thức. Phase vẫn `pending` chờ Phase 05 xuất comparison CSV cùng ROC/PR figures để đối chiếu, và chờ viết Abstract.
+> **Phase 07 — Duy & Hôn — checkpoint 08/09/2026:** Duy đã hoàn thành Chương 1–7 của báo cáo (32 trang DOCX/PDF), số liệu khớp 100% với `reports/model_comparison.csv` của Phase 05. Bộ slide học thuật 21 trang cùng Kịch bản toàn team 7 người (PR #29) đã được PM Hôn **chính thức phê duyệt** làm sản phẩm bảo vệ của Nhóm 9. Phase vẫn `pending` chờ xuất bản Word tên chuẩn `[Nhom9]_BaoCao_FraudDetection.docx` và tổ chức diễn tập thuyết trình.
 >
-> **PM Audit — Hôn — 04/09/2026:** Tiến độ notebooks: Sơn đã bổ sung notebook 02 và 03 (hiện có 5/6, chỉ còn thiếu 06 của Khang). 2 scripts evaluation của Khang chưa tạo, `reports/model_comparison.csv` chưa tồn tại, RF `.pkl` bị gitignore. Tiến độ tổng thể 5/9 phases = 55.6%, đúng Sprint timeline. *Cập nhật:* `reports/figures/` đã có trên nhánh báo cáo của Duy với 2 hình dùng cho Chương 5.
+> **PM Audit — Hôn — 09/09/2026:** Tiến độ tổng thể đạt 6/9 phases = 66.7%. Đầy đủ 6/6 notebooks chạy sạch không lỗi (01–06), 74 tests pass. Radar missed items: bổ sung screenshots và clip cho Demo UI; xuất file báo cáo tên chuẩn cho submit; chuẩn bị thư mục `submit/` và đảm bảo `.env` cùng `paysim.csv` không lọt vào gói nộp.
 
 ## Git Convention
 

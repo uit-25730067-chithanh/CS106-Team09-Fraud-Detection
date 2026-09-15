@@ -26,23 +26,23 @@ gantt
     Preprocessing & Outliers (Thanh)     :done, s2_2, 2026-08-30, 2d
     Imbalance Analysis & SMOTE/ADASYN (Sơn) :done, s2_3, 2026-08-28, 4d
     Huấn luyện Random Forest (Sơn)       :done, s2_4, 2026-08-30, 2d
-    Viết Eval scripts template (Khang)   :active, s2_5, 2026-08-28, 7d
+    Viết Eval scripts template (Khang)   :done, s2_5, 2026-08-28, 7d
     Thiết kế UI & Form shell (Trung)     :done, s2_6, 2026-08-28, 2d
     Viết báo cáo Intro + Dataset (Duy)   :done, s2_7, 2026-08-28, 4d
     PPT Template & 9 slides nháp (Hôn)   :done, s2_8, 2026-08-28, 4d
 
     section Sprint 3 (4/9 - 11/9)
     XGBoost & Autoencoder (Cẩm)          :done, s3_1, 2026-09-01, 7d
-    Evaluation metrics execution (Khang) :active, s3_2, 2026-09-01, 7d
+    Evaluation metrics execution (Khang) :done, s3_2, 2026-09-01, 7d
     Tích hợp model thật vào UI (Trung)   :done, s3_3, 2026-09-01, 4d
     Viết Methodology + Results (Duy)      :done, s3_4, 2026-09-01, 4d
     Cập nhật slides kết quả (Hôn)        :done, s3_5, 2026-09-01, 7d
 
     section Sprint 4 (11/9 - 18/9)
-    Chạy evaluation & So sánh (Khang)   :s4_1, 2026-09-11, 4d
-    Figures & demo evidence (Trung)      :s4_2, 2026-09-11, 4d
-    Báo cáo Results & Conclusion (Duy)   :s4_3, 2026-09-11, 6d
-    Hoàn thiện PPT & Review (Hôn)        :s4_4, 2026-09-11, 6d
+    Chạy evaluation & So sánh (Khang)   :done, s4_1, 2026-09-06, 3d
+    Figures & demo evidence (Trung)      :active, s4_2, 2026-09-09, 4d
+    Báo cáo Results & Conclusion (Duy)   :active, s4_3, 2026-09-09, 4d
+    Hoàn thiện PPT & Review (Hôn)        :active, s4_4, 2026-09-09, 4d
     Đóng gói & Nộp bài (Hôn)             :milestone, s4_5, 2026-09-18, 0d
 ```
 
@@ -134,8 +134,8 @@ gantt
 ### Khang
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Viết `src/evaluation/confusion_matrix_plot.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_confusion_matrix`]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
-| Viết `src/evaluation/model_comparator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compare_models` để tạo bảng so sánh]* | 🟡 High | 🔲 (template có sẵn trong phase file) |
+| Viết `src/evaluation/confusion_matrix_plot.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `plot_confusion_matrix`]* | 🟡 High | ✅ (PR #26 merged) |
+| Viết `src/evaluation/model_comparator.py` template <br> *[Đầu vào: None \| Đầu ra: script định nghĩa hàm `compare_models` để tạo bảng so sánh]* | 🟡 High | ✅ (PR #26 merged) |
 
 ### Trung
 | Task | Ưu tiên | Trạng thái |
@@ -151,7 +151,7 @@ gantt
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Cập nhật các slides non-tech (Dataset, Preprocessing, Models overview) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Slide nháp PPT]* | 🟡 High | ✅ (Bộ slide học thuật 21 trang & Kịch bản toàn team đang xem xét; PM Audit Sprint 3) |
+| Cập nhật các slides non-tech (Dataset, Preprocessing, Models overview) <br> *[Đầu vào: Phase plans 01-04 \| Đầu ra: Slide nháp PPT]* | 🟡 High | ✅ (Bộ slide học thuật 21 trang & Kịch bản toàn team chính thức được PM duyệt; PM Audit Sprint 3 Closing) |
 
 ---
 
@@ -163,28 +163,28 @@ gantt
 ### Khang *(cần model output từ Sơn/Cẩm)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Run: Chạy các scripts tính toán metrics và vẽ biểu đồ ROC/PR/Ma trận nhầm lẫn cho cả 3 mô hình <br> *[Đầu vào: trained models in `models/` + test data \| Đầu ra: computed metrics, `reports/roc_curves_all.png`, `pr_curves_all.png`, `confusion_matrix_[model].png`]* | 🔴 Critical | 🔲 |
-| So sánh: Tổng hợp kết quả và xuất bảng so sánh hiệu năng các mô hình <br> *[Đầu vào: computed metrics \| Đầu ra: `reports/model_comparison.csv`]* | 🔴 Critical | 🔲 |
+| Run: Chạy các scripts tính toán metrics và vẽ biểu đồ ROC/PR/Ma trận nhầm lẫn cho cả 3 mô hình <br> *[Đầu vào: trained models in `models/` + test data \| Đầu ra: computed metrics, `reports/roc_curves_all.png`, `pr_curves_all.png`, `confusion_matrix_[model].png`]* | 🔴 Critical | ✅ (Hoàn thành sớm ở Phase 05) |
+| So sánh: Tổng hợp kết quả và xuất bảng so sánh hiệu năng các mô hình <br> *[Đầu vào: computed metrics \| Đầu ra: `reports/model_comparison.csv`]* | 🔴 Critical | ✅ (Hoàn thành sớm ở Phase 05) |
 
 ### Trung *(cần figures/kết luận từ Phase 05)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
 | Browser QA System/Sáng/Tối <br> *[Đầu vào: app đã tích hợp XGBoost \| Đầu ra: giao diện được kiểm tra trực quan trên ba theme]* | 🟡 High | ✅ |
-| Tích hợp figures/kết luận model <br> *[Đầu vào: output Phase 05 \| Đầu ra: UI hiển thị kết quả so sánh chính thức]* | 🟡 High | 🔲 |
-| Quay clip demo + viết hướng dẫn sử dụng UI ngắn <br> *[Đầu vào: Running Streamlit app \| Đầu ra: `demo/screenshots` hoặc video mp4]* | 🟢 Medium | 🔲 |
+| Tích hợp figures/kết luận model <br> *[Đầu vào: output Phase 05 \| Đầu ra: UI hiển thị kết quả so sánh chính thức]* | 🟡 High | ✅ (Đã kết nối qua `evaluation_artifacts.py`) |
+| Quay clip demo + viết hướng dẫn sử dụng UI ngắn <br> *[Đầu vào: Running Streamlit app \| Đầu ra: `demo/screenshots` hoặc video mp4]* | 🟢 Medium | 🟡 Đã có DEMO-SCRIPT.md; chờ chụp 5 screenshots & video |
 
 ### Duy *(cần kết quả từ Khang)*
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| Đối chiếu Results draft và viết Discussion (Word) <br> *[Đầu vào: `reports/model_comparison.csv` + plots \| Đầu ra: Chương 5 đã xác nhận + Chương 6 Thảo luận]* | 🔴 Critical | 🟡 Chương 6 đã viết xong, chờ Phase 05 đối chiếu |
-| Viết Conclusion + References, tóm tắt Abstract <br> *[Đầu vào: Final outcomes \| Đầu ra: Chương 7, Tóm tắt & tài liệu tham khảo]* | 🟡 High | 🔲 |
-| Format báo cáo Word & kiểm tra tài liệu tham khảo <br> *[Đầu vào: All text segments \| Đầu ra: `reports/[Nhom9]_BaoCao_FraudDetection.docx` hoàn chỉnh]* | 🟡 High | 🔲 |
+| Đối chiếu Results draft và viết Discussion (Word) <br> *[Đầu vào: `reports/model_comparison.csv` + plots \| Đầu ra: Chương 5 đã xác nhận + Chương 6 Thảo luận]* | 🔴 Critical | ✅ (Chương 5 & 6 khớp 100% Phase 05) |
+| Viết Conclusion + References, tóm tắt Abstract <br> *[Đầu vào: Final outcomes \| Đầu ra: Chương 7, Tóm tắt & tài liệu tham khảo]* | 🟡 High | ✅ (Chương 7, Bảng 7.1 & [1]–[8] IEEE) |
+| Format báo cáo Word & kiểm tra tài liệu tham khảo <br> *[Đầu vào: All text segments \| Đầu ra: `reports/[Nhom9]_BaoCao_FraudDetection.docx` hoàn chỉnh]* | 🟡 High | 🟡 Tự động hóa qua build_report.py, đang xuất bản cuối |
 
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
-| PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `reports/model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | 🔲 |
-| Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | 🔲 |
+| PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `reports/model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | ✅ (Slide 21 trang & kịch bản 7 người đã duyệt) |
+| Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | 🔲 Chuẩn bị cây thư mục submit/ (Sprint 4) |
 
 ---
 
