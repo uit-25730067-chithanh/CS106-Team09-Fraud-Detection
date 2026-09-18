@@ -49,7 +49,7 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `passed` ✅ | 4/4 scripts done; notebook 06 chạy Restart&Run All sạch; `model_comparison.csv` + 7 figures xuất xong, khớp ch5_metrics_recomputed.csv |
 | 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI, inference, mapping datetime/VNĐ, comparison + 9 figures, SQLite và Browser QA đã xong; chờ screenshots/clip |
-| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `pending` | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
+| 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `passed` ✅ | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
 | 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 06–07; Đã có 6/6 notebooks (100% hoàn thành) |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.

@@ -253,9 +253,9 @@ def _add_figure_caption(doc, caption_text: str) -> None:
 
 
 _HEADING_CONFIG = {
-    1: {"font_size": 13.5, "space_before": 12, "space_after": 4, "italic": False},
-    2: {"font_size": 13.0, "space_before": 8, "space_after": 3, "italic": False},
-    3: {"font_size": 13.0, "space_before": 6, "space_after": 2, "italic": True},
+    1: {"font_size": 15.0, "space_before": 24, "space_after": 12, "italic": False},
+    2: {"font_size": 14.0, "space_before": 18, "space_after": 6, "italic": False},
+    3: {"font_size": 13.0, "space_before": 12, "space_after": 6, "italic": True},
 }
 
 
@@ -263,7 +263,7 @@ def _handle_heading(
     doc, raw_text: str, level: int, anchor_by_title: dict, bookmark_counter: int
 ) -> int:
     """Add a heading paragraph with optional bookmark anchor."""
-    h_text = raw_text.strip().replace("\u2014", " - ").replace("\u2013", "-")
+    h_text = raw_text.strip()
     cfg = _HEADING_CONFIG[level]
 
     p_h = doc.add_paragraph()
@@ -272,7 +272,10 @@ def _handle_heading(
     p_h.paragraph_format.space_after = Pt(cfg["space_after"])
     p_h.paragraph_format.line_spacing = 1.15
     p_h.paragraph_format.first_line_indent = Cm(0)
-    p_h.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    if level == 1:
+        p_h.alignment = WD_ALIGN_PARAGRAPH.CENTER
+    else:
+        p_h.alignment = WD_ALIGN_PARAGRAPH.LEFT
 
     anchor = anchor_by_title.get(h_text.lower())
     if anchor:
@@ -290,13 +293,18 @@ def _handle_heading(
 
 
 def _handle_list_item(doc, list_match) -> None:
-    """Add a bullet or numbered list item."""
+    """Add a bullet or numbered list item.
+
+    Danh sách căn trái thay vì căn đều. Các mục thường chứa đường dẫn tệp hoặc
+    tên định danh dài không có chỗ ngắt dòng, nên căn đều sẽ kéo giãn ký tự của
+    những dòng còn lại trong cùng mục.
+    """
     indent_spaces = len(list_match.group(1))
     bullet_sym = list_match.group(2)
     content = list_match.group(3)
 
     p_l = doc.add_paragraph()
-    p_l.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p_l.alignment = WD_ALIGN_PARAGRAPH.LEFT
     level = indent_spaces // 2
     p_l.paragraph_format.left_indent = Cm(1.27 + level * 0.4)
     p_l.paragraph_format.first_line_indent = Cm(-0.5)
@@ -320,7 +328,7 @@ def _handle_reference(doc, ref_match, bookmark_counter: int) -> int:
     ref_body = ref_match.group(2)
 
     p_ref = doc.add_paragraph()
-    p_ref.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+    p_ref.alignment = WD_ALIGN_PARAGRAPH.LEFT
     p_ref.paragraph_format.left_indent = Cm(0.8)
     p_ref.paragraph_format.first_line_indent = Cm(-0.8)
     p_ref.paragraph_format.space_before = Pt(2)

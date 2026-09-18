@@ -31,9 +31,12 @@ def parse_inline_formatting(
 
     Handles: ``***bold-italic***``, ``**bold**``, ``*italic*``, ``` `code` ```,
     ``[n]`` citation links, ``[text](url)`` web links, bare ``https://`` URLs.
-    Em-dashes and en-dashes are normalised for academic readability.
+
+    Em dash v\u00e0 en dash \u0111\u01b0\u1ee3c gi\u1eef nguy\u00ean. Times New Roman c\u00f3 \u0111\u1ee7 hai glyph n\u00e0y v\u00e0
+    quy \u01b0\u1edbc h\u1ecdc thu\u1eadt d\u00f9ng en dash cho kho\u1ea3ng gi\u00e1 tr\u1ecb (``pp. 90\u2013113``) c\u00f9ng t\u00ean
+    gh\u00e9p c\u1ee7a hai t\u00e1c gi\u1ea3 (``Clopper\u2013Pearson``, ``Precision\u2013Recall``), n\u00ean thay
+    ch\u00fang b\u1eb1ng hyphen l\u00e0m sai ch\u00ednh t\u1ea3 tr\u00ecnh b\u00e0y.
     """
-    text = text.replace("\u2014", " - ").replace("\u2013", "-")
     token_pattern = re.compile(
         r"(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*|\*[^*]+\*|`[^`]+`|\[\d+\]|\[[^\]]+\]\(https?://[^\)]+\)|https?://[^\s)\]]+)"
     )

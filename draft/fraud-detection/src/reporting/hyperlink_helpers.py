@@ -32,6 +32,24 @@ def _escape_xml(text: str) -> str:
     )
 
 
+def _run_content_xml(text: str) -> str:
+    """Dựng phần nội dung của một run, biến ký tự tab thành phần tử ``<w:tab/>``.
+
+    Ký tự tab nằm thẳng trong ``<w:t>`` không phải là tab theo lược đồ OOXML.
+    Word bỏ qua nó nên số trang trong mục lục không nhảy sang mốc tab và mất
+    hoàn toàn dãy dấu chấm dẫn. Một số trình xem khác như Pages lại hiển thị
+    được, vì vậy lỗi này không lộ ra khi kiểm tra trên bản PDF xuất từ Pages.
+    """
+
+    parts = []
+    for index, chunk in enumerate(text.split("\t")):
+        if index:
+            parts.append("<w:tab/>")
+        if chunk:
+            parts.append(f'<w:t xml:space="preserve">{_escape_xml(chunk)}</w:t>')
+    return "".join(parts)
+
+
 def add_bookmark(paragraph, name: str, bookmark_id: int) -> None:
     """Add a bookmark anchor around a paragraph for internal hyperlink jumping."""
     bm_start = parse_xml(
@@ -75,7 +93,6 @@ def add_internal_hyperlink(
     generator (``build_toc_section``) and the body section builder
     (in-text citation links).
     """
-    escaped_text = _escape_xml(text)
     hl = parse_xml(f'<w:hyperlink {nsdecls("w")} w:anchor="{target_anchor}"/>')
     r = parse_xml(
         f'<w:r {nsdecls("w")}>'
@@ -86,7 +103,7 @@ def add_internal_hyperlink(
         f'{"<w:i/>" if is_italic else ""}'
         f'<w:color w:val="{color_hex}"/>'
         f"</w:rPr>"
-        f'<w:t xml:space="preserve">{escaped_text}</w:t>'
+        f"{_run_content_xml(text)}"
         f"</w:r>"
     )
     hl.append(r)

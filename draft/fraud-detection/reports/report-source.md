@@ -22,7 +22,10 @@ Một khó khăn khác là dữ liệu giao dịch thực tế có tính nhạy 
 
 ## 1.2. Lý do chọn đề tài
 
-Đề tài “Hệ thống phát hiện giao dịch tài chính bất thường và nghi vấn gian lận” kết hợp nhiều nội dung quan trọng của môn Trí tuệ Nhân tạo: biểu diễn dữ liệu, tiền xử lý, học có giám sát, phát hiện bất thường, xử lý dữ liệu mất cân bằng và đánh giá mô hình. Đây cũng là bài toán có ý nghĩa thực tiễn rõ ràng vì quyết định của mô hình liên quan trực tiếp đến hai loại rủi ro: - **False Negative:** giao dịch gian lận không được phát hiện, có thể gây thiệt hại tài chính. - **False Positive:** giao dịch hợp lệ bị gắn cờ nhầm, làm gián đoạn trải nghiệm người dùng và tăng chi phí kiểm tra.
+Đề tài “Hệ thống phát hiện giao dịch tài chính bất thường và nghi vấn gian lận” kết hợp nhiều nội dung quan trọng của môn Trí tuệ Nhân tạo: biểu diễn dữ liệu, tiền xử lý, học có giám sát, phát hiện bất thường, xử lý dữ liệu mất cân bằng và đánh giá mô hình. Đây cũng là bài toán có ý nghĩa thực tiễn rõ ràng vì quyết định của mô hình liên quan trực tiếp đến hai loại rủi ro:
+
+- **False Negative:** giao dịch gian lận không được phát hiện, có thể gây thiệt hại tài chính.
+- **False Positive:** giao dịch hợp lệ bị gắn cờ nhầm, làm gián đoạn trải nghiệm người dùng và tăng chi phí kiểm tra.
 
 Do đó, nhóm không sử dụng Accuracy như tiêu chí duy nhất. Báo cáo tập trung vào Precision, Recall, F1-Score và ROC-AUC theo yêu cầu của đề bài. Các chỉ số này cho phép phân tích rõ hơn khả năng phát hiện lớp gian lận và sự đánh đổi giữa bỏ sót với cảnh báo nhầm.
 
@@ -42,7 +45,7 @@ Xây dựng và đánh giá một quy trình học máy có khả năng phân lo
 6. So sánh mô hình, phân tích hạn chế và đề xuất hướng phát triển.
 7. Chuẩn bị một giao diện minh họa để nhập thông tin giao dịch và hiển thị dự đoán khi mô hình cuối đã sẵn sàng.
 
-> Bản nháp hiện tại đã mô tả quy trình tiền xử lý, xử lý mất cân bằng và ba họ mô hình. Các kết luận thực nghiệm vẫn được giới hạn trong tập kiểm tra PaySim đã xử lý và sẽ được rà soát lại trước khi hoàn thiện báo cáo cuối.
+> Báo cáo đã trình bày quy trình tiền xử lý, xử lý mất cân bằng và cả ba họ mô hình. Các kết luận thực nghiệm được giới hạn trong tập kiểm tra PaySim đã xử lý, không suy rộng sang dữ liệu giao dịch thực tế.
 
 ## 1.4. Đối tượng và phạm vi nghiên cứu
 
@@ -70,7 +73,10 @@ Xây dựng và đánh giá một quy trình học máy có khả năng phân lo
 
 ## 2.1. Mô tả bài toán
 
-Cho tập dữ liệu giao dịch tài chính, mỗi giao dịch được biểu diễn bởi vector đặc trưng $x$. Mục tiêu là xây dựng hàm dự đoán $f(x)$ trả về một trong hai nhãn: - $f(x) = 0$: giao dịch hợp lệ. - $f(x) = 1$: giao dịch gian lận.
+Cho tập dữ liệu giao dịch tài chính, mỗi giao dịch được biểu diễn bởi vector đặc trưng $x$. Mục tiêu là xây dựng hàm dự đoán $f(x)$ trả về một trong hai nhãn:
+
+- $f(x) = 0$: giao dịch hợp lệ.
+- $f(x) = 1$: giao dịch gian lận.
 
 Sau tiền xử lý và xây dựng đặc trưng, vector đầu vào gồm 14 đặc trưng: 10 biến định lượng được chuẩn hóa và bốn cờ nhị phân. Nhóm đặc trưng này kết hợp thông tin thời gian, số tiền, số dư, sai lệch số dư, tỷ lệ số tiền trên số dư nguồn và loại giao dịch. Nhãn cần dự đoán là `isFraud`.
 
@@ -130,7 +136,11 @@ Theo đề bài môn học, hệ thống cần:
 
 ## 2.5. Câu hỏi nghiên cứu
 
-Báo cáo hướng tới trả lời các câu hỏi sau khi hoàn tất thực nghiệm: - Kỹ thuật xử lý mất cân bằng nào phù hợp hơn trên tập PaySim đã tiền xử lý? - Trong các mô hình được thử nghiệm, mô hình nào đạt cân bằng tốt nhất giữa Precision và Recall cho lớp fraud? - Các đặc trưng nào đóng góp nhiều nhất vào quyết định của mô hình, và các đặc trưng này có nguy cơ phản ánh cơ chế mô phỏng của PaySim hay không?
+Báo cáo hướng tới trả lời các câu hỏi sau khi hoàn tất thực nghiệm:
+
+- Kỹ thuật xử lý mất cân bằng nào phù hợp hơn trên tập PaySim đã tiền xử lý?
+- Trong các mô hình được thử nghiệm, mô hình nào đạt cân bằng tốt nhất giữa Precision và Recall cho lớp fraud?
+- Các đặc trưng nào đóng góp nhiều nhất vào quyết định của mô hình, và các đặc trưng này có nguy cơ phản ánh cơ chế mô phỏng của PaySim hay không?
 
 ---
 
@@ -211,11 +221,11 @@ Quy trình loại `nameOrig`, `nameDest` và `isFlaggedFraud`, mã hóa `type`, 
 
 ### 3.6.1. Thay đổi tỷ lệ lớp
 
-Fraud ratio tăng từ 0,129082% lên khoảng 4,1065% sau downsample. Do Precision và đường Precision-Recall phụ thuộc vào prevalence, kết quả trên test downsample không thể được trình bày như hiệu năng trên phân bố PaySim gốc hoặc trên hệ thống thật.
+Fraud ratio tăng từ 0,129082% lên khoảng 4,1065% sau downsample. Do Precision và đường Precision–Recall phụ thuộc vào prevalence, kết quả trên test downsample không thể được trình bày như hiệu năng trên phân bố PaySim gốc hoặc trên hệ thống thật.
 
 ### 3.6.2. Cảnh báo về các cột balance
 
-Data card của Kaggle [3] lưu ý rằng giao dịch bị phát hiện là gian lận trong bộ mô phỏng có thể bị hủy và khuyến cáo không sử dụng các cột `oldbalanceOrg`, `newbalanceOrig`, `oldbalanceDest`, `newbalanceDest` để phát hiện gian lận. Quy trình hiện tại vẫn sử dụng các cột số dư và hai đặc trưng sai lệch số dư. Vì vậy, mô hình có thể học tín hiệu phát sinh từ cơ chế cập nhật hoặc hủy giao dịch của bộ mô phỏng. Mục 5.5 cho thấy nhóm đặc trưng này thực sự chiếm phần lớn mức đóng góp của cả Random Forest và XGBoost. Báo cáo xem đây là một nguy cơ ảnh hưởng tính hợp lệ. Phép kiểm tra dứt điểm là huấn luyện lại mô hình sau khi loại nhóm đặc trưng số dư rồi so sánh hiệu năng. Thí nghiệm này nằm ngoài phạm vi bản nháp hiện tại và được ghi nhận như một hướng kiểm chứng cần thực hiện trước khi khẳng định kết quả.
+Data card của Kaggle [3] lưu ý rằng giao dịch bị phát hiện là gian lận trong bộ mô phỏng có thể bị hủy và khuyến cáo không sử dụng các cột `oldbalanceOrg`, `newbalanceOrig`, `oldbalanceDest`, `newbalanceDest` để phát hiện gian lận. Quy trình hiện tại vẫn sử dụng các cột số dư và hai đặc trưng sai lệch số dư. Vì vậy, mô hình có thể học tín hiệu phát sinh từ cơ chế cập nhật hoặc hủy giao dịch của bộ mô phỏng. Mục 5.5 cho thấy nhóm đặc trưng này thực sự chiếm phần lớn mức đóng góp của cả Random Forest và XGBoost. Báo cáo xem đây là một nguy cơ ảnh hưởng tính hợp lệ. Phép kiểm tra dứt điểm là huấn luyện lại mô hình sau khi loại nhóm đặc trưng số dư rồi so sánh hiệu năng. Thí nghiệm này nằm ngoài phạm vi đồ án và được ghi nhận tại Mục 7.4 như hướng kiểm chứng cần thực hiện trước khi khẳng định kết quả.
 
 ### 3.6.3. Dữ liệu tổng hợp
 
@@ -239,7 +249,14 @@ Bộ dữ liệu PaySim đáp ứng yêu cầu về quy mô và cung cấp nhãn
 
 ## 4.1. Quy trình thực nghiệm
 
-Quy trình thực nghiệm được tổ chức thành sáu bước tuần tự: - **Bước 1 - Đọc và kiểm tra dữ liệu:** nạp bộ PaySim, xác nhận cấu trúc cột, kiểu dữ liệu, giá trị thiếu và phân bố nhãn. - **Bước 2 - Lọc và downsampling:** giữ hai loại giao dịch `TRANSFER` và `CASH_OUT`, bảo toàn toàn bộ giao dịch gian lận và lấy mẫu ngẫu nhiên lớp bình thường để tạo tập làm việc 200.000 giao dịch. - **Bước 3 - Chia dữ liệu:** tách tập huấn luyện và tập kiểm tra theo tỷ lệ 80/20 bằng phép chia phân tầng (stratified) theo nhãn. - **Bước 4 - Xây dựng đặc trưng:** tạo các đặc trưng dẫn xuất, mã hóa loại giao dịch và chuẩn hóa các biến định lượng bằng tham số học từ tập huấn luyện. - **Bước 5 - Xử lý mất cân bằng:** áp dụng oversampling bằng SMOTENC hoặc ADASYN trên tập huấn luyện, không thay đổi tập kiểm tra. - **Bước 6 - Huấn luyện và đánh giá:** huấn luyện Random Forest, XGBoost và Autoencoder, sau đó đánh giá tất cả mô hình trên cùng tập kiểm tra.
+Quy trình thực nghiệm được tổ chức thành sáu bước tuần tự:
+
+- **Bước 1 — Đọc và kiểm tra dữ liệu:** nạp bộ PaySim, xác nhận cấu trúc cột, kiểu dữ liệu, giá trị thiếu và phân bố nhãn.
+- **Bước 2 — Lọc và downsampling:** giữ hai loại giao dịch `TRANSFER` và `CASH_OUT`, bảo toàn toàn bộ giao dịch gian lận và lấy mẫu ngẫu nhiên lớp bình thường để tạo tập làm việc 200.000 giao dịch.
+- **Bước 3 — Chia dữ liệu:** tách tập huấn luyện và tập kiểm tra theo tỷ lệ 80/20 bằng phép chia phân tầng (stratified) theo nhãn.
+- **Bước 4 — Xây dựng đặc trưng:** tạo các đặc trưng dẫn xuất, mã hóa loại giao dịch và chuẩn hóa các biến định lượng bằng tham số học từ tập huấn luyện.
+- **Bước 5 — Xử lý mất cân bằng:** áp dụng oversampling bằng SMOTENC hoặc ADASYN trên tập huấn luyện, không thay đổi tập kiểm tra.
+- **Bước 6 — Huấn luyện và đánh giá:** huấn luyện Random Forest, XGBoost và Autoencoder, sau đó đánh giá tất cả mô hình trên cùng tập kiểm tra.
 
 Toàn bộ thao tác ngẫu nhiên sử dụng `random_state = 42`. `StandardScaler` chỉ được khớp trên tập huấn luyện. SMOTENC và ADASYN cũng chỉ nhận dữ liệu huấn luyện. Tập kiểm tra không tham gia bất kỳ bước học tham số hoặc oversampling nào.
 
@@ -287,7 +304,7 @@ Ngưỡng phân loại được chọn bằng cách quét nhiều mức phân v�
 
 ## 4.7. Quy trình đánh giá
 
-Các mô hình được đánh giá trên cùng tập kiểm tra 40.000 giao dịch, không dùng dữ liệu đã qua oversampling. Báo cáo tập trung vào lớp gian lận với bốn chỉ số chính là Precision, Recall, F1-Score và ROC-AUC. Average Precision được báo cáo bổ sung vì phản ánh chất lượng phát hiện lớp gian lận rõ hơn ROC-AUC khi dữ liệu mất cân bằng. Đường ROC và đường Precision-Recall tổng hợp sẽ được bổ sung trong bản báo cáo cuối.
+Các mô hình được đánh giá trên cùng tập kiểm tra 40.000 giao dịch, không dùng dữ liệu đã qua oversampling. Báo cáo tập trung vào lớp gian lận với bốn chỉ số chính là Precision, Recall, F1-Score và ROC-AUC. Average Precision được báo cáo bổ sung vì phản ánh chất lượng phát hiện lớp gian lận rõ hơn ROC-AUC khi dữ liệu mất cân bằng. Đường ROC và đường Precision–Recall tổng hợp của cả năm biến thể được trình bày tại Mục 5.2.
 
 Ma trận nhầm lẫn được đọc theo bốn thành phần TN, FP, FN và TP. Vì bốn đại lượng này chênh nhau nhiều bậc độ lớn, chúng được biểu diễn trên bốn đồ thị riêng thay vì gộp chung một trục tung. Mọi chỉ số đều được tính lại từ cùng một tệp nhãn thật và cùng các tệp dự đoán đã lưu, để loại trừ khác biệt do cách tính.
 
@@ -309,7 +326,7 @@ Phương pháp thực hiện kết hợp quy trình tiền xử lý hạn chế 
 
 Chương này đánh giá năm biến thể mô hình trên cùng 40.000 giao dịch của tập kiểm tra chưa qua oversampling. Precision, Recall và F1-Score được tính cho lớp gian lận. ROC-AUC và Average Precision sử dụng điểm dự đoán liên tục của từng mô hình. Các giá trị được trình bày với bốn chữ số thập phân để tránh cách làm tròn 1,00 che khuất khác biệt nhỏ.
 
-Toàn bộ chỉ số trong chương được tính lại từ cùng một tệp nhãn thật và các tệp đầu ra dự đoán đã lưu, bằng script `run_report_metrics.py` gọi hàm `compute_metrics` trong `src/evaluation/`. Kết quả tính lại được ghi ra `reports/ch5_metrics_recomputed.csv` để người đọc có thể đối chiếu từng con số. Bảng so sánh, hai biểu đồ và bảng mức đóng góp của đặc trưng dưới đây đều được sinh lại bằng cùng script đó, phản ánh kết quả hiện có trên tập kiểm tra. Đường ROC và đường Precision-Recall tổng hợp sẽ được bổ sung trong bản báo cáo cuối.
+Toàn bộ chỉ số trong chương được tính lại từ cùng một tệp nhãn thật và các tệp đầu ra dự đoán đã lưu, bằng script `run_report_metrics.py` gọi hàm `compute_metrics` trong `src/evaluation/`. Kết quả tính lại được ghi ra `reports/ch5_metrics_recomputed.csv` để người đọc có thể đối chiếu từng con số. Bảng so sánh, các biểu đồ và bảng mức đóng góp của đặc trưng dưới đây đều được sinh lại bằng cùng script đó. Toàn bộ giá trị trong Bảng 5.1 đã được đối chiếu và khớp tuyệt đối với `reports/model_comparison.csv` do bước đánh giá chéo của nhóm xuất ra, nên hai nguồn tính độc lập cho cùng một kết quả.
 
 ## 5.2. So sánh hiệu năng các mô hình
 
@@ -327,13 +344,19 @@ Random Forest kết hợp SMOTENC đạt F1-Score cao nhất là 0,9973, đồng
 
 Autoencoder có ROC-AUC 0,9318 nhưng Precision chỉ đạt 0,3822 và F1-Score đạt 0,5069. Điểm bất thường vẫn xếp hạng giao dịch gian lận cao hơn giao dịch bình thường ở mức khá tốt, nhưng ngưỡng hiện tại tạo nhiều cảnh báo nhầm hơn hẳn so với các mô hình học có giám sát. Khác biệt này đến từ bản chất bài toán mà mỗi nhóm mô hình giải: Random Forest và XGBoost học trực tiếp ranh giới giữa hai lớp từ nhãn gian lận, còn Autoencoder chỉ học cách tái tạo giao dịch bình thường và suy ra gian lận một cách gián tiếp qua sai số tái tạo.
 
-Khoảng cách giữa hai chỉ số xếp hạng của Autoencoder cho thấy vì sao không nên đọc ROC-AUC một mình trên dữ liệu lệch lớp. ROC-AUC đạt 0,9318 nhưng Average Precision chỉ đạt 0,5973. Nguyên nhân là ROC-AUC lấy toàn bộ 38.357 giao dịch bình thường làm mẫu số cho tỷ lệ dương tính giả, nên gần 2.000 cảnh báo nhầm vẫn chỉ làm chỉ số này giảm nhẹ. Average Precision thì đo trực tiếp Precision dọc theo đường Precision-Recall, nên phản ánh đúng cái giá phải trả để đạt được Recall đó. Với bốn biến thể học có giám sát, hai chỉ số này gần như trùng nhau nên kết luận không thay đổi.
+Khoảng cách giữa hai chỉ số xếp hạng của Autoencoder cho thấy vì sao không nên đọc ROC-AUC một mình trên dữ liệu lệch lớp. ROC-AUC đạt 0,9318 nhưng Average Precision chỉ đạt 0,5973. Nguyên nhân là ROC-AUC lấy toàn bộ 38.357 giao dịch bình thường làm mẫu số cho tỷ lệ dương tính giả, nên gần 2.000 cảnh báo nhầm vẫn chỉ làm chỉ số này giảm nhẹ. Average Precision thì đo trực tiếp Precision dọc theo đường Precision–Recall, nên phản ánh đúng cái giá phải trả để đạt được Recall đó. Với bốn biến thể học có giám sát, hai chỉ số này gần như trùng nhau nên kết luận không thay đổi.
+
+![Hình 5.1. Đường ROC của năm biến thể mô hình trên tập kiểm tra](figures/roc_curves_all.png)
+
+![Hình 5.2. Đường Precision–Recall của năm biến thể mô hình trên tập kiểm tra](figures/pr_curves_all.png)
+
+Hình 5.1 và Hình 5.2 trực quan hóa nhận định trên. Trên đường ROC, bốn biến thể học có giám sát gần như trùng nhau và ép sát góc trên bên trái, còn Autoencoder tuy thấp hơn nhưng vẫn cách xa đường chéo ngẫu nhiên. Trên đường Precision–Recall, khoảng cách giữa hai nhóm mô hình giãn ra rõ rệt: bốn biến thể học có giám sát giữ Precision gần 1,0 trên toàn dải Recall, trong khi Precision của Autoencoder suy giảm liên tục và chỉ còn khoảng 0,05 ở mức Recall cao nhất. Cùng một mô hình nhưng hai đồ thị cho hai ấn tượng khác nhau, đó là lý do đề bài yêu cầu không dựa vào một chỉ số duy nhất.
 
 ## 5.3. Phân tích ma trận nhầm lẫn
 
-![Hình 5.1. So sánh riêng bốn thành phần TN, FP, FN và TP theo mô hình](figures/confusion_matrix_components.png)
+![Hình 5.3. So sánh riêng bốn thành phần TN, FP, FN và TP theo mô hình](figures/confusion_matrix_components.png)
 
-Hình 5.1 tách TN, FP, FN và TP thành bốn đồ thị để mỗi thành phần có trục tung riêng. Trục hoành biểu diễn năm biến thể mô hình, còn trục tung biểu diễn số giao dịch. Hai đồ thị sai số FP và FN dùng trục tung theo thang logarit vì giá trị trong cùng một đồ thị chênh nhau tới ba bậc độ lớn, ví dụ 1 cảnh báo nhầm của Random Forest kết hợp SMOTENC so với 1.998 cảnh báo nhầm của Autoencoder. Nếu giữ thang tuyến tính, các cột nhỏ bị dí sát trục và không còn so sánh được với nhau. Cách trình bày này giúp quan sát cả những sai số có giá trị nhỏ mà không bị hai nhóm TN và TP có quy mô lớn che khuất.
+Hình 5.3 tách TN, FP, FN và TP thành bốn đồ thị để mỗi thành phần có trục tung riêng. Trục hoành biểu diễn năm biến thể mô hình, còn trục tung biểu diễn số giao dịch. Hai đồ thị sai số FP và FN dùng trục tung theo thang logarit vì giá trị trong cùng một đồ thị chênh nhau tới ba bậc độ lớn, ví dụ 1 cảnh báo nhầm của Random Forest kết hợp SMOTENC so với 1.998 cảnh báo nhầm của Autoencoder. Nếu giữ thang tuyến tính, các cột nhỏ bị dí sát trục và không còn so sánh được với nhau. Cách trình bày này giúp quan sát cả những sai số có giá trị nhỏ mà không bị hai nhóm TN và TP có quy mô lớn che khuất.
 
 Bốn biến thể học có giám sát đều phát hiện đúng 1.635 trong 1.643 giao dịch gian lận và bỏ sót 8 giao dịch. Đối chiếu vị trí của các giao dịch bị bỏ sót trong tập kiểm tra cho thấy đây là cùng một nhóm 8 giao dịch ở cả bốn mô hình, phần giao và phần hợp của bốn tập bỏ sót đều có đúng 8 phần tử. Autoencoder cũng bỏ sót 7 trong 8 giao dịch đó dù hoạt động theo nguyên lý hoàn toàn khác. Như vậy phần gian lận chưa phát hiện được không phải sai số ngẫu nhiên riêng của từng mô hình, mà là một nhóm giao dịch mà biểu diễn đặc trưng hiện tại không tách được khỏi lớp bình thường. Muốn giảm tiếp số bỏ sót thì phải bổ sung đặc trưng mới chứ không phải đổi thuật toán hay tinh chỉnh siêu tham số. Khác biệt giữa các mô hình vì thế nằm hoàn toàn ở số cảnh báo nhầm. Random Forest kết hợp SMOTENC chỉ tạo 1 FP, trong khi Random Forest kết hợp ADASYN, XGBoost kết hợp SMOTENC và XGBoost kết hợp ADASYN lần lượt tạo 3, 4 và 7 FP.
 
@@ -361,9 +384,9 @@ Nhận định này chỉ áp dụng cho cấu hình, cách chia dữ liệu và
 
 Cả hai mô hình xếp `errorBalanceOrig` ở vị trí đầu tiên. Đặc trưng này là chênh lệch `oldbalanceOrg - amount - newbalanceOrig`, tức phần số dư nguồn không khớp với số tiền giao dịch. Bốn cột số dư gốc cùng hai đặc trưng sai lệch chiếm 74,41% tổng mức đóng góp của Random Forest và 98,54% của XGBoost. Nếu tính thêm `is_drain_account` và `amount_to_oldbalance_ratio`, hai đặc trưng cũng dẫn xuất từ số dư nguồn, tỷ lệ lần lượt là 90,50% và 99,30%. Các đặc trưng thời gian và loại giao dịch đóng góp phần rất nhỏ còn lại.
 
-![Hình 5.2. Mức đóng góp của toàn bộ 14 đặc trưng theo hai mô hình dùng SMOTENC](figures/feature_importance_comparison.png)
+![Hình 5.4. Mức đóng góp của toàn bộ 14 đặc trưng theo hai mô hình dùng SMOTENC](figures/feature_importance_comparison.png)
 
-Hình 5.2 trình bày đầy đủ 14 đặc trưng của cả hai mô hình, mỗi mô hình trên một panel riêng vì hai thang đo khác nhau. Màu phân biệt nhóm đặc trưng dẫn xuất từ số dư với phần còn lại, cho thấy mức độ tập trung rõ hơn bảng số. Với Random Forest, mức đóng góp giảm tương đối đều và các đặc trưng thời gian vẫn giữ vai trò nhỏ nhưng khác 0. Với XGBoost, hai đặc trưng đầu chiếm gần như toàn bộ, mười hai đặc trưng còn lại cộng lại chưa tới 3%, trong đó `is_night_transaction` bằng 0 tức chưa từng được chọn để tách nút. Khác biệt về độ tập trung giữa hai mô hình phản ánh cách boosting dồn trọng số vào một vài đặc trưng mạnh, trong khi rừng ngẫu nhiên buộc mỗi nút chỉ xét một tập con đặc trưng nên phân tán hơn.
+Hình 5.4 trình bày đầy đủ 14 đặc trưng của cả hai mô hình, mỗi mô hình trên một panel riêng vì hai thang đo khác nhau. Màu phân biệt nhóm đặc trưng dẫn xuất từ số dư với phần còn lại, cho thấy mức độ tập trung rõ hơn bảng số. Với Random Forest, mức đóng góp giảm tương đối đều và các đặc trưng thời gian vẫn giữ vai trò nhỏ nhưng khác 0. Với XGBoost, hai đặc trưng đầu chiếm gần như toàn bộ, mười hai đặc trưng còn lại cộng lại chưa tới 3%, trong đó `is_night_transaction` bằng 0 tức chưa từng được chọn để tách nút. Khác biệt về độ tập trung giữa hai mô hình phản ánh cách boosting dồn trọng số vào một vài đặc trưng mạnh, trong khi rừng ngẫu nhiên buộc mỗi nút chỉ xét một tập con đặc trưng nên phân tán hơn.
 
 Kết quả này xác nhận trực tiếp nguy cơ đã nêu tại Mục 3.6.2. Data card của bộ dữ liệu [3] khuyến cáo không dùng các cột số dư để phát hiện gian lận vì giao dịch bị phát hiện trong bộ mô phỏng có thể bị hủy. Quyết định của cả hai mô hình gần như hoàn toàn dựa trên nhóm đặc trưng này, nên hiệu năng rất cao tại Mục 5.2 có thể phản ánh cơ chế cập nhật số dư của bộ mô phỏng thay vì đặc điểm tổng quát của hành vi gian lận. Cần lưu ý cả hai thang đo trên chỉ mô tả cách mô hình sử dụng đặc trưng, không phải quan hệ nhân quả với hành vi gian lận, đồng thời có xu hướng ưu ái các biến liên tục có nhiều giá trị riêng biệt hơn các cờ nhị phân. Vì vậy Bảng 5.2 được dùng để định hướng phần thảo luận, không dùng để kết luận về nguyên nhân gian lận.
 
@@ -401,17 +424,17 @@ Một quan sát khác củng cố nhận định trên. Bốn biến thể học
 
 ## 6.3. Hiệu năng ước tính trên tỷ lệ gian lận gốc
 
-Downsampling chỉ lấy mẫu ngẫu nhiên lớp bình thường nên không làm thay đổi phân bố có điều kiện của từng lớp. Nhờ đó, tỷ lệ phát hiện đúng và tỷ lệ báo động giả đo trên tập kiểm tra vẫn dùng được cho phân bố gốc, chỉ riêng Precision là phụ thuộc tỷ lệ lớp và cần quy chiếu lại. Bảng 6.1 trình bày kết quả quy chiếu về tỷ lệ 0,129082% của PaySim gốc, kèm khoảng tin cậy 95% tính theo phương pháp Clopper-Pearson cho tỷ lệ báo động giả.
+Downsampling chỉ lấy mẫu ngẫu nhiên lớp bình thường nên không làm thay đổi phân bố có điều kiện của từng lớp. Nhờ đó, tỷ lệ phát hiện đúng và tỷ lệ báo động giả đo trên tập kiểm tra vẫn dùng được cho phân bố gốc, chỉ riêng Precision là phụ thuộc tỷ lệ lớp và cần quy chiếu lại. Bảng 6.1 trình bày kết quả quy chiếu về tỷ lệ 0,129082% của PaySim gốc, kèm khoảng tin cậy 95% tính theo phương pháp Clopper–Pearson cho tỷ lệ báo động giả.
 
 **Bảng 6.1. Precision quy chiếu về tỷ lệ gian lận gốc của PaySim**
 
 | Mô hình | FP trên test | Precision trên test | Precision quy chiếu | Khoảng tin cậy 95% | Cảnh báo nhầm trên mỗi triệu giao dịch |
 |---|---:|---:|---:|:---:|---:|
-| Random Forest + SMOTENC | 1 | 0,9994 | **0,9801** | 0,8985 - 0,9995 | 26 |
-| Random Forest + ADASYN | 3 | 0,9982 | 0,9427 | 0,8491 - 0,9876 | 78 |
-| XGBoost + SMOTENC | 4 | 0,9976 | 0,9250 | 0,8281 - 0,9784 | 104 |
-| XGBoost + ADASYN | 7 | 0,9957 | 0,8757 | 0,7738 - 0,9460 | 182 |
-| Autoencoder | 1.998 | 0,3822 | 0,0183 | 0,0176 - 0,0191 | 52.022 |
+| Random Forest + SMOTENC | 1 | 0,9994 | **0,9801** | 0,8985 – 0,9995 | 26 |
+| Random Forest + ADASYN | 3 | 0,9982 | 0,9427 | 0,8491 – 0,9876 | 78 |
+| XGBoost + SMOTENC | 4 | 0,9976 | 0,9250 | 0,8281 – 0,9784 | 104 |
+| XGBoost + ADASYN | 7 | 0,9957 | 0,8757 | 0,7738 – 0,9460 | 182 |
+| Autoencoder | 1.998 | 0,3822 | 0,0183 | 0,0176 – 0,0191 | 52.022 |
 
 Kết quả cho thấy hai điều. Một là chênh lệch nhỏ về số cảnh báo nhầm ở Chương 5 trở nên đáng kể khi đưa về phân bố thật. Khoảng cách giữa 1 và 7 cảnh báo nhầm trên tập kiểm tra tương ứng với khoảng cách hơn mười điểm phần trăm Precision trên phân bố gốc, vì mỗi cảnh báo nhầm khi đó phải chia cho một lượng giao dịch gian lận nhỏ hơn nhiều. Hai là Autoencoder ở ngưỡng hiện tại không dùng được như một bộ lọc độc lập, vì sẽ tạo khoảng 52.000 cảnh báo nhầm cho mỗi triệu giao dịch.
 
@@ -473,7 +496,7 @@ Bảng 7.1 đối chiếu bảy mục tiêu cụ thể nêu tại Mục 1.3.2 v�
 | 6 | So sánh mô hình, phân tích hạn chế, đề xuất hướng phát triển | Hoàn thành | Chương 5, 6, 7 |
 | 7 | Giao diện minh họa nhập giao dịch và hiển thị dự đoán | Hoàn thành | Giao diện Streamlit đã tích hợp mô hình XGBoost-SMOTE và scaler thật |
 
-Toàn bộ bảy mục tiêu cụ thể đã hoàn thành. Trong đó mục tiêu thứ bảy đã tích hợp mô hình XGBoost-SMOTE cùng bộ tiền xử lý và scaler thật vào giao diện tương tác Streamlit, hỗ trợ 4 kịch bản thử nghiệm và vượt qua kiểm thử Browser QA.
+Toàn bộ bảy mục tiêu cụ thể đã hoàn thành. Trong đó mục tiêu thứ bảy đã tích hợp mô hình XGBoost-SMOTE cùng bộ tiền xử lý và scaler thật vào giao diện tương tác Streamlit, hỗ trợ bốn kịch bản thử nghiệm và vượt qua kiểm thử Browser QA.
 
 Về mặt định lượng, Random Forest kết hợp SMOTENC cho kết quả tốt nhất trên tập kiểm tra với Precision 0,9994, Recall 0,9951, F1-Score 0,9973, ROC-AUC 0,9994 và Average Precision 0,9983. Tuy nhiên, như Chương 6 đã chỉ ra, khoảng cách giữa bốn biến thể học có giám sát nằm trong sai số thống kê, và khi quy chiếu về tỷ lệ gian lận gốc của PaySim thì Precision của mô hình này giảm còn 0,9801.
 
@@ -514,16 +537,18 @@ Tài liệu tham khảo được đánh số theo thứ tự xuất hiện trong
 - Nhóm 9, `src/preprocessing/`, mã nguồn đọc dữ liệu, xây dựng đặc trưng, chia tập và xử lý mất cân bằng.
 - Nhóm 9, `src/models/`, mã nguồn huấn luyện Random Forest, XGBoost và Autoencoder.
 - Nhóm 9, `src/evaluation/`, mã nguồn tính chỉ số và trực quan hóa kết quả.
+- Nguyễn Duy Khang, `reports/model_comparison.csv`, `reports/figures/roc_curves_all.png` và `reports/figures/pr_curves_all.png`, bảng so sánh tổng hợp và đường ROC, Precision–Recall của bước đánh giá chéo.
+- Hoàng Cao Sơn và Nguyễn Duy Khang, `notebooks/06_evaluation_comparison.ipynb`, notebook đánh giá và so sánh chéo các mô hình.
 - Nhóm 9, `reports/rf_smote_feature_importance.csv` và `reports/xgb_smote_feature_importance.csv`, mức đóng góp đặc trưng đã lưu của hai mô hình dùng SMOTENC.
 - Vũ Văn Duy, `run_report_metrics.py`, `reports/ch5_metrics_recomputed.csv` và `reports/ch6_prevalence_projection.csv`, kết quả tính lại toàn bộ chỉ số của Chương 5 và phép quy chiếu Precision của Chương 6 từ nhãn thật cùng các tệp dự đoán đã lưu.
 
 ## Tài liệu tham khảo bên ngoài
 
-[1] A. Abdallah, M. A. Maarof, and A. Zainal, “Fraud detection system: A survey,” Journal of Network and Computer Applications, vol. 68, pp. 90-113, 2016, doi: https://doi.org/10.1016/j.jnca.2016.04.007.
-[2] E. A. Lopez-Rojas, A. Elmir, and S. Axelsson, “PaySim: A financial mobile money simulator for fraud detection,” in Proc. 28th European Modeling and Simulation Symposium, Larnaca, Cyprus, 2016, pp. 249-255. [Online]. Available: https://www.msc-les.org/proceedings/emss/2016/EMSS2016_249.pdf.
+[1] A. Abdallah, M. A. Maarof, and A. Zainal, “Fraud detection system: A survey,” Journal of Network and Computer Applications, vol. 68, pp. 90–113, 2016, doi: https://doi.org/10.1016/j.jnca.2016.04.007.
+[2] E. A. Lopez-Rojas, A. Elmir, and S. Axelsson, “PaySim: A financial mobile money simulator for fraud detection,” in Proc. 28th European Modeling and Simulation Symposium, Larnaca, Cyprus, 2016, pp. 249–255. [Online]. Available: https://www.msc-les.org/proceedings/emss/2016/EMSS2016_249.pdf.
 [3] E. Lopez-Rojas, “Synthetic Financial Datasets for Fraud Detection,” Kaggle. [Online]. Available: https://www.kaggle.com/datasets/ealaxi/paysim1. Accessed: Sep. 4, 2026.
-[4] N. V. Chawla, K. W. Bowyer, L. O. Hall, and W. P. Kegelmeyer, “SMOTE: Synthetic Minority Over-sampling Technique,” Journal of Artificial Intelligence Research, vol. 16, pp. 321-357, 2002, doi: https://doi.org/10.1613/jair.953.
-[5] H. He, Y. Bai, E. A. Garcia, and S. Li, “ADASYN: Adaptive synthetic sampling approach for imbalanced learning,” in Proc. IEEE International Joint Conference on Neural Networks, Hong Kong, 2008, pp. 1322-1328, doi: https://doi.org/10.1109/IJCNN.2008.4633969.
-[6] L. Breiman, “Random Forests,” Machine Learning, vol. 45, no. 1, pp. 5-32, 2001, doi: https://doi.org/10.1023/A:1010933404324.
-[7] T. Chen and C. Guestrin, “XGBoost: A scalable tree boosting system,” in Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, 2016, pp. 785-794, doi: https://doi.org/10.1145/2939672.2939785.
-[8] G. E. Hinton and R. R. Salakhutdinov, “Reducing the dimensionality of data with neural networks,” Science, vol. 313, no. 5786, pp. 504-507, 2006, doi: https://doi.org/10.1126/science.1127647.
+[4] N. V. Chawla, K. W. Bowyer, L. O. Hall, and W. P. Kegelmeyer, “SMOTE: Synthetic Minority Over-sampling Technique,” Journal of Artificial Intelligence Research, vol. 16, pp. 321–357, 2002, doi: https://doi.org/10.1613/jair.953.
+[5] H. He, Y. Bai, E. A. Garcia, and S. Li, “ADASYN: Adaptive synthetic sampling approach for imbalanced learning,” in Proc. IEEE International Joint Conference on Neural Networks, Hong Kong, 2008, pp. 1322–1328, doi: https://doi.org/10.1109/IJCNN.2008.4633969.
+[6] L. Breiman, “Random Forests,” Machine Learning, vol. 45, no. 1, pp. 5–32, 2001, doi: https://doi.org/10.1023/A:1010933404324.
+[7] T. Chen and C. Guestrin, “XGBoost: A scalable tree boosting system,” in Proc. 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining, San Francisco, CA, USA, 2016, pp. 785–794, doi: https://doi.org/10.1145/2939672.2939785.
+[8] G. E. Hinton and R. R. Salakhutdinov, “Reducing the dimensionality of data with neural networks,” Science, vol. 313, no. 5786, pp. 504–507, 2006, doi: https://doi.org/10.1126/science.1127647.

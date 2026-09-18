@@ -66,7 +66,6 @@ def build_document_from_markdown(
         md_text = f.read()
 
     # Sanitize dashes in input
-    md_text = md_text.replace("\u2014", " - ").replace("\u2013", "-")
 
     # Load metadata
     meta: dict = {}

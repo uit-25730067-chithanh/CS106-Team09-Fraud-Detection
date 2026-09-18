@@ -123,6 +123,14 @@ def add_toc(document, entries: list[dict], pages: dict[str, int]) -> None:
             page_run.font.size = Pt(11)
 
 
+# Bề rộng vùng in: A4 rộng 21cm trừ lề trái 3cm và lề phải 2cm.
+CONTENT_WIDTH_CM = 16.0
+# Khoảng chừa để số trang không bị đẩy xuống dòng kế tiếp.
+TOC_TAB_SAFETY_CM = 0.2
+# Thụt lề theo cấp mục lục.
+TOC_INDENT_CM = {1: 0.0, 2: 0.6, 3: 1.2}
+
+
 def build_toc_section(
     doc: docx.Document,
     toc_entries: list[dict],
@@ -153,13 +161,16 @@ def build_toc_section(
         p_toc.paragraph_format.space_after = Pt(2)
         p_toc.paragraph_format.line_spacing = 1.25
 
-        if level == 2:
-            p_toc.paragraph_format.left_indent = Cm(0.6)
-        elif level == 3:
-            p_toc.paragraph_format.left_indent = Cm(1.2)
+        indent_cm = TOC_INDENT_CM.get(level, 0.0)
+        if indent_cm:
+            p_toc.paragraph_format.left_indent = Cm(indent_cm)
 
+        # Vị trí tab tính theo mép trong của lề, nên phải trừ đi phần thụt lề của
+        # từng cấp để số trang của cả ba cấp thẳng một cột. Chừa thêm TOC_TAB_SAFETY_CM
+        # vì tab canh phải đặt đúng mép lề sẽ khiến số trang bị đẩy xuống dòng sau.
+        tab_position_cm = CONTENT_WIDTH_CM - TOC_TAB_SAFETY_CM - indent_cm
         tab_stops = p_toc.paragraph_format.tab_stops
-        tab_stops.add_tab_stop(Cm(16.0), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
+        tab_stops.add_tab_stop(Cm(tab_position_cm), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
 
         is_bold = (level == 1)
         font_sz = 12.0 if level == 1 else 11.5
