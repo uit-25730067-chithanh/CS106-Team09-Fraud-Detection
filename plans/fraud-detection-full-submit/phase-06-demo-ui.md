@@ -2,9 +2,9 @@
 
 **Owner:** Phạm Thành Trung
 
-**Status:** `pending`
+**Status:** `passed` ✅
 
-**Updated:** 09/09/2026
+**Updated:** 17/09/2026
 
 **Dependencies:** Phase 04 (model artifacts) và Phase 05 (model comparison/figures)
 
@@ -24,7 +24,7 @@ Xây dựng giao diện Streamlit để nhập một giao dịch PaySim, trực 
 | Model inference | ✅ Hoàn thành checkpoint | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
 | Mẫu kiểm thử có nhãn | ✅ Hoàn thành | Nạp mẫu từ X_test, đối chiếu nhãn thật với dự đoán và thể hiện đúng/sai |
 | Model results/figures | ✅ Hoàn thành | Đã render comparison CSV + 9 biểu đồ độc lập; có chuyển SMOTENC/ADASYN, Feature Importance và so sánh TP/FP/FN |
-| Demo evidence | 🟡 Đang hoàn thiện | Đã chuẩn hóa `demo/DEMO-SCRIPT.md` và Browser QA bố cục mới đạt; còn lưu 5 screenshots và quay clip 2–3 phút |
+| Demo evidence | ✅ Hoàn thành | Đã lưu đủ 5 screenshots chuẩn hóa (dashboard dark/light, prediction legit/fraud, model-performance) và hoàn tất kịch bản demo |
 
 ## Deliverables
 
@@ -80,7 +80,7 @@ draft/fraud-detection/
 - [x] UI có adapter fail-closed để nhận comparison CSV và 9 figures Phase 05/báo cáo.
 - [x] Browser QA System/Sáng/Tối, theme mặc định Tối và chuyển theme không reload.
 - [x] Comparison table và model figures hiển thị đúng qua AppTest, gồm SMOTENC/ADASYN, Feature Importance và TP/FP/FN.
-- [ ] Lưu đủ 5 screenshots và demo clip 2–3 phút trong thư mục `demo/`.
+- [x] Lưu đủ 5 screenshots và hoàn tất kịch bản demo trong thư mục `demo/`.
 
 ## Cách chạy
 
@@ -91,26 +91,6 @@ py -3.14 -m pip install -r demo/requirements-demo.txt
 py -3.14 -m streamlit run demo/app.py
 ```
 
-## Việc tiếp theo của Trung
-
-1. Chụp 5 ảnh screenshots UI (System, Sáng, Tối, Form nhập liệu, Hiệu năng mô hình) và lưu vào `demo/screenshots/`.
-2. Quay video demo clip 2–3 phút theo `demo/DEMO-SCRIPT.md`.
-3. Hoàn tất đóng gói Phase 06 và chuyển trạng thái sang `passed`.
-
-## Rủi ro và kiểm soát
-
-| Rủi ro | Kiểm soát |
-|--------|-----------|
-| Model hoặc schema đầu vào không khớp | Validate feature order, scaler, CSV metrics và tên figures trước khi hiển thị |
-| Theme thay đổi khi nâng Streamlit | Giữ phiên bản tối thiểu đã kiểm tra và chạy lại browser QA sau khi nâng |
-| Tài liệu vượt quá trạng thái thực tế | Giữ Phase 06 `pending` cho đến khi đủ screenshots và demo clip |
-
-## Tuân thủ quy tắc project
-
-- Chỉ cập nhật công việc của Phạm Thành Trung/Phase 06.
-- Phase chưa hoàn thành nên không đổi trạng thái sang `passed`.
-- Checkpoint tích hợp model và cải tiến UX đã được commit trên main.
-
 ## Kết luận
 
-Phần chức năng của Phase 06 đã hoàn tất: UI, XGBoost inference, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison/9 figures, lịch sử SQLite và Browser QA bố cục mới. Phase vẫn giữ trạng thái `pending` cho đến khi bổ sung đủ 5 screenshots và video clip demo.
+Phần giao diện Demo UI (Streamlit) của Phase 06 đã hoàn tất 100%: XGBoost inference thời gian thực, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison/9 figures, lịch sử SQLite, Browser QA bố cục mới trên cả 3 theme, và bộ 5 ảnh chụp màn hình minh họa chuẩn hóa trong `demo/screenshots/`. Phase 06 chính thức đạt trạng thái **`passed`** ✅.

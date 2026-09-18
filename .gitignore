@@ -41,3 +41,7 @@ models/*.joblib
 
 # Office temp lock files
 ~$*
+
+# Submission packages & staging
+submit/*.zip
+submit/\[Project AI-UIT\]*/

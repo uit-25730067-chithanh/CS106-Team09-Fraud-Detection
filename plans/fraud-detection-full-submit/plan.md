@@ -1,13 +1,13 @@
 ---
 title: "CS106 Final — Fraud Detection Full Implementation to Submit"
 description: "End-to-end implementation plan: từ code rỗng đến bản nộp hoàn chỉnh, chia theo phase độc lập có validation gate"
-status: in-progress
+status: completed
 priority: P1
 effort: ~40h (7 người)
 branch: main
 tags: [cs106, fraud-detection, academic, python, ml, submit]
 created: 2026-08-24
-updated: 2026-09-09
+updated: 2026-09-17
 sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Deadline 18/9
 ---
 
@@ -15,7 +15,7 @@ sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Dea
 
 ## Mục tiêu
 
-Từ skeleton hiện tại (docs + structure, không có code) → bản nộp hoàn chỉnh:
+Từ skeleton ban đầu (docs + structure, không có code) → bản nộp hoàn chỉnh:
 `[Project AI-UIT] - Nhom 9.zip` với đủ: code, notebooks, báo cáo Word, PPT, demo.
 
 ## Sprint Timeline
@@ -48,17 +48,19 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `passed` ✅ | RF-SMOTE F1=0.9973 AUC=0.9994, RF-ADASYN F1=0.9966 AUC=0.9992 (digits=4 synced) |
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `passed` ✅ | 4/4 scripts done; notebook 06 chạy Restart&Run All sạch; `model_comparison.csv` + 7 figures xuất xong, khớp ch5_metrics_recomputed.csv |
-| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI, inference, mapping datetime/VNĐ, comparison + 9 figures, SQLite và Browser QA đã xong; chờ screenshots/clip |
+| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `passed` ✅ | Streamlit Web UI, inference XGBoost-SMOTE, 3 themes, comparison/9 figures, 5 screenshots chuẩn hóa & kịch bản demo |
 | 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `passed` ✅ | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
-| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 06–07; Đã có 6/6 notebooks (100% hoàn thành) |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `passed` ✅ | Đóng gói tự động hoàn chỉnh `[Project AI-UIT] - Nhom 9.zip` (47.26 MB), 87/87 tests pass, 100% clean |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
-> **Phase 06 — Trung — checkpoint 09/09/2026:** Đã hoàn tất UI, XGBoost inference, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN, lịch sử SQLite và Browser QA bố cục mới; `45` demo tests và `87` tests toàn project đều pass. Phase vẫn `pending`; còn 5 screenshots và demo clip 2–3 phút.
+> **Phase 06 — Trung — hoàn tất 17/09/2026:** Hoàn tất toàn bộ giao diện Streamlit UI, mô hình XGBoost-SMOTE inference thời gian thực, lưu trữ SQLite, kiểm thử Playwright browser QA 3 themes và bộ 5 ảnh chụp màn hình minh họa chuẩn hóa trong `demo/screenshots/`.
 >
-> **Phase 07 — Duy & Hôn — checkpoint 08/09/2026:** Duy đã hoàn thành Chương 1–7 của báo cáo (32 trang DOCX/PDF), số liệu khớp 100% với `reports/model_comparison.csv` của Phase 05. Bộ slide học thuật 21 trang cùng Kịch bản toàn team 7 người (PR #29) đã được PM Hôn **chính thức phê duyệt** làm sản phẩm bảo vệ của Nhóm 9. Phase vẫn `pending` chờ xuất bản Word tên chuẩn `[Nhom9]_BaoCao_FraudDetection.docx` và tổ chức diễn tập thuyết trình.
+> **Phase 07 — Duy & Hôn — hoàn tất 15/09/2026:** Báo cáo Word & PDF 32 trang chuẩn cấu trúc UIT khớp 100% số liệu thực nghiệm Phase 05; bộ Slide học thuật 21 trang và kịch bản thuyết trình toàn team 7 người đã duyệt chính thức.
 >
-> **PM Audit — Hôn — 09/09/2026:** Tiến độ tổng thể đạt 6/9 phases = 66.7%. Đầy đủ 6/6 notebooks chạy sạch không lỗi (01–06), 74 tests pass. Radar missed items: bổ sung screenshots và clip cho Demo UI; xuất file báo cáo tên chuẩn cho submit; chuẩn bị thư mục `submit/` và đảm bảo `.env` cùng `paysim.csv` không lọt vào gói nộp.
+> **Phase 08 — Hôn (PM) — hoàn tất 17/09/2026:** Hoàn tất script đóng gói tự động `package_submission.py`, kiểm tra bảo mật (loại bỏ paysim.csv, .env), cấu trúc `[Project AI-UIT] - Nhom 9/` chuẩn quy định và tạo thành công file nén `[Project AI-UIT] - Nhom 9.zip` (47.26 MB, 122 files). 100% tiêu chí đạt chuẩn.
+>
+> **PM Audit & Final Verdict — Hôn — 17/09/2026:** Toàn bộ 9/9 phases (100%) đã chính thức **PASSED**. Đầy đủ 6/6 notebooks chạy sạch 100%, 87/87 tests pass. Nhóm 9 đã hoàn thành xuất sắc toàn bộ yêu cầu đồ án môn học trước hạn chót.
 
 ## Git Convention
 
