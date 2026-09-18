@@ -7,7 +7,7 @@ buttonRadius = "999px"
 font = "Manrope:https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap"
 headingFont = "'Space Grotesk':https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700&display=swap"
 codeFont = "'JetBrains Mono':https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
-baseFontSize = 14
+baseFontSize = 15
 baseFontWeight = 400
 codeFontSize = "13px"
 headingFontSizes = ["38px", "27px", "21px", "17px", "14px", "12px"]
@@ -47,15 +47,15 @@ linkColor = "#67E8F9"
 
 [theme.dark]
 primaryColor = "#7C3AED"
-backgroundColor = "#090619"
-secondaryBackgroundColor = "#1A1033"
+backgroundColor = "#080B16"
+secondaryBackgroundColor = "#11162A"
 textColor = "#F8FAFC"
 linkColor = "#67E8F9"
 codeTextColor = "#DDD6FE"
-codeBackgroundColor = "#17102E"
-borderColor = "#3B2663"
-dataframeBorderColor = "#3B2663"
-dataframeHeaderBackgroundColor = "#251746"
+codeBackgroundColor = "#121827"
+borderColor = "#2D3858"
+dataframeBorderColor = "#2D3858"
+dataframeHeaderBackgroundColor = "#19223A"
 
 blueColor = "#38BDF8"
 greenColor = "#34D399"
@@ -66,11 +66,11 @@ violetColor = "#C084FC"
 grayColor = "#94A3B8"
 
 [theme.dark.sidebar]
-backgroundColor = "#060313"
-secondaryBackgroundColor = "#160B2D"
+backgroundColor = "#070914"
+secondaryBackgroundColor = "#141127"
 textColor = "#F1F5F9"
-codeBackgroundColor = "#110824"
-borderColor = "#321A59"
+codeBackgroundColor = "#101424"
+borderColor = "#292F4B"
 primaryColor = "#7C3AED"
 linkColor = "#67E8F9"
 
