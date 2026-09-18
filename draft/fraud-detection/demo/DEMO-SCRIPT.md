@@ -1,6 +1,6 @@
-# Kịch bản quay Demo UI — 3 phút
+# Kịch bản quay Demo UI
 
-**Người trình bày:** Phạm Thành Trung · **Thời lượng:** 03:00
+**Người trình bày:** Phạm Thành Trung · **Thời lượng dự kiến:** 5–6 phút
 
 **Sản phẩm:** Fraud Shield — Hệ thống phát hiện giao dịch tài chính bất thường
 
@@ -22,17 +22,143 @@
 
 ## Kịch bản ghi hình và lời thoại
 
-| Thời gian | Thao tác trên màn hình | Lời thoại đề xuất |
-|-----------|-------------------------|-------------------|
-| **00:00–00:18** | Mở màn hình **Phân tích giao dịch**, để toàn cảnh giao diện Tối. | “Xin chào thầy và các bạn. Em là Phạm Thành Trung, thành viên Nhóm 9. Đây là Fraud Shield, hệ thống phát hiện giao dịch tài chính bất thường trên PaySim, bộ dữ liệu mô phỏng giao dịch Mobile Money.” |
-| **00:18–00:32** | Mở nút **Giao diện** ở cuối sidebar; bấm **Sáng**, sau đó trở lại **Tối**. | “Hệ thống hỗ trợ ba chế độ hiển thị gồm System, Sáng và Tối. Người dùng có thể chuyển giao diện trực tiếp mà không cần tải lại trang.” |
-| **00:32–00:52** | Chỉ lần lượt vào ngày, giờ, step, loại giao dịch và các ô tiền/số dư. | “Tại đây, người dùng chọn chuyển khoản hoặc rút tiền, rồi nhập số tiền và các số dư liên quan. Ngày giờ và step tự động quy đổi qua lại; step là số giờ kể từ đầu mô phỏng PaySim. Giá trị tiền được phân tách hàng nghìn để dễ kiểm tra.” |
-| **00:52–01:14** | Chọn **Hợp lệ — dòng tiền cân đối** trong **Dữ liệu mẫu**, rồi bấm **Phân tích giao dịch**. Cuộn nhẹ tới kết quả. | “Em chọn một giao dịch mô phỏng có dòng tiền cân đối. Sau khi nhấn Phân tích giao dịch, hệ thống tạo 14 đặc trưng, đưa vào XGBoost và trả về mức rủi ro thấp.” |
-| **01:14–01:42** | Chọn **Nghi vấn gian lận — vượt ngưỡng**, bấm **Phân tích giao dịch**; dừng ở thẻ **RỦI RO CAO** và thanh xác suất. | “Tiếp theo là một tình huống mô phỏng đáng ngờ: giao dịch rút 2 triệu đơn vị, vượt số dư nguồn 1,6 triệu và đưa tài khoản về 0. Model trả xác suất khoảng 88 phần trăm nên hệ thống gắn cờ để rà soát. Đây là dự đoán rủi ro, không phải kết luận pháp lý rằng giao dịch chắc chắn gian lận.” |
-| **01:42–01:58** | Lướt qua ba chế độ **Tín hiệu**, **Dòng tiền**, **Số dư**. | “Ba góc nhìn giúp giải thích đầu vào. Tín hiệu thể hiện mức độ nổi bật của từng yếu tố; Dòng tiền mô tả tiền di chuyển giữa hai tài khoản; Số dư làm rõ chênh lệch trước và sau giao dịch.” |
-| **01:58–02:34** | Bấm **Hiệu năng mô hình**. Chỉ bảng so sánh, ROC/PR và Feature Importance; tại **Ma trận nhầm lẫn**, chuyển **SMOTENC** sang **ADASYN**. | “Màn hình Hiệu năng so sánh năm biến thể mô hình. Precision là tỷ lệ cảnh báo chính xác; Recall là khả năng tìm ra giao dịch gian lận; F1-score cân bằng hai chỉ số này. ROC-AUC và PR-AUC đánh giá khả năng phân biệt tổng thể. Các biểu đồ thể hiện đường cong đánh giá, đặc trưng quan trọng, ma trận nhầm lẫn và các ca dự đoán đúng hoặc sai. SMOTENC và ADASYN là hai cách cân bằng tập huấn luyện khi gian lận chiếm tỷ lệ rất thấp.” |
-| **02:34–02:52** | Bấm **Lịch sử phân tích**; chỉ các KPI, biểu đồ, bộ lọc và bảng. Bấm thử **Cảnh báo**, rồi trở về **Tất cả**. | “Kết quả được lưu cục bộ bằng SQLite nên vẫn còn sau khi khởi động lại ứng dụng. Người dùng có thể xem thống kê, lọc cảnh báo, tải CSV và xóa riêng từng giao dịch.” |
-| **02:52–03:00** | Trở về **Phân tích giao dịch**, dừng ở kết quả gian lận hoặc toàn cảnh dashboard. | “Fraud Shield hoàn chỉnh luồng nhập dữ liệu, dự đoán bằng mô hình thật, giải thích kết quả, đánh giá hiệu năng và quản lý lịch sử. Em xin cảm ơn thầy và các bạn.” |
+### 1. Mở đầu
+
+**Thao tác:** Mở màn hình **Phân tích giao dịch** và để toàn cảnh giao diện Tối.
+
+> Xin chào thầy và các bạn. Em tên là Phạm Thành Trung, đại diện cho Nhóm 9 trình bày phần demo của hệ thống.
+
+### 2. Giới thiệu khu vực nhập giao dịch
+
+**Thao tác:** Chỉ lần lượt vào loại giao dịch, ngày, giờ, step, số tiền và các trường số dư.
+
+> Đầu tiên, đây là khu vực nhập thông tin giao dịch.
+>
+> Người dùng có thể nhập loại giao dịch, thời điểm thực hiện, số tiền, cùng với số dư của tài khoản trước và sau giao dịch.
+>
+> Sau khi nhận dữ liệu, hệ thống sẽ kiểm tra, tạo các đặc trưng cần thiết rồi mới đưa vào mô hình để phân tích.
+
+### 3. Demo giao dịch hợp lệ
+
+**Thao tác:**
+
+1. Mở **Dữ liệu mẫu**.
+2. Chọn **Hợp lệ — dòng tiền cân đối**.
+3. Cho thấy dữ liệu mới chỉ được điền vào biểu mẫu.
+4. Nhấn **Phân tích giao dịch** và cuộn đến kết quả.
+
+> Đầu tiên, em chọn một mẫu giao dịch có dòng tiền cân đối.
+>
+> Sau khi chọn, hệ thống chỉ điền dữ liệu vào biểu mẫu và chưa thực hiện dự đoán. Người dùng vẫn có thể kiểm tra hoặc thay đổi thông tin trước khi phân tích.
+>
+> Bây giờ em nhấn “Phân tích giao dịch”.
+>
+> Có thể thấy mô hình trả về mức rủi ro rất thấp và giao dịch được phân loại là hợp lệ.
+
+### 4. Demo giao dịch cần lưu ý
+
+**Thao tác:**
+
+1. Mở **Dữ liệu mẫu**.
+2. Chọn **Cần lưu ý — chưa vượt ngưỡng**.
+3. Nhấn **Phân tích giao dịch**.
+4. Dừng tại mức xác suất và ngưỡng cảnh báo 50%.
+
+> Tiếp theo, em thử một giao dịch có mức rủi ro cao hơn.
+>
+> Giao dịch này vẫn có dòng tiền cân đối, nhưng số tiền chiếm tỷ lệ khá lớn so với số dư tài khoản nguồn và được thực hiện vào thời điểm mô phỏng ban đêm.
+>
+> Sau khi phân tích, mô hình trả về xác suất gian lận khoảng 31,95%.
+>
+> Kết quả này vẫn chưa vượt ngưỡng cảnh báo là 50%, nên mô hình phân loại giao dịch là hợp lệ. Tuy nhiên, giao diện hiển thị mức “Cần lưu ý” để người dùng biết đây là một giao dịch nên được quan sát thêm.
+
+### 5. Demo giao dịch nghi vấn gian lận
+
+**Thao tác:**
+
+1. Mở **Dữ liệu mẫu**.
+2. Chọn **Nghi vấn gian lận — vượt ngưỡng**.
+3. Nhấn **Phân tích giao dịch**.
+4. Dừng tại nhãn **RỦI RO CAO** và thanh xác suất.
+
+> Cuối cùng, em chọn một tình huống có nhiều dấu hiệu bất thường rõ ràng hơn.
+>
+> Ở đây, số tiền giao dịch lớn hơn số dư nguồn hiện có, tài khoản nguồn bị đưa về 0, đồng thời xuất hiện sai lệch trong quá trình cập nhật số dư.
+>
+> Sau khi phân tích, mô hình trả về xác suất rủi ro khoảng 88%.
+>
+> Do kết quả đã vượt ngưỡng cảnh báo 50%, hệ thống gắn cờ giao dịch là nghi vấn gian lận để ưu tiên đưa vào quá trình rà soát.
+
+### 6. Giải thích quy trình phân tích
+
+**Thao tác:** Tại **Quy trình phân tích**, lần lượt mở bốn bước và chỉ vào dữ liệu minh họa của từng bước.
+
+> Ở phần Quy trình phân tích, người dùng có thể xem hệ thống xử lý một giao dịch như thế nào.
+>
+> Đầu tiên là kiểm tra dữ liệu đầu vào.
+>
+> Sau đó, hệ thống tạo các đặc trưng cần thiết từ giao dịch.
+>
+> Các đặc trưng số được chuẩn hóa rồi đưa vào mô hình XGBoost để tính xác suất gian lận.
+>
+> Cuối cùng, xác suất này được so sánh với ngưỡng cảnh báo để đưa ra kết quả phân loại.
+
+### 7. Giới thiệu các góc nhìn trực quan
+
+**Thao tác:** Lần lượt chuyển qua **Tín hiệu**, **Dòng tiền** và **Số dư**.
+
+> Bên cạnh kết quả dự đoán, hệ thống còn cung cấp ba góc nhìn trực quan.
+>
+> Phần Tín hiệu cho biết những yếu tố đáng chú ý của giao dịch.
+>
+> Phần Dòng tiền giúp quan sát quá trình tiền di chuyển giữa hai tài khoản.
+>
+> Còn phần Số dư giúp đối chiếu giá trị trước và sau giao dịch.
+>
+> Nhờ đó, người dùng không chỉ nhìn thấy một con số xác suất mà còn có thêm thông tin để hiểu giao dịch.
+
+### 8. Giới thiệu hiệu năng mô hình
+
+**Thao tác:**
+
+1. Bấm **Hiệu năng mô hình** trên sidebar.
+2. Chỉ vào các thẻ chỉ số và bảng so sánh Random Forest, XGBoost và Autoencoder.
+3. Cuộn qua biểu đồ ROC, Precision–Recall và Feature Importance.
+4. Tại **Ma trận nhầm lẫn**, chuyển từ **SMOTENC** sang **ADASYN**.
+
+> Tiếp theo là phần đánh giá hiệu năng mô hình.
+>
+> Ở đây, nhóm so sánh ba thuật toán gồm Random Forest, XGBoost và Autoencoder.
+>
+> Do dữ liệu gian lận bị mất cân bằng khá mạnh, nên thay vì chỉ dựa vào Accuracy, nhóm tập trung vào các chỉ số như Precision, Recall, F1-score, ROC-AUC và PR-AUC.
+>
+> Đây là các biểu đồ ROC và Precision–Recall, giúp đánh giá khả năng phân biệt giữa giao dịch hợp lệ và giao dịch gian lận.
+>
+> Đồng thời, ma trận nhầm lẫn giúp quan sát số giao dịch phát hiện đúng, số cảnh báo nhầm và những trường hợp gian lận bị bỏ sót.
+>
+> Hệ thống cũng cho phép chuyển giữa SMOTENC và ADASYN để đối chiếu kết quả của hai phương pháp xử lý mất cân bằng dữ liệu.
+
+### 9. Giới thiệu lịch sử phân tích
+
+**Thao tác:**
+
+1. Bấm **Lịch sử phân tích** trên sidebar.
+2. Chỉ vào các thẻ thống kê, bộ lọc và danh sách giao dịch.
+3. Minh họa thao tác lọc và nút tải CSV.
+
+> Cuối cùng là phần Lịch sử phân tích.
+>
+> Mỗi giao dịch sau khi được phân tích thành công sẽ được lưu lại cục bộ bằng SQLite.
+>
+> Người dùng có thể xem tổng số giao dịch, số cảnh báo, xác suất trung bình và kết quả gần nhất.
+>
+> Ngoài ra, người dùng có thể lọc lịch sử theo kết quả hoặc loại giao dịch, xóa riêng từng giao dịch và xuất lịch sử thành file CSV.
+
+### 10. Kết thúc
+
+**Thao tác:** Trở về màn hình **Phân tích giao dịch** và dừng ở toàn cảnh dashboard hoặc kết quả nghi vấn gian lận.
+
+> Phần trình bày của em đến đây là kết thúc. Em xin cảm ơn thầy và các bạn.
 
 ## Điểm cần nhấn mạnh khi nói
 
