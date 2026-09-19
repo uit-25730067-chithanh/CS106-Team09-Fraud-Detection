@@ -2443,6 +2443,7 @@ def initialize_state() -> None:
         "decision_threshold_percent",
         DEFAULT_DECISION_THRESHOLD_PERCENT,
     )
+    st.session_state.setdefault("pipeline_detail_step", 1)
     st.session_state.setdefault("active_view", "prediction")
     refresh_analysis_history()
 

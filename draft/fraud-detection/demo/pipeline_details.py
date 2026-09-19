@@ -104,6 +104,8 @@ def _show_features_step(prediction: PredictionResult) -> None:
     # A semantic table follows the client-side theme instantly, unlike a canvas
     # grid. Preserve the full captured floats; round only the displayed text.
     def format_number(value: float) -> str:
+        if abs(value) < 1e-9:
+            value = 0.0
         return f"{value:,.6f}".rstrip("0").rstrip(".").translate(str.maketrans(",.", ".,"))
 
     with st.container(key="pipeline_feature_table"):
@@ -190,15 +192,16 @@ def show_pipeline_details(
 ) -> None:
     """Navigate read-only details inside the dialog without recording history."""
 
+    current_step = st.session_state.get("pipeline_detail_step", 1)
     with st.container(horizontal=True, gap="small", key="pipeline_detail_nav"):
         for index in range(1, 5):
             if st.button(
                 f"Bước {index:02}", key=f"pipeline_dialog_{index}",
-                type="primary" if index == st.session_state["pipeline_detail_step"] else "secondary",
+                type="primary" if index == current_step else "secondary",
             ):
                 st.session_state["pipeline_detail_step"] = index
                 st.rerun(scope="fragment")
-    step = st.session_state["pipeline_detail_step"]
+    step = st.session_state.get("pipeline_detail_step", 1)
     st.subheader(f"{step:02} · {STEP_TITLES[step - 1]}")
     if step == 1:
         _show_input_step(transaction, validation_notes)

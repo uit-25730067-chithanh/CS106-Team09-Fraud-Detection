@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import io
 import json
+import math
 from pathlib import Path
 from typing import Any
 
@@ -35,6 +36,8 @@ def _as_number(value: Any, field: str) -> float:
         number = float(value)
     except (TypeError, ValueError) as error:
         raise ValueError(f"{field} phải là số") from error
+    if math.isnan(number) or math.isinf(number):
+        raise ValueError(f"{field} không hợp lệ (NaN hoặc Infinity)")
     if number < 0:
         raise ValueError(f"{field} không được âm")
     return number
@@ -48,7 +51,7 @@ def _normalize_row(row: dict[str, Any], index: int, source_name: str) -> dict[st
         raise ValueError("type chỉ nhận TRANSFER hoặc CASH_OUT")
 
     step_number = _as_number(_pick(row, FIELD_ALIASES["step"], "step"), "step")
-    if not step_number.is_integer() or not 1 <= step_number <= 744:
+    if not step_number.is_integer() or not (1 <= step_number <= 744):
         raise ValueError("step phải là số nguyên từ 1 đến 744")
 
     transaction = {
@@ -77,7 +80,7 @@ def _normalize_row(row: dict[str, Any], index: int, source_name: str) -> dict[st
             break
 
     fallback_title = f"{Path(source_name).stem} · Mẫu {index + 1}"
-    title = str(row.get("name") or row.get("title") or fallback_title).strip()
+    title = str(row.get("name") or row.get("title") or fallback_title).strip() or fallback_title
     return {
         "title": title[:80],
         "description": str(
