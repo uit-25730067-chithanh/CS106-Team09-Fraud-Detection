@@ -48,17 +48,17 @@ Từ skeleton hiện tại (docs + structure, không có code) → bản nộp h
 | 03 | [Modeling — Random Forest](./phase-03-model-random-forest.md) | Sơn | Sprint 3 | `passed` ✅ | RF-SMOTE F1=0.9973 AUC=0.9994, RF-ADASYN F1=0.9966 AUC=0.9992 (digits=4 synced) |
 | 04 | [Modeling — XGBoost + Autoencoder](./phase-04-model-xgboost-autoencoder.md) | Cẩm | Sprint 3 | `passed` ✅ | XGB-SMOTE F1=0.9963/AUC=0.9993; Autoencoder Recall=0.75/AUC=0.93 (MLPRegressor — TF thiếu Python 3.14) |
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `passed` ✅ | 4/4 scripts done; notebook 06 chạy Restart&Run All sạch; `model_comparison.csv` + 7 figures xuất xong, khớp ch5_metrics_recomputed.csv |
-| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `pending` | UI, inference, mapping datetime/VNĐ, comparison + 9 figures, SQLite và Browser QA đã xong; chờ screenshots/clip |
+| 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `passed` ✅ | UI, quy trình 4 bước, import CSV/JSON, 74 tests pass, video Google Drive (<50MB) |
 | 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `passed` ✅ | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
 | 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `pending` | Blocked by 06–07; Đã có 6/6 notebooks (100% hoàn thành) |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
-> **Phase 06 — Trung — checkpoint 09/09/2026:** Đã hoàn tất UI, XGBoost inference, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN, lịch sử SQLite và Browser QA bố cục mới; `45` demo tests và `87` tests toàn project đều pass. Phase vẫn `pending`; còn 5 screenshots và demo clip 2–3 phút.
+> **Phase 06 — Trung — checkpoint 19/09/2026:** Đã hoàn tất UI tương tác, XGBoost inference, quy trình phân tích 4 bước, hộp chọn và nhập mẫu CSV/JSON, mapping datetime PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN, lịch sử SQLite và Browser QA; `74` demo tests và `116` tests toàn project pass; video demo clip lưu trữ ngoại tuyến tại Google Drive (tuân thủ giới hạn Git < 50MB). Phase 06 chính thức PASSED.
 >
 > **Phase 07 — Duy & Hôn — checkpoint 08/09/2026:** Duy đã hoàn thành Chương 1–7 của báo cáo (32 trang DOCX/PDF), số liệu khớp 100% với `reports/model_comparison.csv` của Phase 05. Bộ slide học thuật 21 trang cùng Kịch bản toàn team 7 người (PR #29) đã được PM Hôn **chính thức phê duyệt** làm sản phẩm bảo vệ của Nhóm 9. Phase vẫn `pending` chờ xuất bản Word tên chuẩn `[Nhom9]_BaoCao_FraudDetection.docx` và tổ chức diễn tập thuyết trình.
 >
-> **PM Audit — Hôn — 09/09/2026:** Tiến độ tổng thể đạt 6/9 phases = 66.7%. Đầy đủ 6/6 notebooks chạy sạch không lỗi (01–06), 74 tests pass. Radar missed items: bổ sung screenshots và clip cho Demo UI; xuất file báo cáo tên chuẩn cho submit; chuẩn bị thư mục `submit/` và đảm bảo `.env` cùng `paysim.csv` không lọt vào gói nộp.
+> **PM Audit — Hôn — 19/09/2026:** Tiến độ tổng thể đạt 8/9 phases = 88.9%. Đầy đủ 6/6 notebooks chạy sạch không lỗi (01–06), Phase 00–07 hoàn tất 100%, 116 tests pass. Sẵn sàng cho Phase 08 đóng gói nộp bài.
 
 ## Git Convention
 

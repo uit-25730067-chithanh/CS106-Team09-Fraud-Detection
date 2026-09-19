@@ -41,3 +41,7 @@ slide_images/
 
 # Office / PowerPoint temp lock files
 ~$*
+
+# Media & Video files
+*.mp4
+demo/clip/

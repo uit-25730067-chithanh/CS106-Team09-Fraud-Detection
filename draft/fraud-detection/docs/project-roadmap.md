@@ -40,7 +40,7 @@ gantt
 
     section Sprint 4 (11/9 - 18/9)
     Chạy evaluation & So sánh (Khang)   :done, s4_1, 2026-09-06, 3d
-    Figures & demo evidence (Trung)      :active, s4_2, 2026-09-09, 4d
+    Figures & demo evidence (Trung)      :done, s4_2, 2026-09-09, 4d
     Báo cáo Results & Conclusion (Duy)   :active, s4_3, 2026-09-09, 4d
     Hoàn thiện PPT & Review (Hôn)        :active, s4_4, 2026-09-09, 4d
     Đóng gói & Nộp bài (Hôn)             :milestone, s4_5, 2026-09-18, 0d
@@ -171,7 +171,7 @@ gantt
 |------|---------|-----------|
 | Browser QA System/Sáng/Tối <br> *[Đầu vào: app đã tích hợp XGBoost \| Đầu ra: giao diện được kiểm tra trực quan trên ba theme]* | 🟡 High | ✅ |
 | Tích hợp figures/kết luận model <br> *[Đầu vào: output Phase 05 \| Đầu ra: UI hiển thị kết quả so sánh chính thức]* | 🟡 High | ✅ (Đã kết nối qua `evaluation_artifacts.py`) |
-| Quay clip demo + viết hướng dẫn sử dụng UI ngắn <br> *[Đầu vào: Running Streamlit app \| Đầu ra: `demo/screenshots` hoặc video mp4]* | 🟢 Medium | 🟡 Đã có DEMO-SCRIPT.md; chờ chụp 5 screenshots & video |
+| Quay clip demo + viết hướng dẫn sử dụng UI ngắn <br> *[Đầu vào: Running Streamlit app \| Đầu ra: `demo/screenshots` hoặc video mp4]* | 🟢 Medium | ✅ Đã hoàn tất: Kịch bản `DEMO-SCRIPT.md`, 74 tests pass, video demo lưu trữ Google Drive |
 
 ### Duy *(cần kết quả từ Khang)*
 | Task | Ưu tiên | Trạng thái |

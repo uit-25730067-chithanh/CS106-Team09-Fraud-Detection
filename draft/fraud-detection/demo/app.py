@@ -33,6 +33,7 @@ HISTORY_DATABASE_PATH = Path(
         DEMO_DIR / ".data" / "analysis_history.sqlite3",
     )
 )
+DEFAULT_DECISION_THRESHOLD_PERCENT = 50
 if str(DEMO_DIR) not in sys.path:
     sys.path.insert(0, str(DEMO_DIR))
 if str(PROJECT_ROOT) not in sys.path:
@@ -53,6 +54,7 @@ from inference import (
     predict_transaction,
     reconstruct_transaction_input,
 )
+from analysis_pipeline import render_analysis_pipeline
 from evaluation_artifacts import (
     EVALUATION_FIGURES,
     find_evaluation_figures,
@@ -68,6 +70,7 @@ from history_store import (
     load_analysis_history,
     save_analysis,
 )
+from sample_import import parse_sample_file
 
 
 st.set_page_config(
@@ -80,6 +83,28 @@ st.set_page_config(
 st.html(
     """
     <style>
+    /* Shared tonal layers: a quiet panel, a raised card, and an input inset.
+       Keep the violet identity without giving each section a different hue. */
+    html {
+        --fraud-panel-background: linear-gradient(145deg, #151a2c, #0f1322);
+        --fraud-card-background: linear-gradient(145deg, #1b2133, #141927);
+        --fraud-card-accent: #7486c7;
+        --fraud-surface-border: rgba(119, 134, 178, 0.32);
+        --fraud-surface-edge: rgba(191, 208, 255, 0.08);
+        --fraud-panel-shadow: 0 16px 40px rgba(3, 2, 13, 0.28);
+        --fraud-card-shadow: 0 8px 24px rgba(3, 2, 13, 0.20);
+        --fraud-table-header: #20283a;
+    }
+    html[data-fraud-shield-theme="light"] {
+        --fraud-panel-background: linear-gradient(145deg, #ffffff, #fcfbff);
+        --fraud-card-background: linear-gradient(145deg, #ffffff, #f3f3fb);
+        --fraud-surface-border: #d5d8e9;
+        --fraud-surface-edge: rgba(255, 255, 255, 0.85);
+        --fraud-panel-shadow: 0 12px 32px rgba(43, 38, 98, 0.06);
+        --fraud-card-shadow: 0 6px 20px rgba(43, 38, 98, 0.05);
+        --fraud-table-header: #eeeff8;
+    }
+
     [data-testid="stMainMenuButton"],
     [data-testid="stMainMenuPopover"] {
         visibility: hidden !important;
@@ -93,6 +118,60 @@ st.html(
         max-width: 1760px;
         margin-inline: auto;
         padding-inline: clamp(1rem, 2vw, 2.25rem);
+        container-type: inline-size;
+        container-name: fraud-main;
+    }
+
+    /* Native metrics remain accessible; the grid prevents content length
+       and optional descriptions from changing sibling card dimensions. */
+    .st-key-overview_metrics,
+    .st-key-history_metrics,
+    .st-key-model_status_metrics {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        grid-auto-rows: 1fr;
+        align-items: stretch;
+        gap: 1rem;
+    }
+    .st-key-model_status_metrics {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+    :is(.st-key-overview_metrics, .st-key-history_metrics, .st-key-model_status_metrics)
+        > [data-testid="stElementContainer"] {
+        width: 100%;
+        min-width: 0;
+    }
+    :is(.st-key-overview_metrics, .st-key-history_metrics, .st-key-model_status_metrics)
+        [data-testid="stMetric"] {
+        height: 100%;
+        min-height: 9.6rem;
+        padding: 1.1rem 1.15rem;
+    }
+    :is(.st-key-overview_metrics, .st-key-history_metrics, .st-key-model_status_metrics)
+        [data-testid="stMetricLabel"] p {
+        font-size: 0.95rem;
+        font-weight: 600;
+        white-space: normal;
+    }
+    :is(.st-key-overview_metrics, .st-key-history_metrics, .st-key-model_status_metrics)
+        [data-testid="stMetricDelta"] {
+        max-width: 100%;
+        white-space: normal;
+    }
+    @container fraud-main (max-width: 1000px) {
+        .st-key-overview_metrics, .st-key-history_metrics {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+    @container fraud-main (max-width: 640px) {
+        .st-key-model_status_metrics {
+            grid-template-columns: minmax(0, 1fr);
+        }
+    }
+    @container fraud-main (max-width: 520px) {
+        .st-key-overview_metrics, .st-key-history_metrics {
+            grid-template-columns: minmax(0, 1fr);
+        }
     }
 
     .st-key-analyze_transaction {
@@ -174,6 +253,7 @@ st.html(
         min-height: 3.15rem;
         padding-inline: 1rem;
         border-radius: 0.9rem;
+        font-size: 0.96rem;
         font-weight: 650;
         transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, box-shadow 160ms ease;
     }
@@ -193,7 +273,7 @@ st.html(
     [data-testid="stSidebar"] .stButton > button[kind="primary"] {
         position: relative;
         border-color: color-mix(in srgb, var(--st-primary-color) 70%, white);
-        background: linear-gradient(112deg, var(--st-primary-color), color-mix(in srgb, var(--st-primary-color) 72%, #6366f1));
+        background: linear-gradient(112deg, #6d28d9, #4f46e5);
         box-shadow: 0 10px 24px color-mix(in srgb, var(--st-primary-color) 25%, transparent);
     }
 
@@ -201,10 +281,6 @@ st.html(
         margin-top: 1.15rem;
         padding-top: 1rem;
         border-top: 1px solid color-mix(in srgb, var(--st-primary-color) 15%, var(--st-border-color));
-    }
-
-    .st-key-preset_selector [data-testid="stPills"] {
-        gap: 0.42rem;
     }
 
     .risk-meter-card {
@@ -295,7 +371,7 @@ st.html(
         z-index: 2;
         padding: 0.22rem 0.45rem;
         border-radius: 0.45rem;
-        font-size: 0.66rem;
+        font-size: 0.75rem;
         font-weight: 800;
         line-height: 1;
         white-space: nowrap;
@@ -359,7 +435,7 @@ st.html(
         display: flex;
         justify-content: space-between;
         color: var(--st-gray-text-color);
-        font-size: 0.58rem;
+        font-size: 0.72rem;
         font-variant-numeric: tabular-nums;
     }
 
@@ -367,13 +443,13 @@ st.html(
         display: flex;
         justify-content: space-between;
         color: var(--st-gray-text-color);
-        font-size: 0.62rem;
+        font-size: 0.76rem;
         font-weight: 600;
     }
 
     @media (min-width: 1800px) {
         html {
-            font-size: 15px;
+            font-size: 16px;
         }
 
         [data-testid="stMainBlockContainer"] {
@@ -392,6 +468,10 @@ st.html(
     }
 
     @media (max-width: 768px) {
+        html {
+            font-size: 14px;
+        }
+
         [data-testid="stMainBlockContainer"] {
             width: 100%;
             padding-inline: 0.85rem;
@@ -603,22 +683,22 @@ export default function (component) {
     },
     Dark: {
       primary: "#7C3AED",
-      background: "#090619",
-      secondary: "#1A1033",
+      background: "#080B16",
+      secondary: "#11162A",
       text: "#F8FAFC",
-      border: "#3B2663",
+      border: "#2D3858",
       gray: "#94A3B8",
       blue: "#38BDF8",
       green: "#34D399",
       orange: "#FB923C",
       red: "#FB7185",
       violet: "#C084FC",
-      sidebar: "#060313",
-      sidebarSecondary: "#160B2D",
+      sidebar: "#070914",
+      sidebarSecondary: "#141127",
       sidebarText: "#F1F5F9",
-      sidebarBorder: "#321A59",
-      inputBackground: "#151827",
-      inputBorder: "rgba(99, 102, 241, 0.38)",
+      sidebarBorder: "#292F4B",
+      inputBackground: "#121827",
+      inputBorder: "rgba(129, 140, 248, 0.32)",
       inputHover: "#818CF8",
       inputFocus: "#8B5CF6",
       inputGlow: "rgba(139, 92, 246, 0.18)",
@@ -677,6 +757,53 @@ export default function (component) {
       }
       html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stMetricDelta"] svg {
         fill: currentColor !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-overview_metric_"] {
+        --overview-metric-accent: var(--st-blue-color);
+        height: 100%;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-overview_metric_scope {
+        --overview-metric-accent: var(--st-orange-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-overview_metric_features {
+        --overview-metric-accent: var(--st-violet-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-overview_metric_model_ready {
+        --overview-metric-accent: var(--st-green-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-overview_metric_model_unavailable {
+        --overview-metric-accent: var(--st-orange-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-overview_metric_"] [data-testid="stMetricDelta"] {
+        color: var(--overview-metric-accent) !important;
+        background: color-mix(in srgb, var(--overview-metric-accent) 13%, transparent) !important;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--overview-metric-accent) 20%, transparent);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-model_metric_"] {
+        --model-metric-accent: var(--st-gray-text-color);
+        height: 100%;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-model_metric_rf_"] {
+        --model-metric-accent: var(--st-blue-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-model_metric_xgb_"] {
+        --model-metric-accent: var(--st-green-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-model_metric_autoencoder_"] {
+        --model-metric-accent: var(--st-orange-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-model_metric_unavailable_"] {
+        --model-metric-accent: var(--st-gray-text-color);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [class*="st-key-model_metric_"] [data-testid="stMetricDelta"] {
+        color: var(--model-metric-accent) !important;
+        background: color-mix(in srgb, var(--model-metric-accent) 13%, transparent) !important;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--model-metric-accent) 20%, transparent);
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-dataset_fraud_metrics [data-testid="stMetricDelta"] {
+        color: var(--st-green-color) !important;
+        background: color-mix(in srgb, var(--st-green-color) 13%, transparent) !important;
+        box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--st-green-color) 20%, transparent);
       }
       html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputContainer"],
       html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stNumberInputStepDown"],
@@ -774,40 +901,57 @@ export default function (component) {
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-hero_panel {
         background: linear-gradient(135deg, #ffffff 0%, #faf7ff 62%, #eef6ff 100%) !important;
-        border-color: rgba(99, 102, 241, 0.3) !important;
+        border-color: var(--fraud-surface-border) !important;
         box-shadow: 0 20px 48px rgba(43, 38, 98, 0.11) !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-result_panel {
-        background: linear-gradient(155deg, #ffffff 0%, #f8faff 100%) !important;
-        border-color: rgba(99, 102, 241, 0.3) !important;
-        box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] :is(
+        .st-key-result_panel, .st-key-transaction_form, .st-key-analysis_pipeline_panel,
+        .st-key-evaluation_data_panel, [class*="st-key-evaluation_figure_"],
+        .st-key-feature_importance_panel, .st-key-confusion_components_panel,
+        .st-key-comparison_panel, .st-key-evaluation_pending_panel,
+        .st-key-history_empty_panel, .st-key-history_chart_panel, .st-key-history_signal_panel
+      ) {
+        background: var(--fraud-panel-background) !important;
+        border-color: var(--fraud-surface-border) !important;
+        box-shadow: var(--fraud-panel-shadow), inset 0 1px 0 var(--fraud-surface-edge) !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-feature_importance_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-confusion_components_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-comparison_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-evaluation_pending_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_empty_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_chart_panel,
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-history_signal_panel {
-        background: #ffffff !important;
-        border-color: rgba(99, 102, 241, 0.3) !important;
-        box-shadow: 0 14px 34px rgba(30, 41, 59, 0.08) !important;
+      html[data-fraud-shield-theme] [data-testid="stDialog"]:has(.st-key-sample_dialog) {
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        overflow: hidden;
+        background: rgba(2, 6, 23, 0.72);
+        backdrop-filter: blur(7px) saturate(0.86);
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
-        background: #ffffff !important;
-        border-color: rgba(99, 102, 241, 0.3) !important;
-        border-top: 3px solid #6366f1 !important;
-        box-shadow: 0 10px 26px rgba(30, 41, 59, 0.08) !important;
+      html[data-fraud-shield-theme] [role="dialog"]:has(.st-key-sample_dialog) {
+        color: var(--st-text-color) !important;
+        background: var(--fraud-panel-background) !important;
+        border: 1px solid var(--fraud-surface-border) !important;
+        max-height: min(820px, calc(100dvh - 2rem));
+        overflow-y: auto;
+        box-shadow: 0 24px 72px rgba(2, 6, 23, 0.48), inset 0 1px 0 var(--fraud-surface-edge) !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stMetricDelta"] {
-        color: #526078 !important;
-        background: #eef2ff !important;
+      html[data-fraud-shield-theme] [role="dialog"]:has(.st-key-sample_dialog) [data-baseweb="select"] > div {
+        color: var(--st-text-color) !important;
+        background: var(--fraud-input-background) !important;
+        border-color: var(--fraud-input-border) !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-transaction_form {
-        background: #ffffff !important;
-        border-color: rgba(99, 102, 241, 0.3) !important;
-        box-shadow: 0 16px 36px rgba(30, 41, 59, 0.09) !important;
+      html[data-fraud-shield-theme] [role="dialog"]:has(.st-key-sample_dialog) .st-key-choose_sample button:not(:disabled) {
+        color: #ffffff !important;
+        background: linear-gradient(110deg, #1d4ed8, #2563eb) !important;
+        border-color: #60a5fa !important;
+        box-shadow: 0 7px 18px rgba(37, 99, 235, 0.24) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
+        background: var(--fraud-card-background) !important;
+        border: 1px solid var(--fraud-surface-border) !important;
+        box-shadow: var(--fraud-card-shadow), inset 0 1px 0 var(--fraud-surface-edge) !important;
+        font-variant-numeric: tabular-nums;
+      }
+      html[data-fraud-shield-theme] :is(
+        [data-testid="stMainBlockContainer"], [role="dialog"]:has(.st-key-pipeline_dialog_1)
+      ) [data-testid="stMetric"] {
+        border-top: 2px solid var(--fraud-card-accent) !important;
       }
       html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"] {
         color: #334155 !important;
@@ -870,74 +1014,99 @@ export default function (component) {
         background-color: rgba(244, 63, 94, 0.2) !important;
         box-shadow: inset 0 0 0 1px rgba(251, 113, 133, 0.28);
       }
-      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-workflow_steps {
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] :is(.st-key-workflow_steps, .st-key-pipeline_stats) {
         margin: 0.15rem 0 0.8rem;
       }
-      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge {
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] :is(.st-key-workflow_steps, .st-key-pipeline_stats) .stMarkdownBadge {
         min-height: 2rem;
         padding: 0.48rem 0.72rem;
         border-radius: 0.72rem;
-        font-size: 0.86rem !important;
+        font-size: 0.9rem !important;
         font-weight: 800 !important;
         letter-spacing: -0.012em;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge {
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] :is(.st-key-workflow_steps, .st-key-pipeline_stats) .stMarkdownBadge {
         color: #111827 !important;
         transform: translateY(-1px);
         text-shadow: none !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge[style*="124, 58, 237"] {
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] :is(.st-key-workflow_steps, .st-key-pipeline_stats) .stMarkdownBadge[style*="124, 58, 237"] {
         background-color: #ede9fe !important;
         box-shadow: inset 0 0 0 2px #7c3aed, 0 7px 16px rgba(109, 40, 217, 0.16) !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge[style*="37, 99, 235"] {
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] :is(.st-key-workflow_steps, .st-key-pipeline_stats) .stMarkdownBadge[style*="37, 99, 235"] {
         background-color: #dbeafe !important;
         box-shadow: inset 0 0 0 2px #2563eb, 0 7px 16px rgba(37, 99, 235, 0.15) !important;
       }
-      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] .st-key-workflow_steps .stMarkdownBadge[style*="22, 163, 74"] {
+      html[data-fraud-shield-theme="light"] [data-testid="stMainBlockContainer"] :is(.st-key-workflow_steps, .st-key-pipeline_stats) .stMarkdownBadge[style*="22, 163, 74"] {
         background-color: #d1fae5 !important;
         box-shadow: inset 0 0 0 2px #047857, 0 7px 16px rgba(4, 120, 87, 0.15) !important;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stAppViewContainer"] {
         background:
-          radial-gradient(circle at 82% -8%, rgba(124, 58, 237, 0.2), transparent 31rem),
-          radial-gradient(circle at 28% 58%, rgba(14, 165, 233, 0.06), transparent 28rem),
-          #090619 !important;
+          radial-gradient(circle at 82% -8%, rgba(124, 58, 237, 0.16), transparent 31rem),
+          radial-gradient(circle at 28% 58%, rgba(14, 165, 233, 0.055), transparent 28rem),
+          #080b16 !important;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-hero_panel {
-        background: linear-gradient(135deg, rgba(22, 13, 49, 0.96), rgba(10, 7, 28, 0.98)) !important;
-        border-color: rgba(99, 102, 241, 0.48) !important;
-        box-shadow: 0 22px 54px rgba(3, 2, 13, 0.48), inset 0 1px 0 rgba(192, 132, 252, 0.09) !important;
+        background: linear-gradient(135deg, rgba(20, 27, 46, 0.98), rgba(10, 15, 28, 0.99)) !important;
+        border-color: rgba(119, 134, 178, 0.38) !important;
+        box-shadow: 0 22px 54px rgba(2, 6, 18, 0.46), inset 0 1px 0 rgba(191, 208, 255, 0.08) !important;
       }
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-result_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-evaluation_data_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-feature_importance_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-confusion_components_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-comparison_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-evaluation_pending_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_empty_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_chart_panel,
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-history_signal_panel {
-        background: linear-gradient(150deg, rgba(22, 13, 49, 0.95), rgba(12, 8, 30, 0.98)) !important;
-        border-color: rgba(99, 102, 241, 0.48) !important;
-        box-shadow: 0 16px 40px rgba(3, 2, 13, 0.4) !important;
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stWidgetLabel"] p {
+        font-size: 0.94rem;
+        font-weight: 650;
+        letter-spacing: -0.008em;
       }
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stMetric"] {
-        background: linear-gradient(150deg, #160d31, #0d091f) !important;
-        border-color: rgba(99, 102, 241, 0.48) !important;
-        border-top: 3px solid #6366f1 !important;
-        box-shadow: 0 12px 30px rgba(3, 2, 13, 0.38) !important;
-      }
-      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] .st-key-transaction_form {
-        background: linear-gradient(155deg, #130b2b, #0d081f) !important;
-        border-color: rgba(99, 102, 241, 0.48) !important;
-        box-shadow: 0 18px 44px rgba(3, 2, 13, 0.42) !important;
+      html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] :is(h2, h3) {
+        letter-spacing: -0.025em;
       }
       html[data-fraud-shield-theme="dark"] [data-testid="stMainBlockContainer"] [data-testid="stButtonGroup"] button[role="radio"][aria-checked="true"] {
         color: #ffffff !important;
         background: linear-gradient(110deg, #6d28d9, #7c3aed) !important;
         border-color: #a78bfa !important;
         box-shadow: 0 7px 18px rgba(124, 58, 237, 0.3) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] .st-key-dataset_scope button[role="radio"][aria-checked="true"] {
+        color: var(--st-text-color) !important;
+        background: color-mix(in srgb, var(--st-blue-color) 16%, var(--fraud-input-background)) !important;
+        border-color: var(--st-blue-color) !important;
+        box-shadow: none !important;
+      }
+      html[data-fraud-shield-theme] .st-key-dataset_scope [role="radio"][aria-checked="true"] p {
+        color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stCaptionContainer"] {
+        opacity: 1;
+      }
+      html[data-fraud-shield-theme] [data-testid="stMainBlockContainer"] [data-testid="stCaptionContainer"] p {
+        color: var(--st-gray-text-color);
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+      html[data-fraud-shield-theme] .st-key-comparison_snapshot table {
+        width: 100%;
+        min-width: 680px;
+        color: var(--st-text-color);
+      }
+      html[data-fraud-shield-theme] .st-key-comparison_snapshot :is(th, td) {
+        background: var(--fraud-input-background);
+        border-color: var(--fraud-surface-border);
+        padding: 0.7rem 0.8rem;
+        font-variant-numeric: tabular-nums;
+      }
+      html[data-fraud-shield-theme] .st-key-comparison_snapshot th {
+        background: var(--fraud-table-header);
+      }
+      html[data-fraud-shield-theme] .st-key-comparison_snapshot :is(th, td) p {
+        color: var(--st-text-color) !important;
+      }
+      html[data-fraud-shield-theme] .st-key-comparison_snapshot tbody tr:first-child td {
+        background: color-mix(in srgb, var(--st-green-color) 7%, var(--fraud-input-background));
+        font-weight: 650;
+      }
+      html[data-fraud-shield-theme] .st-key-comparison_panel :is([data-testid="stTable"] > div, details) {
+        border-color: color-mix(in srgb, var(--st-gray-text-color) 35%, transparent);
       }
       html[data-fraud-shield-theme] .st-key-transaction_type_input [role="radiogroup"] > button:nth-of-type(1)[aria-checked="true"] {
         color: #ffffff !important;
@@ -1283,14 +1452,12 @@ HISTORY_TABLE = st.components.v2.component(
 }
 .history-table-shell {
   --history-text: #17213a;
-  --history-surface: #ffffff;
-  --history-header-start: #f3efff;
-  --history-header-end: #eef2ff;
-  --history-border: rgba(99, 102, 241, .3);
-  --history-divider: rgba(99, 102, 241, .16);
-  --history-row: #f8fafc;
-  --history-hover: #f7f5ff;
-  --history-track: #e9e7f8;
+  --history-surface: var(--fraud-panel-background);
+  --history-border: var(--fraud-surface-border);
+  --history-divider: color-mix(in srgb, var(--fraud-surface-border) 65%, transparent);
+  --history-row: var(--fraud-input-background);
+  --history-hover: color-mix(in srgb, var(--history-text) 5%, var(--history-row));
+  --history-track: #e2e8f0;
   --history-shadow: rgba(30, 41, 59, .09);
   width: 100%;
   overflow-x: auto;
@@ -1302,14 +1469,7 @@ HISTORY_TABLE = st.components.v2.component(
 }
 .history-table-shell[data-theme="dark"] {
   --history-text: #f8fafc;
-  --history-surface: linear-gradient(155deg, #130b2b, #0d081f);
-  --history-header-start: #241444;
-  --history-header-end: #19133b;
-  --history-border: rgba(99, 102, 241, .48);
-  --history-divider: rgba(99, 102, 241, .2);
-  --history-row: #151827;
-  --history-hover: #1b1138;
-  --history-track: #30204f;
+  --history-track: #35344d;
   --history-shadow: rgba(3, 2, 13, .42);
 }
 .history-table {
@@ -1324,13 +1484,9 @@ HISTORY_TABLE = st.components.v2.component(
 .history-header {
   min-height: 40px;
   color: var(--history-text);
-  background: linear-gradient(
-    105deg,
-    var(--history-header-start),
-    var(--history-header-end)
-  );
+  background: var(--fraud-table-header);
   border-bottom: 1px solid var(--history-border);
-  font-size: .86rem;
+  font-size: .9rem;
   font-weight: 650;
 }
 .history-header > div,
@@ -1350,7 +1506,7 @@ HISTORY_TABLE = st.components.v2.component(
 }
 .history-row {
   min-height: 46px;
-  font-size: .88rem;
+  font-size: .92rem;
   background: var(--history-row);
   border-bottom: 1px solid var(--history-divider);
   transition: background 140ms ease;
@@ -1369,9 +1525,10 @@ HISTORY_TABLE = st.components.v2.component(
   background: var(--history-track);
 }
 .probability-fill {
+  display: block;
   height: 100%;
   border-radius: inherit;
-  background: linear-gradient(90deg, #7c3aed, #6366f1);
+  background: linear-gradient(90deg, #2563eb, #38bdf8);
 }
 .delete-button {
   display: grid;
@@ -1379,7 +1536,7 @@ HISTORY_TABLE = st.components.v2.component(
   width: 30px;
   height: 30px;
   padding: 0;
-  color: color-mix(in srgb, var(--st-text-color) 76%, #ef4444);
+  color: color-mix(in srgb, var(--history-text) 76%, #ef4444);
   border: 0;
   border-radius: .55rem;
   background: transparent;
@@ -1391,10 +1548,14 @@ HISTORY_TABLE = st.components.v2.component(
   background: color-mix(in srgb, #ef4444 12%, transparent);
   transform: translateY(-1px);
 }
+.delete-button:focus-visible {
+  outline: 2px solid #38bdf8;
+  outline-offset: 2px;
+}
 .delete-button svg { width: 17px; height: 17px; }
 @media (max-width: 760px) {
   .history-table { min-width: 820px; }
-  .history-header, .history-row { font-size: .8rem; }
+  .history-header, .history-row { font-size: .86rem; }
 }
 """,
     js="""
@@ -1506,11 +1667,14 @@ class TransactionInput:
 
 
 TRANSACTION_PRESETS = {
-    "balanced": {
-        "title": "Cân đối",
-        "eyebrow": "DÒNG TIỀN KHỚP",
-        "description": "Nguồn giảm và đích tăng đúng 250.000 đơn vị.",
-        "icon": ":material/balance:",
+    "safe": {
+        "title": "Hợp lệ — dòng tiền cân đối",
+        "eyebrow": "Mẫu mô phỏng · Model phân loại hợp lệ",
+        "description": (
+            "Giao dịch chuyển khoản 250.000 đơn vị có số dư hai phía cân đối "
+            "và xác suất rủi ro rất thấp."
+        ),
+        "icon": ":material/verified_user:",
         "color": "green",
         "transaction": TransactionInput(
             transaction_type="TRANSFER",
@@ -1522,55 +1686,52 @@ TRANSACTION_PRESETS = {
             new_balance_destination=750_000.0,
         ),
     },
-    "mismatch": {
-        "title": "Lệch số dư",
-        "eyebrow": "SOI SAI LỆCH",
-        "description": "Hai đầu số dư không khớp để khám phá cảnh báo.",
-        "icon": ":material/difference:",
+    "watchlist": {
+        "title": "Cần lưu ý — chưa vượt ngưỡng",
+        "eyebrow": "Mẫu mô phỏng · Model phân loại hợp lệ",
+        "description": (
+            "Giao dịch chuyển khoản 2.500.000 đơn vị có dòng tiền cân đối, "
+            "dùng để minh họa vùng cần lưu ý; đây không phải mẫu có nhãn thật "
+            "và model vẫn phân loại hợp lệ ở ngưỡng 50%."
+        ),
+        "icon": ":material/visibility:",
         "color": "orange",
         "transaction": TransactionInput(
             transaction_type="TRANSFER",
-            step=410,
-            amount=300_000.0,
-            old_balance_origin=800_000.0,
-            new_balance_origin=620_000.0,
-            old_balance_destination=200_000.0,
-            new_balance_destination=430_000.0,
-        ),
-    },
-    "large": {
-        "title": "Giao dịch lớn",
-        "eyebrow": "QUY MÔ CAO",
-        "description": "2.500.000 đơn vị với dòng tiền vẫn cân đối.",
-        "icon": ":material/payments:",
-        "color": "violet",
-        "transaction": TransactionInput(
-            transaction_type="CASH_OUT",
             step=720,
             amount=2_500_000.0,
             old_balance_origin=3_000_000.0,
             new_balance_origin=500_000.0,
-            old_balance_destination=10_000_000.0,
-            new_balance_destination=12_500_000.0,
+            old_balance_destination=500_000.0,
+            new_balance_destination=3_000_000.0,
         ),
     },
-    "drain": {
-        "title": "Cạn tài khoản",
-        "eyebrow": "TÍN HIỆU RỦI RO",
-        "description": "Chuyển toàn bộ 1.143.937,73 đơn vị khỏi tài khoản nguồn.",
-        "icon": ":material/crisis_alert:",
+    "high_risk": {
+        "title": "Nghi vấn gian lận — vượt ngưỡng",
+        "eyebrow": "Mẫu mô phỏng · Model gắn cờ rà soát",
+        "description": (
+            "Giao dịch lớn rút 2.000.000 đơn vị khi số dư nguồn chỉ có "
+            "1.600.000, tạo sai lệch rõ ràng và được model gắn cờ ở ngưỡng 50%."
+        ),
+        "icon": ":material/gpp_maybe:",
         "color": "red",
         "transaction": TransactionInput(
-            transaction_type="TRANSFER",
-            step=435,
-            amount=1_143_937.73,
-            old_balance_origin=1_143_937.73,
+            transaction_type="CASH_OUT",
+            step=70,
+            amount=2_000_000.0,
+            old_balance_origin=1_600_000.0,
             new_balance_origin=0.0,
-            old_balance_destination=0.0,
-            new_balance_destination=0.0,
+            old_balance_destination=2_000_000.0,
+            new_balance_destination=4_000_000.0,
         ),
     },
 }
+
+DEMO_SAMPLE_ORDER = (
+    ("preset", "safe"),
+    ("preset", "watchlist"),
+    ("preset", "high_risk"),
+)
 
 
 @dataclass(frozen=True)
@@ -1689,24 +1850,75 @@ def load_labeled_test_cases(
         with scaler_path.open("rb") as scaler_file:
             scaler = load_pickle_compat(scaler_file)
 
+    # Prefer an actual held-out normal transaction whose money flow is easy to
+    # verify during a demo. PaySim contains legitimate rows with incomplete
+    # source balances, so the lowest-risk row alone is not always intuitive.
+    scaler_features = tuple(scaler.feature_names_in_)
+    reconstructed_numeric = pd.DataFrame(
+        scaler.inverse_transform(X_test.loc[:, scaler_features]),
+        columns=scaler_features,
+    )
+    origin_balance_error = (
+        reconstructed_numeric["oldbalanceOrg"]
+        - reconstructed_numeric["amount"]
+        - reconstructed_numeric["newbalanceOrig"]
+    ).abs()
+    destination_balance_error = (
+        reconstructed_numeric["oldbalanceDest"]
+        + reconstructed_numeric["amount"]
+        - reconstructed_numeric["newbalanceDest"]
+    ).abs()
+    display_balances = reconstructed_numeric[
+        [
+            "oldbalanceOrg",
+            "newbalanceOrig",
+            "oldbalanceDest",
+            "newbalanceDest",
+        ]
+    ]
+    explainable_normal_mask = (
+        (y_test == 0)
+        & (y_pred == 0)
+        & (origin_balance_error <= 0.05)
+        & (destination_balance_error <= 0.05)
+        & (
+            reconstructed_numeric["oldbalanceOrg"]
+            >= reconstructed_numeric["amount"]
+        )
+        & reconstructed_numeric["amount"].between(25_000, 250_000)
+        & (display_balances.max(axis=1) <= 1_000_000)
+    )
+    explainable_fraud_mask = (
+        (y_test == 1)
+        & (y_pred == 1)
+        & y_prob.between(0.95, 0.99995)
+        & (reconstructed_numeric["amount"].between(50_000, 500_000))
+        & (reconstructed_numeric["oldbalanceOrg"] > 0)
+        & (reconstructed_numeric["newbalanceOrig"].abs() <= 0.05)
+        & (reconstructed_numeric["oldbalanceDest"] > 0)
+        & (reconstructed_numeric["newbalanceDest"] > 0)
+        & (origin_balance_error <= 0.05)
+        & (destination_balance_error <= 0.05)
+    )
+
     definitions = (
         (
             "true_negative",
-            "Hợp lệ — dự đoán đúng",
-            "Nhãn thật 0, mô hình dự đoán hợp lệ ở ngưỡng 50%.",
-            (y_test == 0) & (y_pred == 0),
+            "Hợp lệ — dòng tiền cân đối",
+            "Số dư nguồn giảm và số dư đích tăng đúng bằng số tiền giao dịch; nhãn thật và dự đoán đều hợp lệ.",
+            explainable_normal_mask,
             "min",
         ),
         (
             "true_positive",
-            "Gian lận — phát hiện đúng",
-            "Nhãn thật 1, mô hình phát hiện bất thường ở ngưỡng 50%.",
-            (y_test == 1) & (y_pred == 1),
-            "max",
+            "Phát hiện gian lận",
+            "Nhãn thật 1; giao dịch rút cạn tài khoản có dòng tiền cân đối và được mô hình phát hiện ở ngưỡng 50%.",
+            explainable_fraud_mask,
+            "min",
         ),
         (
             "false_positive",
-            "Cảnh báo nhầm",
+            "Cảnh báo nhầm — đối chứng",
             "Nhãn thật 0 nhưng mô hình gắn cờ ở ngưỡng 50%.",
             (y_test == 0) & (y_pred == 1),
             "max",
@@ -1822,7 +2034,7 @@ def build_class_distribution_chart(
                 "Nhãn:N",
                 scale=alt.Scale(
                     domain=["Hợp lệ", "Gian lận"],
-                    range=["#7C3AED", "#EC4899"],
+                    range=["#3B82F6", "#EC4899"],
                 ),
                 legend=alt.Legend(title=None, orient="bottom"),
             ),
@@ -1847,7 +2059,7 @@ def build_class_distribution_chart(
     )
     total_text = (
         alt.Chart(center_data)
-        .mark_text(dy=17, fontSize=11, color=text_color)
+        .mark_text(dy=17, fontSize=12, color=text_color)
         .encode(text="Mô tả:N")
     )
 
@@ -1900,7 +2112,7 @@ def build_split_distribution_chart(summary: DatasetSummary) -> alt.Chart:
                 "Nhãn:N",
                 scale=alt.Scale(
                     domain=["Hợp lệ", "Gian lận"],
-                    range=["#7C3AED", "#EC4899"],
+                    range=["#3B82F6", "#EC4899"],
                 ),
                 legend=None,
             ),
@@ -2212,11 +2424,26 @@ def validate_transaction(transaction: TransactionInput) -> list[str]:
 def initialize_state() -> None:
     """Initialize per-session values in one predictable place."""
 
+    pending_threshold = st.session_state.pop(
+        "pending_decision_threshold_percent",
+        None,
+    )
+    if pending_threshold is not None:
+        st.session_state["decision_threshold_percent"] = pending_threshold
+
     st.session_state.setdefault("last_transaction", None)
     st.session_state.setdefault("validation_notes", [])
     st.session_state.setdefault("active_preset", None)
     st.session_state.setdefault("active_test_case", None)
-    st.session_state.setdefault("decision_threshold_percent", 50)
+    st.session_state.setdefault("submitted_test_case", None)
+    st.session_state.setdefault("imported_samples", {})
+    st.session_state.setdefault("show_sample_import", False)
+    st.session_state.setdefault("processed_sample_upload", None)
+    st.session_state.setdefault(
+        "decision_threshold_percent",
+        DEFAULT_DECISION_THRESHOLD_PERCENT,
+    )
+    st.session_state.setdefault("pipeline_detail_step", 1)
     st.session_state.setdefault("active_view", "prediction")
     refresh_analysis_history()
 
@@ -2347,7 +2574,7 @@ def sync_form_display() -> None:
 
 
 def apply_transaction_preset(preset_key: str) -> None:
-    """Populate the form and preview with a descriptive sample scenario."""
+    """Populate the form with a descriptive sample scenario."""
 
     preset = TRANSACTION_PRESETS[preset_key]
     transaction = preset["transaction"]
@@ -2360,8 +2587,10 @@ def apply_transaction_preset(preset_key: str) -> None:
             "new_balance_origin": transaction.new_balance_origin,
             "old_balance_destination": transaction.old_balance_destination,
             "new_balance_destination": transaction.new_balance_destination,
-            "last_transaction": asdict(transaction),
-            "validation_notes": validate_transaction(transaction),
+            "last_transaction": None,
+            "pipeline_submitted_payload": None,
+            "validation_notes": [],
+            "submitted_test_case": None,
             "active_preset": preset_key,
             "active_test_case": None,
         }
@@ -2390,8 +2619,10 @@ def apply_labeled_test_case(test_case_key: str) -> None:
             "new_balance_origin": transaction.new_balance_origin,
             "old_balance_destination": transaction.old_balance_destination,
             "new_balance_destination": transaction.new_balance_destination,
-            "last_transaction": asdict(transaction),
-            "validation_notes": validate_transaction(transaction),
+            "last_transaction": None,
+            "pipeline_submitted_payload": None,
+            "validation_notes": [],
+            "submitted_test_case": None,
             "active_preset": None,
             "active_test_case": test_case_key,
         }
@@ -2453,52 +2684,15 @@ def render_sidebar_navigation() -> str:
                 args=(view_key,),
             )
 
-        if active_view == "prediction":
-            with st.container(key="sidebar_presets", gap="small"):
-                st.caption("KỊCH BẢN NHANH")
-                selected_preset = st.pills(
-                    "Chọn dữ liệu mẫu",
-                    options=tuple(TRANSACTION_PRESETS),
-                    format_func=lambda key: (
-                        f"{TRANSACTION_PRESETS[key]['icon']} "
-                        f"{TRANSACTION_PRESETS[key]['title']}"
-                    ),
-                    key="preset_selector",
-                    on_change=apply_selected_preset,
-                    label_visibility="collapsed",
-                    width="stretch",
-                    persist_state="session",
-                )
-                if selected_preset is None:
-                    st.caption("Chọn một mẫu để tự điền form.")
-                else:
-                    st.caption(
-                        TRANSACTION_PRESETS[selected_preset]["description"]
-                    )
-
-                st.caption("MẪU KIỂM THỬ CÓ NHÃN")
-                try:
-                    labeled_cases = load_labeled_test_cases(
-                        PROCESSED_DATA_DIR,
-                        XGB_PREDICTIONS_PATH,
-                        SCALER_PATH,
-                    )
-                    selected_test_case = st.selectbox(
-                        "Chọn kết quả kiểm thử",
-                        options=tuple(labeled_cases),
-                        index=None,
-                        placeholder="Chọn tình huống kiểm thử",
-                        format_func=lambda key: labeled_cases[key].title,
-                        key="test_case_selector",
-                        on_change=apply_selected_test_case,
-                        label_visibility="collapsed",
-                    )
-                    if selected_test_case is None:
-                        st.caption("Dùng nhãn thật để đối chiếu dự đoán.")
-                    else:
-                        st.caption(labeled_cases[selected_test_case].description)
-                except (FileNotFoundError, KeyError, OSError, ValueError):
-                    st.caption("Dữ liệu kiểm thử chưa sẵn sàng.")
+        if st.button(
+            "Dữ liệu mẫu",
+            icon=":material/dataset:",
+            key="open_sample_picker",
+            type="secondary",
+            width="stretch",
+            on_click=reset_sample_threshold,
+        ):
+            show_sample_picker()
 
         with st.container(key="theme_bootstrap"):
             THEME_SWITCHER(
@@ -2568,20 +2762,173 @@ def render_threshold_control() -> None:
     )
 
 
-def apply_selected_preset() -> None:
-    """Apply the scenario selected by the compact preset control."""
+def reset_sample_threshold() -> None:
+    """Start every sample-selection flow at the standard 50% threshold."""
 
-    preset_key = st.session_state.get("preset_selector")
-    if preset_key in TRANSACTION_PRESETS:
-        apply_transaction_preset(preset_key)
+    st.session_state["decision_threshold_percent"] = (
+        DEFAULT_DECISION_THRESHOLD_PERCENT
+    )
 
 
-def apply_selected_test_case() -> None:
-    """Apply the held-out example selected in the sidebar."""
+def apply_selected_sample(selected_sample: str | None = None) -> None:
+    """Fill the form from one sample and restore the standard 50% threshold."""
 
-    test_case_key = st.session_state.get("test_case_selector")
-    if test_case_key:
-        apply_labeled_test_case(test_case_key)
+    selected_sample = selected_sample or st.session_state.get("sample_selector")
+    if not selected_sample or ":" not in selected_sample:
+        return
+    source, key = selected_sample.split(":", 1)
+    if source == "preset" and key in TRANSACTION_PRESETS:
+        apply_transaction_preset(key)
+    elif source == "test":
+        apply_labeled_test_case(key)
+    elif source == "imported" and key in st.session_state["imported_samples"]:
+        sample = st.session_state["imported_samples"][key]
+        transaction = TransactionInput(**sample["transaction"])
+        st.session_state.update(
+            {
+                "transaction_type_input": transaction.transaction_type,
+                "transaction_step_input": transaction.step,
+                "transaction_amount_input": transaction.amount,
+                "old_balance_origin": transaction.old_balance_origin,
+                "new_balance_origin": transaction.new_balance_origin,
+                "old_balance_destination": transaction.old_balance_destination,
+                "new_balance_destination": transaction.new_balance_destination,
+                "last_transaction": None,
+                "pipeline_submitted_payload": None,
+                "validation_notes": [],
+                "submitted_test_case": None,
+                "active_preset": None,
+                "active_test_case": None,
+            }
+        )
+        sync_form_display()
+    else:
+        return
+
+    # Every demo/test sample starts from the same documented decision rule.
+    # Users can still adjust the slider after choosing a sample for comparison.
+    st.session_state["pending_decision_threshold_percent"] = (
+        DEFAULT_DECISION_THRESHOLD_PERCENT
+    )
+
+
+@st.dialog(
+    "Dữ liệu mẫu",
+    width="medium",
+    icon=":material/dataset:",
+    on_dismiss="rerun",
+)
+def show_sample_picker() -> None:
+    """Choose one sample in a centered dialog, then fill the input form."""
+
+    try:
+        labeled_cases = load_labeled_test_cases(
+            PROCESSED_DATA_DIR,
+            XGB_PREDICTIONS_PATH,
+            SCALER_PATH,
+        )
+    except (FileNotFoundError, KeyError, OSError, ValueError):
+        labeled_cases = {}
+
+    sample_options = tuple(
+        [
+            f"{source}:{key}"
+            for source, key in DEMO_SAMPLE_ORDER
+            if (source == "preset" and key in TRANSACTION_PRESETS)
+            or (source == "test" and key in labeled_cases)
+        ]
+        + [f"imported:{key}" for key in st.session_state["imported_samples"]]
+    )
+
+    def format_sample_option(option: str) -> str:
+        source, key = option.split(":", 1)
+        if source == "preset":
+            preset = TRANSACTION_PRESETS[key]
+            return f"{preset['icon']} Mô phỏng · {preset['title']}"
+        if source == "test":
+            return f"Có nhãn · {labeled_cases[key].title}"
+        return f"Đã import · {st.session_state['imported_samples'][key]['title']}"
+
+    with st.container(key="sample_dialog", gap="medium"):
+        st.caption(
+            "Chọn dữ liệu để điền vào biểu mẫu. Hệ thống chỉ dự đoán sau khi "
+            "bạn bấm Phân tích giao dịch."
+        )
+        selected_sample = st.selectbox(
+            "Chọn mẫu giao dịch",
+            options=sample_options,
+            index=None,
+            placeholder="Chọn một dữ liệu mẫu",
+            format_func=format_sample_option,
+            key="sample_selector",
+            width="stretch",
+        )
+
+        choose_column, import_column = st.columns(2, gap="small")
+        with choose_column:
+            choose_sample = st.button(
+                "Chọn mẫu",
+                icon=":material/check_circle:",
+                key="choose_sample",
+                type="primary",
+                width="stretch",
+            )
+        with import_column:
+            show_import = st.button(
+                "Import mẫu",
+                icon=":material/upload_file:",
+                key="show_sample_import_button",
+                type="secondary",
+                width="stretch",
+            )
+
+        if choose_sample:
+            if not selected_sample:
+                st.warning("Hãy chọn một dữ liệu mẫu trước.")
+            else:
+                apply_selected_sample(selected_sample)
+                st.session_state["active_view"] = "prediction"
+                st.rerun()
+
+        if show_import:
+            st.session_state["show_sample_import"] = True
+
+        if st.session_state["show_sample_import"]:
+            uploaded_file = st.file_uploader(
+                "Import mẫu kiểm thử từ CSV hoặc JSON",
+                type=("csv", "json"),
+                key="sample_file_upload",
+                help=(
+                    "Cần các trường type, step, amount, oldbalanceOrg, "
+                    "newbalanceOrig, oldbalanceDest và newbalanceDest."
+                ),
+            )
+            st.caption("Tối đa 1 MB và 50 mẫu mỗi lần import.")
+            if uploaded_file is not None:
+                content = uploaded_file.getvalue()
+                signature = (uploaded_file.name, len(content), hash(content))
+                if signature != st.session_state["processed_sample_upload"]:
+                    if len(content) > 1_000_000:
+                        st.error("File vượt quá giới hạn 1 MB.")
+                    else:
+                        try:
+                            imported = parse_sample_file(uploaded_file.name, content)
+                        except ValueError as error:
+                            st.error(str(error))
+                        else:
+                            library = dict(st.session_state["imported_samples"])
+                            for sample in imported:
+                                sample_key = f"sample_{len(library) + 1}"
+                                library[sample_key] = sample
+                            st.session_state["imported_samples"] = library
+                            st.session_state["processed_sample_upload"] = signature
+                            st.toast(
+                                f"Đã import {len(imported)} mẫu vào thư viện.",
+                                icon=":material/check_circle:",
+                            )
+                            st.rerun(scope="fragment")
+
+        st.caption("Chọn mẫu chỉ điền biểu mẫu · Chưa chạy dự đoán")
 
 
 def render_risk_meter(prediction: PredictionResult) -> None:
@@ -2594,8 +2941,8 @@ def render_risk_meter(prediction: PredictionResult) -> None:
         decision_title = "Nghi vấn gian lận"
     elif probability >= 20:
         risk_class = "risk-medium"
-        risk_label = "CẦN LƯU Ý"
-        decision_title = "Chưa vượt ngưỡng"
+        risk_label = "CẦN LƯU Ý — CHƯA VƯỢT NGƯỠNG"
+        decision_title = "Model vẫn phân loại hợp lệ"
     else:
         risk_class = "risk-low"
         risk_label = "RỦI RO THẤP"
@@ -2635,7 +2982,7 @@ def render_risk_meter(prediction: PredictionResult) -> None:
 def render_labeled_test_verdict(prediction: PredictionResult) -> None:
     """Compare the current prediction with the selected held-out label."""
 
-    test_case_key = st.session_state.get("active_test_case")
+    test_case_key = st.session_state.get("submitted_test_case")
     if not test_case_key:
         return
 
@@ -2686,7 +3033,7 @@ def render_header(summary: DatasetSummary | None) -> None:
                 "**trực quan, dễ đọc**, kèm dự đoán từ mô hình đã huấn luyện."
             )
 
-            with st.container(horizontal=True):
+            with st.container(key="dataset_fraud_metrics", horizontal=True):
                 st.badge(
                     "XGBoost sẵn sàng",
                     icon=":material/model_training:",
@@ -2713,26 +3060,29 @@ def render_header(summary: DatasetSummary | None) -> None:
     )
     model_ready = XGB_MODEL_PATH.is_file() and SCALER_PATH.is_file()
 
-    metric_columns = st.columns(4, gap="small")
     metric_specs = (
-        ("Dữ liệu đã xử lý", total_label, split_label),
-        ("Tỷ lệ gian lận", fraud_ratio_label, "Trên toàn bộ dữ liệu"),
-        ("Không gian đặc trưng", "14", "10 số • 4 nhị phân"),
+        ("overview_metric_data", "Dữ liệu đã xử lý", total_label, split_label),
+        ("overview_metric_scope", "Tỷ lệ gian lận", fraud_ratio_label, "Trên toàn bộ dữ liệu"),
+        ("overview_metric_features", "Không gian đặc trưng", "14", "10 số • 4 nhị phân"),
         (
+            "overview_metric_model_ready" if model_ready else "overview_metric_model_unavailable",
             "Mô hình phân tích",
             "Sẵn sàng" if model_ready else "Chưa sẵn sàng",
             "XGBoost đang hoạt động" if model_ready else "Kiểm tra dữ liệu mô hình",
         ),
     )
-    for column, (label, value, delta) in zip(metric_columns, metric_specs):
-        with column:
-            st.metric(
-                label,
-                value,
-                delta,
-                delta_color="off",
-                border=True,
-            )
+    with st.container(key="overview_metrics", horizontal=True, gap="small"):
+        for metric_key, label, value, delta in metric_specs:
+            with st.container(key=metric_key, height="stretch", gap=None):
+                st.metric(
+                    label,
+                    value,
+                    delta,
+                    delta_color="off",
+                    delta_arrow="off",
+                    border=True,
+                    height="stretch",
+                )
 
 
 def render_transaction_form() -> None:
@@ -2760,11 +3110,18 @@ def render_transaction_form() -> None:
             )
         active_preset = st.session_state["active_preset"]
         if active_preset is not None:
-            st.badge(
-                f"Đang dùng kịch bản: {TRANSACTION_PRESETS[active_preset]['title']}",
-                icon=":material/auto_awesome:",
-                color=TRANSACTION_PRESETS[active_preset]["color"],
-            )
+            preset = TRANSACTION_PRESETS[active_preset]
+            with st.container(horizontal=True, vertical_alignment="center"):
+                st.badge(
+                    f"Đang dùng kịch bản: {preset['title']}",
+                    icon=":material/auto_awesome:",
+                    color=preset["color"],
+                )
+                st.badge(
+                    preset["eyebrow"],
+                    icon=":material/info:",
+                    color="gray",
+                )
         active_test_case = st.session_state["active_test_case"]
         if active_test_case is not None:
             try:
@@ -2878,7 +3235,6 @@ def render_transaction_form() -> None:
                     amount, old_balance_origin, new_balance_origin,
                     old_balance_destination, new_balance_destination,
                 )),
-                help="Kiểm tra dữ liệu, tạo 14 đặc trưng và phân tích giao dịch.",
             )
         if submitted:
             transaction = TransactionInput(
@@ -2890,8 +3246,23 @@ def render_transaction_form() -> None:
                 old_balance_destination=float(old_balance_destination),
                 new_balance_destination=float(new_balance_destination),
             )
+            submitted_test_case = None
+            active_test_case = st.session_state.get("active_test_case")
+            if active_test_case:
+                try:
+                    selected_case = load_labeled_test_cases(
+                        PROCESSED_DATA_DIR,
+                        XGB_PREDICTIONS_PATH,
+                        SCALER_PATH,
+                    )[active_test_case]
+                    if asdict(selected_case.transaction) == asdict(transaction):
+                        submitted_test_case = active_test_case
+                except (FileNotFoundError, KeyError, OSError, ValueError):
+                    submitted_test_case = None
             st.session_state["last_transaction"] = asdict(transaction)
+            st.session_state["pipeline_submitted_payload"] = asdict(transaction)
             st.session_state["validation_notes"] = validate_transaction(transaction)
+            st.session_state["submitted_test_case"] = submitted_test_case
             st.session_state["active_preset"] = None
             st.session_state["active_test_case"] = None
             submitted_prediction, submitted_error = run_transaction_inference(
@@ -2915,6 +3286,7 @@ def render_transaction_form() -> None:
                     icon=":material/error:",
                 )
 
+    prediction = None
     with preview_column:
         st.subheader("Kết quả phân tích")
 
@@ -3103,6 +3475,44 @@ def render_transaction_form() -> None:
                             ),
                         },
                     )
+    # Reuse the preview's real result without running inference again. A changed
+    # or invalid form must not show completed steps for the previous payload.
+    current_payload = {
+        "transaction_type": transaction_type or "TRANSFER",
+        "step": selected_step,
+        "amount": amount,
+        "old_balance_origin": old_balance_origin,
+        "new_balance_origin": new_balance_origin,
+        "old_balance_destination": old_balance_destination,
+        "new_balance_destination": new_balance_destination,
+    }
+    submitted_payload = st.session_state.get("pipeline_submitted_payload")
+    if submitted_payload is None:
+        pipeline_state = "idle"
+        pipeline_payload = current_payload
+    elif time_error is not None or any(value is None for value in current_payload.values()):
+        pipeline_state = "invalid"
+        pipeline_payload = submitted_payload
+    elif current_payload != raw_transaction or current_payload != submitted_payload:
+        pipeline_state = "edited"
+        pipeline_payload = submitted_payload
+    elif prediction is None:
+        pipeline_state = "unavailable"
+        pipeline_payload = submitted_payload
+    else:
+        pipeline_state = "complete"
+        pipeline_payload = submitted_payload
+
+    with form_column:
+        render_analysis_pipeline(
+            state=pipeline_state,
+            prediction=prediction,
+            transaction=pipeline_payload,
+            threshold=st.session_state["decision_threshold_percent"] / 100,
+            validation_notes=st.session_state["validation_notes"],
+            animate=submitted,
+        )
+
 
 def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
     """Render a lively, evidence-based snapshot before models are available."""
@@ -3159,7 +3569,11 @@ def render_dataset_snapshot(summary: DatasetSummary | None) -> None:
                 width="stretch",
                 height=145,
             )
-            with st.container(horizontal=True):
+            with st.container(
+                key="dataset_fraud_metrics",
+                horizontal=True,
+                gap="small",
+            ):
                 st.metric(
                     "Gian lận — huấn luyện",
                     format_integer(summary.train_fraud),
@@ -3220,39 +3634,35 @@ def render_model_comparison() -> bool:
             f"({best_model['f1_score']:.2%}).",
             icon=":material/trophy:",
         )
-        st.dataframe(
-            comparison,
-            hide_index=True,
-            column_order=(
-                "model",
-                "precision",
-                "recall",
-                "f1_score",
-                "roc_auc",
-                "pr_auc",
-            ),
-            column_config={
-                "model": st.column_config.TextColumn("Mô hình", pinned=True),
-                "precision": st.column_config.NumberColumn(
-                    "Precision",
-                    format="percent",
-                ),
-                "recall": st.column_config.NumberColumn("Recall", format="percent"),
-                "f1_score": st.column_config.NumberColumn(
-                    "F1-score",
-                    format="percent",
-                ),
-                "roc_auc": st.column_config.NumberColumn(
-                    "ROC-AUC",
-                    format="%.4f",
-                ),
-                "pr_auc": st.column_config.NumberColumn(
-                    "PR-AUC",
-                    format="%.4f",
-                ),
-            },
-            width="stretch",
-        )
+        comparison_columns = {
+            "model": "Mô hình", "precision": "Precision", "recall": "Recall",
+            "f1_score": "F1-score", "roc_auc": "ROC-AUC", "pr_auc": "PR-AUC",
+        }
+        # This small overview follows instant client-side theme changes. Keep
+        # the original interactive grid below for sorting and CSV export.
+        with st.container(key="comparison_snapshot"):
+            st.table(
+                comparison[list(comparison_columns)].rename(columns=comparison_columns).style.format({
+                    "Precision": "{:.2%}", "Recall": "{:.2%}", "F1-score": "{:.2%}",
+                    "ROC-AUC": "{:.4f}", "PR-AUC": "{:.4f}",
+                }),
+                hide_index=True,
+            )
+        with st.expander("Sắp xếp và tải bảng dữ liệu", icon=":material/table_chart:"):
+            st.dataframe(
+                comparison,
+                hide_index=True,
+                column_order=tuple(comparison_columns),
+                column_config={
+                    "model": st.column_config.TextColumn("Mô hình", pinned=True),
+                    "precision": st.column_config.NumberColumn("Precision", format="percent"),
+                    "recall": st.column_config.NumberColumn("Recall", format="percent"),
+                    "f1_score": st.column_config.NumberColumn("F1-score", format="percent"),
+                    "roc_auc": st.column_config.NumberColumn("ROC-AUC", format="%.4f"),
+                    "pr_auc": st.column_config.NumberColumn("PR-AUC", format="%.4f"),
+                },
+                width="stretch",
+            )
         st.caption(
             "So sánh tập trung vào Precision, Recall, F1-score, ROC-AUC và PR-AUC; "
             "Accuracy không được dùng làm chỉ số chính."
@@ -3290,7 +3700,7 @@ def render_evaluation_figures() -> bool:
         curve_columns = st.columns(len(curve_specs), gap="large")
         for column, figure in zip(curve_columns, curve_specs):
             with column:
-                with st.container(border=True, height="stretch"):
+                with st.container(key=f"evaluation_figure_{figure.key}", border=True, height="stretch"):
                     st.markdown(f"#### {figure.title}")
                     st.image(
                         figure_paths[figure.key],
@@ -3309,7 +3719,7 @@ def render_evaluation_figures() -> bool:
             st.badge(
                 "GIẢI THÍCH MÔ HÌNH",
                 icon=":material/psychology:",
-                color="violet",
+                color="blue",
             )
             st.image(
                 figure_paths[figure.key],
@@ -3354,7 +3764,7 @@ def render_evaluation_figures() -> bool:
         confusion_columns = st.columns(3, gap="medium")
         for column, figure in zip(confusion_columns, confusion_specs):
             with column:
-                with st.container(border=True, height="stretch"):
+                with st.container(key=f"evaluation_figure_{figure.key}", border=True, height="stretch"):
                     st.markdown(f"**{figure.title}**")
                     st.image(
                         figure_paths[figure.key],
@@ -3399,25 +3809,44 @@ def render_model_performance(summary: DatasetSummary | None) -> None:
 
     st.subheader("Trạng thái mô hình")
 
-    with st.container(horizontal=True):
-        for model_name, summary_path in TRAINING_SUMMARIES.items():
+    with st.container(key="model_status_metrics", horizontal=True, gap="small"):
+        for index, (model_name, summary_path) in enumerate(TRAINING_SUMMARIES.items(), 1):
             try:
                 metrics = load_training_metrics(summary_path)
-                st.metric(
-                    model_name,
-                    f"F1 {metrics['f1']:.4f}",
-                    f"ROC-AUC {metrics['auc']:.4f}",
-                    delta_color="off",
-                    border=True,
-                )
+                tone = {
+                    "Random Forest": "rf",
+                    "XGBoost": "xgb",
+                    "Autoencoder": "autoencoder",
+                }.get(model_name, "unavailable")
+                with st.container(
+                    key=f"model_metric_{tone}_{index}",
+                    height="stretch",
+                    gap=None,
+                ):
+                    st.metric(
+                        model_name,
+                        f"F1 {metrics['f1']:.4f}",
+                        f"ROC-AUC {metrics['auc']:.4f}",
+                        delta_color="off",
+                        delta_arrow="off",
+                        border=True,
+                        height="stretch",
+                    )
             except (FileNotFoundError, OSError, ValueError):
-                st.metric(
-                    model_name,
-                    "Chưa có",
-                    "Dữ liệu chưa sẵn sàng",
-                    delta_color="off",
-                    border=True,
-                )
+                with st.container(
+                    key=f"model_metric_unavailable_{index}",
+                    height="stretch",
+                    gap=None,
+                ):
+                    st.metric(
+                        model_name,
+                        "Chưa có",
+                        "Dữ liệu chưa sẵn sàng",
+                        delta_color="off",
+                        delta_arrow="off",
+                        border=True,
+                        height="stretch",
+                    )
 
     render_model_comparison()
     render_evaluation_figures()
@@ -3468,26 +3897,42 @@ def render_analysis_history() -> None:
     average_probability = float(history_frame["fraud_probability"].mean())
     latest_probability = float(history_frame.iloc[-1]["fraud_probability"])
 
-    with st.container(horizontal=True):
-        st.metric("Đã phân tích", len(history_frame), border=True)
+    with st.container(key="history_metrics", horizontal=True, gap="small"):
+        st.metric(
+            "Đã phân tích",
+            len(history_frame),
+            "Giao dịch trong lịch sử",
+            delta_color="off",
+            delta_arrow="off",
+            border=True,
+            height="stretch",
+        )
         st.metric(
             "Cảnh báo rủi ro",
             fraud_count,
             f"{fraud_count / len(history_frame):.0%} lịch sử",
             delta_color="off",
+            delta_arrow="off",
             border=True,
+            height="stretch",
         )
         st.metric(
             "Xác suất trung bình",
             f"{average_probability:.2%}",
+            "Trên toàn bộ lịch sử",
+            delta_color="off",
+            delta_arrow="off",
             border=True,
+            height="stretch",
         )
         st.metric(
             "Lần gần nhất",
             f"{latest_probability:.2%}",
-            "Theo ngưỡng tại lúc phân tích",
+            "Xác suất giao dịch mới nhất",
             delta_color="off",
+            delta_arrow="off",
             border=True,
+            height="stretch",
         )
 
     filter_mode = st.segmented_control(

@@ -41,3 +41,9 @@ models/*.joblib
 
 # Office temp lock files
 ~$*
+
+# Media & Video files (too large for Git, stored on Google Drive/YouTube)
+*.mp4
+*.mov
+*.avi
+**/demo/clip/*.mp4
