@@ -33,7 +33,7 @@ Final/
 │       ├── docs/           ← ✅ 4 file kỹ thuật (overview, roadmap, architecture, code-standards)
 │       ├── reports/        ← ✅ Predictions + Báo cáo DOCX/PDF Chương 1–7 (32 trang) + model_comparison.csv + figures/
 │       ├── slide/          ← ✅ Bộ slide học thuật 21 trang + kịch bản toàn team (PM duyệt chính thức)
-│       ├── demo/           ← 🟡 Streamlit UI + XGBoost inference + Phase 05 artifacts adapter (chờ screenshots & video clip)
+│       ├── demo/           ← ✅ Streamlit UI + XGBoost inference + Quy trình 4 bước + Import mẫu + 74 tests pass + Clip Google Drive
 │       ├── run_preprocessing.py  ← Script chạy lại pipeline nếu cần
 │       └── requirements.txt
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-09-09)
+## Current State (2026-09-19)
 
 | Component | Status |
 |-----------|--------|
@@ -57,11 +57,11 @@ Final/
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | ✅ Phase 05 `passed` (PR #26 & #28) — 4/4 scripts của Khang xong (metrics_calculator.py, plot_roc_curve.py, confusion_matrix_plot.py, model_comparator.py); `notebooks/06_evaluation_comparison.ipynb` chạy sạch; `reports/model_comparison.csv` + 7 figures đã xuất, khớp 100% `ch5_metrics_recomputed.csv`. Thêm 2 scripts vẽ đồ thị báo cáo |
-| Demo UI | 🟡 Phase 06 `pending` — XGBoost-SMOTE + scaler kết nối hoàn chỉnh; hỗ trợ mapping thời gian PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN và lịch sử SQLite; Browser QA bố cục mới đạt; `45` demo tests pass; còn screenshots và demo clip |
+| Demo UI | ✅ Phase 06 `passed` — XGBoost-SMOTE + scaler kết nối hoàn chỉnh; bổ sung quy trình phân tích trực quan 4 bước, hộp chọn dữ liệu mẫu hỗ trợ nhập CSV/JSON an toàn, mapping thời gian PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, chuyển SMOTENC/ADASYN và lịch sử SQLite; Browser QA đạt; `74` demo tests pass; kịch bản 7 cảnh và video clip demo đã lưu trữ Google Drive |
 | Báo cáo & Slide | ✅ Phase 07 `passed` (15/09) — Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang chuẩn định dạng UIT, khớp 100% Phase 05). Slide: bộ học thuật 21 trang kèm Kịch bản toàn team 7 người **đã duyệt chính thức**. |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides |
 
-> **Verdict (15/09): Phase 00–05, 07 PASSED (7/9 = 77.8%). Phase 06, 08 đang hoàn thiện. Báo cáo Word & Slide đã hoàn tất hoàn toàn. Trung đã hoàn tất chức năng và Browser QA của Demo UI; còn screenshots/clip. Nhóm chuẩn bị kịch bản diễn tập thuyết trình và đóng gói nộp bài.**
+> **Verdict (19/09): Phase 00–07 PASSED (8/9 = 88.9%). Chỉ còn Phase 08 (đóng gói tệp nộp bài). Toàn bộ mã nguồn, notebooks, báo cáo Word 32 trang, Slide học thuật 21 trang và Demo UI tương tác đã hoàn thiện và kiểm thử thành công.**
 
 ---
 

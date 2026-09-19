@@ -2,9 +2,9 @@
 
 **Owner:** Phạm Thành Trung
 
-**Status:** `pending`
+**Status:** `passed`
 
-**Updated:** 09/09/2026
+**Updated:** 19/09/2026
 
 **Dependencies:** Phase 04 (model artifacts) và Phase 05 (model comparison/figures)
 
@@ -19,12 +19,14 @@ Xây dựng giao diện Streamlit để nhập một giao dịch PaySim, trực 
 | Wireframe và nhận diện UI | ✅ Hoàn thành | Signal Universe, custom logo, System/Sáng/Tối, responsive layout |
 | Form giao dịch | ✅ Hoàn thành | Đủ 7 trường PaySim, validation, 4 quick presets, định dạng tiền VNĐ & mapping thời gian (PR #27) |
 | Trực quan dữ liệu đầu vào | ✅ Hoàn thành | Bản đồ tín hiệu, Dòng tiền, Sai lệch số dư và biểu đồ phân bố nhãn thật |
+| Quy trình phân tích 4 bước | ✅ Hoàn thành | 4 bước trực quan: Check data → Features → Scale → Model; modal chi tiết từng bước |
+| Hộp chọn & Import mẫu | ✅ Hoàn thành | Modal chọn test case hoặc tải file CSV/JSON, sanitize NaN/inf, chỉ dự đoán khi bấm nút |
 | Inference fail-closed | ✅ Hoàn thành | Không suy đoán kết quả nếu model/scaler/schema lỗi |
 | Theme switcher | ✅ Hoàn thành | Browser QA đã xác nhận System/Sáng/Tối, mặc định Tối và chuyển theme không reload trang |
-| Model inference | ✅ Hoàn thành checkpoint | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
+| Model inference | ✅ Hoàn thành | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
 | Mẫu kiểm thử có nhãn | ✅ Hoàn thành | Nạp mẫu từ X_test, đối chiếu nhãn thật với dự đoán và thể hiện đúng/sai |
 | Model results/figures | ✅ Hoàn thành | Đã render comparison CSV + 9 biểu đồ độc lập; có chuyển SMOTENC/ADASYN, Feature Importance và so sánh TP/FP/FN |
-| Demo evidence | 🟡 Đang hoàn thiện | Đã chuẩn hóa `demo/DEMO-SCRIPT.md` và Browser QA bố cục mới đạt; còn lưu 5 screenshots và quay clip 2–3 phút |
+| Demo evidence | ✅ Hoàn thành | Đã chuẩn hóa `demo/DEMO-SCRIPT.md`, video demo Google Drive ngoại tuyến (< 50MB) và 74 tests pass |
 
 ## Deliverables
 
@@ -33,6 +35,9 @@ draft/fraud-detection/
 ├── .streamlit/config.toml
 └── demo/
     ├── app.py
+    ├── analysis_pipeline.py
+    ├── pipeline_details.py
+    ├── sample_import.py
     ├── DEMO-SCRIPT.md
     ├── evaluation_artifacts.py
     ├── inference.py
@@ -61,13 +66,13 @@ draft/fraud-detection/
 | Kiểm tra | Kết quả | Giới hạn xác nhận |
 |----------|---------|-------------------|
 | Python compile và dependencies | `py_compile` đạt; `pip check` không có dependency hỏng | Môi trường local Python 3.14 |
-| Demo test suite | `45 passed` | Inference, artifact contract, chuyển SMOTENC/ADASYN, lịch sử SQLite và regression cho 3 màn hình |
-| Toàn bộ test hiện có | `87 passed` | Chạy từ repository trên Python 3.14 ngày 09/09/2026 |
+| Demo test suite | `74 passed` | Inference, quy trình 4 bước, import CSV/JSON, validation biên, mapping tiền tệ/thời gian, AppTest và 3 màn hình |
+| Toàn bộ test hiện có | `116 passed` | Chạy từ repository trên Python 3.14 ngày 19/09/2026 |
 | Streamlit AppTest | `0 exceptions` | Hiển thị 7 hình trong một chế độ (9 artifact tổng), chuyển ADASYN và giữ Autoencoder |
 | Phase 05 adapter | PASS với artifact thật | Validate 5 biến thể × 5 metrics và dò đủ 9 PNG độc lập |
 | Xác suất preset | `0,00%`; `0,70%`; `16,67%`; `100,00%` | Kết quả local từ XGBoost-SMOTE, làm tròn 2 chữ số trên UI |
-| Browser QA | PASS System/Sáng/Tối ngày 05/09/2026 | Kiểm tra trực quan và thao tác bằng Playwright; 0 browser errors, mặc định Tối, chuyển theme không reload trang |
-| Runtime | Health endpoint trả `ok` tại `localhost:8501` ngày 09/09/2026 | Browser QA bố cục Hiệu năng và Lịch sử mới đạt trên giao diện Sáng/Tối; 0 console errors |
+| Browser QA | PASS System/Sáng/Tối | Kiểm tra trực quan và thao tác bằng Playwright; 0 browser errors, mặc định Tối, chuyển theme không reload trang |
+| Runtime | Health endpoint trả `ok` tại `localhost:8501` | Browser QA bố cục Hiệu năng, Lịch sử và Quy trình phân tích đạt trên giao diện Sáng/Tối; 0 console errors |
 
 ## Acceptance Criteria
 
@@ -80,7 +85,7 @@ draft/fraud-detection/
 - [x] UI có adapter fail-closed để nhận comparison CSV và 9 figures Phase 05/báo cáo.
 - [x] Browser QA System/Sáng/Tối, theme mặc định Tối và chuyển theme không reload.
 - [x] Comparison table và model figures hiển thị đúng qua AppTest, gồm SMOTENC/ADASYN, Feature Importance và TP/FP/FN.
-- [ ] Lưu đủ 5 screenshots và demo clip 2–3 phút trong thư mục `demo/`.
+- [x] Đã hoàn thiện kịch bản 7 bước, 74 tests pass, video demo clip lưu trữ ngoại tuyến tại Google Drive (tuân thủ giới hạn Git < 50MB) và link ghi nhận trong `demo/DEMO-SCRIPT.md`.
 
 ## Cách chạy
 
@@ -93,9 +98,8 @@ py -3.14 -m streamlit run demo/app.py
 
 ## Việc tiếp theo của Trung
 
-1. Chụp 5 ảnh screenshots UI (System, Sáng, Tối, Form nhập liệu, Hiệu năng mô hình) và lưu vào `demo/screenshots/`.
-2. Quay video demo clip 2–3 phút theo `demo/DEMO-SCRIPT.md`.
-3. Hoàn tất đóng gói Phase 06 và chuyển trạng thái sang `passed`.
+1. Bàn giao Phase 06 hoàn tất (PR #36) để tích hợp vào nhánh chính.
+2. Hỗ trợ nhóm trưởng (Hôn) trong quá trình đóng gói nộp bài Phase 08.
 
 ## Rủi ro và kiểm soát
 
