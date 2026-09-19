@@ -67,9 +67,13 @@ Bây giờ, em xin nhường lời lại cho bạn **Thanh** bắt đầu với 
 
 ### SLIDE 3 – PHẦN 1: TỔNG QUAN ĐỀ TÀI & DỮ LIỆU
 
-_(Thời lượng: ~10s | Người nói: **Đặng Chí Thanh** - EDA & Preprocessing Lead)_
+_(Thời lượng: ~25s | Người nói: **Đặng Chí Thanh** - EDA & Preprocessing Lead)_
 
-Dạ em cảm ơn anh Hôn. Em chào thầy và các bạn, em là **Đặng Chí Thanh**. Sau đây em xin phép bắt đầu với Phần 1: Giới thiệu bài toán và những thách thức kỹ thuật cốt lõi trong dữ liệu gian lận tài chính.
+Dạ em cảm ơn anh Hôn cho phần mở đầu vừa rồi. Em chào thầy và các bạn!
+
+Để tiếp nối lộ trình báo cáo của nhóm, em xin phép đi thẳng vào **Phần 01: Giới thiệu và phát biểu bài toán**.
+
+Ở Phần 1 này, nhóm sẽ đi qua 3 nội dung chính như trên slide, gồm: bối cảnh công nghiệp của Mobile Money (thanh toán di động), các thách thức kỹ thuật cốt lõi, và mục tiêu nghiên cứu của nhóm.
 
 ---
 
@@ -77,15 +81,15 @@ Dạ em cảm ơn anh Hôn. Em chào thầy và các bạn, em là **Đặng Ch�
 
 _(Thời lượng: ~60s | Người nói: **Đặng Chí Thanh**)_
 
-Theo như chúng ta cũng có thể đã biết, hiện nay các giao dịch ví điện tử Mobile Money diễn ra hàng triệu lượt mỗi ngày, kéo theo các thủ đoạn lừa đảo và tẩu tán tiền diễn ra chỉ trong vài giây. Hệ thống phòng thủ bắt buộc phải đưa ra quyết định cực nhanh, dưới 100 mili-giây trước khi tiền bị rút mất.
+Về mặt thực tế, hiện nay các giao dịch ví điện tử Mobile Money diễn ra hàng triệu lượt mỗi ngày. Kẻ gian tẩu tán tiền chỉ trong vài giây, nên hệ thống phòng thủ bắt buộc phải đưa ra quyết định real-time với độ trễ dưới 100 mili-giây trước khi tiền bị rút mất.
 
-Khi bắt tay vào tiền xử lý và khám phá dữ liệu, em nhận thấy bài toán này có **3 thách thức kỹ thuật lớn nhất**:
+Thầy và các bạn có thể quan sát ở các khung bên phải màn hình là bảng ký hiệu toán học và các mục tiêu cụ thể mà nhóm hướng tới.
 
-- **Thứ nhất là Extreme Class Imbalance**: Gian lận chỉ chiếm tỷ lệ cực nhỏ, khoảng **0.13%** — tức là cứ 800 giao dịch bình thường thì mới có 1 giao dịch lừa đảo. Nếu dùng thước đo Accuracy truyền thống, một mô hình ngây thơ lúc nào cũng đoán là 'hợp lệ' thì đã đạt 99.87% độ chính xác, nhưng thực tế là không bắt được bất kỳ tên trộm nào!
-- **Thứ hai là Cost Asymmetry (Tổn thất bất đối xứng)**: Bỏ sót 1 ca gian lận thì người dùng mất trắng tiền, ngân hàng mất uy tín. Trong khi cảnh báo nhầm thì mình chỉ cần gửi OTP bắt xác nhận lại một chút thôi. Do đó, mục tiêu của nhóm bắt buộc phải tối đa hóa **Recall và PR-AUC** chứ không nhìn vào Accuracy.
-- **Thứ ba là Tính phi tĩnh**: Kẻ gian liên tục đổi thủ đoạn luân chuyển tiền để lách qua các tập luật tĩnh.
+Còn trọng tâm khi tiếp cận bài toán, ở cột bên trái, em đối mặt với **3 thách thức kỹ thuật lớn nhất**:
 
-Vì vậy, mục tiêu của nhóm là xây dựng một pipeline chuẩn chỉ, kết hợp cả mô hình có giám sát để bắt các mẫu đã biết, và mô hình không giám sát để phòng thủ trước các đòn tấn công mới lạ.
+- **Thứ nhất là Extreme Class Imbalance (Mất cân bằng cực đoan)**: Gian lận chỉ chiếm khoảng `0.13%` — tức là cứ 800 giao dịch bình thường mới có đúng 1 ca gian lận. Với tỷ lệ lệch này, thước đo Accuracy bị vô hiệu hóa hoàn toàn, vì nếu một mô hình ngây thơ lúc nào cũng đoán "Hợp lệ" thì Accuracy đã đạt `99.87%` nhưng thực tế không bắt được tên trộm nào. Do đó, nhóm bắt buộc phải tối ưu **Recall và PR-AUC**.
+- **Thứ hai là Cost Asymmetry (Tổn thất bất đối xứng)**: Bỏ sót 1 ca gian lận thì khách hàng mất tiền thật và ngân hàng mất uy tín. Trong khi cảnh báo nhầm thì mình chỉ cần gửi OTP yêu cầu người dùng xác thực lại. Vì vậy, chi phí phạt cho việc bỏ sót phải lớn hơn rất nhiều so với báo nhầm.
+- **Thứ ba là tính phi tĩnh**: Kẻ gian liên tục biến đổi thủ đoạn luân chuyển tiền để lách qua các bộ lọc luật tĩnh.
 
 ---
 
@@ -95,11 +99,15 @@ _(Thời lượng: ~50s | Người nói: **Đặng Chí Thanh**)_
 
 Để thực nghiệm, nhóm em dùng bộ dữ liệu mô phỏng chuẩn học thuật là **PaySim**.
 
-Tập gốc ghi nhận hơn **6.36 triệu giao dịch** trong 30 ngày. Để tối ưu hóa tài nguyên tính toán mà không làm lệch ranh giới bài toán, em đã thực hiện lấy mẫu phân tầng 200,000 giao dịch, nhưng **giữ lại nguyên vẹn 100% toàn bộ 8,213 ca gian lận gốc**.
+Tập gốc khi em download trên Kaggle về ghi nhận hơn **6.36 triệu giao dịch** trong 30 ngày. Để tối ưu tài nguyên tính toán mà không làm lệch ranh giới bài toán, em thực hiện lấy mẫu phân tầng **200,000 sự kiện**, nhưng **bảo toàn nguyên vẹn 100% toàn bộ 8,213 ca gian lận gốc**. 
 
-Mọi người nhìn vào bảng ở đây: dữ liệu ghi nhận bước thời gian, loại giao dịch, số tiền, số dư trước và sau của cả tài khoản chuyển lẫn tài khoản nhận.
+Thầy và các bạn có thể nhìn vào bảng ở giữa màn hình: dữ liệu ghi nhận bước thời gian theo giờ, loại giao dịch, số tiền, cùng số dư trước và sau của cả tài khoản chuyển lẫn tài khoản nhận.
 
-Đặc biệt, qua phân tích dữ liệu ban đầu, em phát hiện ra một chi tiết quan trọng: **100% các ca gian lận chỉ xảy ra ở đúng 2 loại giao dịch: TRANSFER (Chuyển khoản) và CASH_OUT (Rút tiền mặt)**. Các loại còn lại như PAYMENT, CASH_IN hay DEBIT an toàn tuyệt đối (0% gian lận). Nhờ đó, bước tiền xử lý lọc chỉ giữ lại 2 loại này đã giúp nhóm loại bỏ ngay được hơn 70% dữ liệu nhiễu.
+Đặc biệt, qua phân tích phân bố ban đầu, em phát hiện ra một quy luật rất đắt giá ở khung màu xanh bên dưới:
+**100% tất cả các ca gian lận CHỈ xảy ra ở đúng 2 loại giao dịch: TRANSFER (chuyển khoản) và CASH_OUT (rút tiền mặt)**. Các loại khác an toàn tuyệt đối. Nhờ phát hiện này, bước tiền xử lý lọc chỉ giữ lại 2 loại trên đã giúp nhóm triệt tiêu ngay được `70%` dữ liệu nhiễu vô ích cho toàn bộ pipeline phía sau.
+
+> **Đúc kết Phần 01:**  
+> Tóm lại, Phần 1 đã làm rõ bản chất mất cân bằng cực đoan 0.13% và insight khoanh vùng 2 loại giao dịch giúp loại bỏ 70% dữ liệu nhiễu, tạo tiền đề dữ liệu sạch cho Phần 2.
 
 ---
 
@@ -107,42 +115,41 @@ Mọi người nhìn vào bảng ở đây: dữ liệu ghi nhận bước thờ
 
 _(Thời lượng: ~10s | Người nói: **Đặng Chí Thanh**)_
 
-Tiếp theo, em xin đi sâu vào Phần 2: Phân tích các dấu vết hành vi của kẻ gian và cách em thiết kế 14 đặc trưng cho bài toán.
+Sau khi đã khoanh vùng được tập dữ liệu sạch, chúng ta đến với **Phần 02: Phân tích khám phá dữ liệu và kỹ thuật đặc trưng**.
 
 ---
 
 ### SLIDE 7 – PHÂN TÍCH KHÁM PHÁ DỮ LIỆU: DẤU VẾT HÀNH VI CỐT LÕI
 
-_(Thời lượng: ~60s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng: ~55s | Người nói: **Đặng Chí Thanh**)_
 
-Khi thực hiện EDA trên notebook `01_eda.ipynb`, em tìm ra **3 dấu vết mang tính bản chất của tội phạm tài chính**:
+Khi thực hiện EDA trên notebook `01_eda.ipynb`, em đúc kết được **3 dấu vết hành vi mang tính bản chất của tội phạm tài chính**, tương ứng với 3 cột trên màn hình:
 
-1. **Dấu vết 1 — Khoanh vùng loại giao dịch (100%)**: Toàn bộ gian lận chỉ tập trung ở đúng 2 loại giao dịch. Kẻ gian chiếm được tài khoản sẽ chuyển tiền (`TRANSFER`) sang tài khoản trung gian, rồi lập tức rút ngay tiền mặt (`CASH_OUT`) để hoàn tất tẩu tán và cắt đứt dấu vết.
-2. **Dấu vết 2 — Hành vi vét sạch tài khoản (97.56%)**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị đưa về đúng bằng 0 (`newbalanceOrig == 0`). Kẻ gian luôn có tâm lý 'đã trộm thì phải trộm hết sạch' trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
-3. **Dấu vết 3 — Sai lệch số dư ở tài khoản nhận**: Tại tài khoản đích, số dư thực tế hầu như không tăng tương ứng với số tiền nhận được (`newbalanceDest ≈ 0`). Điều này phản ánh rõ nét hành vi dùng tài khoản rác (mule account) hoặc luân chuyển tiền đa tầng liên tục.
+- **Cột đầu tiên — Khoanh vùng loại giao dịch**: Kẻ gian chiếm được tài khoản sẽ dùng lệnh `TRANSFER` chuyển tiền sang tài khoản trung gian, rồi lập tức rút tiền mặt `CASH_OUT` ngay để cắt đứt dấu vết dòng tiền.
+- **Cột thứ hai — Hành vi vét sạch tài khoản**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị rút cạn sạch về đúng bằng 0 (`newbalanceOrig == 0`) trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
+- **Cột thứ ba — Sai lệch sổ cái đích**: Tiền chuyển đi nhưng số dư tài khoản nhận thực tế không tăng tương ứng (`newbalanceDest ≈ 0`), vạch trần việc dùng các tài khoản rác (mule account) để tẩu tán tiền.
 
-Nếu chỉ đưa số tiền hay số dư thô vào mô hình thì rất lãng phí. Vì vậy, em đã tiến hành chuyển đổi quy luật này thành các đặc trưng kế toán.
+Nếu chỉ đưa số tiền hay số dư thô vào mô hình thì rất lãng phí. Vì vậy, em đã tiến hành chuyển đổi các quy luật này thành các đặc trưng kế toán.
 
 ---
 
 ### SLIDE 8 – KỸ THUẬT ĐẶC TRƯNG: 14 THUỘC TÍNH CỐT LÕI
 
-_(Thời lượng: ~60s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng: ~50s | Người nói: **Đặng Chí Thanh**)_
 
-Từ 3 dấu vết trên, em đã hiện thực trong module `src/preprocessing/` tổng cộng **14 đặc trưng chuyên sâu**. Mọi người nhìn vào 3 khung công thức bên trái:
+Từ 3 dấu vết trên, em hiện thực trong code tổng cộng **14 đặc trưng miền chuyên sâu** ở 3 khung công thức bên trái: gồm sai lệch số dư nguồn (`errorBalanceOrig`), sai lệch số dư đích (`errorBalanceDest`), cùng cờ rút cạn (`drain_flag`) kết hợp giờ đêm (`is_overnight`).
 
-- **Đặc trưng 1: Sai lệch số dư nguồn (`errorBalanceOrig`)**:
-  $$\text{errorBalanceOrig} = \text{oldbalanceOrg} - \text{amount} - \text{newbalanceOrig}$$
-  Với giao dịch bình thường, phép tính này phải bằng 0. Nhưng với giao dịch gian lận, con số này bị lệch rất lớn vì tài khoản bị trừ tiền bất thường.
-- **Đặc trưng 2: Sai lệch số dư đích (`errorBalanceDest`)**:
-  $$\text{errorBalanceDest} = \text{oldbalanceDest} + \text{amount} - \text{newbalanceDest}$$
-  Bắt các giao dịch nhận tiền bất thường nhưng không ghi tăng số dư.
-- **Đặc trưng 3: Cờ rút cạn tài khoản (`drain_flag`) và Chu kỳ giờ đêm (`is_overnight`)**:
-  Đánh dấu xem tài khoản có bị rút cạn về 0 hay không, và giao dịch có diễn ra lúc nửa đêm từ 0h đến 5h sáng hay không.
+Điều chứng minh rõ nhất hiệu quả của việc thiết kế đặc trưng nằm ở **khung Feature Importance góc dưới bên phải**:
+Khi đánh giá mô hình, **chỉ riêng 2 biến `errorBalanceOrig` (49.9%) và `newbalanceOrig` (47.2%) đã chiếm tới hơn `97.1%` tổng sức mạnh phân loại!**
 
-Chính các đặc trưng này đã giúp chuyển hóa bài toán phân lớp phi tuyến phức tạp thành các ranh giới phân tách cực kỳ rõ nét.
+Điều này chứng minh kỹ thuật đặc trưng miền đã giải quyết bài toán tận gốc, biến ranh giới phân lớp phức tạp thành tuyến tính rõ rệt. Và một nguyên tắc em luôn tuân thủ nghiêm ngặt là chống rò rỉ dữ liệu: toàn bộ các bước scale chuẩn hóa chỉ được fit trên tập Train.
 
-Tiếp theo, em xin mời bạn **Hoàng Cao Sơn** trình bày về phần Xử lý mất cân bằng dữ liệu và Mô hình Random Forest.
+> **Đúc kết Phần 02 (Nhánh EDA & Features):**  
+> Tóm lại, nhóm đã chuyển hóa thành công 3 dấu vết hành vi thành các đặc trưng kế toán quyết định 97.1% sức mạnh phân loại và đảm bảo tuyệt đối nguyên tắc Leak-Free.
+
+Khi đã có không gian đặc trưng chất lượng cao, bài toán tiếp theo là xử lý mất cân bằng 0.13% bằng kỹ thuật sinh mẫu thích ứng. 
+
+Sau đây, em xin chuyển lại phần trình bày cho bạn **Hoàng Cao Sơn** tiếp tục với nội dung SMOTE và ADASYN ở Slide 9 ạ.
 
 ---
 
