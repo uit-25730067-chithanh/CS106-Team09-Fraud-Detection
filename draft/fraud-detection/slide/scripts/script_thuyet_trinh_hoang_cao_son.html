@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kịch Bản Thuyết Trình CS106 — Hoàng Cao Sơn (Bản Rà Soát Chuẩn Xác 100%)</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+      --primary: #38bdf8;
+      --primary-glow: rgba(56, 189, 248, 0.25);
+      --accent: #f59e0b;
+      --success: #10b981;
+      --danger: #ef4444;
+      --border: #334155;
+      --tag-bg: #334155;
+      --cue-bg: #2e1065;
+      --cue-border: #8b5cf6;
+      --cue-text: #c4b5fd;
+      --pause-bg: #78350f;
+      --pause-text: #fde68a;
+      --term-vn: #34d399;
+      --slide-card-ref: #f43f5e;
+      --font-size: 19px;
+      --line-height: 1.75;
+    }
+
+    body.light-mode {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --primary: #0284c7;
+      --primary-glow: rgba(2, 132, 199, 0.15);
+      --accent: #d97706;
+      --success: #059669;
+      --danger: #dc2626;
+      --border: #e2e8f0;
+      --tag-bg: #e2e8f0;
+      --cue-bg: #f5f3ff;
+      --cue-border: #8b5cf6;
+      --cue-text: #6d28d9;
+      --pause-bg: #fef3c7;
+      --pause-text: #92400e;
+      --term-vn: #059669;
+      --slide-card-ref: #e11d48;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      font-size: var(--font-size);
+      line-height: var(--line-height);
+      padding-bottom: 120px;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      padding: 12px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-left h1 {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .header-left p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .timer-badge {
+      background: var(--border);
+      color: var(--text);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      font-weight: 700;
+      font-family: monospace;
+      font-size: 1.15rem;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .btn {
+      background: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:hover {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+    }
+
+    .container {
+      max-width: 920px;
+      margin: 28px auto;
+      padding: 0 20px;
+    }
+
+    .hero-card {
+      background: linear-gradient(135deg, rgba(56,189,248,0.1), rgba(139,92,246,0.1));
+      border: 1px solid var(--primary-glow);
+      border-radius: 14px;
+      padding: 18px 22px;
+      margin-bottom: 24px;
+    }
+
+    .hero-title {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .stat-box {
+      background: var(--card-bg);
+      padding: 10px 14px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .stat-val {
+      font-size: 1.25rem;
+      font-weight: 800;
+      color: var(--success);
+    }
+
+    .stat-lbl {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .speech-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 22px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      position: relative;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .slide-tag {
+      background: var(--primary);
+      color: #fff;
+      font-size: 0.82rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .time-tag {
+      font-size: 0.85rem;
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .slide-pointer {
+      background: rgba(244, 63, 94, 0.12);
+      border: 1px solid var(--slide-card-ref);
+      color: var(--slide-card-ref);
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.82em;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: inline-block;
+    }
+
+    .speech-text {
+      font-size: var(--font-size);
+      color: var(--text);
+      line-height: var(--line-height);
+    }
+
+    .speech-text p {
+      margin-bottom: 14px;
+    }
+
+    .cue {
+      display: inline-block;
+      background: var(--cue-bg);
+      color: var(--cue-text);
+      border: 1px solid var(--cue-border);
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 0.82em;
+      font-weight: 600;
+      margin: 0 4px;
+      vertical-align: middle;
+    }
+
+    .pause {
+      display: inline-block;
+      background: var(--pause-bg);
+      color: var(--pause-text);
+      font-family: monospace;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 4px;
+      font-size: 0.8em;
+      margin: 0 3px;
+    }
+
+    .highlight {
+      color: var(--primary);
+      font-weight: 700;
+    }
+
+    .highlight-strong {
+      color: var(--accent);
+      font-weight: 800;
+    }
+
+    .vn-trans {
+      color: var(--term-vn);
+      font-weight: 600;
+    }
+
+    .speech-quote {
+      border-left: 4px solid var(--primary);
+      padding-left: 16px;
+    }
+
+    .qa-box {
+      background: var(--card-bg);
+      border: 1px dashed var(--border);
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin-top: 14px;
+    }
+
+    .qa-q {
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.95em;
+    }
+
+    .qa-a {
+      font-size: 0.92em;
+      color: var(--text);
+    }
+
+    .progress-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: var(--border);
+      z-index: 101;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 0%;
+      transition: width 0.1s linear;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="header-left">
+      <h1>🎙️ Teleprompter — Hoàng Cao Sơn (Bản Rà Soát Chuẩn 100%)</h1>
+      <p>Bám sát từng con số trên Slide 9, 10, 11, 12 | Thời lượng: <strong>~1 phút 20 giây</strong></p>
+    </div>
+
+    <div class="header-controls">
+      <div class="timer-badge">
+        ⏱️ <span id="timerDisplay">00:00</span>
+      </div>
+      <button class="btn btn-primary" id="btnTimer" onclick="toggleTimer()">Bắt đầu nói</button>
+      <button class="btn" onclick="resetTimer()">Reset</button>
+      <button class="btn" onclick="adjustFontSize(-2)">A-</button>
+      <button class="btn" onclick="adjustFontSize(2)">A+</button>
+      <button class="btn" onclick="toggleTheme()">🌓 Sáng/Tối</button>
+    </div>
+  </header>
+
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressBar"></div>
+  </div>
+
+  <div class="container">
+
+    <div class="hero-card">
+      <div class="hero-title">🛡️ Bản Lĩnh Số Liệu — Đã Khớp 100% Mã Nguồn & Slide</div>
+      <p style="font-size: 0.9rem; color: var(--text-muted);">
+        Đã rà soát: Random Forest là <strong>100 cây</strong>, <strong>max_depth = 15</strong>, thời gian train <strong>~1187s</strong>; tập SMOTENC là <strong>230.145 dòng (tỷ lệ 1:2)</strong>. Khớp hoàn hảo với slide, không sợ Thầy bắt bẻ!
+      </p>
+      <div class="stats-grid">
+        <div class="stat-box">
+          <div class="stat-val">Slide 9</div>
+          <div class="stat-lbl">Accuracy Paradox & SMOTENC vs ADASYN (~30s)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">Slide 11</div>
+          <div class="stat-lbl">6 Bước Pipeline & 4 Quy chuẩn Leak-Free (~25s)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">Slide 12 (Trái)</div>
+          <div class="stat-lbl">RF 100 cây, max_depth=15, F1=0.9973 (~20s)</div>
+        </div>
+        <div class="stat-box">
+          <div class="stat-val">Mục Tiêu</div>
+          <div class="stat-lbl">Chuẩn xác, tự tin, đạt điểm tối đa!</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1 -->
+    <div class="speech-section">
+      <div class="section-header">
+        <span class="slide-tag">Nối nhịp từ Em Thanh</span>
+        <span class="time-tag">⏱️ ~5 giây</span>
+      </div>
+      <div class="speech-text speech-quote">
+        <p>
+          <span class="cue">Gật đầu tiếp nhận, nhìn thẳng Thầy và hội trường</span>
+          Cảm ơn Thanh. Chào Thầy và các bạn, mình là <strong>Hoàng Cao Sơn</strong>. 
+          Sau khi em Thanh đã trích xuất 14 đặc trưng, mình tiếp nhận bài toán và xử lý thách thức cốt lõi đầu tiên: 
+          <span class="highlight-strong">Dữ liệu bị mất cân bằng</span> <span class="vn-trans">(Imbalanced Data)</span> cực đoan ~0.13%.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="speech-section">
+      <div class="section-header">
+        <span class="slide-tag">Slide 9: Xử lý Mất cân bằng Lớp (SMOTE vs. ADASYN)</span>
+        <span class="time-tag">⏱️ ~30 giây</span>
+      </div>
+      <div class="slide-pointer">
+        🎯 <strong>Điểm chỉ trên Slide 9:</strong> Khung đỏ trên cùng ➔ Khung xanh SMOTE bên trái ➔ Khung xám ADASYN bên phải
+      </div>
+      <div class="speech-text">
+        <p>
+          <span class="cue">👉 Chỉ vào khung đỏ trên cùng</span>
+          Nhìn vào khung cảnh báo màu đỏ ở trên cùng: Đây là <strong>Accuracy Paradox</strong> <span class="vn-trans">(nghịch lý độ chính xác)</span>. 
+          Nếu mô hình ngây thơ đoán 100% giao dịch là bình thường thì <strong>Accuracy</strong> <span class="vn-trans">(độ chính xác tổng thể)</span> vẫn đạt 99.87% nhưng bỏ sót toàn bộ gian lận. 
+          Do đó, việc đánh giá bắt buộc phải dẫn dắt bởi <strong>Precision</strong> <span class="vn-trans">(độ chuẩn xác)</span>, <strong>Recall</strong> <span class="vn-trans">(độ phủ)</span>, <strong>F1-Score</strong> và <strong>PR-AUC</strong>. <span class="pause">//</span>
+        </p>
+        <p>
+          Để cân bằng dữ liệu, mình đưa 2 kỹ thuật sinh mẫu vào đối chuẩn:
+        </p>
+        <ul style="margin-left: 20px; margin-bottom: 12px;">
+          <li style="margin-bottom: 8px;">
+            <span class="cue">👉 Chỉ tay vào công thức khung xanh bên trái</span>
+            Như công thức hiển thị ở khung màu xanh, bản chất của <strong>SMOTE</strong> <span class="vn-trans">(Kỹ thuật nội suy mẫu tổng hợp)</span> là nội suy mẫu nhân tạo dọc theo đoạn thẳng nối các láng giềng <strong>k-NN</strong> <span class="vn-trans">(k láng giềng gần nhất)</span>, tạo ra đường biên phân tách phẳng và rõ nét. 
+            Điểm mấu chốt là mình dùng biến thể <strong>SMOTENC</strong> <span class="vn-trans">(Nominal & Continuous - biến định danh và liên tục)</span> để bảo toàn nguyên vẹn giá trị 0-1 của các cờ nhị phân.
+          </li>
+          <li>
+            <span class="cue">👉 Chỉ tay sang khung xám bên phải</span>
+            Ngược lại, ở khung màu xám là <strong>ADASYN</strong> <span class="vn-trans">(Lấy mẫu thích ứng theo mật độ)</span>: 
+            Do cố sinh mẫu theo mật độ vùng biên khó, mà kẻ gian lại ngụy trang tinh vi, ADASYN đã đẻ mẫu quá đà ở vùng chồng lấn nhiễu, làm tăng <strong>False Positives</strong> <span class="vn-trans">(báo động giả)</span>.
+          </li>
+        </ul>
+        <p>
+          <span class="cue">🎯 Chốt hạ dứt khoát</span>
+          <strong>Chốt lại:</strong> Mình chọn <strong>SMOTENC</strong>, tạo ra tập train cân bằng <span class="highlight">230.145 dòng</span> (theo tỷ lệ 1:2 tối ưu), triệt tiêu tối đa báo động giả.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="speech-section">
+      <div class="section-header">
+        <span class="slide-tag">Slide 10 & 11: Pipeline Chuẩn Leak-Free</span>
+        <span class="time-tag">⏱️ ~25 giây</span>
+      </div>
+      <div class="slide-pointer">
+        🎯 <strong>Điểm chỉ trên Slide 11:</strong> Quét qua 6 bước hàng trên (B.1 đến B.6) ➔ Chỉ vào 4 quy chuẩn ở khung dưới
+      </div>
+      <div class="speech-text">
+        <p>
+          <span class="cue">Lướt nhanh Slide 10 trong 1s, mở Slide 11</span>
+          Bước sang Slide 11 là kiến trúc <strong>Pipeline</strong> <span class="vn-trans">(chuỗi quy trình xử lý)</span> gồm 6 bước của nhóm, từ Lọc dữ liệu, Trích xuất đặc trưng, Chia tập, Tái lấy mẫu, Huấn luyện đến Đánh giá, được thiết kế để triệt tiêu hoàn toàn nguy cơ <strong>Data Leakage</strong> <span class="vn-trans">(rò rỉ dữ liệu)</span>. <span class="pause">//</span>
+        </p>
+        <p>
+          Mọi người có thể thấy <strong>4 quy chuẩn bảo vệ nghiêm ngặt</strong> ở khung bên dưới:
+        </p>
+        <p style="margin-left: 10px; font-size: 0.95em;">
+          <strong>1. Stratified Split</strong> <span class="vn-trans">(chia phân tầng)</span> <strong>80/20</strong> được chốt chặn trước bất kỳ bước tái lấy mẫu hay chuẩn hóa nào.<br>
+          <strong>2. Resampling</strong> <span class="vn-trans">(tái lấy mẫu)</span> ở Bước 4 <strong>tuyệt đối chỉ chạy trên tập Train</strong> <span class="vn-trans">(huấn luyện)</span>; tập <strong>Test</strong> <span class="vn-trans">(kiểm thử)</span> 40.000 mẫu được giữ nguyên vẹn 100% tỷ lệ thực tế ngoài đời, không một mẫu nhân tạo nào được lọt vào.<br>
+          <strong>3. StandardScaler</strong> <span class="vn-trans">(chuẩn hóa độ lệch chuẩn)</span> chỉ <code>fit</code> <span class="vn-trans">(học tham số)</span> trên Train rồi mới <code>transform</code> <span class="vn-trans">(áp dụng chuyển đổi)</span> mù sang Test.<br>
+          <strong>4.</strong> Toàn bộ khâu chọn ngưỡng và dò <strong>Hyperparameters</strong> <span class="vn-trans">(siêu tham số)</span> đều dùng <strong>Cross-Validation</strong> <span class="vn-trans">(kiểm định chéo)</span> nội bộ trên Train, không chạm vào Test.
+        </p>
+        <p>
+          <span class="cue">Nhấn mạnh</span>
+          Nhờ vậy, kết quả thực nghiệm hoàn toàn khách quan và trung thực.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="speech-section">
+      <div class="section-header">
+        <span class="slide-tag">Slide 12 (Nửa Trái): Mô hình Random Forest</span>
+        <span class="time-tag">⏱️ ~20 giây</span>
+      </div>
+      <div class="slide-pointer">
+        🎯 <strong>Điểm chỉ trên Slide 12:</strong> Hộp 'Mô hình 1: Random Forest Ensemble' và công thức Gini bên trái
+      </div>
+      <div class="speech-text">
+        <p>
+          <span class="cue">👉 Chỉ vào khung Random Forest bên trái</span>
+          Tại Slide 12, ở nửa bên trái là mô hình <strong>Random Forest</strong> <span class="vn-trans">(Rừng ngẫu nhiên)</span> do mình huấn luyện. <span class="pause">//</span>
+        </p>
+        <p>
+          Về kiến trúc, mô hình tập hợp <strong>100 Decision Trees</strong> <span class="vn-trans">(cây quyết định độc lập)</span> theo cơ chế <strong>Ensemble Bagging</strong> <span class="vn-trans">(học kết hợp đóng bao)</span>, phân nhánh tối ưu theo độ tinh khiết <strong>Gini</strong> như công thức trên slide. 
+          Để chống <strong>Overfitting</strong> <span class="vn-trans">(học vẹt)</span>, mình khống chế độ sâu tối đa <code>max_depth = 15</code>.
+        </p>
+        <p>
+          🎯 <strong>Kết quả thực nghiệm nổi bật:</strong>
+        </p>
+        <ul style="margin-left: 20px; margin-bottom: 12px;">
+          <li style="margin-bottom: 6px;">
+            <strong>Peak Precision</strong> <span class="vn-trans">(độ chuẩn xác đỉnh cao)</span> <strong>đạt 99.94%:</strong> Trong 38.357 giao dịch hợp lệ, mô hình chỉ báo nhầm duy nhất <strong>đúng 1 ca</strong>!
+          </li>
+          <li style="margin-bottom: 6px;">
+            <strong>F1-Score đạt 0.9973:</strong> Đưa Random Forest trở thành mô hình có độ chính xác cao nhất toàn đồ án.
+          </li>
+          <li>
+            <strong>Hạn chế:</strong> Thời gian huấn luyện khá lâu, mất gần 20 phút (~1187 giây).
+          </li>
+        </ul>
+        <p>
+          <span class="cue">Chuyển lượt sang Cẩm</span>
+          Để khắc phục độ trễ huấn luyện và mở rộng khả năng bắt gian lận chưa từng thấy, phần tiếp theo sẽ do bạn <strong>Bùi Thị Mỷ Cẩm</strong> trình bày về mô hình <strong>XGBoost</strong> <span class="vn-trans">(mô hình tăng cường độ dốc cực đại)</span> ở nửa bên phải và mạng <strong>Deep Autoencoder</strong> <span class="vn-trans">(tự mã hóa học sâu)</span>.
+        </p>
+      </div>
+    </div>
+
+    <!-- Section 5 -->
+    <div class="speech-section">
+      <div class="section-header">
+        <span class="slide-tag" style="background: var(--accent);">Phản xạ phản biện chuyên sâu (Q&A Cheat-Sheet)</span>
+        <span class="time-tag">🛡️ Bản lĩnh vững vàng</span>
+      </div>
+      
+      <div class="qa-box">
+        <div class="qa-q">❓ Thầy hỏi: "Tập train sau SMOTENC là 230.145 dòng, đây là tỷ lệ cân bằng 50:50 hay bao nhiêu?"</div>
+        <div class="qa-a">
+          <strong>Sơn đáp:</strong> "Dạ ban đầu tập Train có 153.430 ca hợp lệ và 6.570 ca gian lận (~4.1%). Mình cấu hình tham số <code>sampling_strategy = 0.5</code>, tức là đưa tỷ lệ gian lận về mức 1:2 (chiếm 33.33% = 76.715 ca), tổng là 230.145 dòng. Mình không ép lên tỷ lệ 1:1 (50:50) vì việc sinh thêm hơn 146.000 mẫu nhân tạo sẽ dễ gây Overfitting và làm sai lệch phân phối thực tế. Mức 1:2 là tối ưu nhất qua thực nghiệm."
+        </div>
+      </div>
+
+      <div class="qa-box">
+        <div class="qa-q">❓ Thầy hỏi: "Tại sao dùng SMOTENC mà không dùng SMOTE thường?"</div>
+        <div class="qa-a">
+          <strong>Sơn đáp:</strong> "Vì dữ liệu có 4 biến nhị phân One-Hot: cờ rút cạn (<code>is_drain_account</code>), cờ giao dịch đêm, giao dịch lớn và loại <code>TRANSFER</code>. SMOTE thường sẽ nội suy Euclidean ra các số thực lẻ như 0.4 hay 0.7. SMOTENC cho phép truyền index của các cột phân loại để lấy giá trị theo Mode (tần suất nhiều nhất), bảo toàn nguyên vẹn giá trị 0 hoặc 1."
+        </div>
+      </div>
+
+      <div class="qa-box">
+        <div class="qa-q">❓ Thầy hỏi: "Con số 1187 giây trên Slide 12 thể hiện điều gì?"</div>
+        <div class="qa-a">
+          <strong>Sơn đáp:</strong> "Đó là tổng thời gian huấn luyện 100 cây Random Forest trên tập dữ liệu đã qua SMOTENC (230.145 dòng). Do Random Forest phải dựng nhiều cây quyết định sâu trên CPU, chi phí tính toán cao hơn nhiều so với XGBoost (chỉ mất 41.7 giây)."
+        </div>
+      </div>
+
+      <div class="qa-box">
+        <div class="qa-q">❓ Thầy hỏi: "Sao không dùng Accuracy để đánh giá?"</div>
+        <div class="qa-a">
+          <strong>Sơn đáp:</strong> "Vì với tỷ lệ gian lận cực đoan, mô hình đoán tất cả là 0 vẫn đạt Accuracy 99.87% nhưng bỏ sót 100% gian lận. Mình dùng F1-Score để cân bằng giữa Precision (tránh chặn nhầm khách thường) và Recall (tránh lọt kẻ gian)."
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    let timerInterval = null;
+    let secondsElapsed = 0;
+    const TARGET_SECONDS = 85;
+
+    function toggleTimer() {
+      const btn = document.getElementById("btnTimer");
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.textContent = "Tiếp tục nói";
+        btn.classList.remove("btn-primary");
+      } else {
+        timerInterval = setInterval(() => {
+          secondsElapsed++;
+          updateTimerDisplay();
+        }, 1000);
+        btn.textContent = "Tạm dừng";
+        btn.classList.add("btn-primary");
+      }
+    }
+
+    function resetTimer() {
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+      }
+      secondsElapsed = 0;
+      updateTimerDisplay();
+      document.getElementById("btnTimer").textContent = "Bắt đầu nói";
+      document.getElementById("btnTimer").classList.add("btn-primary");
+    }
+
+    function updateTimerDisplay() {
+      const mins = Math.floor(secondsElapsed / 60).toString().padStart(2, '0');
+      const secs = (secondsElapsed % 60).toString().padStart(2, '0');
+      document.getElementById("timerDisplay").textContent = `${mins}:${secs}`;
+
+      const pct = Math.min(100, (secondsElapsed / TARGET_SECONDS) * 100);
+      document.getElementById("progressBar").style.width = pct + "%";
+
+      if (secondsElapsed > TARGET_SECONDS) {
+        document.getElementById("progressBar").style.backgroundColor = "var(--danger)";
+        document.getElementById("timerDisplay").style.color = "var(--danger)";
+      } else {
+        document.getElementById("progressBar").style.backgroundColor = "var(--primary)";
+        document.getElementById("timerDisplay").style.color = "inherit";
+      }
+    }
+
+    let currentFontSize = 19;
+    function adjustFontSize(delta) {
+      currentFontSize = Math.max(15, Math.min(28, currentFontSize + delta));
+      document.documentElement.style.setProperty('--font-size', currentFontSize + 'px');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('light-mode');
+    }
+  </script>
+</body>
+</html>
