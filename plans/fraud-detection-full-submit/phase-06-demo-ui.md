@@ -2,7 +2,7 @@
 
 **Owner:** Phạm Thành Trung
 
-**Status:** `passed`
+**Status:** `passed` ✅
 
 **Updated:** 19/09/2026
 
@@ -26,7 +26,7 @@ Xây dựng giao diện Streamlit để nhập một giao dịch PaySim, trực 
 | Model inference | ✅ Hoàn thành | XGBoost-SMOTE JSON + scaler, 14-feature contract, probability và nhãn thật |
 | Mẫu kiểm thử có nhãn | ✅ Hoàn thành | Nạp mẫu từ X_test, đối chiếu nhãn thật với dự đoán và thể hiện đúng/sai |
 | Model results/figures | ✅ Hoàn thành | Đã render comparison CSV + 9 biểu đồ độc lập; có chuyển SMOTENC/ADASYN, Feature Importance và so sánh TP/FP/FN |
-| Demo evidence | ✅ Hoàn thành | Đã chuẩn hóa `demo/DEMO-SCRIPT.md`, video demo Google Drive ngoại tuyến (< 50MB) và 74 tests pass |
+| Demo evidence | ✅ Hoàn thành | Đã lưu đủ 5 screenshots chuẩn hóa (`demo/screenshots/`), hoàn tất kịch bản 7 bước `demo/DEMO-SCRIPT.md`, video demo Google Drive ngoại tuyến và toàn bộ tests demo pass |
 
 ## Deliverables
 
@@ -85,7 +85,7 @@ draft/fraud-detection/
 - [x] UI có adapter fail-closed để nhận comparison CSV và 9 figures Phase 05/báo cáo.
 - [x] Browser QA System/Sáng/Tối, theme mặc định Tối và chuyển theme không reload.
 - [x] Comparison table và model figures hiển thị đúng qua AppTest, gồm SMOTENC/ADASYN, Feature Importance và TP/FP/FN.
-- [x] Đã hoàn thiện kịch bản 7 bước, 74 tests pass, video demo clip lưu trữ ngoại tuyến tại Google Drive (tuân thủ giới hạn Git < 50MB) và link ghi nhận trong `demo/DEMO-SCRIPT.md`.
+- [x] Đã hoàn thiện kịch bản 7 bước, 74 tests pass, lưu đủ 5 screenshots chuẩn hóa trong `demo/screenshots/`, video demo clip lưu trữ ngoại tuyến tại Google Drive (tuân thủ giới hạn Git < 50MB) và link ghi nhận trong `demo/DEMO-SCRIPT.md`.
 
 ## Cách chạy
 
@@ -98,8 +98,8 @@ py -3.14 -m streamlit run demo/app.py
 
 ## Việc tiếp theo của Trung
 
-1. Bàn giao Phase 06 hoàn tất (PR #36) để tích hợp vào nhánh chính.
-2. Hỗ trợ nhóm trưởng (Hôn) trong quá trình đóng gói nộp bài Phase 08.
+1. Bàn giao Phase 06 hoàn tất (PR #36) và phối hợp cùng nhóm trưởng (Hôn) đóng gói nộp bài Phase 08.
+2. Sẵn sàng phản biện phần Demo trong phiên bảo vệ đồ án.
 
 ## Rủi ro và kiểm soát
 
@@ -107,14 +107,8 @@ py -3.14 -m streamlit run demo/app.py
 |--------|-----------|
 | Model hoặc schema đầu vào không khớp | Validate feature order, scaler, CSV metrics và tên figures trước khi hiển thị |
 | Theme thay đổi khi nâng Streamlit | Giữ phiên bản tối thiểu đã kiểm tra và chạy lại browser QA sau khi nâng |
-| Tài liệu vượt quá trạng thái thực tế | Giữ Phase 06 `pending` cho đến khi đủ screenshots và demo clip |
-
-## Tuân thủ quy tắc project
-
-- Chỉ cập nhật công việc của Phạm Thành Trung/Phase 06.
-- Phase chưa hoàn thành nên không đổi trạng thái sang `passed`.
-- Checkpoint tích hợp model và cải tiến UX đã được commit trên main.
+| Tệp media lớn quá giới hạn Git | Lưu video demo ngoại tuyến tại Google Drive, tệp deck tích hợp video đã được tối ưu |
 
 ## Kết luận
 
-Phần chức năng của Phase 06 đã hoàn tất: UI, XGBoost inference, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison/9 figures, lịch sử SQLite và Browser QA bố cục mới. Phase vẫn giữ trạng thái `pending` cho đến khi bổ sung đủ 5 screenshots và video clip demo.
+Phần giao diện Demo UI (Streamlit) của Phase 06 đã hoàn tất 100%: XGBoost inference thời gian thực, mẫu test có nhãn, mapping datetime PaySim, định dạng tiền VNĐ, comparison/9 figures, lịch sử SQLite, Browser QA bố cục mới trên cả 3 theme, và bộ 5 ảnh chụp màn hình minh họa chuẩn hóa trong `demo/screenshots/`. Phase 06 chính thức đạt trạng thái **`passed`** ✅.

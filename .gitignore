@@ -42,8 +42,15 @@ models/*.joblib
 # Office temp lock files
 ~$*
 
+# Submission packages & staging
+submit/*.zip
+submit/\[Project AI-UIT\]*/
+
 # Media & Video files (too large for Git, stored on Google Drive/YouTube)
 *.mp4
 *.mov
 *.avi
 **/demo/clip/*.mp4
+
+# Temporary scratch scripts
+**/scratch/

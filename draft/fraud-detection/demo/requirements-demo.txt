@@ -1,6 +1,7 @@
 # Streamlit UI shell (Phase 06)
 streamlit>=1.59.2
 pandas>=2.0.0
+jinja2>=3.1.2
 altair>=6.0.0
 # scaler.pkl was serialized with scikit-learn 1.9.0.
 scikit-learn>=1.9.0

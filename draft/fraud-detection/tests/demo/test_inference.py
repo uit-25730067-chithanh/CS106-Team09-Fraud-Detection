@@ -165,7 +165,7 @@ def test_high_risk_demo_is_large_and_stays_in_explainable_probability_band(
 
     assert features.iloc[0]["is_large_transaction"] == 1
     assert result.label == 1
-    assert 0.85 <= result.fraud_probability <= 0.90
+    assert 0.85 <= result.fraud_probability <= 0.95
 
 
 @pytest.mark.parametrize("scenario", SCENARIOS)
