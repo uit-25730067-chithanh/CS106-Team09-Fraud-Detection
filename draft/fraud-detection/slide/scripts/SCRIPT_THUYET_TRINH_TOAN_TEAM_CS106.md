@@ -42,22 +42,6 @@
 |    ⏱️    | **Dự phòng (Buffer)** |                 —                 |                                —                                | Độ trễ chuyển slide giữa các thành viên và kết nối micro.                                             |      **1 phút 20s** *(80s)*      |                       —                       |                  —                  |                     —                     | Dành cho việc chuyển slide và kết nối âm thanh.                                               |
 |     🏁     | **TỔNG TOÀN BÀI**    |        **20 Slides**        |                 **3/7 bạn đã tối ưu**                 | **6 thành viên nói + Live Demo**                                                                        |     **15 phút 00s** *(900s)*     |      **19 phút 06s** *(1,146s)*      |      *~35m02s (Thuần nói)*      |      🔴**VƯỢT +4m06s (+27%)**      | ⚠️**ĐÃ GIẢM GẦN 4 PHÚT! CẦN NÓI Ý CHÍNH ĐỂ VỀ ĐÚNG 15P.**                      |
 
-### 💡 GỢI Ý TỐC ĐỘ NÓI CHUẨN & CÔNG THỨC VIẾT KỊCH BẢN (KHÔNG CHÁY GIỜ)
-
-> 📌 **Tốc độ chuẩn thuyết trình kỹ thuật:** **2.0 – 2.3 từ / giây** *(tương đương **120 – 140 từ / phút**)*.  
-> Không nên nói nhanh hơn 2.5 từ/s (người nghe không kịp tiếp nhận các thuật ngữ AI và số liệu), và không nói chậm dưới 1.8 từ/s (gây buồn ngủ và cháy giờ).
->
-> 📏 **Công thức ước lượng dung lượng kịch bản:**  
-> **Số từ kịch bản tối đa** $\approx$ **Thời gian mục tiêu (giây)** $\times$ **2.1**
-> - **1 phút (60s):** ~**125 từ**
-> - **1 phút 30s (90s):** ~**190 từ**
-> - **2 phút (120s):** ~**250 từ**
-> - **3 phút (180s):** ~**380 từ**
->
-> 🎯 **Mẹo kiểm soát nhịp độ khi tập luyện:** Khi tập với đồng hồ bấm giờ, cứ mỗi 30 giây cần đi qua được khoảng 60–65 từ. Nếu kịch bản vượt quá số từ này, **cắt bỏ giải thích lý thuyết, chỉ đọc số liệu và kết luận chính (insight)**.
-
----
-
 # LỜI THOẠI VĂN NÓI CHI TIẾT THEO TỪNG SLIDE
 
 ---
@@ -138,10 +122,10 @@ Tập gốc khi em download trên Kaggle về ghi nhận hơn **6.36 triệu gia
 
 Thầy và các bạn có thể nhìn vào bảng ở giữa màn hình: dữ liệu ghi nhận bước thời gian theo giờ, loại giao dịch, số tiền, cùng số dư trước và sau của cả tài khoản chuyển lẫn tài khoản nhận.
 
-Đặc biệt, qua phân tích phân bố ban đầu, em phát hiện ra một quy luật rất đắt giá ở khung màu xanh bên dưới:**100% tất cả các ca gian lận CHỈ xảy ra ở đúng 2 loại giao dịch: TRANSFER (chuyển khoản) và CASH_OUT (rút tiền mặt)**. Các loại khác an toàn tuyệt đối. Nhờ phát hiện này, bước tiền xử lý lọc chỉ giữ lại 2 loại trên đã giúp nhóm triệt tiêu ngay được `70%` dữ liệu nhiễu vô ích cho toàn bộ pipeline phía sau.
+Đặc biệt, qua phân tích phân bố ban đầu, em phát hiện ra một quy luật rất đắt giá ở khung màu xanh bên dưới:**100% tất cả các ca gian lận CHỈ xảy ra ở đúng 2 loại giao dịch: TRANSFER (chuyển khoản) và CASH_OUT (rút tiền mặt)**. Các loại khác an toàn tuyệt đối. Nhờ phát hiện này, bước tiền xử lý lọc chỉ giữ lại 2 loại trên đã giúp nhóm loại bỏ ngay được `~56.5%` giao dịch hoàn toàn không có gian lận, tối ưu tài nguyên tính toán cho toàn bộ pipeline phía sau.
 
 > **Đúc kết Phần 01:**
-> Tóm lại, Phần 1 đã làm rõ bản chất mất cân bằng cực đoan 0.13% và insight khoanh vùng 2 loại giao dịch giúp loại bỏ 70% dữ liệu nhiễu, tạo tiền đề dữ liệu sạch cho Phần 2.
+> Tóm lại, Phần 1 đã làm rõ bản chất mất cân bằng cực đoan 0.13% và insight khoanh vùng 2 loại giao dịch giúp loại bỏ ~56.5% giao dịch không có rủi ro gian lận, tạo tiền đề dữ liệu sạch cho Phần 2.
 
 ---
 
@@ -160,7 +144,7 @@ _(Thời lượng chuẩn hóa: **~55s – 60s** [Meeting thực tế: ~110s] | 
 Khi thực hiện EDA trên notebook `01_eda.ipynb`, em đúc kết được **3 dấu vết hành vi mang tính bản chất của tội phạm tài chính**, tương ứng với 3 cột trên màn hình:
 
 - **Cột đầu tiên — Khoanh vùng loại giao dịch**: Kẻ gian chiếm được tài khoản sẽ dùng lệnh `TRANSFER` chuyển tiền sang tài khoản trung gian, rồi lập tức rút tiền mặt `CASH_OUT` ngay để cắt đứt dấu vết dòng tiền.
-- **Cột thứ hai — Hành vi vét sạch tài khoản**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị rút cạn sạch về đúng bằng 0 (`newbalanceOrig == 0`) trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
+- **Cột thứ hai — Hành vi vét sạch tài khoản**: Trong **97.55%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị rút cạn sạch về đúng bằng 0 (`newbalanceOrig == 0`) trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
 - **Cột thứ ba — Sai lệch sổ cái đích**: Tiền chuyển đi nhưng số dư tài khoản nhận thực tế không tăng tương ứng (`newbalanceDest ≈ 0`), vạch trần việc dùng các tài khoản rác (mule account) để tẩu tán tiền.
 
 Nếu chỉ đưa số tiền hay số dư thô vào mô hình thì rất lãng phí. Vì vậy, em đã tiến hành chuyển đổi các quy luật này thành các đặc trưng kế toán.
@@ -174,9 +158,9 @@ _(Thời lượng chuẩn hóa: **~65s – 70s** [Meeting thực tế: ~127s] | 
 Từ 3 dấu vết trên, em hiện thực trong code tổng cộng **14 đặc trưng miền chuyên sâu** ở 3 khung công thức bên trái: gồm sai lệch số dư nguồn (`errorBalanceOrig`), sai lệch số dư đích (`errorBalanceDest`), cùng cờ rút cạn (`drain_flag`) kết hợp giờ đêm (`is_overnight`).
 
 Điều chứng minh rõ nhất hiệu quả của việc thiết kế đặc trưng nằm ở **khung Feature Importance góc dưới bên phải**:
-Khi đánh giá mô hình, **chỉ riêng 2 biến `errorBalanceOrig` (49.9%) và `newbalanceOrig` (47.2%) đã chiếm tới hơn `97.1%` tổng sức mạnh phân loại!**
+Khi đánh giá mô hình XGBoost, **chỉ riêng 2 biến `errorBalanceOrig` (49.9%) và `newbalanceOrig` (47.2%) đã chiếm tới `97.1%` tổng Feature Split Gains!**
 
-Điều này chứng minh kỹ thuật đặc trưng miền đã giải quyết bài toán tận gốc, biến ranh giới phân lớp phức tạp thành tuyến tính rõ rệt. Và một nguyên tắc em luôn tuân thủ nghiêm ngặt là chống rò rỉ dữ liệu: toàn bộ các bước scale chuẩn hóa chỉ được fit trên tập Train.
+Mô hình dựa gần như hoàn toàn vào nhóm đặc trưng số dư (98.5%). Trong báo cáo khoa học, nhóm đã nhận diện rõ ràng: đây vừa là thế mạnh giúp phân loại tốt trên PaySim, vừa là nguy cơ rủi ro do cơ chế cập nhật số dư của bộ mô phỏng (Mục 3.6.2). Toàn bộ 14 đặc trưng này đều tuân thủ nguyên tắc chống rò rỉ: StandardScaler chỉ được fit trên tập Train.
 
 > **Đúc kết Phần 02 (Nhánh EDA & Features):**
 > Tóm lại, nhóm đã chuyển hóa thành công 3 dấu vết hành vi thành các đặc trưng kế toán quyết định 97.1% sức mạnh phân loại và đảm bảo tuyệt đối nguyên tắc Leak-Free.
@@ -259,15 +243,15 @@ Em đặt ra một câu hỏi: *"Nếu kẻ gian dùng một hình thức lừa 
 
 Để trả lời, em xây dựng thêm mô hình không giám sát **Deep Autoencoder**:
 
-Kiến trúc mạng đối xứng gồm: 14 chiều đầu vào ➔ tầng Dense 8 chiều ➔ nút cổ chai Bottleneck 4 chiều ➔ giải mã qua Dense 8 chiều ➔ và tái tạo lại 14 chiều đầu ra.
+Kiến trúc mạng đối xứng gồm: 14 chiều đầu vào ➔ qua 2 tầng nén 16 và 8 chiều ➔ nút cổ chai Bottleneck 4 chiều ➔ giải mã qua 8 và 16 chiều ➔ và tái tạo lại 14 chiều đầu ra.
 
 Nguyên lý phát hiện gồm **3 giai đoạn**:
 
 - **Giai đoạn 1 - Học chuẩn**: Mạng **chỉ huấn luyện trên giao dịch hợp lệ**, học cách nén và tái tạo cấu trúc luồng tiền bình thường.
-- **Giai đoạn 2 - Bắt lỗi**: Khi gặp giao dịch gian lận hoặc biến thể Zero-Day dị biệt, mạng không thể tái tạo chính xác, khiến sai số tái tạo MSE ($L_{\text{rec}}$) tăng vọt.
+- **Giai đoạn 2 - Bắt lỗi**: Khi gặp giao dịch gian lận bất thường, mạng không thể tái tạo chính xác, khiến sai số tái tạo MSE ($L_{\text{rec}}$) tăng vọt.
 - **Giai đoạn 3 - Ra quyết định**: Hệ thống gắn cờ gian lận nếu sai số vượt ngưỡng $\tau = 0.0455$ (tương ứng phân vị thứ 95).
 
-Nhờ vậy, dù **hoàn toàn không dùng nhãn khi huấn luyện**, Autoencoder vẫn đạt **Recall = 75.23%**, đóng vai trò như lớp phòng thủ thứ hai (Defense-in-Depth), miễn nhiễm với các thủ thuật lừa đảo mới chưa từng có tiền lệ.
+Nhờ vậy, dù **không dùng nhãn gian lận khi huấn luyện mạng**, Autoencoder vẫn đạt **Recall = 75.23% trên tập Test**, đóng vai trò như lớp phòng thủ thứ hai (Defense-in-Depth) phát hiện bất thường độc lập với nhãn.
 
 Tiếp theo, em xin mời bạn **Nguyễn Duy Khang** trình bày phần Đánh giá thực nghiệm và Đối chuẩn giữa các mô hình.
 
@@ -314,14 +298,14 @@ _(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~82s] | N
 Cũng trong module đánh giá, nhóm tiến hành phân tích **Độ quan trọng của đặc trưng (Feature Importance)**:
 
 Nhìn vào biểu đồ thanh ngang và bảng xếp hạng, Thầy và các bạn sẽ thấy một kết quả định lượng rất rõ ràng:
-Hai đặc trưng do bạn Thanh thiết kế đứng đầu bảng:
+Hai đặc trưng hàng đầu chiếm thế thượng phong:
 
 - **`errorBalanceOrig`** (Sai lệch số dư nguồn) chiếm **49.9%** đóng góp.
-- **`newbalanceOrig`** (Rút cạn số dư về 0) chiếm **47.2%** đóng góp.
+- **`newbalanceOrig`** (Số dư nguồn về 0 khi rút cạn) chiếm **47.2%** đóng góp.
 
-**Chỉ riêng 2 đặc trưng này gộp lại đã chiếm tới 97.1% toàn bộ sức mạnh phân loại của mô hình!** Trong khi các thuộc tính truyền thống như số tiền giao dịch (`amount`) chỉ chiếm 1.4%, hay khung giờ đêm chỉ chiếm 0.9%.
+**Chỉ riêng 2 đặc trưng này gộp lại đã chiếm tới 97.1% toàn bộ Feature Split Gains của XGBoost!** Trong khi các thuộc tính phụ trợ như số tiền giao dịch (`amount`) chỉ chiếm khoảng 0.5%, hay khung giờ đêm chỉ chiếm 0.03%.
 
-Điều này chứng minh một sự thật rằng: Kẻ gian có thể chia nhỏ số tiền để ngụy trang, nhưng không thể nào xóa được dấu vết sai lệch trên số dư tài khoản.
+Điều này cho thấy mô hình bám rất chặt vào dấu vết sai lệch số dư. Trong báo cáo, nhóm cũng nhận diện rõ việc phụ thuộc 98.5% vào nhóm số dư là nguy cơ rủi ro do đặc thù simulator PaySim, chứ không vội vàng xem đây là ranh giới tuyến tính đơn giản ngoài thực tế.
 
 Tiếp theo, em xin mời chị **Mỷ Cẩm** giải thích phần chọn ngưỡng của mô hình Autoencoder ở slide 18.
 
@@ -335,13 +319,13 @@ Dạ em cảm ơn bạn Khang.
 
 Như mọi người thấy trên slide, biểu đồ bên trái thể hiện rõ sự phân tách sai số tái tạo MSE: giao dịch hợp lệ (đường màu xanh) tập trung ở vùng sai số cực thấp, dưới 0.02; trong khi giao dịch gian lận (đường màu đỏ) có sai số trải dài sang bên phải do cấu trúc luồng tiền dị biệt không thể nén qua nút thắt cổ chai.
 
-Bảng bên phải thể hiện việc dò ngưỡng qua các phân vị:
+Bảng bên phải thể hiện việc dò ngưỡng qua các phân vị trên tập Validation:
 
-- Ở phân vị 90th ($\tau = 0.0211$): Recall đạt 88.4% nhưng Precision chỉ 24.1%.
-- Ở phân vị 99th ($\tau = 0.2104$): Precision tăng lên 68.5% nhưng Recall giảm mạnh còn 49.8%.
-- Nhóm quyết định chọn **Điểm cắt tại phân vị 95th ($\tau = 0.0455$)**: tạo cân bằng tối ưu giữa **Recall = 75.2%** và **Precision = 38.2%**.
+- Ở phân vị 90th ($\tau = 0.0134$): Recall đạt 84.8% nhưng Precision chỉ 26.6%.
+- Ở phân vị 99th ($\tau = 0.1240$): Precision tăng lên 66.8% nhưng Recall giảm xuống còn 47.0%.
+- Nhóm quyết định chọn **Điểm cắt tại phân vị 95th ($\tau = 0.0455$)**: đạt F1 cao nhất (0.5064) trong các ngưỡng thỏa mãn điều kiện Recall $\ge 60\%$. Trên tập Test độc lập sau đó, mô hình đạt **Recall = 75.2%** và **Precision = 38.2%** (F1 = 50.69%).
 
-Đây là chốt chặn phòng thủ thứ hai vững chắc: nếu mô hình có giám sát bị qua mặt bởi hình thức lừa đảo mới, Autoencoder sẽ lập tức kích hoạt báo động chuyển giao dịch sang thẩm định chuyên sâu mà không phụ thuộc vào việc có nhãn hay chưa.
+Đây là chốt chặn phòng thủ thứ hai vững chắc: nếu mô hình có giám sát bị qua mặt bởi hình thức bất thường, Autoencoder sẽ lập tức kích hoạt báo động chuyển giao dịch sang thẩm định chuyên sâu mà không phụ thuộc vào việc có nhãn hay chưa.
 
 Tiếp theo, em xin mời anh **Vũ Văn Duy** và bạn **Phạm Thành Trung** trình bày hệ thống Demo Streamlit và các kịch bản kiểm thử ạ.
 
@@ -381,7 +365,7 @@ Sau đây, xin mời bạn **Trung** sẽ trực tiếp thao tác chạy 3 kịc
 
 *(Phạm Thành Trung chia sẻ màn hình và thao tác trực tiếp trên trình duyệt)*
 
-Dạ em cảm ơn anh Duy. Thưa Thầy và các bạn, đây là giao diện **Dashboard giám sát gian lận thời gian thực** do em xây dựng trên nền tảng Streamlit, kết nối trực tiếp với trọng số mô hình XGBoost và Autoencoder đã huấn luyện.
+Dạ em cảm ơn anh Duy. Thưa Thầy và các bạn, đây là giao diện **Dashboard giám sát gian lận thời gian thực** do em xây dựng trên nền tảng Streamlit, kết nối trực tiếp với trọng số mô hình XGBoost-SMOTE và StandardScaler đã huấn luyện, đồng thời hỗ trợ tra cứu đối chuẩn Autoencoder.
 
 - **Khu vực nhập liệu:** Cho phép người dùng nhập loại giao dịch, thời điểm thực hiện, số tiền, và số dư trước sau của tài khoản nguồn và đích. Sau khi nhập, hệ thống tự động vector hóa để tạo 14 đặc trưng miền và chuẩn hóa bằng StandardScaler trong bộ nhớ.
 - **Thực nghiệm Kịch bản 1 (An toàn):** Em chọn mẫu giao dịch cân đối. Nhấn *"Phân tích giao dịch"* ➔ Hệ thống trả về kết quả rủi ro rất thấp (0.02%), gắn nhãn Xanh an toàn trong chưa đầy 0.5 mili-giây.
@@ -431,10 +415,10 @@ Em xin chân thành cảm ơn Thầy và các bạn đã chú ý lắng nghe!
 > **Người trả lời chính:** **Đặng Chí Thanh** _(EDA & Preprocessing)_**Hướng trả lời:**"Dạ thưa thầy, nhóm em đã kiểm soát rất chặt nguy cơ rò rỉ dữ liệu qua 4 chốt chặn Leak-Free nghiêm ngặt:
 >
 > 1. Tập Test độc lập (20%) được tách riêng đầu tiên trước mọi bước xử lý.
-> 2. SMOTENC chỉ chạy trên 80% tập Train. Tập Test hoàn toàn giữ nguyên phân bố tự nhiên 0.13% và tuyệt đối không có mẫu nhân tạo nào.
+> 2. SMOTENC chỉ chạy trên 80% tập Train. Tập Test hoàn toàn giữ nguyên phân bố sau downsample (4.11% fraud, 1,643 ca) và tuyệt đối không có mẫu nhân tạo nào.
 > 3. StandardScaler chỉ `fit` trên Train và `transform` mù trên Test.
 > 4. Toàn bộ quá trình chọn ngưỡng và tinh chỉnh tham số đều dùng 5-Fold Cross Validation nội bộ trên Train.
->    Điểm số cao thực chất là nhờ 2 đặc trưng miền `errorBalanceOrig` và `newbalanceOrig` do em thiết kế đã giải thích đúng bản chất kế toán của hành vi gian lận (chiếm >97% split gains), giúp biến bài toán phân lớp phi tuyến phức tạp thành ranh giới tuyến tính phân tách rõ rệt thay vì do mô hình học vẹt ạ."
+>    Điểm số cao thực chất là nhờ đặc trưng dẫn xuất `errorBalanceOrig` và cột gốc `newbalanceOrig` đã giải thích đúng bản chất kế toán của hành vi gian lận (chiếm 97.1% split gains). Nhóm cũng nhìn nhận khách quan đây là phát hiện mạnh trên PaySim nhưng cũng đi kèm rủi ro simulator artifact như Báo cáo Mục 3.6.2 đã phân tích sâu ạ."
 
 ---
 
@@ -442,7 +426,7 @@ Em xin chân thành cảm ơn Thầy và các bạn đã chú ý lắng nghe!
 
 > **Người trả lời chính:** **Bùi Thị Mỷ Cẩm / Hoàng Cao Sơn**
 > **Hướng trả lời:**
-> "Dạ thưa thầy, về chất lượng phân loại thì 2 mô hình tương đương nhau (F1 chênh lệch không đáng kể: 99.73% so với 99.63%, chỉ lệch 3 ca đoán nhầm trên 40,000 mẫu). Nhưng Random Forest mất gần 20 phút để huấn luyện và file model rất nặng (~32MB). Trong khi đó, XGBoost chỉ mất 41.7 giây để huấn luyện (nhanh gấp 28.5 lần), file model native JSON chỉ 410KB, và độ trễ suy luận cho 1 giao dịch chỉ dưới 0.5 mili-giây. Với các hệ thống cổng thanh toán trực tuyến cần xử lý hàng chục ngàn giao dịch mỗi giây thì XGBoost là lựa chọn tối ưu vượt trội để triển khai production ạ."
+> "Dạ thưa thầy, về chất lượng phân loại thì 2 mô hình tương đương nhau (F1 chênh lệch không đáng kể: 99.73% so với 99.63%, chỉ lệch 3 ca đoán nhầm trên 40,000 mẫu). Nhưng Random Forest mất gần 20 phút để huấn luyện và file model rất nặng (~32MB). Trong khi đó, XGBoost chỉ mất khoảng 42s–58s để huấn luyện (nhanh gấp hơn 20 lần), file model native JSON chỉ 410KB, và độ trễ suy luận cho 1 giao dịch chỉ dưới 0.5 mili-giây. Với các hệ thống cổng thanh toán trực tuyến cần xử lý hàng chục ngàn giao dịch mỗi giây thì XGBoost là lựa chọn tối ưu vượt trội để triển khai production ạ."
 
 ---
 

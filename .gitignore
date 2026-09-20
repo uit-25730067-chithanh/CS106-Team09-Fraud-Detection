@@ -51,3 +51,6 @@ submit/\[Project AI-UIT\]*/
 *.mov
 *.avi
 **/demo/clip/*.mp4
+
+# Temporary scratch scripts
+**/scratch/
