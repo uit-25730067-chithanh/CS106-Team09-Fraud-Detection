@@ -42,6 +42,14 @@ SCALED_FEATURES = (
 
 
 @dataclass(frozen=True)
+class FeatureTrace:
+    """Exact feature values before and after the scaler for one prediction."""
+
+    raw_values: tuple[float, ...]
+    model_values: tuple[float, ...]
+
+
+@dataclass(frozen=True)
 class PredictionResult:
     """One fraud-classification result returned by the deployed model."""
 
@@ -49,6 +57,7 @@ class PredictionResult:
     fraud_probability: float
     threshold: float = 0.5
     model_name: str = "XGBoost-SMOTE"
+    feature_trace: FeatureTrace | None = None
 
 
 def load_xgboost_model(path: Path) -> XGBClassifier:
@@ -64,6 +73,15 @@ def load_xgboost_model(path: Path) -> XGBClassifier:
 
 def build_model_features(values: Mapping[str, object], scaler: object) -> pd.DataFrame:
     """Reproduce the exact Phase 01 feature engineering for one transaction."""
+
+    _, features = _build_feature_frames(values, scaler)
+    return features
+
+
+def _build_feature_frames(
+    values: Mapping[str, object], scaler: object,
+) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Keep the original feature row alongside the exact model input."""
 
     transaction_type = str(values["transaction_type"])
     if transaction_type not in {"TRANSFER", "CASH_OUT"}:
@@ -104,10 +122,11 @@ def build_model_features(values: Mapping[str, object], scaler: object) -> pd.Dat
             f"{scaler_features}"
         )
 
+    raw_features = features.copy()
     features.loc[:, list(SCALED_FEATURES)] = scaler.transform(
         features.loc[:, list(SCALED_FEATURES)]
     )
-    return features
+    return raw_features, features
 
 
 def reconstruct_transaction_input(
@@ -166,10 +185,14 @@ def predict_transaction(
             f"{model_features}"
         )
 
-    features = build_model_features(values, scaler)
+    raw_features, features = _build_feature_frames(values, scaler)
     fraud_probability = float(model.predict_proba(features)[0, 1])
     return PredictionResult(
         label=int(fraud_probability >= threshold),
         fraud_probability=fraud_probability,
         threshold=threshold,
+        feature_trace=FeatureTrace(
+            raw_values=tuple(float(value) for value in raw_features.iloc[0]),
+            model_values=tuple(float(value) for value in features.iloc[0]),
+        ),
     )

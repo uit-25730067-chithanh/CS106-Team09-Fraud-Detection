@@ -78,12 +78,17 @@ fraud-detection/
 │   ├── _toc_pages.json             # Số trang mục lục do sync_toc_pages.py sinh ra
 │   └── figures/           # Hình dùng trong báo cáo (Hình 5.1 confusion_matrix_components.png, Hình 5.2 feature_importance_comparison.png, 7 ROC/PR/Confusion plots)
 ├── slide/                 # ✅ Bộ Slide học thuật 21 trang & Kịch bản bảo vệ toàn team (PM chính thức phê duyệt)
-├── demo/                  # 🟡 Streamlit UI + XGBoost inference + mapping datetime/VNĐ (chờ screenshots & video clip)
-│   ├── inference.py      # 14-feature contract + XGBoost probability
-│   ├── app.py            # Quick presets + signal/flow/error views + native motion
-│   ├── assets/           # Logo và tài nguyên hình ảnh của demo
-│   ├── screenshots/      # Ảnh kiểm thử giao diện
-│   ├── WIREFRAME.md      # Bố cục và nguyên tắc giao diện
+├── demo/                  # ✅ Streamlit UI + XGBoost inference + Quy trình 4 bước + Import mẫu (74 tests pass, video Google Drive)
+│   ├── app.py            # Giao diện chính Fraud Shield (Presets, Form, Kết quả, Pipeline)
+│   ├── analysis_pipeline.py # Quy trình tiền xử lý, trích xuất đặc trưng & suy luận 4 bước
+│   ├── pipeline_details.py  # Modal chi tiết từng bước trong quy trình phân tích
+│   ├── sample_import.py     # Hộp chọn mẫu kiểm thử, parser CSV/JSON an toàn
+│   ├── inference.py         # Hợp đồng 14 đặc trưng + XGBoost probability fail-closed
+│   ├── evaluation_artifacts.py # Adapter nạp kết quả so sánh mô hình & 9 biểu đồ Phase 05
+│   ├── DEMO-SCRIPT.md       # Kịch bản thuyết minh 7 cảnh demo kèm link video ngoại tuyến
+│   ├── WIREFRAME.md         # Bố cục và nguyên tắc thiết kế giao diện
+│   ├── assets/              # Logo và tài nguyên hình ảnh của demo
+│   ├── screenshots/         # Ảnh chụp kiểm thử giao diện
 │   └── requirements-demo.txt
 ├── docs/                  # Tài liệu dự án
 ├── run_preprocessing.py   # Script chạy lại pipeline tiền xử lý (Phase 01)
@@ -141,7 +146,7 @@ streamlit run demo/app.py
 
 Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contract 14 đặc trưng, trả xác suất/nhãn theo ngưỡng và khóa an toàn nếu model, scaler hoặc schema lỗi.
 
-**Trạng thái:** Model integration, comparison CSV và 9 figures đã tích hợp; có chuyển SMOTENC/ADASYN, Feature Importance, so sánh TP/FP/FN và lịch sử SQLite. Browser QA bố cục mới đạt; `45` demo tests và `87` tests toàn project pass. Phase 06 vẫn `pending`; còn screenshots và demo clip. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
+**Trạng thái:** ✅ **Hoàn tất (Passed)** — Tích hợp đầy đủ XGBoost model inference, comparison CSV và 9 figures Phase 05; bổ sung quy trình phân tích 4 bước trực quan, hộp chọn/nhập mẫu CSV/JSON; Browser QA đạt chuẩn; `74/74` demo tests và `116/116` tests toàn project passed. Video clip demo lưu trữ ngoại tuyến tại Google Drive (tuân thủ giới hạn Git < 50MB) và kịch bản chi tiết tại `demo/DEMO-SCRIPT.md`. Xem evidence tại [phase-06-demo-ui.md](../../plans/fraud-detection-full-submit/phase-06-demo-ui.md).
 
 ---
 
@@ -154,11 +159,11 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 4. Modeling       ✔ Random Forest (Sơn) | XGBoost & Autoencoder (Cẩm) — ALL 3 MODELS DONE
 5. Evaluation     ✔ 4/4 scripts done (PR #7, #26, #28); 74 tests pass (Khang)
 6. Comparison     ✔ Bảng reports/model_comparison.csv + 7 figures ROC/PR/Confusion Matrix (Khang)
-7. Demo UI        ✔ UI + inference + mapping datetime/VNĐ + comparison/9 figures + SQLite + Browser QA; → Chờ screenshots/clip (Trung)
+7. Demo UI        ✔ Streamlit UI + XGBoost inference + Quy trình 4 bước + Import mẫu + 74 tests pass + Clip Google Drive (Trung)
 8. Report         ✔ Báo cáo Word/PDF Tóm tắt + Chương 1–7 đầy đủ, 32 trang (Duy) + Bộ Slide 21 trang đã duyệt chính thức (Hôn)
 ```
 
-> ⚠️ **PM Audit (09/09):** Đầy đủ 6/6 notebooks hoàn thành và chạy sạch (01–06); Phase 00–05 đạt 66.7%. Đang hoàn thiện evidence Demo UI và chuẩn bị đóng gói nộp bài cho Sprint 4.
+> ⚠️ **PM Audit (19/09):** Đầy đủ 6/6 notebooks hoàn thành và chạy sạch (01–06); 8/9 phases đạt 88.9%. Demo UI đã hoàn tất toàn diện với 74 unit tests passed và clip demo trên Google Drive. Sẵn sàng cho Phase 08 đóng gói nộp bài.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 

@@ -27,6 +27,8 @@
    - Risk Meter là điểm nhấn đầu tiên sau dự đoán, dùng thang xanh–cam–đỏ, một nhãn xác suất nổi, vạch ngưỡng không chữ và các mốc 0–25–50–75–100%.
 3. **Hiệu năng mô hình:** Phân bố nhãn thật; chừa vị trí cho comparison table và figures từ Phase 05.
 4. **Hồ sơ dự án:** Dataset, mô hình, metrics và tiến độ pipeline.
+5. **Quy trình phân tích 4 bước:** Trực quan hóa hành trình xử lý từ kiểm tra đầu vào, trích xuất đặc trưng, chuẩn hóa dữ liệu đến tính toán xác suất qua XGBoost; tích hợp modal chi tiết từng bước.
+6. **Hộp thoại chọn dữ liệu mẫu (Sample Picker Dialog):** Modal cho phép chọn kịch bản mẫu hoặc tải tệp CSV/JSON ngoại vi, điền vào form trước và chỉ suy luận khi người dùng nhấn "Phân tích giao dịch".
 
 Sidebar giữ điều hướng chính, bốn kịch bản nhanh theo ngữ cảnh và nút giao diện. Cụm kịch bản chỉ xuất hiện ở màn hình Phân tích giao dịch; lựa chọn được giữ khi chuyển màn hình. Brand header, active state có vạch nhấn, hover nhẹ và model status card tạo phân cấp rõ mà không lấn át nội dung.
 

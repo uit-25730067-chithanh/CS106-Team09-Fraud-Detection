@@ -33,7 +33,7 @@ Final/
 │       ├── docs/           ← ✅ 4 file kỹ thuật (overview, roadmap, architecture, code-standards)
 │       ├── reports/        ← ✅ Predictions + Báo cáo DOCX/PDF Chương 1–7 (32 trang) + model_comparison.csv + figures/
 │       ├── slide/          ← ✅ Bộ slide học thuật 21 trang + kịch bản toàn team (PM duyệt chính thức)
-│       ├── demo/           ← 🟡 Streamlit UI + XGBoost inference + Phase 05 artifacts adapter (chờ screenshots & video clip)
+│       ├── demo/           ← ✅ Streamlit UI + XGBoost inference + Quy trình 4 bước + Import mẫu + 74 tests pass + Clip Google Drive
 │       ├── run_preprocessing.py  ← Script chạy lại pipeline nếu cần
 │       └── requirements.txt
 └── submit/            ← Bản nộp cuối (trống cho đến khi nộp bài)
@@ -41,7 +41,7 @@ Final/
 
 ---
 
-## Current State (2026-09-09)
+## Current State (2026-09-19)
 
 | Component | Status |
 |-----------|--------|
@@ -57,12 +57,12 @@ Final/
 | `models/xgb_smote.json` | ✅ XGBoost trained — F1=0.9963, AUC=0.9993 (Train time: 41.6s) |
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | ✅ Phase 05 `passed` (PR #26 & #28) — 4/4 scripts của Khang xong (metrics_calculator.py, plot_roc_curve.py, confusion_matrix_plot.py, model_comparator.py); `notebooks/06_evaluation_comparison.ipynb` chạy sạch; `reports/model_comparison.csv` + 7 figures đã xuất, khớp 100% `ch5_metrics_recomputed.csv`. Thêm 2 scripts vẽ đồ thị báo cáo |
-| Demo UI | ✅ Phase 06 `passed` (17/09) — Streamlit Web UI + XGBoost inference + 3 themes; 5 screenshots chuẩn hóa & kịch bản demo hoàn tất; 87 tests pass |
+| Demo UI | ✅ Phase 06 `passed` — Streamlit Web UI + XGBoost-SMOTE & scaler kết nối hoàn chỉnh; bổ sung quy trình phân tích trực quan 4 bước, hộp chọn dữ liệu mẫu hỗ trợ nhập CSV/JSON an toàn, mapping thời gian PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, 3 themes; 5 screenshots chuẩn hóa, kịch bản 7 cảnh & video clip demo; tests pass |
 | Báo cáo & Slide | ✅ Phase 07 `passed` (15/09) — Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang chuẩn định dạng UIT, khớp 100% Phase 05). Slide: bộ học thuật 21 trang kèm Kịch bản toàn team 7 người **đã duyệt chính thức**. |
 | Gói nộp bài | ✅ Phase 08 `passed` (17/09) — Đóng gói tự động `[Project AI-UIT] - Nhom 9.zip` (47.26 MB), kiểm tra toàn vẹn và bảo mật đạt 100% |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides, Huong_dan_su_dung (Word & MD), Danh sách nhóm (Excel) |
 
-> **Verdict (17/09/2026): Phase 00–08 TOÀN BỘ PASSED (9/9 = 100%). Đồ án hoàn thành trọn vẹn trước hạn chót. Mã nguồn, báo cáo Word/PDF, slide PPT, giao diện demo UI và gói nộp bài ZIP đã hoàn tất và sẵn sàng nộp chính thức.**
+> **Verdict (19/09/2026): Phase 00–08 TOÀN BỘ PASSED (9/9 = 100%). Đồ án hoàn thành trọn vẹn trước hạn chót. Toàn bộ mã nguồn, 6/6 notebooks, báo cáo Word/PDF 32 trang, Slide học thuật 21 trang kèm kịch bản thuyết trình toàn team, giao diện demo UI tương tác và gói nộp bài ZIP [Project AI-UIT] - Nhom 9.zip đã sẵn sàng nộp chính thức.**
 
 ---
 
