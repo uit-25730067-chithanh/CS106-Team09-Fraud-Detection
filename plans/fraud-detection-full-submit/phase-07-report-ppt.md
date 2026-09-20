@@ -336,7 +336,7 @@ Word file: reports/[Nhom9]_BaoCao_FraudDetection.docx
   
 PPT file: reports/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx
   - Slides: 21
-  - Estimated time: 10-12 phút (đã có SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md)
+  - Calibrated presentation time: ~23–25 phút (đã hiệu chỉnh theo dữ liệu thực tế buổi họp meeting 18/09/2026 trong SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md / .docx)
 ```
 
 ## Risk Assessment

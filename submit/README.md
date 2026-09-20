@@ -28,12 +28,14 @@ Sau đó zip thành: **`[Project AI-UIT] - Nhom 9.zip`**
 
 ---
 
-## Checklist trước khi nộp (Cập nhật PM Audit 09/09/2026)
+## Checklist trước khi nộp (Hoàn tất 17/09/2026)
 
 - [x] Tất cả 6/6 notebooks chạy được từ đầu đến cuối (Restart & Run All) không lỗi
 - [x] Mỗi model có đủ: Confusion Matrix + Precision/Recall/F1 + ROC-AUC (5 biến thể)
 - [x] Có bảng so sánh tổng hợp các model (`reports/model_comparison.csv`)
 - [x] Báo cáo Word/PDF có đủ: Tóm tắt, Giới thiệu, Dữ liệu, Phương pháp, Kết quả, Thảo luận, Kết luận (Chương 1–7)
 - [x] PPT có slide kết quả và biểu đồ (Bộ Slide học thuật 21 trang đã duyệt chính thức)
-- [ ] Demo: Bổ sung 5 screenshots và video clip demo 2–3 phút vào `demo/`
-- [ ] File nộp đúng tên chuẩn: `[Project AI-UIT] - Nhom 9.zip` (loại trừ .env và paysim.csv)
+- [x] Demo: Đã lưu 5 screenshots chuẩn hóa và kịch bản demo vào `demo/screenshots/`
+- [x] File nộp đúng tên chuẩn: `[Project AI-UIT] - Nhom 9.zip` (dung lượng 118.58 MB, 128 files, loại trừ triệt để .env và paysim.csv)
+- [x] Toàn bộ 116/116 automated unit/integration tests vượt qua 100%
+- [x] Script tự động đóng gói `draft/fraud-detection/src/reporting/package_submission.py` hoạt động hoàn hảo
