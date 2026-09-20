@@ -69,6 +69,27 @@ _(Căn cứ phân công chính thức trong `AGENTS.md`, `plan.md` và thống n
 
 ---
 
+## ⏱️ BẢNG ĐỐI CHIẾU THỜI GIAN THEO MỤC TIÊU 15 PHÚT (900 GIÂY)
+
+> ⚠️ **Định hướng chiến lược tối ưu cho buổi bảo vệ 15 phút (theo khung giờ chuẩn môn học CS106):**
+> - **Bỏ qua Slide 21:** Bạn Phạm Thành Trung sau khi thao tác Live Demo tại Slide 20 sẽ trực tiếp tổng kết 4 đóng góp, cảm ơn Thầy/Cô và mở phiên hỏi đáp Q&A.
+> - **Slide 20 do một mình Trung phụ trách:** Anh Vũ Văn Duy không nói trên slide, dành toàn bộ thời lượng làm "chủ lực" trả lời các câu hỏi phản biện chuyên sâu về Báo cáo khoa học Word 32 trang và phương pháp luận học thuật.
+
+| STT | Thành viên | Slide phụ trách | Nội dung chính phụ trách | Thời gian Mục tiêu 15p (Target Budget) | Thời gian Kịch bản hiện tại (Script Time) | Thực tế chạy thử Dry-run (18/09) | Chênh lệch (Kịch bản vs Mục tiêu 15p) | Mức độ đáp ứng & Khuyến nghị nhịp độ |
+| :-: | :--- | :-: | :--- | :-: | :-: | :-: | :-: | :--- |
+| **1** | **Trần Hoàng Hôn** | **Slide 1, 2** | Mở đầu, giới thiệu 7 thành viên Nhóm 9 và lộ trình 5 phần. | **1 phút 15s** *(75s)* | **2 phút 35s** *(155s)* | *3 phút 16s* *(196s)* | 🔴 **Vượt +1m20s** *(+106%)* | ⚠️ **Cần rút gọn:** Đọc nhanh tên 7 bạn (45s) + lướt nhanh Agenda (30s). |
+| **2** | **Đặng Chí Thanh** | **Slide 3, 4, 5, 6, 7, 8** | Bối cảnh, PaySim 200k, 100% gian lận ở 2 loại, 14 đặc trưng miền. | **3 phút 30s** *(210s)* | **5 phút 22s** *(322s)* | *7 phút 54s* *(474s)* | 🔴 **Vượt +1m52s** *(+53%)* | ⚠️ **Cần nói lướt:** Đi thẳng vào 2 biến quyết định 97.1% (PR #37). |
+| **3** | **Hoàng Cao Sơn** | **Slide 9, 10, 11, 12 (RF)** | SMOTENC giữ nguyên cờ 0/1, 4 chốt chặn Leak-Free và Random Forest. | **2 phút 00s** *(120s)* | **3 phút 30s** *(210s)* | *7 phút 17s* *(437s)* | 🔴 **Vượt +1m30s** *(+75%)* | ⚠️ **Cắt lý thuyết:** Bỏ giải thích ADASYN, chỉ nêu kết quả RF F1=0.9973. |
+| **4** | **Bùi Thị Mỷ Cẩm** | **Slide 12 (XGB), 13, 18** | XGBoost siêu tốc (41s, JSON 410KB) và Deep Autoencoder bắt Zero-Day. | **2 phút 00s** *(120s)* | **3 phút 43s** *(223s)* | *4 phút 15s* *(255s)* | 🔴 **Vượt +1m43s** *(+86%)* | ⚠️ **Cần cô đọng:** XGB 40s + Autoencoder & ngưỡng 95th 80s. |
+| **5** | **Nguyễn Duy Khang** | **Slide 14, 15, 16, 17** | Đối chuẩn 5 mô hình, Ma trận nhầm lẫn (sót 8 ca) và Feature Importance. | **2 phút 15s** *(135s)* | **4 phút 39s** *(279s)* | *4 phút 27s* *(267s)* | 🔴 **Vượt +2m24s** *(+106%)* | ⚠️ **Không đọc bảng:** Chỉ nêu bật RF & XGBoost dẫn đầu, lướt các chỉ số phụ. |
+| **6** | **Vũ Văn Duy** | *Không nói Slide* | **Chuyên trách phản biện:** Trụ cột trả lời Q&A về Báo cáo Word 32 trang & Threats to Validity. | **0 phút 00s** *(0s)* | **0 phút 00s** *(0s)* | *2 phút 29s* *(149s)* | 🟢 **`0s` (Khớp tuyệt đối)** | 🎯 **HOÀN THÀNH MỤC TIÊU:** Duy không nói slide, tránh đổi micro. |
+| **7** | **Phạm Thành Trung** | **Slide 19, 20 + Cảm ơn** | Giới thiệu Dashboard, nêu 3 kịch bản, Live Demo, 4 đóng góp, Cảm ơn & Mời Q&A. | **2 phút 40s** *(160s)* | **3 phút 50s** *(230s)* | *5 phút 04s* *(304s)* | 🔴 **Vượt +1m10s** *(+44%)* | ⚠️ **Cần demo nhanh:** Bấm 2 preset mẫu, không gõ tay dữ liệu. |
+| ⏩ | **Slide 21** | *Bỏ qua* | Trung nói cảm ơn trực tiếp tại cuối Slide 20, không quay lại Slide 21. | **0 phút 00s** *(0s)* | **0 phút 00s** *(0s)* | *45s* | 🟢 **`0s` (Khớp tuyệt đối)** | 🎯 **HOÀN THÀNH MỤC TIÊU:** Cắt bỏ hoàn toàn độ trễ switch slide. |
+| ⏱️ | **Dự phòng (Buffer)** | — | Độ trễ chuyển slide giữa các thành viên và kết nối micro. | **1 phút 20s** *(80s)* | — | — | — | Dành cho việc chuyển slide và kết nối âm thanh. |
+| 🏁 | **TỔNG TOÀN BÀI** | **20 Slides** | **6 thành viên nói + Live Demo** | **15 phút 00s** *(900s)* | **23 phút 04s** *(1,384s)* | *~35m02s (Thuần nói)* | 🔴 **VƯỢT +8m04s (+53%)** | ❌ **CẦN NÓI Ý CHÍNH (INSIGHT), TUYỆT ĐỐI KHÔNG ĐỌC LẠI SLIDE!** |
+
+---
+
 # LỜI THOẠI VĂN NÓI CHI TIẾT THEO TỪNG SLIDE
 
 ---
