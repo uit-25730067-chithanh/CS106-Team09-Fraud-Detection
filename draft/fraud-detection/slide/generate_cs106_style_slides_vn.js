@@ -309,7 +309,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     line: { color: '93C5FD', width: 2 }
   });
 
-  s.addText('Trần Hoàng Hôn (26410046)  •  Đặng Chí Thanh (25730067)  •  Nguyễn Duy Khang (26410055)\nHoàng Cao Sơn (25730061)  •  Vũ Văn Duy (26410031)  •  Bùi Thị Mỷ Cẩm (25730013)  •  Phạm Thanh Trung (26410141)', {
+  s.addText('Trần Hoàng Hôn (26410046)  •  Đặng Chí Thanh (25730067)  •  Nguyễn Duy Khang (26410055)\nHoàng Cao Sơn (25730061)  •  Vũ Văn Duy (26410031)  •  Bùi Thị Mỷ Cẩm (25730013)  •  Phạm Thành Trung (26410141)', {
     x: M, y: 3.65, w: CW, h: 0.55,
     fontSize: 10, fontFace: F.fontBody, color: 'CBD5E1', align: 'center', lineSpacingMultiple: 1.3
   });
@@ -382,7 +382,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: '1. Bối cảnh Thực tiễn & Quy mô\n', options: { bold: true, color: C.navyTitle, fontSize: 12 } },
     { text: '• Giao dịch Mobile Money tăng trưởng bùng nổ, kéo theo các thủ đoạn gian lận tinh vi.\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
     { text: '• Hệ thống phòng thủ đòi hỏi độ trễ suy luận real-time (< 100ms) trước khi tiền bị tẩu tán.\n\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
-    
+
     { text: '2. Thách thức Extreme Class Imbalance (~0.13%)\n', options: { bold: true, color: C.navyTitle, fontSize: 12 } },
     { text: '• Gian lận chỉ chiếm ~1 trên 800 giao dịch (8,213 ca trên 6.36M sự kiện trong PaySim).\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
     { text: '• Cost Asymmetry: Bỏ sót gian lận (FN) gây mất vốn trực tiếp, trong khi Báo động nhầm (FP) chỉ gây gián đoạn trải nghiệm người dùng.\n\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
@@ -408,8 +408,8 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Mục tiêu Nghiên cứu Cốt lõi',
     bullets: [
       'Xây dựng end-to-end ML pipeline chuẩn, đảm bảo Leak-Free tuyệt đối.',
-      'Thiết kế 14 domain features bắt trọn sai lệch số dư sổ cái.',
-      'Đối chuẩn Ensemble Trees với Unsupervised Deep Autoencoder bắt Zero-Day.',
+      'Thiết kế 14 features bắt trọn sai lệch số dư tài khoản.',
+      'So sánh Ensemble Trees với Unsupervised Deep Autoencoder bắt Zero-Day.',
       'Triển khai interactive dashboard phục vụ ra quyết định thời gian thực.'
     ],
     fontSize: 9.5
@@ -491,7 +491,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addShape(pptx.shapes.RECTANGLE, { x: M, y: 1.10, w: cardW, h: cardH, fill: { color: C.skyBox }, line: { color: C.skyBorder, width: 1.5 } });
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.25, w: cardW - 0.3, h: 0.35, fill: { color: C.pillBlue } });
   s.addText('100% GIAN LẬN KHU BIỆT', { x: M + 0.15, y: 1.25, w: cardW - 0.3, h: 0.35, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
-  s.addText('Phát hiện 1: Khu biệt Loại Giao dịch', { x: M + 0.15, y: 1.70, w: cardW - 0.3, h: 0.3, fontSize: 11, bold: true, color: C.navyTitle });
+  s.addText('Phát hiện 1: Khoanh vùng Loại Giao dịch', { x: M + 0.15, y: 1.70, w: cardW - 0.3, h: 0.3, fontSize: 11, bold: true, color: C.navyTitle });
   s.addText([
     { text: '• 100% gian lận xảy ra duy nhất ở 2 loại giao dịch: ', options: { color: C.textDark } },
     { text: 'TRANSFER và CASH_OUT.\n', options: { bold: true, color: C.dangerRed } },
@@ -503,21 +503,21 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Card 2: Total Account Drain
   s.addShape(pptx.shapes.RECTANGLE, { x: M + cardW + 0.15, y: 1.10, w: cardW, h: cardH, fill: { color: C.redBox }, line: { color: C.redBorder, width: 1.5 } });
   s.addShape(pptx.shapes.RECTANGLE, { x: M + cardW + 0.3, y: 1.25, w: cardW - 0.3, h: 0.35, fill: { color: C.dangerRed } });
-  s.addText('97.56% TỔNG SỐ CA GIAN LẬN', { x: M + cardW + 0.3, y: 1.25, w: cardW - 0.3, h: 0.35, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
+  s.addText('97.55% TỔNG SỐ CA GIAN LẬN', { x: M + cardW + 0.3, y: 1.25, w: cardW - 0.3, h: 0.35, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
   s.addText('Phát hiện 2: Vét Sạch Số Dư Nguồn', { x: M + cardW + 0.3, y: 1.70, w: cardW - 0.3, h: 0.3, fontSize: 11, bold: true, color: C.dangerRed });
   s.addText([
-    { text: '• Trong 97.56% giao dịch gian lận, tài khoản nạn nhân bị rút cạn sạch về 0: ', options: { color: C.textDark } },
+    { text: '• Trong 97.55% giao dịch gian lận, tài khoản nạn nhân bị rút cạn sạch về 0: ', options: { color: C.textDark } },
     { text: 'newbalanceOrig == 0.\n', options: { bold: true, color: C.navyTitle } },
     { text: '• Kẻ gian tối đa hóa số tiền lấy cắp trong 1 lần duy nhất trước khi bị khóa thẻ.\n\n', options: { color: C.textDark } },
     { text: '• Tín hiệu Cốt lõi: ', options: { bold: true, color: C.dangerRed } },
-    { text: 'Tỷ lệ rút cạn tài khoản đóng vai trò phân loại chính xác hàng đầu.', options: { color: C.textDark } }
+    { text: '97.55% ca gian lận rút cạn tài khoản nguồn; kết hợp sai lệch errorBalanceOrig mới tạo phân loại mạnh.', options: { color: C.textDark } }
   ], { x: M + cardW + 0.3, y: 2.05, w: cardW - 0.3, h: cardH - 1.15, fontSize: 9.8, lineSpacingMultiple: 1.22, shrinkText: true, margin: [2, 4, 2, 4] });
 
   // Card 3: Destination Ledger Mismatch
   s.addShape(pptx.shapes.RECTANGLE, { x: M + (cardW + 0.15) * 2, y: 1.10, w: cardW, h: cardH, fill: { color: C.skyBox }, line: { color: C.skyBorder, width: 1.5 } });
   s.addShape(pptx.shapes.RECTANGLE, { x: M + (cardW + 0.15) * 2 + 0.15, y: 1.25, w: cardW - 0.3, h: 0.35, fill: { color: '1D4ED8' } });
   s.addText('BẤT THƯỜNG BIẾN ĐỘNG SỐ DƯ', { x: M + (cardW + 0.15) * 2 + 0.15, y: 1.25, w: cardW - 0.3, h: 0.35, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
-  s.addText('Phát hiện 3: Sai Lệch Sổ Cái Đích', { x: M + (cardW + 0.15) * 2 + 0.15, y: 1.70, w: cardW - 0.3, h: 0.3, fontSize: 11, bold: true, color: C.navyTitle });
+  s.addText('Phát hiện 3: Sai Lệch số dư đích', { x: M + (cardW + 0.15) * 2 + 0.15, y: 1.70, w: cardW - 0.3, h: 0.3, fontSize: 11, bold: true, color: C.navyTitle });
   s.addText([
     { text: '• Tỷ lệ lớn giao dịch gian lận không làm tăng số dư tài khoản đích theo sổ sách: ', options: { color: C.textDark } },
     { text: 'newbalanceDest ≈ 0.\n', options: { bold: true, color: C.navyTitle } },
@@ -566,9 +566,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     x: rightX, y: 2.95, w: rightW, h: 2.05,
     title: 'Đúc kết Feature Importance',
     bullets: [
-      'Hai biến errorBalanceOrig (49.9%) và newbalanceOrig (47.2%) chiếm > 97.1% tổng Feature Split Gains.',
-      'Domain Engineering tạo bước nhảy vọt so với chỉ dùng các trường số tiền gốc.',
-      'Nguyên tắc Chống Rò rỉ: Toàn bộ 14 features được scale chuẩn hóa nghiêm ngặt CHỈ trên tập Train.'
+      'Hai biến errorBalanceOrig (49.9%) và newbalanceOrig (47.2%) chiếm 97.1% tổng Feature Split Gains (XGBoost).',
+      'XGBoost dựa gần như hoàn toàn vào nhóm số dư (98.5%); nhóm ghi nhận rủi ro simulator artifact (Mục 3.6.2).',
+      'Nguyên tắc Chống Rò rỉ: Toàn bộ 14 đặc trưng (7 dẫn xuất) được chuẩn hóa StandardScaler CHỈ trên tập Train.'
     ],
     type: 'blue',
     fontSize: 9.0
@@ -594,7 +594,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Left: SMOTE Box
   s.addShape(pptx.shapes.RECTANGLE, { x: M, y: 1.90, w: colW, h: 3.10, fill: { color: C.skyBox }, line: { color: C.skyBorder } });
   s.addText('Kỹ thuật Nội suy Mẫu SMOTE', { x: M + 0.15, y: 1.98, w: colW - 0.3, h: 0.24, fontSize: 11.5, bold: true, color: C.navyTitle });
-  
+
   // Math Card inside SMOTE
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 2.26, w: colW - 0.3, h: 0.36, fill: { color: 'FFFFFF' }, line: { color: C.skyBorder } });
   s.addText('x_new = x_i + λ · (x_zi - x_i),    với  λ ∈ [0, 1]', { x: M + 0.2, y: 2.29, w: colW - 0.4, h: 0.30, fontSize: 9.2, fontFace: F.fontCode, bold: true, color: C.blueAccent });
@@ -660,14 +660,14 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 
   steps.forEach((st, idx) => {
     const sx = M + idx * (cardW + gapW);
-    
+
     // Card Container
     s.addShape(pptx.shapes.RECTANGLE, { x: sx, y: 1.08, w: cardW, h: stepH, fill: { color: C.skyBox }, line: { color: C.skyBorder } });
-    
+
     // Top Step Badge
     s.addShape(pptx.shapes.RECTANGLE, { x: sx, y: 1.08, w: cardW, h: 0.34, fill: { color: st.color } });
     s.addText(`B.${st.num}: ${st.name}`, { x: sx, y: 1.08, w: cardW, h: 0.34, fontSize: 8.5, bold: true, color: 'FFFFFF', align: 'center' });
-    
+
     // Step Body Text
     s.addText(st.desc, { x: sx + 0.04, y: 1.46, w: cardW - 0.08, h: stepH - 0.42, fontSize: 8.8, align: 'center', color: C.textDark, lineSpacingMultiple: 1.15, shrinkText: true });
 
@@ -681,7 +681,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Bottom Rules Box
   addHighlightBlock(s, {
     x: M, y: 2.98, w: CW, h: 2.02,
-    title: 'Quy chuẩn Khắt khe Chống Rò rỉ Dữ liệu (Strict Protocol Against Data Leakage)',
+    title: 'Nguyên tắc Chống Rò rỉ Dữ liệu (Data Leakage)',
     bullets: [
       'Phân tách Tập Dữ liệu Tuyệt đối: Phân chia Stratified Train/Test (80/20) được thực hiện TRƯỚC BẤT KỲ bước resampling hay chuẩn hóa nào.',
       'Resampling Phân lập: SMOTE / ADASYN tuyệt đối CHỈ áp dụng trên tập huấn luyện (Train fold). Tập Test hoàn toàn giữ nguyên phân bố tự nhiên (0.13% fraud).',
@@ -706,24 +706,24 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addShape(pptx.shapes.RECTANGLE, { x: M, y: 1.08, w: colW, h: 3.92, fill: { color: C.skyBox }, line: { color: C.skyBorder } });
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.18, w: colW - 0.3, h: 0.32, fill: { color: C.navyTitle } });
   s.addText('Mô hình 1: Random Forest Ensemble', { x: M + 0.15, y: 1.18, w: colW - 0.3, h: 0.32, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
-  
+
   // Math Card RF
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.58, w: colW - 0.3, h: 0.36, fill: { color: 'FFFFFF' }, line: { color: C.skyBorder } });
   s.addText('Gini(D) = 1 - ∑ (p_i)²', { x: M + 0.2, y: 1.60, w: colW - 0.4, h: 0.30, fontSize: 9.5, fontFace: F.fontCode, bold: true, color: C.blueAccent });
 
   // Code Variable & Hyperparameter Badge
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 2.00, w: colW - 0.3, h: 0.42, fill: { color: 'F1F5F9' }, line: { color: 'CBD5E1', width: 0.5 } });
-  s.addText('📋 Tham số: n_estimators = 100, max_depth = 15\n📋 Chú giải biến: p_i = Xác suất mẫu thuộc lớp i tại node D', {
+  s.addText('📋 Tham số: n_estimators = 200, max_depth = 20\n📋 Chú giải biến: p_i = Xác suất mẫu thuộc lớp i tại node D', {
     x: M + 0.2, y: 2.03, w: colW - 0.4, h: 0.36, fontSize: 8.2, fontFace: F.fontBody, color: C.navyTitle, lineSpacingMultiple: 1.15
   });
 
   s.addText([
     { text: '• Cơ chế: ', options: { bold: true, color: C.navyTitle } },
-    { text: 'Tập hợp 100 cây quyết định độc lập (Bagging) với kỹ thuật lấy mẫu ngẫu nhiên không gian con đặc trưng (Random Subspace).\n\n', options: { color: C.textDark } },
+    { text: 'Tập hợp 200 cây quyết định độc lập (Bagging) với kỹ thuật lấy mẫu ngẫu nhiên không gian con đặc trưng (Random Subspace).\n\n', options: { color: C.textDark } },
     { text: '• Peak Precision: ', options: { bold: true, color: C.blueAccent } },
     { text: 'Chỉ sinh duy nhất 1 False Positive trên 38,357 giao dịch hợp lệ (Precision = 99.94%).\n\n', options: { color: C.textDark } },
     { text: '• Hạn chế: ', options: { bold: true, color: C.dangerRed } },
-    { text: 'Thời gian huấn luyện lâu (~1187s), chi phí tính toán cao khi dữ liệu phình to.', options: { color: C.textDark } }
+    { text: 'Thời gian huấn luyện lâu (~20 phút), chi phí tính toán cao khi dữ liệu phình to.', options: { color: C.textDark } }
   ], { x: M + 0.15, y: 2.50, w: colW - 0.3, h: 2.40, fontSize: 9.0, lineSpacingMultiple: 1.2, shrinkText: true, margin: [2, 4, 2, 4] });
 
   // Right: XGBoost
@@ -745,7 +745,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: '• Cơ chế: ', options: { bold: true, color: C.navyTitle } },
     { text: 'Gradient Boosting cải tiến với gradient bậc 1 (g_i) và Hessian bậc 2 (h_i), bổ sung L2 regularization chống Overfitting.\n\n', options: { color: C.textDark } },
     { text: '• Ưu thế Vượt trội: ', options: { bold: true, color: C.blueAccent } },
-    { text: 'F1-Score đạt 99.63% tương đương RF, nhưng tốc độ huấn luyện nhanh gấp 28.5 lần (~41.7s).\n\n', options: { color: C.textDark } },
+    { text: 'F1-Score đạt 99.63% tương đương RF, nhưng tốc độ huấn luyện nhanh gấp khoảng 28 lần (~42s).\n\n', options: { color: C.textDark } },
     { text: '• Production Ready: ', options: { bold: true, color: C.navyTitle } },
     { text: 'Độ trễ suy luận < 0.5ms, lý tưởng cho cổng thanh toán real-time.', options: { color: C.textDark } }
   ], { x: M + colW + 0.4, y: 2.50, w: colW - 0.3, h: 2.40, fontSize: 9.0, lineSpacingMultiple: 1.2, shrinkText: true, margin: [2, 4, 2, 4] });
@@ -765,7 +765,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 
   // Architecture Card
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.42, w: leftW - 0.3, h: 0.32, fill: { color: 'FFFFFF' }, line: { color: 'CBD5E1' } });
-  s.addText('14 (Input) → 8 (Dense) → 4 (Bottleneck) → 8 (Dense) → 14 (Output)', {
+  s.addText('14(Input) → 16(Dense) → 8(Dense) → 4(Bottleneck) → 8(Dense) → 16(Dense) → 14(Output)', {
     x: M + 0.2, y: 1.45, w: leftW - 0.4, h: 0.26, fontSize: 8.5, fontFace: F.fontCode, bold: true, color: C.blueAccent
   });
 
@@ -777,7 +777,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: '1. Giai đoạn Học Chuẩn (Normal Manifold):\n', options: { bold: true, color: C.navyTitle } },
     { text: '• Mạng chỉ huấn luyện trên giao dịch HỢP LỆ, học cách nén và tái tạo cấu trúc luồng tiền bình thường.\n\n', options: { color: C.textDark } },
     { text: '2. Giai đoạn Bắt Lỗi (Anomaly Spike):\n', options: { bold: true, color: C.dangerRed } },
-    { text: '• Khi gặp giao dịch gian lận/Zero-Day, mạng không thể tái tạo chính xác → Sai số MSE tăng vọt.\n\n', options: { color: C.textDark } },
+    { text: '• Khi gặp giao dịch gian lận bất thường, mạng không thể tái tạo chính xác → Sai số MSE tăng vọt.\n\n', options: { color: C.textDark } },
     { text: '3. Giai đoạn Ra Quyết định (Thresholding):\n', options: { bold: true, color: C.blueAccent } },
     { text: '• Gán cờ Gian lận nếu L_rec(x, x_recon) > τ (ngưỡng phân vị 95th: τ = 0.0455).', options: { color: C.textDark } }
   ], { x: M + 0.15, y: 2.22, w: leftW - 0.3, h: 2.70, fontSize: 9.0, lineSpacingMultiple: 1.18, shrinkText: true, margin: [2, 4, 2, 4] });
@@ -796,10 +796,10 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 
   addHighlightBlock(s, {
     x: rightX, y: 3.08, w: rightW, h: 1.92,
-    title: 'Vai trò Độc tôn: Bắt Tấn công Zero-Day',
+    title: 'Phát hiện Bất thường Không giám sát (Unsupervised)',
     bullets: [
-      'Autoencoder đạt 75.23% Recall dù hoàn toàn KHÔNG sử dụng nhãn gian lận khi huấn luyện.',
-      'Miễn nhiễm mẫu cũ: Phát hiện hiệu quả các thủ thuật gian lận mới chưa từng có nhãn.',
+      'Autoencoder đạt 75.23% Recall trên Test dù không dùng nhãn gian lận khi huấn luyện mạng.',
+      'Không phụ thuộc nhãn: Phát hiện bất thường theo nguyên lý sai số tái tạo (Reconstruction MSE).',
       'Lớp Phòng thủ Thứ cấp (Defense-in-Depth): Đóng vai trò lưới lọc an toàn chuyển giao dịch nghi vấn sang kiểm tra chuyên sâu.'
     ],
     type: 'blue',
@@ -813,9 +813,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 {
   const s = pptx.addSlide();
   addSectionDivider(s, 'PHẦN 04', 'KẾT QUẢ THỰC NGHIỆM & ĐÁNH GIÁ SO SÁNH', [
-    'Benchmark Hiệu năng Toàn diện & Đối chuẩn Đa Chỉ số (Precision, Recall, F1, PR-AUC)',
+    'Benchmark Hiệu năng Toàn diện & Bảng so sánh đa chỉ số (Precision, Recall, F1, PR-AUC)',
     'Phân tích Ma trận Nhầm lẫn (Confusion Matrix) & Đánh đổi False Alarm vs. Missed Fraud',
-    'Feature Importance Attribution & Đóng góp Vượt bậc của Domain Engineering',
+    'Feature Importance Attribution & Phân tích Đóng góp Nhóm Đặc trưng Số dư',
     'Phân bố Sai số Tái tạo & Ngưỡng Anomaly Thresholding (Deep Autoencoder)'
   ]);
 }
@@ -825,7 +825,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 // =========================================================================
 {
   const s = pptx.addSlide();
-  addAcademicHeader(s, 'Kết quả Thực nghiệm: Đối chuẩn Đa Chỉ số Toàn diện', 15, TOTAL_PAGES);
+  addAcademicHeader(s, 'Kết quả Thực nghiệm: So sánh đa chỉ số', 15, TOTAL_PAGES);
 
   const leftW = 4.45;
   const rightX = M + leftW + 0.20;
@@ -842,10 +842,10 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
       { text: 'Time', options: { fill: { color: C.tblHdrBg }, color: 'FFFFFF', bold: true } }
     ],
     [{ text: 'Random Forest', options: { bold: true } }, { text: 'SMOTE' }, { text: '99.94%', options: { bold: true, color: C.blueAccent } }, { text: '99.51%', options: { bold: true, color: C.blueAccent } }, { text: '99.73%', options: { bold: true, color: C.blueAccent } }, { text: '1187s' }],
-    [{ text: 'Random Forest', options: { bold: true } }, { text: 'ADASYN' }, { text: '99.88%' }, { text: '99.51%' }, { text: '99.69%' }, { text: '1215s' }],
+    [{ text: 'Random Forest', options: { bold: true } }, { text: 'ADASYN' }, { text: '99.82%' }, { text: '99.51%' }, { text: '99.66%' }, { text: '1168s' }],
     [{ text: 'XGBoost', options: { bold: true, color: C.navyTitle } }, { text: 'SMOTE' }, { text: '99.76%' }, { text: '99.51%' }, { text: '99.63%', options: { bold: true } }, { text: '41.7s', options: { bold: true, color: C.blueAccent } }],
     [{ text: 'XGBoost', options: { bold: true } }, { text: 'ADASYN' }, { text: '99.57%' }, { text: '99.51%' }, { text: '99.54%' }, { text: '43.2s' }],
-    [{ text: 'Autoencoder (Zero-Day)', options: { bold: true, color: C.dangerRed } }, { text: 'None (Unsup.)' }, { text: '38.23%' }, { text: '75.23%', options: { bold: true, color: C.dangerRed } }, { text: '50.71%' }, { text: '68.4s' }]
+    [{ text: 'Autoencoder (Zero-Day)', options: { bold: true, color: C.dangerRed } }, { text: 'None (Unsup.)' }, { text: '38.22%' }, { text: '75.23%', options: { bold: true, color: C.dangerRed } }, { text: '50.69%' }, { text: '68.4s' }]
   ];
 
   slideTable(s, benchTable, M, 1.08, leftW, [leftW * 0.32, leftW * 0.20, leftW * 0.12, leftW * 0.12, leftW * 0.12, leftW * 0.12], 8.2);
@@ -853,7 +853,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Left Bottom: Quantitative Findings Box
   addHighlightBlock(s, {
     x: M, y: 3.12, w: leftW, h: 1.88,
-    title: 'Đúc kết Thực nghiệm Định lượng',
+    title: 'Đúc kết bảng so sánh',
     bullets: [
       'Random Forest + SMOTE đạt F1-Score đỉnh cao 99.73% nhờ cơ chế Bagging triệt tiêu phương sai.',
       'XGBoost + SMOTE đạt hiệu năng tương đương (F1 = 99.63%) nhưng tốc độ huấn luyện nhanh gấp 28.5 lần.',
@@ -876,7 +876,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Right Bottom: Comparison Insights
   addHighlightBlock(s, {
     x: rightX, y: 1.08 + chartH + 0.10, w: rightW, h: 3.92 - chartH - 0.10,
-    title: 'Phân tích Biểu đồ Đa Chỉ số',
+    title: 'Phân tích Biểu đồ',
     bullets: [
       'Cột Precision & Recall của RF và XGBoost vượt trội trên 99.5%, khẳng định tính khả thi triển khai thực tế.',
       'Autoencoder hy sinh Precision (38.2%) để duy trì Recall cao (75.2%) nhằm phòng ngừa triệt để tổn thất tài chính.'
@@ -964,7 +964,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     x: M, y: 1.08 + chartH + 0.10, w: leftW, h: 3.92 - chartH - 0.10,
     title: 'Ý nghĩa Kỹ thuật Đặc trưng (Feature Engineering)',
     bullets: [
-      'Top 2 đặc trưng tự chế chiếm 97.1% tổng Feature Split Gains.',
+      'Top 2 đặc trưng (errorBalanceOrig dẫn xuất & newbalanceOrig gốc nguồn) chiếm 97.1% Split Gains.',
       'Mô hình cây dựa chủ yếu vào sai lệch cân bằng kế toán để phân định gian lận thay vì chỉ học giá trị số tiền gốc.'
     ],
     type: 'blue',
@@ -979,10 +979,10 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
       { text: 'Ý nghĩa Phân loại Nghiệp vụ', options: { fill: { color: C.tblHdrBg }, color: 'FFFFFF', bold: true } }
     ],
     [{ text: 'errorBalanceOrig', options: { bold: true, fontFace: F.fontCode } }, { text: '49.9%', options: { bold: true, color: C.blueAccent } }, { text: 'Sai lệch số dư tài khoản nguồn' }],
-    [{ text: 'newbalanceOrig', options: { bold: true, fontFace: F.fontCode } }, { text: '47.2%', options: { bold: true, color: C.blueAccent } }, { text: 'Hành vi rút cạn sạch tài khoản' }],
-    [{ text: 'amount', options: { bold: true, fontFace: F.fontCode } }, { text: '1.4%' }, { text: 'Giá trị giao dịch bất thường' }],
-    [{ text: 'hour / overnight', options: { bold: true, fontFace: F.fontCode } }, { text: '0.9%' }, { text: 'Khung giờ tấn công đêm (0h - 5h)' }],
-    [{ text: '10 features khác', options: { bold: true } }, { text: '0.6%' }, { text: 'Các thuộc tính phụ trợ' }]
+    [{ text: 'newbalanceOrig', options: { bold: true, fontFace: F.fontCode } }, { text: '47.2%', options: { bold: true, color: C.blueAccent } }, { text: 'Số dư nguồn về 0 (rút cạn tài khoản)' }],
+    [{ text: 'amount', options: { bold: true, fontFace: F.fontCode } }, { text: '0.5%' }, { text: 'Giá trị giao dịch bất thường' }],
+    [{ text: 'hour / overnight', options: { bold: true, fontFace: F.fontCode } }, { text: '0.03%' }, { text: 'Khung giờ tấn công đêm (0h - 5h)' }],
+    [{ text: '9 features còn lại', options: { bold: true } }, { text: '2.4%' }, { text: 'Các thuộc tính phụ trợ' }]
   ];
   slideTable(s, fiTable, rightX, 1.08, rightW, [rightW * 0.38, rightW * 0.22, rightW * 0.40], 8.2);
 
@@ -992,8 +992,8 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Đúc kết Bản chất Bài toán Gian lận',
     bullets: [
       'errorBalanceOrig = 49.9%: Khi kẻ gian thực hiện lệnh chuyển/rút tiền, số dư sổ cái bị trừ vượt mức số tiền thực tế có trong tài khoản.',
-      'newbalanceOrig = 47.2%: 97.56% các ca gian lận để lại số dư đích danh bằng 0 nhằm tẩu tán tối đa tài sản.',
-      'Triệt tiêu nhiễu: Kỹ thuật đặc trưng miền biến bài toán phân lớp phi tuyến phức tạp thành ranh giới quyết định tuyến tính rõ rệt.'
+      'newbalanceOrig = 47.2%: 97.55% các ca gian lận rút cạn số dư nguồn về 0 nhằm tẩu tán tối đa tài sản.',
+      'Đặc trưng số dư: Nhóm số dư chiếm 98.5% Split Gains; nhóm ghi nhận đây là thế mạnh trên PaySim nhưng cũng là nguy cơ rủi ro dữ liệu mô phỏng (Mục 3.6.2).'
     ],
     type: 'blue',
     fontSize: 8.3
@@ -1041,9 +1041,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
       { text: 'Recall', options: { fill: { color: C.tblHdrBg }, color: 'FFFFFF', bold: true } },
       { text: 'Precision', options: { fill: { color: C.tblHdrBg }, color: 'FFFFFF', bold: true } }
     ],
-    [{ text: '90th %ile', options: { bold: true } }, { text: '0.0211' }, { text: '88.4%' }, { text: '24.1%' }],
-    [{ text: '95th %ile (Chọn)', options: { bold: true, color: C.dangerRed } }, { text: '0.0455', options: { bold: true } }, { text: '75.2%', options: { bold: true, color: C.dangerRed } }, { text: '38.2%', options: { bold: true } }],
-    [{ text: '99th %ile', options: { bold: true } }, { text: '0.2104' }, { text: '49.8%' }, { text: '68.5%' }],
+    [{ text: '90.0th %ile', options: { bold: true } }, { text: '0.0134' }, { text: '84.8%' }, { text: '26.6%' }],
+    [{ text: '95.0th %ile (Chọn)', options: { bold: true, color: C.dangerRed } }, { text: '0.0455', options: { bold: true } }, { text: '73.5%', options: { bold: true, color: C.dangerRed } }, { text: '38.6%', options: { bold: true } }],
+    [{ text: '99.0th %ile', options: { bold: true } }, { text: '0.1240' }, { text: '47.0%' }, { text: '66.8%' }],
     [{ text: '99.9th %ile', options: { bold: true } }, { text: '0.7460' }, { text: '25.4%' }, { text: '91.5%' }]
   ];
   slideTable(s, thTable, rightX, 1.08, rightW, [rightW * 0.28, rightW * 0.24, rightW * 0.24, rightW * 0.24], 8.2);
@@ -1051,11 +1051,11 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Right Bottom: Strategic Decision Highlight
   addHighlightBlock(s, {
     x: rightX, y: 2.85, w: rightW, h: 2.15,
-    title: 'Quyết định Điểm cắt Ngưỡng Tối ưu (τ = 0.0455)',
+    title: 'Quét ngưỡng trên Validation & Điểm cắt Chọn (τ = 0.0455)',
     bullets: [
-      'Điểm cắt phân vị 95th (τ = 0.0455) tạo điểm cân bằng tối ưu giữa Recall (75.2%) và Precision (38.2%).',
-      'Chiến lược Defense-in-Depth: Nếu mô hình có giám sát bị qua mặt bởi hình thức lừa đảo mới, Autoencoder sẽ kích hoạt báo động chuyển luồng sang thẩm định chuyên sâu.',
-      'Không phụ thuộc nhãn: Mô hình duy trì khả năng tự thích ứng bền bỉ trong môi trường luồng tiền thay đổi liên tục.'
+      'Điểm cắt 95th (τ = 0.0455) đạt F1 cao nhất (0.5064) trong các ngưỡng thỏa Recall ≥ 60%. Trên Test độc lập đạt Recall 75.2%, Precision 38.2%.',
+      'Chiến lược Defense-in-Depth: Đóng vai trò lớp phòng thủ thứ cấp phát hiện giao dịch dị biệt chuyển sang thẩm định chuyên sâu.',
+      'Không cần nhãn gian lận: Mạng nơ-ron huấn luyện hoàn toàn trên luồng tiền hợp lệ (nhãn chỉ dùng ở bước quét ngưỡng).'
     ],
     type: 'blue',
     fontSize: 8.3
@@ -1079,7 +1079,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 // =========================================================================
 {
   const s = pptx.addSlide();
-  addAcademicHeader(s, 'Hệ thống Demo Streamlit & Lộ trình Nghiên cứu Tương lai', 20, TOTAL_PAGES);
+  addAcademicHeader(s, 'Hệ thống Demo Streamlit & Hướng phát triển', 20, TOTAL_PAGES);
 
   // Left: Outer Video Player Device Frame
   const leftW = 5.50;
@@ -1098,7 +1098,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     fill: { color: '1E293B' },
     line: { type: 'none' }
   });
-  s.addText('🔴 LIVE DEMO  •  Streamlit Real-Time Fraud Shield  |  Latency < 0.5ms', {
+  s.addText('🔴 LIVE DEMO  •  Streamlit Real-Time Fraud Shield  |  XGBoost-SMOTE & Autoencoder', {
     x: M + 0.15, y: 1.08, w: leftW - 0.3, h: 0.30,
     fontSize: 8.8, fontFace: F.fontCode, color: '60A5FA', bold: true
   });
@@ -1147,7 +1147,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     fill: { color: '131C31' },
     line: { color: '1E293B', width: 1 }
   });
-  s.addText('3 Kịch bản: 1. Bình thường (Safe < 0.1%)  |  2. Rút cạn số dư (Fraud > 99.8%)  |  3. Batch Audit CSV', {
+  s.addText('3 Kịch bản: 1. Hợp lệ (< 0.1%)  |  2. Vét cạn số dư (88.36%)  |  3. Cận biên ban đêm (~32%)', {
     x: M + 0.20, y: 4.40, w: leftW - 0.4, h: 0.50,
     fontSize: 7.8, fontFace: F.fontCode, color: 'CBD5E1', align: 'center'
   });
@@ -1161,9 +1161,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Tổng kết Đóng góp Cốt lõi',
     bullets: [
       'Quy chuẩn Leak-Free: 80/20 Stratified Split chống rò rỉ dữ liệu.',
-      'Domain Engineering: 14 engineered features chiếm > 97% split gains.',
-      'Superior Benchmark: F1 = 99.73%, Recall = 99.51% (chỉ bỏ sót 8 ca).',
-      'Phòng thủ Đa tầng: Kết hợp XGBoost (< 0.5ms) và Autoencoder.'
+      'Đặc trưng Số dư: Nhóm số dư chiếm > 97% split gains (ghi nhận rủi ro simulator artifact).',
+      'Benchmark: F1 = 99.73%, Recall = 99.51% (Random Forest SMOTENC, 8 ca bỏ sót).',
+      'Phòng thủ Đa tầng: Phối hợp XGBoost phát hiện nhanh và Autoencoder bắt bất thường.'
     ],
     type: 'blue',
     fontSize: 8.4
@@ -1171,7 +1171,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 
   addHighlightBlock(s, {
     x: rightX, y: 3.10, w: rightW, h: 1.90,
-    title: 'Lộ trình Nghiên cứu Tương lai',
+    title: 'Hướng phát triển',
     bullets: [
       'Graph Neural Networks (GNN): GraphSAGE phát hiện rửa tiền đa tầng.',
       'Xử lý Phân tán (Kafka/Flink): Streaming hàng triệu sự kiện/giây.',
@@ -1212,7 +1212,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   });
 
   s.addText([
-    { text: '• Mã nguồn Dự án (Official Repo): ', options: { bold: true, color: '60A5FA' } },
+    { text: '• Mã nguồn Dự án (Gói nộp bài & GitHub Repo): ', options: { bold: true, color: '60A5FA' } },
     { text: 'https://github.com/uit-25730067-chithanh/CS106-Team09-Fraud-Detection\n', options: { color: '38BDF8', bold: true } },
     { text: '• PaySim Simulator: ', options: { bold: true, color: '60A5FA' } },
     { text: 'E. A. Lopez-Rojas, A. Elmir, and S. Axelsson, "PaySim: A financial mobile money simulator for fraud detection," in Proc. 28th Eur. Model. Simul. Symp., 2016, pp. 249-255.\n', options: { color: 'E2E8F0' } },
@@ -1220,7 +1220,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: 'T. Chen and C. Guestrin, "XGBoost: A scalable tree boosting system," in Proc. 22nd ACM SIGKDD, 2016, pp. 785-794.\n', options: { color: 'E2E8F0' } },
     { text: '• SMOTE Resampling: ', options: { bold: true, color: '60A5FA' } },
     { text: 'N. V. Chawla et al., "SMOTE: Synthetic minority over-sampling technique," J. Artif. Intell. Res., vol. 16, pp. 321-357, 2002.\n\n', options: { color: 'E2E8F0' } },
-    { text: 'Nhóm 09 rất mong nhận được những câu hỏi và góp ý quý báu từ Hội đồng!', options: { italic: true, color: 'FCD34D' } }
+    { text: 'Nhóm 09 rất mong nhận được những câu hỏi và góp ý quý báu từ Thầy và các bạn!', options: { italic: true, color: 'FCD34D' } }
   ], {
     x: M + 0.75, y: 2.36, w: CW - 1.5, h: 2.35,
     fontSize: 9.3, fontFace: F.fontBody, align: 'left', lineSpacingMultiple: 1.25, shrinkText: true, margin: [2, 4, 2, 4]
