@@ -329,7 +329,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 
   const agenda = [
     { num: '01', title: 'Giới thiệu & Phát biểu Bài toán', desc: 'Bối cảnh tài chính, Extreme Class Imbalance (0.13%) và Cost Asymmetry.', color: '60A5FA' },
-    { num: '02', title: 'Phân tích Khám phá Dữ liệu & Kỹ thuật Đặc trưng', desc: 'Khu biệt loại giao dịch, dấu vết rút cạn số dư và 14 engineered features.', color: '3B82F6' },
+    { num: '02', title: 'Phân tích Khám phá Dữ liệu & Kỹ thuật Đặc trưng', desc: 'Khu biệt loại giao dịch, dấu vết rút cạn số dư và 14 đặc trưng (7 dẫn xuất).', color: '3B82F6' },
     { num: '03', title: 'Phương pháp Đề xuất & Kiến trúc Pipeline', desc: 'Quy chuẩn Leak-Free, Random Forest vs. XGBoost và Deep Autoencoder.', color: '2563EB' },
     { num: '04', title: 'Kết quả Thực nghiệm & Đánh giá So sánh', desc: 'Benchmark đa chỉ số, Confusion Matrix, Feature Split Gains và Anomaly Cutoff.', color: '1D4ED8' },
     { num: '05', title: 'Hệ thống Demo & Định hướng Tương lai', desc: 'Dashboard Streamlit thời gian thực, kịch bản kiểm thử và lộ trình mở rộng GNN.', color: '1E3A8A' }
@@ -384,7 +384,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: '• Hệ thống phòng thủ đòi hỏi độ trễ suy luận real-time (< 100ms) trước khi tiền bị tẩu tán.\n\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
 
     { text: '2. Thách thức Extreme Class Imbalance (~0.13%)\n', options: { bold: true, color: C.navyTitle, fontSize: 12 } },
-    { text: '• Gian lận chỉ chiếm ~1 trên 800 giao dịch (8,213 ca trên 6.36M sự kiện trong PaySim).\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
+    { text: '• Gian lận chỉ chiếm ~1 trên 775 giao dịch (8,213 ca trên 6.36M sự kiện trong PaySim).\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
     { text: '• Cost Asymmetry: Bỏ sót gian lận (FN) gây mất vốn trực tiếp, trong khi Báo động nhầm (FP) chỉ gây gián đoạn trải nghiệm người dùng.\n\n', options: { fontSize: 10.5, color: C.textDark, lineSpacingMultiple: 1.2 } },
 
     { text: '3. Hành vi Gian lận Phi tĩnh (Non-Stationary)\n', options: { bold: true, color: C.navyTitle, fontSize: 12 } },
@@ -407,9 +407,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     x: M + 5.0, y: 2.85, w: 3.9, h: 2.2,
     title: 'Mục tiêu Nghiên cứu Cốt lõi',
     bullets: [
-      'Xây dựng end-to-end ML pipeline chuẩn, đảm bảo Leak-Free tuyệt đối.',
-      'Thiết kế 14 features bắt trọn sai lệch số dư tài khoản.',
-      'So sánh Ensemble Trees với Unsupervised Deep Autoencoder bắt Zero-Day.',
+      'Xây dựng end-to-end ML pipeline chuẩn, đảm bảo nguyên tắc phân lập dữ liệu Leak-Free.',
+      'Thiết kế 14 đặc trưng (7 dẫn xuất) bắt trọn sai lệch số dư tài khoản.',
+      'So sánh Ensemble Trees với Unsupervised Deep Autoencoder phát hiện bất thường.',
       'Triển khai interactive dashboard phục vụ ra quyết định thời gian thực.'
     ],
     fontSize: 9.5
@@ -447,7 +447,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
       { text: 'Kiểu Dữ liệu', options: { fill: { color: C.tblHdrBg }, color: 'FFFFFF', bold: true, fontSize: 9.5 } },
       { text: 'Ý nghĩa Miền & Nghiệp vụ Giao dịch', options: { fill: { color: C.tblHdrBg }, color: 'FFFFFF', bold: true, fontSize: 9.5 } }
     ],
-    [{ text: 'step', options: { bold: true, fontFace: F.fontCode } }, { text: 'Số nguyên (Integer)' }, { text: 'Bước thời gian theo giờ (1..744, tương ứng 30 ngày mô phỏng)' }],
+    [{ text: 'step', options: { bold: true, fontFace: F.fontCode } }, { text: 'Số nguyên (Integer)' }, { text: 'Bước thời gian theo giờ (1..743, tương ứng 30 ngày mô phỏng)' }],
     [{ text: 'type', options: { bold: true, color: C.dangerRed, fontFace: F.fontCode } }, { text: 'Phân loại (Categorical)' }, { text: 'Loại giao dịch: CASH_OUT, TRANSFER, PAYMENT, CASH_IN, DEBIT' }],
     [{ text: 'amount', options: { bold: true, fontFace: F.fontCode } }, { text: 'Liên tục (Continuous)' }, { text: 'Số tiền thực hiện giao dịch (đơn vị tiền tệ cục bộ)' }],
     [{ text: 'oldbalanceOrg / newbalanceOrig', options: { bold: true, fontFace: F.fontCode } }, { text: 'Liên tục (Continuous)' }, { text: 'Số dư trước và ngay sau giao dịch của tài khoản nguồn (sender)' }],
@@ -459,7 +459,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   addHighlightBlock(s, {
     x: M, y: 4.08, w: CW, h: 0.98,
     title: 'Insight Quan trọng từ Phân bố Dữ liệu',
-    text: '100% tất cả các ca gian lận trong 6.36M giao dịch CHỈ xuất hiện ở 2 loại: TRANSFER và CASH_OUT. Các loại PAYMENT, CASH_IN và DEBIT hoàn toàn an toàn (0% gian lận). Do đó, bước tiền xử lý lọc chỉ giữ lại TRANSFER & CASH_OUT giúp triệt tiêu 70% dữ liệu nhiễu.',
+    text: '100% tất cả các ca gian lận trong 6.36M giao dịch CHỈ xuất hiện ở 2 loại: TRANSFER và CASH_OUT. Các loại PAYMENT, CASH_IN và DEBIT hoàn toàn an toàn (0% gian lận). Do đó, bước tiền xử lý lọc chỉ giữ lại TRANSFER & CASH_OUT giúp loại bỏ ~56.5% giao dịch hoàn toàn không có gian lận.',
     type: 'blue',
     fontSize: 9.3
   });
@@ -472,7 +472,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   const s = pptx.addSlide();
   addSectionDivider(s, 'PHẦN 02', 'PHÂN TÍCH KHÁM PHÁ DỮ LIỆU & KỸ THUẬT ĐẶC TRƯNG', [
     'Phân tích Dấu vết Hành vi Thực nghiệm (Behavioral Signatures)',
-    'Công thức Toán học của 14 Engineered Domain Features',
+    'Công thức toán học của 14 đặc trưng miền (7 dẫn xuất)',
     'Xử lý Mất cân bằng Lớp: SMOTE vs. ADASYN Formulation'
   ]);
 }
@@ -497,7 +497,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: 'TRANSFER và CASH_OUT.\n', options: { bold: true, color: C.dangerRed } },
     { text: '• Các loại PAYMENT, CASH_IN, DEBIT hoàn toàn không có gian lận (0%).\n\n', options: { color: C.textDark } },
     { text: '• Hành động Pipeline: ', options: { bold: true, color: C.blueAccent } },
-    { text: 'Lọc tập dữ liệu chỉ giữ lại TRANSFER & CASH_OUT, triệt tiêu ngay 70% dữ liệu nhiễu vô ích.', options: { color: C.textDark } }
+    { text: 'Lọc tập dữ liệu chỉ giữ lại TRANSFER & CASH_OUT, loại bỏ ~56% giao dịch không có rủi ro gian lận.', options: { color: C.textDark } }
   ], { x: M + 0.15, y: 2.05, w: cardW - 0.3, h: cardH - 1.15, fontSize: 9.8, lineSpacingMultiple: 1.22, shrinkText: true, margin: [2, 4, 2, 4] });
 
   // Card 2: Total Account Drain
@@ -521,7 +521,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addText([
     { text: '• Tỷ lệ lớn giao dịch gian lận không làm tăng số dư tài khoản đích theo sổ sách: ', options: { color: C.textDark } },
     { text: 'newbalanceDest ≈ 0.\n', options: { bold: true, color: C.navyTitle } },
-    { text: '• Phản ánh tài khoản rác (mule account) hoặc luân chuyển rửa tiền đa tầng tức thì.\n\n', options: { color: C.textDark } },
+    { text: '• Phản ánh tài khoản rác hoặc luân chuyển rửa tiền đa tầng tức thì (diễn giải, dữ liệu mô phỏng).\n\n', options: { color: C.textDark } },
     { text: '• Tín hiệu Cốt lõi: ', options: { bold: true, color: C.blueAccent } },
     { text: 'Sai lệch số dư đích vạch trần hành vi rút tiền bất hợp pháp.', options: { color: C.textDark } }
   ], { x: M + (cardW + 0.15) * 2 + 0.15, y: 2.05, w: cardW - 0.3, h: cardH - 1.15, fontSize: 9.8, lineSpacingMultiple: 1.22, shrinkText: true, margin: [2, 4, 2, 4] });
@@ -585,7 +585,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // Top Banner: Accuracy Paradox
   s.addShape(pptx.shapes.RECTANGLE, { x: M, y: 1.08, w: CW, h: 0.72, fill: { color: C.redBox }, line: { color: C.redBorder } });
   s.addText('Accuracy Paradox trong Bài toán Phân lớp Mất cân bằng Cực đoan', { x: M + 0.15, y: 1.12, w: CW - 0.3, h: 0.20, fontSize: 10.5, bold: true, color: C.dangerRed });
-  s.addText('Một mô hình ngây thơ luôn dự đoán 100% là "Hợp lệ" vẫn đạt Accuracy 99.87% nhưng bỏ sót 100% gian lận! Do đó, đánh giá mô hình phải dẫn dắt bởi Precision, Recall, F1-Score và PR-AUC (Precision-Recall AUC).', {
+  s.addText('Một mô hình ngây thơ luôn dự đoán 100% là "Hợp lệ" vẫn đạt Accuracy 99.87% trên PaySim gốc nhưng bỏ sót 100% gian lận! Do đó, đánh giá mô hình phải dẫn dắt bởi Precision, Recall, F1-Score và PR-AUC (Precision-Recall AUC).', {
     x: M + 0.15, y: 1.34, w: CW - 0.3, h: 0.42, fontSize: 9.3, color: C.textDark, lineSpacingMultiple: 1.2
   });
 
@@ -601,7 +601,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 
   s.addText([
     { text: '• Cơ chế: ', options: { bold: true, color: C.navyTitle } },
-    { text: 'Nội suy mẫu nhân tạo thiểu số dọc theo đoạn thẳng nối các láng giềng k-NN trong Latent Space.\n\n', options: { color: C.textDark } },
+    { text: 'Nội suy mẫu nhân tạo thiểu số dọc theo đoạn thẳng nối các láng giềng k-NN trong không gian đặc trưng.\n\n', options: { color: C.textDark } },
     { text: '• Ưu điểm: ', options: { bold: true, color: C.blueAccent } },
     { text: 'Tạo Decision Boundary rõ nét, phân tách tốt giữa Fraud và Legitimate.\n\n', options: { color: C.textDark } },
     { text: '• Kết quả Thực nghiệm: ', options: { bold: true, color: C.navyTitle } },
@@ -621,7 +621,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addText('Tái lấy mẫu Mật độ ADASYN vs. Đúc kết', { x: M + colW + 0.35, y: 3.70, w: colW - 0.2, h: 0.22, fontSize: 10, bold: true, color: C.navyTitle });
   s.addText([
     { text: '• ADASYN sinh mẫu tỷ lệ thuận theo mật độ vùng biên khó, tuy nhiên dễ over-synthesize ở vùng chồng lấn nhiễu gây tăng nhẹ False Alarm.\n', options: { color: C.textDark } },
-    { text: '• Đúc kết: SMOTE ổn định và vượt trội hơn ADASYN trên cả Random Forest và XGBoost.', options: { bold: true, color: C.blueAccent } }
+    { text: '• Đúc kết: SMOTENC nhỉnh hơn nhẹ so với ADASYN trên RF và XGBoost (ít cảnh báo nhầm hơn).', options: { bold: true, color: C.blueAccent } }
   ], { x: M + colW + 0.35, y: 3.94, w: colW - 0.2, h: 1.00, fontSize: 8.8, lineSpacingMultiple: 1.18, shrinkText: true, margin: [2, 4, 2, 4] });
 }
 
@@ -647,9 +647,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   // 6 Pipeline Steps spanning the full 8.9" width
   const steps = [
     { num: '1', name: 'Filtering', desc: 'Lọc giữ lại\nTRANSFER &\nCASH_OUT', color: '60A5FA' },
-    { num: '2', name: 'Feature Eng.', desc: 'Tính toán 14\nengineered\ndomain features', color: '3B82F6' },
-    { num: '3', name: 'Stratified Split', desc: 'Phân chia chuẩn\n80% Train /\n20% Test', color: '2563EB' },
-    { num: '4', name: 'Resampling', desc: 'SMOTE / ADASYN\nCHỈ áp dụng\ntrên tập Train', color: '1D4ED8' },
+    { num: '2', name: 'Stratified Split', desc: 'Phân chia chuẩn\n80% Train /\n20% Test', color: '3B82F6' },
+    { num: '3', name: 'Feature Eng.', desc: '7 đặc trưng dẫn xuất\n→ 14 đặc trưng\nScaler fit Train', color: '2563EB' },
+    { num: '4', name: 'Resampling', desc: 'SMOTENC / ADASYN\nCHỈ áp dụng\ntrên tập Train', color: '1D4ED8' },
     { num: '5', name: 'Model Training', desc: 'Huấn luyện RF,\nXGB & Deep\nAutoencoder', color: '1E3A8A' },
     { num: '6', name: 'Evaluation', desc: 'Đánh giá độc lập\ntrên Test set\n(N=40,000)', color: '0F172A' }
   ];
@@ -683,10 +683,10 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     x: M, y: 2.98, w: CW, h: 2.02,
     title: 'Nguyên tắc Chống Rò rỉ Dữ liệu (Data Leakage)',
     bullets: [
-      'Phân tách Tập Dữ liệu Tuyệt đối: Phân chia Stratified Train/Test (80/20) được thực hiện TRƯỚC BẤT KỲ bước resampling hay chuẩn hóa nào.',
-      'Resampling Phân lập: SMOTE / ADASYN tuyệt đối CHỈ áp dụng trên tập huấn luyện (Train fold). Tập Test hoàn toàn giữ nguyên phân bố tự nhiên (0.13% fraud).',
-      'Chuẩn hóa StandardScaler: Bộ biến đổi tỷ lệ chỉ được fit trên tập Train và transform mù trên tập Test, không rò rỉ bất kỳ thông tin trung bình/độ lệch chuẩn nào.',
-      'Không tối ưu Hyperparameter trên Test Set: Toàn bộ quá trình chọn ngưỡng và tune tham số đều tuân thủ Cross-Validation nội bộ trên tập Train.'
+      'Không rò rỉ sang tập Test: Stratified Split 80/20 thực hiện TRƯỚC resampling và chuẩn hóa; scaler chỉ fit trên Train.',
+      'Resampling chỉ trên Train (SMOTENC / ADASYN). Tập Test giữ nguyên phân bố sau downsample (4.11% fraud, 1,643 ca), không chứa mẫu nhân tạo.',
+      'Giới hạn: oversampling chưa nằm trong từng fold CV nên điểm CV có thể lạc quan (báo cáo mục 4.8).',
+      'Không tối ưu hyperparameter trên Test: chọn ngưỡng và tune tham số bằng Cross-Validation nội bộ trên tập Train.'
     ],
     type: 'blue',
     fontSize: 9.3
@@ -707,9 +707,14 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.18, w: colW - 0.3, h: 0.32, fill: { color: C.navyTitle } });
   s.addText('Mô hình 1: Random Forest Ensemble', { x: M + 0.15, y: 1.18, w: colW - 0.3, h: 0.32, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
 
-  // Math Card RF
+  // Math Card RF — rendered formula image recovered from audited PPTX
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.58, w: colW - 0.3, h: 0.36, fill: { color: 'FFFFFF' }, line: { color: C.skyBorder } });
-  s.addText('Gini(D) = 1 - ∑ (p_i)²', { x: M + 0.2, y: 1.60, w: colW - 0.4, h: 0.30, fontSize: 9.5, fontFace: F.fontCode, bold: true, color: C.blueAccent });
+  const giniImg = path.join(__dirname, 'slide_assets', 'formula_rf_gini.png');
+  if (fs.existsSync(giniImg)) {
+    s.addImage({ path: giniImg, x: 0.99, y: 1.60, w: 3.03, h: 0.33 });
+  } else {
+    s.addText('Gini(D) = 1 - ∑ (p_i)²', { x: M + 0.2, y: 1.60, w: colW - 0.4, h: 0.30, fontSize: 9.5, fontFace: F.fontCode, bold: true, color: C.blueAccent });
+  }
 
   // Code Variable & Hyperparameter Badge
   s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 2.00, w: colW - 0.3, h: 0.42, fill: { color: 'F1F5F9' }, line: { color: 'CBD5E1', width: 0.5 } });
@@ -731,9 +736,14 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addShape(pptx.shapes.RECTANGLE, { x: M + colW + 0.4, y: 1.18, w: colW - 0.3, h: 0.32, fill: { color: '1D4ED8' } });
   s.addText('Mô hình 2: XGBoost Classifier (GBDT)', { x: M + colW + 0.4, y: 1.18, w: colW - 0.3, h: 0.32, fontSize: 10.5, bold: true, color: 'FFFFFF', align: 'center' });
 
-  // Math Card XGBoost
+  // Math Card XGBoost — rendered formula image recovered from audited PPTX
   s.addShape(pptx.shapes.RECTANGLE, { x: M + colW + 0.4, y: 1.58, w: colW - 0.3, h: 0.36, fill: { color: 'FFFFFF' }, line: { color: C.skyBorder } });
-  s.addText('Obj^(t) ≈ ∑ [ g_i · f_t + ½ h_i · f_t² ] + Ω(f_t)', { x: M + colW + 0.45, y: 1.60, w: colW - 0.4, h: 0.30, fontSize: 9.0, fontFace: F.fontCode, bold: true, color: C.blueAccent });
+  const xgbObjImg = path.join(__dirname, 'slide_assets', 'formula_xgb_objective.png');
+  if (fs.existsSync(xgbObjImg)) {
+    s.addImage({ path: xgbObjImg, x: 5.304, y: 1.60, w: 3.589, h: 0.30 });
+  } else {
+    s.addText('Obj^(t) ≈ ∑ [ g_i · f_t + ½ h_i · f_t² ] + Ω(f_t)', { x: M + colW + 0.45, y: 1.60, w: colW - 0.4, h: 0.30, fontSize: 9.0, fontFace: F.fontCode, bold: true, color: C.blueAccent });
+  }
 
   // Code Variable & Regularization Badge
   s.addShape(pptx.shapes.RECTANGLE, { x: M + colW + 0.4, y: 2.00, w: colW - 0.3, h: 0.42, fill: { color: 'F1F5F9' }, line: { color: 'CBD5E1', width: 0.5 } });
@@ -745,9 +755,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: '• Cơ chế: ', options: { bold: true, color: C.navyTitle } },
     { text: 'Gradient Boosting cải tiến với gradient bậc 1 (g_i) và Hessian bậc 2 (h_i), bổ sung L2 regularization chống Overfitting.\n\n', options: { color: C.textDark } },
     { text: '• Ưu thế Vượt trội: ', options: { bold: true, color: C.blueAccent } },
-    { text: 'F1-Score đạt 99.63% tương đương RF, nhưng tốc độ huấn luyện nhanh gấp khoảng 28 lần (~42s).\n\n', options: { color: C.textDark } },
+    { text: 'F1-Score đạt 99.63% tương đương RF, nhưng tốc độ huấn luyện nhanh hơn ~20 lần (57.94s; xgb_smote_summary).\n\n', options: { color: C.textDark } },
     { text: '• Production Ready: ', options: { bold: true, color: C.navyTitle } },
-    { text: 'Độ trễ suy luận < 0.5ms, lý tưởng cho cổng thanh toán real-time.', options: { color: C.textDark } }
+    { text: 'Độ trễ suy luận cỡ nửa mili-giây (mô hình thuần, 1 giao dịch, CPU).', options: { color: C.textDark } }
   ], { x: M + colW + 0.4, y: 2.50, w: colW - 0.3, h: 2.40, fontSize: 9.0, lineSpacingMultiple: 1.2, shrinkText: true, margin: [2, 4, 2, 4] });
 }
 
@@ -769,9 +779,14 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     x: M + 0.2, y: 1.45, w: leftW - 0.4, h: 0.26, fontSize: 8.5, fontFace: F.fontCode, bold: true, color: C.blueAccent
   });
 
-  // Formula Card
-  s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.80, w: leftW - 0.3, h: 0.34, fill: { color: 'FFFFFF' }, line: { color: C.redBorder } });
-  s.addText('L_rec(x, x_recon) = (1 / d) · ∑ (x_j - x_recon_j)²', { x: M + 0.2, y: 1.83, w: leftW - 0.4, h: 0.28, fontSize: 9.0, fontFace: F.fontCode, bold: true, color: C.dangerRed });
+  // Formula Card — rendered MSE image recovered from audited PPTX
+  s.addShape(pptx.shapes.RECTANGLE, { x: M + 0.15, y: 1.78, w: leftW - 0.3, h: 0.44, fill: { color: 'FFFFFF' }, line: { color: C.redBorder } });
+  const aeRecImg = path.join(__dirname, 'slide_assets', 'formula_ae_reconstruction.png');
+  if (fs.existsSync(aeRecImg)) {
+    s.addImage({ path: aeRecImg, x: 1.125, y: 1.786, w: 2.462, h: 0.428 });
+  } else {
+    s.addText('L_rec(x, x_recon) = (1 / d) · ∑ (x_j - x_recon_j)²', { x: M + 0.2, y: 1.83, w: leftW - 0.4, h: 0.28, fontSize: 9.0, fontFace: F.fontCode, bold: true, color: C.dangerRed });
+  }
 
   s.addText([
     { text: '1. Giai đoạn Học Chuẩn (Normal Manifold):\n', options: { bold: true, color: C.navyTitle } },
@@ -782,7 +797,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     { text: '• Gán cờ Gian lận nếu L_rec(x, x_recon) > τ (ngưỡng phân vị 95th: τ = 0.0455).', options: { color: C.textDark } }
   ], { x: M + 0.15, y: 2.22, w: leftW - 0.3, h: 2.70, fontSize: 9.0, lineSpacingMultiple: 1.18, shrinkText: true, margin: [2, 4, 2, 4] });
 
-  // Right Side: Unified Notation Glossary & Zero-Day Role
+  // Right Side: Unified Notation Glossary & Unsupervised Role
   const rightW = CW - leftW - 0.25;
   const rightX = M + leftW + 0.25;
 
@@ -799,7 +814,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Phát hiện Bất thường Không giám sát (Unsupervised)',
     bullets: [
       'Autoencoder đạt 75.23% Recall trên Test dù không dùng nhãn gian lận khi huấn luyện mạng.',
-      'Không phụ thuộc nhãn: Phát hiện bất thường theo nguyên lý sai số tái tạo (Reconstruction MSE).',
+      'Không phụ thuộc nhãn khi train: Phát hiện bất thường theo sai số tái tạo (nhãn chỉ dùng để chọn ngưỡng).',
       'Lớp Phòng thủ Thứ cấp (Defense-in-Depth): Đóng vai trò lưới lọc an toàn chuyển giao dịch nghi vấn sang kiểm tra chuyên sâu.'
     ],
     type: 'blue',
@@ -843,9 +858,9 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     ],
     [{ text: 'Random Forest', options: { bold: true } }, { text: 'SMOTE' }, { text: '99.94%', options: { bold: true, color: C.blueAccent } }, { text: '99.51%', options: { bold: true, color: C.blueAccent } }, { text: '99.73%', options: { bold: true, color: C.blueAccent } }, { text: '1187s' }],
     [{ text: 'Random Forest', options: { bold: true } }, { text: 'ADASYN' }, { text: '99.82%' }, { text: '99.51%' }, { text: '99.66%' }, { text: '1168s' }],
-    [{ text: 'XGBoost', options: { bold: true, color: C.navyTitle } }, { text: 'SMOTE' }, { text: '99.76%' }, { text: '99.51%' }, { text: '99.63%', options: { bold: true } }, { text: '41.7s', options: { bold: true, color: C.blueAccent } }],
-    [{ text: 'XGBoost', options: { bold: true } }, { text: 'ADASYN' }, { text: '99.57%' }, { text: '99.51%' }, { text: '99.54%' }, { text: '43.2s' }],
-    [{ text: 'Autoencoder (Zero-Day)', options: { bold: true, color: C.dangerRed } }, { text: 'None (Unsup.)' }, { text: '38.22%' }, { text: '75.23%', options: { bold: true, color: C.dangerRed } }, { text: '50.69%' }, { text: '68.4s' }]
+    [{ text: 'XGBoost', options: { bold: true, color: C.navyTitle } }, { text: 'SMOTE' }, { text: '99.76%' }, { text: '99.51%' }, { text: '99.63%', options: { bold: true } }, { text: '57.94s', options: { bold: true, color: C.blueAccent } }],
+    [{ text: 'XGBoost', options: { bold: true } }, { text: 'ADASYN' }, { text: '99.57%' }, { text: '99.51%' }, { text: '99.54%' }, { text: '45.48s' }],
+    [{ text: 'Autoencoder (Unsupervised)', options: { bold: true, color: C.dangerRed } }, { text: 'None (Unsup.)' }, { text: '38.22%' }, { text: '75.23%', options: { bold: true, color: C.dangerRed } }, { text: '50.69%' }, { text: '—' }]
   ];
 
   slideTable(s, benchTable, M, 1.08, leftW, [leftW * 0.32, leftW * 0.20, leftW * 0.12, leftW * 0.12, leftW * 0.12, leftW * 0.12], 8.2);
@@ -856,8 +871,8 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Đúc kết bảng so sánh',
     bullets: [
       'Random Forest + SMOTE đạt F1-Score đỉnh cao 99.73% nhờ cơ chế Bagging triệt tiêu phương sai.',
-      'XGBoost + SMOTE đạt hiệu năng tương đương (F1 = 99.63%) nhưng tốc độ huấn luyện nhanh gấp 28.5 lần.',
-      'Autoencoder bắt được 75.23% gian lận hoàn toàn không cần nhãn giám sát, tạo lớp phòng thủ Zero-Day vững chắc.'
+      'XGBoost + SMOTE đạt hiệu năng tương đương (F1 = 99.63%) nhưng tốc độ huấn luyện nhanh hơn ~20 lần (57.94s).',
+      'Autoencoder bắt được 75.23% gian lận hoàn toàn không cần nhãn giám sát, tạo lớp phòng thủ phát hiện bất thường thứ cấp.'
     ],
     type: 'blue',
     fontSize: 8.6
@@ -879,7 +894,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Phân tích Biểu đồ',
     bullets: [
       'Cột Precision & Recall của RF và XGBoost vượt trội trên 99.5%, khẳng định tính khả thi triển khai thực tế.',
-      'Autoencoder hy sinh Precision (38.2%) để duy trì Recall cao (75.2%) nhằm phòng ngừa triệt để tổn thất tài chính.'
+      'Autoencoder hy sinh Precision (38.2%) để duy trì Recall cao (75.2%) nhằm giảm bỏ sót.'
     ],
     type: 'blue',
     fontSize: 8.4
@@ -925,13 +940,13 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   s.addShape(pptx.shapes.RECTANGLE, { x: M + cardW + 0.15, y: cardY, w: cardW, h: cardH, fill: { color: C.skyBox }, line: { color: C.skyBorder } });
   s.addText('XGBoost + SMOTE (Sản xuất)', { x: M + cardW + 0.25, y: cardY + 0.08, w: cardW - 0.2, h: 0.20, fontSize: 9.5, bold: true, color: C.navyTitle });
   s.addText('TP: 1,635  •  FP: 4\nFN: 8  •  TN: 38,353', { x: M + cardW + 0.25, y: cardY + 0.28, w: cardW - 0.2, h: 0.38, fontSize: 8.5, fontFace: F.fontCode, bold: true, color: C.blueAccent });
-  s.addText('• Chỉ 4 ca cảnh báo nhầm, đồng thời bắt trúng 1,635 ca gian lận.\n• Độ trễ suy luận < 0.5ms — cấu hình tối ưu nhất cho môi trường thực tế.', {
+  s.addText('• Chỉ 4 ca cảnh báo nhầm, đồng thời bắt trúng 1,635 ca gian lận.\n• Độ trễ cỡ nửa mili-giây (mô hình thuần, 1 giao dịch, CPU).', {
     x: M + cardW + 0.25, y: cardY + 0.68, w: cardW - 0.2, h: cardH - 0.72, fontSize: 8.2, color: C.textDark, lineSpacingMultiple: 1.15, shrinkText: true, margin: [2, 4, 2, 4]
   });
 
   // Card 3: Deep Autoencoder
   s.addShape(pptx.shapes.RECTANGLE, { x: M + (cardW + 0.15) * 2, y: cardY, w: cardW, h: cardH, fill: { color: C.redBox }, line: { color: C.redBorder } });
-  s.addText('Deep Autoencoder (Zero-Day)', { x: M + (cardW + 0.15) * 2 + 0.1, y: cardY + 0.08, w: cardW - 0.2, h: 0.20, fontSize: 9.5, bold: true, color: C.dangerRed });
+  s.addText('Deep Autoencoder (Unsupervised)', { x: M + (cardW + 0.15) * 2 + 0.1, y: cardY + 0.08, w: cardW - 0.2, h: 0.20, fontSize: 9.5, bold: true, color: C.dangerRed });
   s.addText('TP: 1,236  •  FP: 1,998\nFN: 407  •  TN: 36,359', { x: M + (cardW + 0.15) * 2 + 0.1, y: cardY + 0.28, w: cardW - 0.2, h: 0.38, fontSize: 8.5, fontFace: F.fontCode, bold: true, color: C.dangerRed });
   s.addText('• Bắt 1,236 ca gian lận trong điều kiện học không giám sát.\n• Đóng vai trò màng lọc an toàn thứ cấp cho các mẫu tấn công phi quy ước.', {
     x: M + (cardW + 0.15) * 2 + 0.1, y: cardY + 0.68, w: cardW - 0.2, h: cardH - 0.72, fontSize: 8.2, color: C.textDark, lineSpacingMultiple: 1.15, shrinkText: true, margin: [2, 4, 2, 4]
@@ -1027,7 +1042,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     title: 'Nguyên lý Phân tách Phân bố Sai số',
     bullets: [
       'Giao dịch hợp lệ (Xanh) tập trung ở vùng sai số MSE cực thấp (< 0.02).',
-      'Giao dịch gian lận (Đỏ) có sai số tái tạo trải dài sang phải do cấu trúc dòng tiền dị biệt không thể nén qua bottleneck.'
+      'Giao dịch gian lận (Đỏ) có sai số tái tạo trải dài sang phải; trục x cắt ở 0.18 nên 37.6% ca gian lận nằm ngoài hình.'
     ],
     type: 'blue',
     fontSize: 8.3
@@ -1068,7 +1083,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
 {
   const s = pptx.addSlide();
   addSectionDivider(s, 'PHẦN 05', 'HỆ THỐNG DEMO & ĐỊNH HƯỚNG TƯƠNG LAI', [
-    'Kiến trúc Dashboard Streamlit Real-Time Inference & Batch CSV Scoring',
+    'Dashboard Streamlit suy luận XGBoost & nhập dữ liệu mẫu CSV/JSON (tối đa 50 mẫu)',
     'Tổng kết Đóng góp Học thuật & Quy chuẩn Kỹ thuật Cốt lõi',
     'Hạn chế Nghiên cứu & Lộ trình Mở rộng Graph Neural Networks (GNN)'
   ]);
@@ -1081,7 +1096,7 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
   const s = pptx.addSlide();
   addAcademicHeader(s, 'Hệ thống Demo Streamlit & Hướng phát triển', 20, TOTAL_PAGES);
 
-  // Left: Outer Video Player Device Frame
+  // Left: Demo UI screenshot filling the frame (no chrome captions)
   const leftW = 5.50;
   const leftH = 3.92;
 
@@ -1092,65 +1107,18 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     rectRadius: 0.12
   });
 
-  // Top Status Bar of Player
-  s.addShape(pptx.shapes.RECTANGLE, {
-    x: M, y: 1.08, w: leftW, h: 0.30,
-    fill: { color: '1E293B' },
-    line: { type: 'none' }
-  });
-  s.addText('🔴 LIVE DEMO  •  Streamlit Real-Time Fraud Shield  |  XGBoost-SMOTE & Autoencoder', {
-    x: M + 0.15, y: 1.08, w: leftW - 0.3, h: 0.30,
-    fontSize: 8.8, fontFace: F.fontCode, color: '60A5FA', bold: true
-  });
-
-  // TRUE 16:9 SCREEN BOX (Width: 5.12", Height: 2.88" -> Exact 16:9 Ratio!)
-  const screenW = 5.12;
-  const screenH = 2.88; // 5.12 * 9 / 16 = 2.88
-  const screenX = M + (leftW - screenW) / 2;
-  const screenY = 1.45;
-
-  s.addShape(pptx.shapes.RECTANGLE, {
-    x: screenX, y: screenY, w: screenW, h: screenH,
-    fill: { color: '0B1120' },
-    line: { color: '38BDF8', width: 1.5 }
-  });
-
-  // Center Play Icon & 16:9 Watermark inside Video Screen
-  s.addText('▶', {
-    x: screenX, y: screenY + 0.35, w: screenW, h: 0.65,
-    fontSize: 36, color: '38BDF8', align: 'center', bold: true
-  });
-  s.addText('[ KHUNG CHÈN VIDEO DEMO STREAMLIT ]\n(Tỷ lệ Chuẩn 16:9 — 1920×1080 / 1280×720 MP4/GIF)', {
-    x: screenX + 0.15, y: screenY + 1.05, w: screenW - 0.3, h: 0.55,
-    fontSize: 10, fontFace: 'Segoe UI', color: 'E2E8F0', align: 'center', bold: true, lineSpacingMultiple: 1.2
-  });
-  s.addText('Giao diện phân tích rủi ro thời gian thực & Chấm điểm Batch CSV', {
-    x: screenX + 0.15, y: screenY + 1.68, w: screenW - 0.3, h: 0.25,
-    fontSize: 8.5, fontFace: 'Segoe UI', color: '94A3B8', align: 'center', italic: true
-  });
-
-  // Bottom 16:9 Aspect Ratio Pill Badge
-  s.addShape(pptx.shapes.ROUNDED_RECTANGLE, {
-    x: screenX + (screenW - 2.2) / 2, y: screenY + 2.15, w: 2.2, h: 0.32,
-    fill: { color: '1E293B' },
-    line: { color: '64748B', width: 0.8 },
-    rectRadius: 0.08
-  });
-  s.addText('HD 1080p  •  TỶ LỆ 16:9', {
-    x: screenX + (screenW - 2.2) / 2, y: screenY + 2.15, w: 2.2, h: 0.32,
-    fontSize: 8.2, fontFace: F.fontCode, color: '38BDF8', align: 'center', bold: true
-  });
-
-  // Bottom Ticker Bar inside Video Frame
-  s.addShape(pptx.shapes.RECTANGLE, {
-    x: M + 0.15, y: 4.40, w: leftW - 0.3, h: 0.50,
-    fill: { color: '131C31' },
-    line: { color: '1E293B', width: 1 }
-  });
-  s.addText('3 Kịch bản: 1. Hợp lệ (< 0.1%)  |  2. Vét cạn số dư (88.36%)  |  3. Cận biên ban đêm (~32%)', {
-    x: M + 0.20, y: 4.40, w: leftW - 0.4, h: 0.50,
-    fontSize: 7.8, fontFace: F.fontCode, color: 'CBD5E1', align: 'center'
-  });
+  const demoUiImg = path.join(__dirname, 'slide_assets', 'demo_ui_slide20.png');
+  if (fs.existsSync(demoUiImg)) {
+    s.addImage({
+      path: demoUiImg,
+      x: M + 0.06, y: 1.14, w: leftW - 0.12, h: leftH - 0.12
+    });
+  } else {
+    s.addText('[ Ảnh giao diện Demo Streamlit ]', {
+      x: M, y: 2.70, w: leftW, h: 0.40,
+      fontSize: 12, fontFace: 'Segoe UI', color: 'E2E8F0', align: 'center', bold: true
+    });
+  }
 
   // Right Side: Contributions & Roadmap
   const rightW = CW - leftW - 0.25;
@@ -1160,10 +1128,10 @@ function slideTable(slide, rows, x, y, w, colWidths, fontSize = 8.5) {
     x: rightX, y: 1.08, w: rightW, h: 1.90,
     title: 'Tổng kết Đóng góp Cốt lõi',
     bullets: [
-      'Quy chuẩn Leak-Free: 80/20 Stratified Split chống rò rỉ dữ liệu.',
-      'Đặc trưng Số dư: Nhóm số dư chiếm > 97% split gains (ghi nhận rủi ro simulator artifact).',
+      'Không rò rỉ sang Test: split 80/20 trước, scaler và oversampling chỉ trên Train.',
+      'Đặc trưng Số dư: Nhóm số dư chiếm > 97% split gains (rủi ro simulator artifact, Mục 3.6.2).',
       'Benchmark: F1 = 99.73%, Recall = 99.51% (Random Forest SMOTENC, 8 ca bỏ sót).',
-      'Phòng thủ Đa tầng: Phối hợp XGBoost phát hiện nhanh và Autoencoder bắt bất thường.'
+      'Demo suy luận bằng XGBoost-SMOTE; Autoencoder dùng để so sánh bất thường, không phải model chọn trên UI.'
     ],
     type: 'blue',
     fontSize: 8.4
