@@ -3,23 +3,69 @@
 ## Đề tài: Hệ Thống Phát Hiện Gian Lận Tài Chính Trên Dữ Liệu PaySim Bằng Machine Learning & Deep Learning
 
 **Môn học:** CS106 - Trí tuệ Nhân tạo | **GVHD:** PGS.TS. Nguyễn Đình Hiển  
-**Nhóm thực hiện:** Nhóm 09 (7 thành viên)
+**Nhóm thực hiện:** Nhóm 09 (7 thành viên)  
+**Phiên bản:** Hiệu chỉnh theo dữ liệu thực nghiệm chạy thử (Meeting Dry-Run 18/09/2026)
 
 ---
 
-## 👥 BẢNG PHÂN CÔNG THUYẾT TRÌNH CHUẨN THEO TASKS ĐỒ ÁN FINAL
+> ⏱️ **KẾT QUẢ ĐO ĐẠC & HIỆU CHỈNH THỜI LƯỢNG THỰC TẾ (TỪ CUỘC HỌP DRY-RUN 18/09/2026):**
+>
+> - **Căn cứ thực nghiệm:** Dữ liệu bóc tách từ file ghi âm cuộc họp diễn tập toàn team `Meeting in [Nhóm 14-15] _ Trí tuệ nhân tạo - CS106.F31.CN2.TTNT.docx` (tổng thời lượng 49 phút 48 giây).
+> - **Tổng thời gian nói thuần vòng chạy thử 1:** **35 phút 02 giây** (2,102 giây / 5,183 từ phát biểu). Nếu tính cả sự cố chia sẻ màn hình và gián đoạn chuyển slide: **~40 phút**.
+> - **Tốc độ nói thực tế (Empirical WPM - Words Per Minute):**
+>   - **Đặng Chí Thanh:** **186.2 WPM** (~3.10 từ/giây) — *Tốc độ nói nhanh nhất nhóm, diễn giải sâu và nhiều số liệu*.
+>   - **Trần Hoàng Hôn:** **156.4 WPM** (~2.61 từ/giây) — *Phong thái tự nhiên, kết nối tốt, giới thiệu chi tiết từng thành viên*.
+>   - **Hoàng Cao Sơn:** **152.3 WPM** (~2.54 từ/giây) — *Tốc độ đều, phân tích sâu cơ chế SMOTE/ADASYN và 4 nguyên tắc Leak-Free*.
+>   - **Phạm Thành Trung:** **147.0 WPM** (~2.45 từ/giây) — *Thuyết minh thao tác trực tiếp trên giao diện Streamlit (Live Demo hết 5m04s)*.
+>   - **Bùi Thị Mỷ Cẩm:** **135.5 WPM** (~2.26 từ/giây) — *Giọng rõ ràng, chuẩn mực kỹ thuật, trình bày Autoencoder và phân vị ngưỡng*.
+>   - **Nguyễn Duy Khang:** **119.8 WPM** (~2.00 từ/giây) — *Nhịp nói điềm đạm, nhấn mạnh rành mạch từng chỉ số và ma trận nhầm lẫn*.
+>   - **Vũ Văn Duy:** **72.9 WPM** (lần đầu lúng túng) ➔ **Chuẩn hóa ~115 WPM** (~1.92 từ/giây) *khi trình bày 3 kịch bản kiểm thử*.
+> - **Mục tiêu tối ưu sau cuộc họp (Target Calibrated):** **~23 – 25 phút** (cô đọng số liệu chi tiết đã có sẵn trên slide, lược bớt định nghĩa lý thuyết, và tối ưu Live Demo Streamlit gọn gàng trong ~3 phút).
 
-_(Căn cứ theo phân công chính thức trong `plans/fraud-detection-full-submit/plan.md` & `AGENTS.md`)_
+---
 
-| STT | Thành viên                        | Task chính trong Đồ án Final                                   | Slide phụ trách                   | Nội dung thuyết trình phụ trách                                                                                                                     |
-| :-- | :-------------------------------- | :------------------------------------------------------------- | :-------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | **Trần Hoàng Hôn** _(26410046)_   | **PM + PPT + Submit Package** _(Phase 07 & 08)_                | **Slide 1, 2, 21**                | Mở đầu, Giới thiệu thành viên, Lộ trình báo cáo & Tổng kết, Cảm ơn, Điều phối Q&A                                                                   |
-| 2   | **Đặng Chí Thanh** _(25730067)_   | **EDA + Preprocessing + 14 Features** _(Phase 00 & 01)_        | **Slide 3, 4, 5, 6, 7, 8**        | Phần 1: Bối cảnh, Thách thức Imbalance & Dữ liệu PaySim.<br>Phần 2: Khám phá EDA, 3 Dấu vết hành vi & Kỹ thuật 14 đặc trưng miền                    |
-| 3   | **Hoàng Cao Sơn** _(25730061)_    | **Imbalance (SMOTE/ADASYN) + Random Forest** _(Phase 02 & 03)_ | **Slide 9, 10, 11, 12 (phần RF)** | Phần 2: Xử lý mất cân bằng SMOTE vs. ADASYN.<br>Phần 3: Kiến trúc Pipeline chuẩn Leak-Free & Mô hình Random Forest                                  |
-| 4   | **Bùi Thị Mỷ Cẩm** _(25730013)_   | **XGBoost + Deep Autoencoder** _(Phase 04)_                    | **Slide 12 (phần XGB), 13, 18**   | Phần 3: Mô hình XGBoost siêu tốc (41.7s) & Mô hình không giám sát Deep Autoencoder bắt Zero-Day.<br>Phần 4: Phân bố sai số tái tạo & Ngưỡng Anomaly |
-| 5   | **Nguyễn Duy Khang** _(26410055)_ | **Evaluation & Cross-Model Comparison** _(Phase 05)_           | **Slide 14, 15, 16, 17**          | Phần 4: Nghiệm thu thực nghiệm, Đối chuẩn đa chỉ số Benchmark, Phân tích Ma trận nhầm lẫn & Feature Importance (97.1%)                              |
-| 6   | **Phạm Thành Trung** _(26410141)_ | **Demo UI Streamlit** _(Phase 06)_                             | **Slide 19, 20 (phần Dashboard)** | Phần 5: Trình diễn Giao diện GUI Dashboard Streamlit (Chấm điểm tức thì & Batch CSV)                                                                |
-| 7   | **Vũ Văn Duy** _(26410031)_       | **Báo cáo Word + Test Cases & Demo Video** _(Phase 07)_        | **Slide 20 (phần Test & Video)**  | Phần 5: Trình bày 3 Kịch bản Test Case (An toàn, Rút cạn, Zero-Day), Video Demo hoạt động & Tổng kết đóng góp                                       |
+## 👥 BẢNG PHÂN CÔNG THUYẾT TRÌNH & THỜI LƯỢNG CHUẨN HÓA
+
+_(Căn cứ phân công chính thức trong `AGENTS.md`, `plan.md` và thống nhất tại buổi họp 18/09/2026)_
+
+| STT | Thành viên | Task chính trong Đồ án | Slide phụ trách | Tốc độ thực tế (WPM) | Thời lượng mục tiêu | Nội dung thuyết trình phụ trách |
+| :-- | :--- | :--- | :---: | :---: | :---: | :--- |
+| 1 | **Trần Hoàng Hôn** *(26410046)* | **PM + PPT + Submit Package** *(Phase 07 & 08)* | **Slide 1, 2, 21** | 156.4 WPM | **~3m00s** (180s) | Mở đầu, Giới thiệu thành viên, Lộ trình báo cáo & Tổng kết, Cảm ơn, Điều phối phiên Q&A |
+| 2 | **Đặng Chí Thanh** *(25730067)* | **EDA + Preprocessing + 14 Features** *(Phase 00 & 01)* | **Slide 3, 4, 5, 6, 7, 8** | 186.2 WPM | **~5m30s** (330s) | Phần 1: Bối cảnh, Thách thức Imbalance & Dữ liệu PaySim.<br>Phần 2: Khám phá EDA, 3 Dấu vết hành vi & Kỹ thuật 14 đặc trưng miền kế toán |
+| 3 | **Hoàng Cao Sơn** *(25730061)* | **Imbalance (SMOTE/ADASYN) + Random Forest** *(Phase 02 & 03)* | **Slide 9, 10, 11, 12 (phần RF)** | 152.3 WPM | **~3m45s** (225s) | Phần 2: Xử lý mất cân bằng SMOTENC vs. ADASYN.<br>Phần 3: Kiến trúc Pipeline chuẩn Leak-Free (4 chốt chặn) & Mô hình Random Forest |
+| 4 | **Bùi Thị Mỷ Cẩm** *(25730013)* | **XGBoost + Deep Autoencoder** *(Phase 04)* | **Slide 12 (phần XGB), 13, 18** | 135.5 WPM | **~3m55s** (235s) | Phần 3: Mô hình XGBoost siêu tốc (41.7s) & Mô hình không giám sát Deep Autoencoder bắt Zero-Day.<br>Phần 4: Phân bố sai số tái tạo MSE & Ngưỡng Anomaly |
+| 5 | **Nguyễn Duy Khang** *(26410055)* | **Evaluation & Cross-Model Comparison** *(Phase 05)* | **Slide 14, 15, 16, 17** | 119.8 WPM | **~4m30s** (270s) | Phần 4: Nghiệm thu thực nghiệm, Đối chuẩn đa chỉ số Benchmark, Phân tích Ma trận nhầm lẫn & Feature Importance (97.1%) |
+| 6 | **Vũ Văn Duy** *(26410031)* | **Báo cáo Word + Test Scenarios** *(Phase 07)* | **Slide 20 (Phần Test Cases)** | ~115.0 WPM | **~1m25s** (85s) | Phần 5: Trình bày chi tiết 3 Kịch bản Kiểm thử Thực tế (Giao dịch an toàn, Gian lận rút cạn, Bất thường Zero-Day) trước khi Demo |
+| 7 | **Phạm Thành Trung** *(26410141)* | **Demo UI Streamlit + Video Clip** *(Phase 06)* | **Slide 19, 20 (Live Demo & Đóng góp)** | 147.0 WPM | **~3m20s** (200s) | Phần 5: Chuyển giao màn hình, thao tác Trực tiếp Live Demo Streamlit Dashboard theo 3 kịch bản, 3 góc nhìn trực quan, phân tích lịch sử & Tổng kết 4 đóng góp |
+
+---
+
+## 📊 BẢNG ĐỐI CHUẨN THỜI LƯỢNG CHI TIẾT TỪNG SLIDE (THEO DỮ LIỆU THỰC TẾ)
+
+| Slide | Tiêu đề Slide | Người nói | Số từ Script | Tốc độ đo được | Thời lượng cũ (bản nháp) | Thực tế chạy thử trong Meeting | Thời lượng chuẩn hóa mục tiêu | Ghi chú & Rút kinh nghiệm từ Cuộc họp |
+| :---: | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :--- |
+| **01** | Tiêu đề & Giới thiệu thành viên | Trần Hoàng Hôn | 243 từ | 156.4 WPM | ~60s | *110s (chung S1-S2: 196s)* | **~95s – 100s** (~1m35s) | Giới thiệu 7 thành viên mạch lạc, phát âm chuẩn tên và nhiệm vụ |
+| **02** | Nội dung báo cáo & Lộ trình (Agenda) | Trần Hoàng Hôn | 157 từ | 156.4 WPM | ~40s | *86s* | **~60s – 65s** (~1m00s) | Đi nhanh 5 phần chính, chuyển giao dứt khoát cho Thanh |
+| **03** | Phần 1: Tổng quan đề tài & Dữ liệu | Đặng Chí Thanh | 48 từ | 186.2 WPM | ~10s | *15s* | **~15s** | Lời chào và mở đầu Phần 1 ngắn gọn, dứt khoát |
+| **04** | Động lực nghiên cứu & Thách thức kỹ thuật | Đặng Chí Thanh | 301 từ | 186.2 WPM | ~60s | *118s* | **~95s – 100s** (~1m35s) | Nhấn mạnh 3 thách thức: Imbalance 0.13%, Cost Asymmetry, Non-stationarity |
+| **05** | Tập dữ liệu PaySim: Thuộc tính thống kê | Đặng Chí Thanh | 189 từ | 186.2 WPM | ~50s | *94s* | **~60s – 65s** (~1m00s) | Rút kinh nghiệm: Nhấn mạnh 100% gian lận ở TRANSFER & CASH_OUT, lướt qua bảng thuộc tính thô |
+| **06** | Phần 2: Tiền xử lý & Kỹ thuật đặc trưng | Đặng Chí Thanh | 31 từ | 186.2 WPM | ~10s | *10s* | **~10s** | Chuyển tiếp nhanh vào 3 dấu vết hành vi |
+| **07** | Phân tích EDA: 3 Dấu vết hành vi cốt lõi | Đặng Chí Thanh | 242 từ | 186.2 WPM | ~60s | *110s* | **~75s – 80s** (~1m15s) | Nêu bật: Khoanh vùng 2 loại giao dịch, Rút cạn số dư 97.56%, Lệch số dư tài khoản đích |
+| **08** | Kỹ thuật đặc trưng: 14 thuộc tính cốt lõi | Đặng Chí Thanh | 213 từ | 186.2 WPM | ~60s | *127s* | **~70s – 75s** (~1m10s) | Rút kinh nghiệm: Không đọc lại công thức, chỉ nhấn mạnh `errorBalanceOrig` & `newbalanceOrig` chiếm >97% |
+| **09** | Xử lý mất cân bằng lớp: SMOTE & ADASYN | Hoàng Cao Sơn | 186 từ | 152.3 WPM | ~50s | *153s* | **~75s – 80s** (~1m15s) | Rút kinh nghiệm: Giảm giải thích khái niệm lý thuyết, nói thẳng lý do chọn SMOTENC (không méo biên, giữ nguyên 0/1) |
+| **10** | Phần 3: Phương pháp & Mô hình học máy | Hoàng Cao Sơn | 24 từ | 152.3 WPM | ~10s | *10s* | **~10s** | Cầu nối ngắn gọn sang kiến trúc Pipeline |
+| **11** | Kiến trúc Pipeline chuẩn Leak-Free | Hoàng Cao Sơn | 212 từ | 152.3 WPM | ~60s | *140s* | **~85s – 90s** (~1m25s) | Nêu bật 4 chốt chặn bảo vệ tính trung thực: Split trước, Resample train-only, Scaler độc lập, CV nội bộ |
+| **12** | Mô hình giám sát: Random Forest & XGBoost | Sơn (RF) / Cẩm (XGB) | 211 từ | Sơn: 152 WPM<br>Cẩm: 136 WPM | ~60s | *200s (Sơn 134s + Cẩm 66s)* | **~90s – 95s**<br>*(Sơn ~40s, Cẩm ~50s)* | Sơn chốt RF (F1 99.73% nhưng mất 20p train) ➔ Cẩm tiếp lời XGBoost (F1 99.63% chỉ 41.7s, latency <0.5ms) |
+| **13** | Mô hình không giám sát: Deep Autoencoder | Bùi Thị Mỷ Cẩm | 247 từ | 135.5 WPM | ~60s | *85s* | **~105s – 110s** (~1m45s) | Đặt câu hỏi bắt Zero-Day, kiến trúc đối xứng 14-8-4-8-14, nguyên lý lỗi tái tạo MSE tăng vọt, Recall 75.23% |
+| **14** | Phần 4: Kết quả thực nghiệm & Phân tích | Nguyễn Duy Khang | 50 từ | 119.8 WPM | ~10s | *25s* | **~25s** | Mở đầu module đánh giá độc lập |
+| **15** | Bảng so sánh đa chỉ số Benchmark | Nguyễn Duy Khang | 165 từ | 119.8 WPM | ~60s | *80s* | **~80s – 85s** (~1m20s) | Rút kinh nghiệm: Tập trung vào mô hình tốt nhất (RF F1 99.73%, XGB 99.63% siêu tốc), lướt các chỉ số phụ |
+| **16** | Phân tích Ma trận nhầm lẫn & Đánh đổi sai số | Nguyễn Duy Khang | 171 từ | 119.8 WPM | ~60s | *80s* | **~80s – 85s** (~1m20s) | Phân tích TP/FN/FP của RF (lọt 8 vụ, nhầm 1 ca), XGBoost (lọt 8, nhầm 4 ca) và Autoencoder (bắt 1,236 vụ không nhãn) |
+| **17** | Phân tích đóng góp đặc trưng (Feature Importance) | Nguyễn Duy Khang | 172 từ | 119.8 WPM | ~50s | *82s* | **~80s – 85s** (~1m20s) | Chốt hạ thông điệp: Kẻ gian chia nhỏ tiền được nhưng không xóa được sai lệch kế toán (2 đặc trưng chiếm 97.1%) |
+| **18** | Phân bố sai số tái tạo & Ngưỡng Anomaly | Bùi Thị Mỷ Cẩm | 155 từ | 122.3 WPM | ~50s | *104s* | **~75s – 80s** (~1m15s) | Biểu đồ phân bố MSE tách biệt và quyết định chọn điểm cắt phân vị 95th (tau = 0.0455) |
+| **19** | Phần 5: Demo hệ thống & Kết luận | Phạm Thành Trung | 40 từ | 147.0 WPM | ~10s | *Chuyển share màn hình* | **~20s** | Bắt nhịp, mở đầu chuyển sang phần kiểm thử và trình diễn ứng dụng |
+| **20** | Hệ thống Demo Streamlit & Kịch bản kiểm thử | Duy (Test Cases)<br>Trung (Live Demo) | 359 từ + Live Demo | Duy: ~115 WPM<br>Trung: 147 WPM | ~75s *(quá phi lý)* | *Duy: 149s<br>Trung Demo: 304s<br>(Tổng: 453s = 7m33s)* | **~240s – 270s** (~4m00s – 4m30s)<br>*(Duy ~85s, Trung Demo ~160s-185s)* | **Thống nhất thứ tự mới:** Duy trình bày 3 Kịch bản trước ➔ Trung thao tác Live Demo Streamlit trên 3 kịch bản đó ➔ Trung tổng kết 4 đóng góp |
+| **21** | Tổng kết, Tài liệu tham khảo & Phiên hỏi đáp | Trần Hoàng Hôn | 93 từ | 156.4 WPM | ~45s | *Chốt kết thúc buổi họp* | **~45s – 50s** | Cảm ơn Thầy và các bạn, mở phiên thảo luận & phản biện Q&A |
+| **TỔNG CỘNG** | **Toàn bộ bài báo cáo 21 Slides + Live Demo** | **7 thành viên** | **3,000+ từ** | **Trung bình ~145 WPM** | **~15 phút 50s** *(Ước tính cũ)* | **~35m02s** *(Meeting nói thuần)*<br>**~40 phút** *(Gồm chuyển giao)* | **~23 phút 30s – 25 phút** *(Chuẩn hóa tối ưu thực tế)* | **Đạt tiêu chuẩn vàng cho buổi bảo vệ đồ án chuyên sâu môn Trí tuệ Nhân tạo tại UIT!** |
 
 ---
 
@@ -29,21 +75,21 @@ _(Căn cứ theo phân công chính thức trong `plans/fraud-detection-full-sub
 
 ### SLIDE 1 – TRANG TIÊU ĐỀ & GIỚI THIỆU THÀNH VIÊN
 
-_(Thời lượng: ~60s | Người nói: **Trần Hoàng Hôn** - PM / Trưởng nhóm)_
+_(Thời lượng chuẩn hóa: **~95s – 100s** [Meeting thực tế: ~110s] | Người nói: **Trần Hoàng Hôn** - PM / Trưởng nhóm)_
 
 Em chào thầy và các bạn,
 
-Em là **Trần Hoàng Hôn**, trưởng nhóm của **Nhóm 9**. Hôm nay, nhóm chúng em xin được phép trình bày báo cáo đồ án cuối kỳ môn Trí tuệ Nhân tạo với đề tài: **"Hệ thống phát hiện gian lận tài chính trên dữ liệu giao dịch PaySim bằng Machine Learning và Deep Learning"**.
+Em là **Trần Hoàng Hôn**, trưởng nhóm của **Nhóm 9**. Hôm nay, nhóm chúng em xin trình bày báo cáo đồ án cuối kỳ môn Trí tuệ Nhân tạo với đề tài: **"Hệ thống phát hiện gian lận tài chính trên dữ liệu giao dịch PaySim bằng Machine Learning và Deep Learning"**.
 
-Trước khi đi vào nội dung chi tiết, em xin phép giới thiệu nhanh 7 thành viên của Nhóm và phần việc mà từng bạn trực tiếp đảm nhận trong đồ án:
+Trước khi đi vào nội dung chi tiết, em xin phép giới thiệu 7 thành viên của Nhóm và nhiệm vụ cụ thể của từng bạn:
 
-- Bạn **Đặng Chí Thanh** — phụ trách phần **EDA, Tiền xử lý dữ liệu và Kỹ thuật trích xuất 14 đặc trưng**.
-- Bạn **Hoàng Cao Sơn** — phụ trách phần **Xử lý mất cân bằng dữ liệu SMOTE(X-mốt)/ADASYN(A-đa-sin) và huấn luyện mô hình Random Forest**.
-- Bạn **Bùi Thị Mỷ Cẩm** — phụ trách huấn luyện mô hình **XGBoost, mạng Deep Autoencoder không giám sát** và xuất các file model.
-- Bạn **Nguyễn Duy Khang** — phụ trách xây dựng module **Đánh giá kiểm thử, vẽ đồ thị ROC-AUC(Rốc - Ây-Du-Xi) và lập bảng đối chuẩn so sánh giữa các mô hình**.
-- Bạn **Phạm Thành Trung** — phụ trách lập trình **Giao diện Dashboard Streamlit thời gian thực** để tích hợp mô hình.
-- Bạn **Vũ Văn Duy** — phụ trách soạn thảo **Báo cáo kỹ thuật, thiết kế kịch bản test case và quay video demo**.
-- Và cuối cùng là em — **Trần Hoàng Hôn**, phụ trách quản lý tiến độ, thiết kế slide thuyết trình và đóng gói sản phẩm.
+- Bạn **Đặng Chí Thanh** — phụ trách phần **EDA, Tiền xử lý dữ liệu và trích xuất 14 đặc trưng miền kế toán**.
+- Bạn **Hoàng Cao Sơn** — phụ trách **Xử lý mất cân bằng dữ liệu bằng SMOTENC/ADASYN và huấn luyện mô hình Random Forest**.
+- Bạn **Bùi Thị Mỷ Cẩm** — phụ trách huấn luyện mô hình **XGBoost siêu tốc, mạng Deep Autoencoder không giám sát** và xuất các file model artifact.
+- Bạn **Nguyễn Duy Khang** — phụ trách xây dựng module **Đánh giá kiểm thử độc lập, vẽ biểu đồ ROC/PR và lập bảng đối chuẩn giữa các mô hình**.
+- Anh **Vũ Văn Duy** — phụ trách biên soạn **Báo cáo khoa học Word chuẩn UIT và thiết kế 3 kịch bản kiểm thử Test Cases**.
+- Bạn **Phạm Thành Trung** — phụ trách **Lập trình giao diện Dashboard Streamlit thời gian thực và thực hiện Live Demo**.
+- Và cuối cùng là em — **Trần Hoàng Hôn**, phụ trách quản lý tiến độ, thiết kế slide thuyết trình học thuật và đóng gói sản phẩm giao nộp.
 
 Sau đây, em xin phép bắt đầu buổi báo cáo ạ.
 
@@ -51,299 +97,341 @@ Sau đây, em xin phép bắt đầu buổi báo cáo ạ.
 
 ### SLIDE 2 – NỘI DUNG BÁO CÁO & LỘ TRÌNH (AGENDA)
 
-_(Thời lượng: ~40s | Người nói: **Trần Hoàng Hôn**)_
+_(Thời lượng chuẩn hóa: **~60s – 65s** [Meeting thực tế: ~86s] | Người nói: **Trần Hoàng Hôn**)_
 
-Để thầy và các bạn tiện theo dõi, bài thuyết trình của nhóm em sẽ đi qua **5 phần chính**:
+Để Thầy và các bạn tiện theo dõi, bài thuyết trình của nhóm em sẽ đi qua **5 phần chính**:
 
-- **Phần 1**: Bạn Thanh sẽ giới thiệu bối cảnh bài toán gian lận tài chính và tập dữ liệu PaySim.
-- **Phần 2**: Bạn Thanh và bạn Sơn sẽ phân tích các dấu vết hành vi của kẻ gian, 14 đặc trưng miền kế toán và cách xử lý mất cân bằng dữ liệu.
-- **Phần 3**: Bạn Sơn và bạn Cẩm sẽ trình bày kiến trúc Pipeline chuẩn chống rò rỉ dữ liệu cùng 3 mô hình học máy: Random Forest, XGBoost và Deep Autoencoder.
+- **Phần 1**: Bạn Thanh sẽ giới thiệu bối cảnh bài toán, 3 thách thức kỹ thuật cốt lõi và tập dữ liệu PaySim.
+- **Phần 2**: Bạn Thanh và bạn Sơn sẽ phân tích 3 dấu vết hành vi của kẻ gian, 14 đặc trưng kế toán và kỹ thuật xử lý mất cân bằng dữ liệu.
+- **Phần 3**: Bạn Sơn và bạn Cẩm sẽ trình bày kiến trúc Pipeline chuẩn Leak-Free cùng 3 mô hình học máy: Random Forest, XGBoost và Deep Autoencoder.
 - **Phần 4**: Bạn Khang và bạn Cẩm sẽ trình bày bảng so sánh kết quả thực nghiệm, phân tích ma trận nhầm lẫn và độ quan trọng của đặc trưng.
-- **Phần 5**: Bạn Trung và anh Duy sẽ thực hiện Demo Streamlit cùng video kịch bản kiểm thử thực tế.
+- **Phần 5**: Anh Duy và bạn Trung sẽ trình diễn các kịch bản kiểm thử cùng hệ thống Live Demo Streamlit thực tế và tổng kết.
 
-Bây giờ, em xin nhường lời lại cho bạn **Thanh** bắt đầu với Phần 1 và Phần 2 ạ.
+Bây giờ, em xin nhường lời lại cho bạn **Thanh** bắt đầu với Phần 1 và Phần 2 ạ. Em mời Thanh!
 
 ---
 
 ### SLIDE 3 – PHẦN 1: TỔNG QUAN ĐỀ TÀI & DỮ LIỆU
 
-_(Thời lượng: ~10s | Người nói: **Đặng Chí Thanh** - EDA & Preprocessing Lead)_
+_(Thời lượng chuẩn hóa: **~15s** [Meeting thực tế: ~15s] | Người nói: **Đặng Chí Thanh** - EDA & Preprocessing Lead)_
 
-Dạ em cảm ơn anh Hôn. Em chào thầy và các bạn, em là **Đặng Chí Thanh**. Sau đây em xin phép bắt đầu với Phần 1: Giới thiệu bài toán và những thách thức kỹ thuật cốt lõi trong dữ liệu gian lận tài chính.
+Dạ em cảm ơn anh Hôn. Em chào thầy và các bạn, em là **Đặng Chí Thanh**. Sau đây em xin phép đại diện nhóm bắt đầu với Phần 1: Giới thiệu bài toán và những thách thức kỹ thuật cốt lõi trong phát hiện gian lận tài chính.
 
 ---
 
 ### SLIDE 4 – ĐỘNG LỰC NGHIÊN CỨU & THÁCH THỨC KỸ THUẬT
 
-_(Thời lượng: ~60s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng chuẩn hóa: **~95s – 100s** [Meeting thực tế: ~118s] | Người nói: **Đặng Chí Thanh**)_
 
-Theo như chúng ta cũng có thể đã biết, hiện nay các giao dịch ví điện tử Mobile Money diễn ra hàng triệu lượt mỗi ngày, kéo theo các thủ đoạn lừa đảo và tẩu tán tiền diễn ra chỉ trong vài giây. Hệ thống phòng thủ bắt buộc phải đưa ra quyết định cực nhanh, dưới 100 mili-giây trước khi tiền bị rút mất.
+Kính thưa Thầy và các bạn, hiện nay các giao dịch trên ví điện tử và Mobile Money đang tăng trưởng bùng nổ, kéo theo các thủ đoạn lừa đảo và tẩu tán tiền diễn ra chỉ trong vài giây. Do đó, hệ thống phòng thủ bắt buộc phải đưa ra quyết định cực nhanh theo thời gian thực, với độ trễ dưới 100 mili-giây trước khi tiền bị rút mất.
 
-Khi bắt tay vào tiền xử lý và khám phá dữ liệu, em nhận thấy bài toán này có **3 thách thức kỹ thuật lớn nhất**:
+Khi bắt tay vào bài toán, nhóm em phải đối mặt với **3 thách thức kỹ thuật lớn nhất**:
 
-- **Thứ nhất là Extreme Class Imbalance**: Gian lận chỉ chiếm tỷ lệ cực nhỏ, khoảng **0.13%** — tức là cứ 800 giao dịch bình thường thì mới có 1 giao dịch lừa đảo. Nếu dùng thước đo Accuracy truyền thống, một mô hình ngây thơ lúc nào cũng đoán là 'hợp lệ' thì đã đạt 99.87% độ chính xác, nhưng thực tế là không bắt được bất kỳ tên trộm nào!
-- **Thứ hai là Cost Asymmetry (Tổn thất bất đối xứng)**: Bỏ sót 1 ca gian lận thì người dùng mất trắng tiền, ngân hàng mất uy tín. Trong khi cảnh báo nhầm thì mình chỉ cần gửi OTP bắt xác nhận lại một chút thôi. Do đó, mục tiêu của nhóm bắt buộc phải tối đa hóa **Recall và PR-AUC** chứ không nhìn vào Accuracy.
-- **Thứ ba là Tính phi tĩnh**: Kẻ gian liên tục đổi thủ đoạn luân chuyển tiền để lách qua các tập luật tĩnh.
+- **Thứ nhất là Extreme Class Imbalance (Mất cân bằng cực đoan)**: Gian lận chỉ chiếm tỷ lệ khoảng **0.13%** — tức là cứ 800 giao dịch bình thường thì mới có đúng 1 giao dịch lừa đảo. Nếu dùng thước đo Accuracy truyền thống, một bộ phân lớp ngây thơ lúc nào cũng đoán 'hợp lệ' thì đã đạt 99.87% độ chính xác, nhưng hoàn toàn vô dụng vì không bắt được tên trộm nào! Do đó, nhóm bắt buộc phải tối ưu hóa **Recall và PR-AUC**.
+- **Thứ hai là Cost Asymmetry (Tổn thất bất đối xứng)**: Chi phí của việc bỏ sót một vụ gian lận (False Negative) là khách hàng mất tiền thật và ngân hàng mất uy tín. Trong khi cảnh báo nhầm (False Positive) thì chỉ cần yêu cầu người dùng xác thực lại một bước OTP.
+- **Thứ ba là Hành vi phi tĩnh**: Kẻ gian liên tục biến đổi thủ đoạn luân chuyển tiền tinh vi để lách qua các tập luật tĩnh.
 
-Vì vậy, mục tiêu của nhóm là xây dựng một pipeline chuẩn chỉ, kết hợp cả mô hình có giám sát để bắt các mẫu đã biết, và mô hình không giám sát để phòng thủ trước các đòn tấn công mới lạ.
+Vì vậy, mục tiêu của nhóm là xây dựng một pipeline chuẩn chỉ, kết hợp cả mô hình có giám sát lẫn mô hình không giám sát để tạo thành hệ thống phòng thủ đa tầng.
 
 ---
 
 ### SLIDE 5 – TẬP DỮ LIỆU PAYSIM: THUỘC TÍNH THỐNG KÊ
 
-_(Thời lượng: ~50s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng chuẩn hóa: **~60s – 65s** [Meeting thực tế: ~94s] | Người nói: **Đặng Chí Thanh**)_
 
-Để thực nghiệm, nhóm em dùng bộ dữ liệu mô phỏng chuẩn học thuật là **PaySim**.
+Để thực nghiệm, nhóm sử dụng bộ dữ liệu mô phỏng chuẩn học thuật là **PaySim**.
 
-Tập gốc ghi nhận hơn **6.36 triệu giao dịch** trong 30 ngày. Để tối ưu hóa tài nguyên tính toán mà không làm lệch ranh giới bài toán, em đã thực hiện lấy mẫu phân tầng 200,000 giao dịch, nhưng **giữ lại nguyên vẹn 100% toàn bộ 8,213 ca gian lận gốc**.
+Tập gốc ghi nhận hơn **6.36 triệu giao dịch** trong 30 ngày. Để tối ưu hóa tài nguyên tính toán nhưng không làm mất bản chất bài toán, nhóm thực hiện lấy mẫu phân tầng 200,000 sự kiện, và **giữ nguyên vẹn 100% toàn bộ 8,213 ca gian lận gốc**, đồng thời mở rộng không gian từ 11 lên 14 đặc trưng.
 
-Mọi người nhìn vào bảng ở đây: dữ liệu ghi nhận bước thời gian, loại giao dịch, số tiền, số dư trước và sau của cả tài khoản chuyển lẫn tài khoản nhận.
+Bảng dữ liệu ở giữa slide thể hiện các trường thuộc tính như bước thời gian, loại giao dịch, số tiền, và số dư trước sau.
 
-Đặc biệt, qua phân tích dữ liệu ban đầu, em phát hiện ra một chi tiết quan trọng: **100% các ca gian lận chỉ xảy ra ở đúng 2 loại giao dịch: TRANSFER (Chuyển khoản) và CASH_OUT (Rút tiền mặt)**. Các loại còn lại như PAYMENT, CASH_IN hay DEBIT an toàn tuyệt đối (0% gian lận). Nhờ đó, bước tiền xử lý lọc chỉ giữ lại 2 loại này đã giúp nhóm loại bỏ ngay được hơn 70% dữ liệu nhiễu.
+Tuy nhiên, **insight mang tính quyết định nhất** mà em muốn nhấn mạnh nằm ở khung màu xanh dưới cùng: **100% tất cả các ca gian lận chỉ xuất hiện ở đúng 2 loại giao dịch là TRANSFER (Chuyển khoản) và CASH_OUT (Rút tiền mặt)**. Các loại còn lại như PAYMENT, CASH_IN hay DEBIT an toàn tuyệt đối (0% gian lận). Nhờ phát hiện này, ngay tại bước tiền xử lý, việc lọc dữ liệu chỉ giữ lại 2 loại giao dịch đã giúp nhóm triệt tiêu ngay được hơn 70% dữ liệu nhiễu!
 
 ---
 
 ### SLIDE 6 – PHẦN 2: TIỀN XỬ LÝ & KỸ THUẬT ĐẶC TRƯNG
 
-_(Thời lượng: ~10s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng chuẩn hóa: **~10s** [Meeting thực tế: ~10s] | Người nói: **Đặng Chí Thanh**)_
 
-Tiếp theo, em xin đi sâu vào Phần 2: Phân tích các dấu vết hành vi của kẻ gian và cách em thiết kế 14 đặc trưng cho bài toán.
+Tiếp theo, em xin đi sâu vào Phần 2: Phân tích khám phá dữ liệu, 3 dấu vết hành vi của kẻ gian và kỹ thuật trích xuất 14 đặc trưng miền kế toán.
 
 ---
 
 ### SLIDE 7 – PHÂN TÍCH KHÁM PHÁ DỮ LIỆU: DẤU VẾT HÀNH VI CỐT LÕI
 
-_(Thời lượng: ~60s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng chuẩn hóa: **~75s – 80s** [Meeting thực tế: ~110s] | Người nói: **Đặng Chí Thanh**)_
 
-Khi thực hiện EDA trên notebook `01_eda.ipynb`, em tìm ra **3 dấu vết mang tính bản chất của tội phạm tài chính**:
+Khi thực hiện EDA trên notebook `01_eda.ipynb`, nhóm đã đúc kết được **3 dấu vết hành vi mang tính bản chất của tội phạm tài chính**:
 
-1. **Dấu vết 1 — Khoanh vùng loại giao dịch (100%)**: Toàn bộ gian lận chỉ tập trung ở đúng 2 loại giao dịch. Kẻ gian chiếm được tài khoản sẽ chuyển tiền (`TRANSFER`) sang tài khoản trung gian, rồi lập tức rút ngay tiền mặt (`CASH_OUT`) để hoàn tất tẩu tán và cắt đứt dấu vết.
-2. **Dấu vết 2 — Hành vi vét sạch tài khoản (97.56%)**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị đưa về đúng bằng 0 (`newbalanceOrig == 0`). Kẻ gian luôn có tâm lý 'đã trộm thì phải trộm hết sạch' trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
-3. **Dấu vết 3 — Sai lệch số dư ở tài khoản nhận**: Tại tài khoản đích, số dư thực tế hầu như không tăng tương ứng với số tiền nhận được (`newbalanceDest ≈ 0`). Điều này phản ánh rõ nét hành vi dùng tài khoản rác (mule account) hoặc luân chuyển tiền đa tầng liên tục.
+1. **Dấu vết 1 — Khoanh vùng loại giao dịch (100%)**: Toàn bộ gian lận tập trung khu biệt. Kẻ gian khi chiếm đoạt tài khoản sẽ thực hiện lệnh `TRANSFER` sang tài khoản trung gian, rồi ngay lập tức rút tiền mặt bằng lệnh `CASH_OUT` để tẩu tán và cắt đứt hoàn toàn dấu vết dòng tiền.
+2. **Dấu vết 2 — Hành vi vét sạch tài khoản (97.56%)**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị đưa về đúng bằng 0 (`newbalanceOrig == 0`). Kẻ gian luôn có tâm lý tối đa hóa số tiền chiếm đoạt trong một lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
+3. **Dấu vết 3 — Bất thường biến động số dư ở tài khoản nhận**: Tại tài khoản đích, phần lớn các vụ gian lận thì số dư thực tế hầu như không tăng tương ứng theo sổ sách (`newbalanceDest ≈ 0`). Điều này phản ánh rõ nét việc kẻ gian sử dụng các tài khoản rác (mule account) hoặc luân chuyển rửa tiền đa tầng liên tục.
 
-Nếu chỉ đưa số tiền hay số dư thô vào mô hình thì rất lãng phí. Vì vậy, em đã tiến hành chuyển đổi quy luật này thành các đặc trưng kế toán.
+Nếu chỉ đưa số tiền hay số dư thô vào mô hình thì rất lãng phí các tín hiệu cốt lõi này. Vì vậy, nhóm đã tiến hành toán học hóa thành các đặc trưng miền kế toán ở slide tiếp theo.
 
 ---
 
 ### SLIDE 8 – KỸ THUẬT ĐẶC TRƯNG: 14 THUỘC TÍNH CỐT LÕI
 
-_(Thời lượng: ~60s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng chuẩn hóa: **~70s – 75s** [Meeting thực tế: ~127s] | Người nói: **Đặng Chí Thanh**)_
 
-Từ 3 dấu vết trên, em đã hiện thực trong module `src/preprocessing/` tổng cộng **14 đặc trưng chuyên sâu**. Mọi người nhìn vào 3 khung công thức bên trái:
+Ở slide này, nhóm thể hiện tổng cộng **14 đặc trưng miền** đã hiện thực trong code. Em xin tóm lược nguyên lý của 3 nhóm đặc trưng quan trọng nhất:
 
-- **Đặc trưng 1: Sai lệch số dư nguồn (`errorBalanceOrig`)**:
-  $$\text{errorBalanceOrig} = \text{oldbalanceOrg} - \text{amount} - \text{newbalanceOrig}$$
+- **Nhóm 1: Sai lệch số dư nguồn (`errorBalanceOrig`)**:
+  $$
+  \text{errorBalanceOrig} = \text{oldbalanceOrg} - \text{amount} - \text{newbalanceOrig}
+  $$
   Với giao dịch bình thường, phép tính này phải bằng 0. Nhưng với giao dịch gian lận, con số này bị lệch rất lớn vì tài khoản bị trừ tiền bất thường.
-- **Đặc trưng 2: Sai lệch số dư đích (`errorBalanceDest`)**:
-  $$\text{errorBalanceDest} = \text{oldbalanceDest} + \text{amount} - \text{newbalanceDest}$$
-  Bắt các giao dịch nhận tiền bất thường nhưng không ghi tăng số dư.
-- **Đặc trưng 3: Cờ rút cạn tài khoản (`drain_flag`) và Chu kỳ giờ đêm (`is_overnight`)**:
-  Đánh dấu xem tài khoản có bị rút cạn về 0 hay không, và giao dịch có diễn ra lúc nửa đêm từ 0h đến 5h sáng hay không.
+- **Nhóm 2: Sai lệch số dư đích (`errorBalanceDest`)**:
+  $$
+  \text{errorBalanceDest} = \text{oldbalanceDest} + \text{amount} - \text{newbalanceDest}
+  $$
+  Ghi nhận bất thường khi tiền chuyển đi nhưng tài khoản nhận lại không ghi nhận tăng số dư.
+- **Nhóm 3: Cờ rút cạn (`drain_flag`) và Chu kỳ giờ đêm (`is_overnight`)**:
+  Bắt trọn hành vi vét sạch ví về 0 và các đợt tấn công từ 0 giờ đến 5 giờ sáng.
 
-Chính các đặc trưng này đã giúp chuyển hóa bài toán phân lớp phi tuyến phức tạp thành các ranh giới phân tách cực kỳ rõ nét.
+Điểm mấu chốt là: sau khi đánh giá độ quan trọng, **chỉ riêng 2 đặc trưng `errorBalanceOrig` và `newbalanceOrig` đã chiếm tới hơn 97.1% tổng sức mạnh phân loại** của mô hình! Điều này chứng minh rằng kỹ thuật đặc trưng miền đã giải quyết bài toán tận gốc rễ, biến bài toán phân lớp phi tuyến phức tạp thành ranh giới phân tách tuyến tính cực kỳ rõ rệt.
 
-Tiếp theo, em xin mời bạn **Hoàng Cao Sơn** trình bày về phần Xử lý mất cân bằng dữ liệu và Mô hình Random Forest.
+Sau đây, em xin mời bạn **Hoàng Cao Sơn** trình bày tiếp về phương pháp xử lý mất cân bằng và mô hình Random Forest ạ.
 
 ---
 
 ### SLIDE 9 – XỬ LÝ MẤT CÂN BẰNG LỚP: SMOTE và ADASYN
 
-_(Thời lượng: ~50s | Người nói: **Hoàng Cao Sơn** - Imbalance & Random Forest Lead)_
+_(Thời lượng chuẩn hóa: **~75s – 80s** [Meeting thực tế: ~153s] | Người nói: **Hoàng Cao Sơn** - Imbalance & Random Forest Lead)_
 
-Em chào thầy và các bạn, em là **Hoàng Cao Sơn**.
+Em chào thầy và các bạn, mình là **Hoàng Cao Sơn**.
 
-Em đảm nhận việc xử lý bài toán mất cân bằng dữ liệu 0.13%. Em đã thử nghiệm và so sánh 2 kỹ thuật sinh mẫu nhân tạo là **SMOTE** và **ADASYN**:
+Ở phần trước thì Thanh đã phân tích rất rõ về 14 đặc trưng trích xuất. Nhưng khi bước sang huấn luyện mô hình, thách thức lớn nhất là tỷ lệ gian lận cực đoan chỉ chiếm **0.13%**. Nếu để nguyên dữ liệu gốc, mô hình sẽ bị rơi vào cái bẫy 'bộ phân lớp hiển nhiên' (Majority Classifier) — đoán tất cả là bình thường thì Accuracy vẫn 99.87% nhưng hoàn toàn vô dụng.
 
-- Với **SMOTE**: Thuật toán lấy mẫu gian lận $x_i$ và nội suy tuyến tính với láng giềng gần nhất $k$-NN trong không gian ẩn. Cơ chế này tạo ra ranh giới quyết định rất phẳng và phân tách rõ giữa 2 lớp.
-- Với **ADASYN**: Thuật toán cố gắng sinh nhiều mẫu hơn ở các vùng biên khó. Tuy nhiên, trong bài toán PaySim, ADASYN bị hiện tượng sinh mẫu quá đà ở vùng chồng lấn nhiễu, làm tăng tỷ lệ báo động giả (False Alarm).
+Để xử lý, nhóm đã thử nghiệm đối chuẩn 2 kỹ thuật sinh mẫu nhân tạo là **SMOTENC** và **ADASYN**:
 
-**Kết luận thực nghiệm**: Em quyết định chọn **SMOTE** làm phương pháp xử lý mất cân bằng chính thức, tạo ra tập dữ liệu huấn luyện cân bằng (230,145 dòng) giúp mô hình đạt F1-Score cao nhất và gần như triệt tiêu hoàn toàn báo động giả.
+- Với **ADASYN**: Thuật toán ưu tiên sinh mẫu ở các vùng biên khó. Tuy nhiên trong dữ liệu gian lận, vùng biên thường bị nhiễu do kẻ gian ngụy trang. ADASYN tập trung sinh dày đặc mẫu nhân tạo vào vùng nhiễu này, làm méo mó ranh giới quyết định và dẫn tới **tỷ lệ báo động giả (False Alarm) tăng vọt**, khách hàng bình thường cũng bị chặn thẻ.
+- Với **SMOTENC**: Thuật toán nội suy tuyến tính láng giềng k-NN trong không gian ẩn ổn định hơn, tạo ra ranh giới phẳng và phân cách rõ ràng. Điểm mấu chốt là nhóm dùng biến thể **SMOTENC (Nominal and Continuous)**: vì dữ liệu có 4 cờ nhị phân quan trọng (như cờ rút cạn, giao dịch đêm), SMOTENC bảo toàn nguyên vẹn giá trị 0 hoặc 1, không bao giờ nội suy ra các số thực lẻ vô nghĩa như 0.4 hay 0.7.
+
+**Kết luận thực nghiệm:** Nhóm chọn **SMOTENC** làm phương pháp xử lý chính thức, tạo ra tập huấn luyện cân bằng gồm **230,145 dòng**, giúp mô hình triệt tiêu tối đa các ca báo động giả.
 
 ---
 
 ### SLIDE 10 – PHẦN 3: PHƯƠNG PHÁP & MÔ HÌNH HỌC MÁY
 
-_(Thời lượng: ~10s | Người nói: **Hoàng Cao Sơn**)_
+_(Thời lượng chuẩn hóa: **~10s** [Meeting thực tế: ~10s] | Người nói: **Hoàng Cao Sơn**)_
 
-Tiếp theo, em xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free và Mô hình Random Forest mà em đã huấn luyện.
+Tiếp theo, em xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free và chi tiết 3 mô hình học máy mà nhóm đã xây dựng.
 
 ---
 
 ### SLIDE 11 – KIẾN TRÚC PIPELINE CHUẨN LEAK-FREE
 
-_(Thời lượng: ~60s | Người nói: **Hoàng Cao Sơn**)_
+_(Thời lượng chuẩn hóa: **~85s – 90s** [Meeting thực tế: ~140s] | Người nói: **Hoàng Cao Sơn**)_
 
-Thưa thầy, trong các hệ thống AI tài chính, rủi ro lớn nhất là **Rò rỉ dữ liệu (Data Leakage)** — làm cho mô hình có điểm số cao ảo khi huấn luyện nhưng khi chạy thật thì hoàn toàn thất bại.
+Kính thưa Thầy, trong các hệ thống AI tài chính, rủi ro lớn nhất là **Rò rỉ dữ liệu (Data Leakage)** — mô hình nhìn trộm dữ liệu kiểm thử, dẫn đến điểm số trên máy thì cao chót vót nhưng đem ra chạy thực tế thì thất bại hoàn toàn.
 
-Để giải quyết, nhóm em xây dựng một **Pipeline gồm 6 bước** với **4 nguyên tắc bảo vệ**:
+Để đảm bảo tính trung thực và khách quan tuyệt đối, nhóm đã thiết kế quy trình gồm 6 bước với **4 nguyên tắc bảo vệ Leak-Free nghiêm ngặt**:
 
-1. **Phân chia Stratified Split (80/20) TRƯỚC TIÊN**: Tách riêng tập Train và Test trước khi thực hiện bất kỳ phép biến đổi nào.
-2. **Resampling cách ly tuyệt đối**: SMOTE **chỉ được chạy trên 80% tập Train**. Tập Test ($N = 40,000$ mẫu) được giữ nguyên vẹn 100% tỷ lệ mất cân bằng tự nhiên 0.13%, tuyệt đối không có mẫu nhân tạo nào lọt vào tập Test.
-3. **Chuẩn hóa Scaler độc lập**: Bộ `StandardScaler` chỉ được `fit` trên tập Train, rồi dùng nguyên tham số đó `transform` trên tập Test.
-4. **Không tối ưu tham số trên tập Test**: Toàn bộ quá trình chọn ngưỡng và tune model đều dùng K-Fold Cross Validation nội bộ trên tập Train.
+1. **Stratified Split (80/20) TRƯỚC TIÊN**: Chốt chặn đầu tiên tách riêng tập Train (160,000 dòng) và Test (40,000 dòng) trước khi thực hiện bất kỳ phép biến đổi nào.
+2. **Cô lập Resampling tuyệt đối**: Quá trình sinh mẫu SMOTENC **chỉ chạy trên 80% tập Train**. Tập Test 40,000 mẫu được giữ nguyên vẹn 100% tỷ lệ thực tế ngoài đời, tuyệt đối không có một mẫu nhân tạo nào lọt vào.
+3. **Chuẩn hóa Scaler độc lập**: Bộ `StandardScaler` chỉ được `fit` trên tập Train để lấy trung bình và phương sai, rồi dùng nguyên tham số đó `transform` trên Test.
+4. **Tối ưu siêu tham số độc lập**: Toàn bộ khâu chọn ngưỡng và tune model đều dùng **5-Fold Stratified Cross-Validation nội bộ trên Train**, không chạm vào Test.
 
-Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm đều đảm bảo tính khách quan và trung thực tuyệt đối.
+Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm đều là số liệu thật và có giá trị tin cậy cao.
 
 ---
 
 ### SLIDE 12 – MÔ HÌNH GIÁM SÁT: RANDOM FOREST và XGBOOST
 
-_(Thời lượng: ~60s | Người nói: **Hoàng Cao Sơn** [phần RF] & **Bùi Thị Mỷ Cẩm** [phần XGB])_
+_(Thời lượng chuẩn hóa: **~90s – 95s** [Sơn ~40s, Cẩm ~50s] [Meeting thực tế: ~200s] | Người nói: **Hoàng Cao Sơn** [phần RF] & **Bùi Thị Mỷ Cẩm** [phần XGB])_
 
 _(Phần 1 - Random Forest: **Hoàng Cao Sơn** trình bày)_
 
-Về mô hình Random Forest ở bên trái: Em sử dụng kỹ thuật Bagging với 100 cây quyết định độc lập, kết hợp tinh chỉnh siêu tham số `RandomizedSearchCV` với 50 vòng lặp trên 5-Fold CV.
+Dựa trên pipeline đó, mô hình có giám sát đầu tiên nhóm xây dựng là **Random Forest** ở bên trái. Nhóm sử dụng cơ chế Ensemble Bagging với 200 cây quyết định độc lập, tối ưu qua `RandomizedSearchCV` 50 vòng lặp, khống chế `max_depth = 20`, đồng thời áp dụng trọng số lớp cân bằng theo từng cây con.
 
-Mô hình này cho độ chính xác cực kỳ cao, Precision đạt **99.94%**, trên 38,357 giao dịch bình thường nó chỉ đoán nhầm đúng 1 ca. Tuy nhiên, nhược điểm là thời gian huấn luyện khá lâu, mất gần 20 phút.
+Khi kiểm thử trên 40,000 mẫu tập Test, mô hình đạt độ chính xác cực cao: **Precision = 99.94%** (trên 38,357 giao dịch bình thường chỉ đoán nhầm đúng 1 ca), **Recall = 99.51%**, và **F1-Score = 0.9973**. Tuy nhiên, hạn chế của Random Forest là thời gian huấn luyện khá lâu, mất gần 20 phút.
+
+Để giải quyết bài toán tốc độ, phần tiếp theo sẽ do bạn **Bùi Thị Mỷ Cẩm** trình bày về mô hình XGBoost.
 
 _(Phần 2 - XGBoost: **Bùi Thị Mỷ Cẩm** tiếp lời)_
 
 Dạ em chào thầy và các bạn, em là **Bùi Thị Mỷ Cẩm**. Em đảm nhận việc huấn luyện mô hình **XGBoost** ở bên phải:
 
-XGBoost tối ưu hàm mục tiêu bậc hai dựa trên cả gradient bậc 1 ($g_i$) và Hessian bậc 2 ($h_i$), có bổ sung điều chuẩn L2 ($\Omega(f_t)$) để chống Overfitting.
+Về cơ chế, XGBoost tối ưu hàm mục tiêu xấp xỉ bậc 2 sử dụng cả Gradient bậc 1 ($g_i$) và Hessian bậc 2 ($h_i$) của hàm mất mát, kết hợp số hạng điều chuẩn $\Omega(f_t)$ để kiểm soát độ sâu cây và chống Overfitting.
 
-Điểm vượt trội của XGBoost là: F1-Score đạt **99.63%** (tương đương Random Forest), nhưng thời gian huấn luyện chỉ mất **41.7 giây — nhanh gấp 28.5 lần!** Độ trễ suy luận cho 1 giao dịch chỉ dưới **0.5 mili-giây**, cực kỳ thích hợp để triển khai vào thực tế.
+**Ưu thế vượt trội:** XGBoost đạt **F1-Score = 99.63%**, tương đương Random Forest, nhưng **thời gian huấn luyện nhanh gấp 28.5 lần — chỉ mất 41.7 giây!** Độ trễ suy luận cho mỗi giao dịch chỉ dưới **0.5 mili-giây**, cực kỳ lý tưởng để triển khai vào các cổng thanh toán xử lý thời gian thực.
 
 ---
 
 ### SLIDE 13 – MÔ HÌNH KHÔNG GIÁM SÁT: DEEP AUTOENCODER
 
-_(Thời lượng: ~60s | Người nói: **Bùi Thị Mỷ Cẩm** - Modeling XGB & Autoencoder Lead)_
+_(Thời lượng chuẩn hóa: **~105s – 110s** [Meeting thực tế: ~85s] | Người nói: **Bùi Thị Mỷ Cẩm** - Modeling XGB & Autoencoder Lead)_
 
-Em đặt ra một bài toán khó hơn: _"Nếu kẻ gian thực hiện một hình thức lừa đảo mới lạ chưa từng có nhãn trong quá khứ thì sao?"_
+Em đặt ra một câu hỏi: *"Nếu kẻ gian dùng một hình thức lừa đảo hoàn toàn mới, chưa từng có nhãn trong quá khứ thì mô hình có giám sát có còn phát hiện được không?"*
 
-Để phòng trường hợp này, em xây dựng thêm một mạng **Deep Autoencoder** học không giám sát:
+Để trả lời, em xây dựng thêm mô hình không giám sát **Deep Autoencoder**:
 
-Kiến trúc mạng nén đối xứng từ 14 chiều đầu vào qua nút cổ chai 4 chiều, rồi giải mã ngược ra 14 chiều:
+Kiến trúc mạng đối xứng gồm: 14 chiều đầu vào ➔ tầng Dense 8 chiều ➔ nút cổ chai Bottleneck 4 chiều ➔ giải mã qua Dense 8 chiều ➔ và tái tạo lại 14 chiều đầu ra.
 
-- **Lúc học**: Mạng **chỉ được huấn luyện trên các giao dịch HỢP LỆ**, học cách nén và tái tạo cấu trúc dòng tiền bình thường.
-- **Lúc phát hiện**: Khi gặp giao dịch bình thường, mạng tái tạo rất chuẩn. Nhưng khi gặp giao dịch gian lận hoặc biến thể Zero-Day dị biệt, mạng không thể tái tạo chính xác, dẫn đến **Sai số tái tạo MSE ($L_{\text{rec}}$) tăng vọt lên**:
-  $$L_{\text{rec}}(x, x_{\text{recon}}) = \frac{1}{d} \sum_{j=1}^d (x_j - x_{\text{recon}, j})^2$$
-- **Ra quyết định**: Cứ giao dịch nào có sai số vượt ngưỡng $\tau = 0.0455$, hệ thống sẽ gán cờ cảnh báo.
+Nguyên lý phát hiện gồm **3 giai đoạn**:
+- **Giai đoạn 1 - Học chuẩn**: Mạng **chỉ huấn luyện trên giao dịch hợp lệ**, học cách nén và tái tạo cấu trúc luồng tiền bình thường.
+- **Giai đoạn 2 - Bắt lỗi**: Khi gặp giao dịch gian lận hoặc biến thể Zero-Day dị biệt, mạng không thể tái tạo chính xác, khiến sai số tái tạo MSE ($L_{\text{rec}}$) tăng vọt.
+- **Giai đoạn 3 - Ra quyết định**: Hệ thống gắn cờ gian lận nếu sai số vượt ngưỡng $\tau = 0.0455$ (tương ứng phân vị thứ 95).
 
-Mặc dù hoàn toàn không dùng nhãn khi train, Autoencoder vẫn bắt được **75.23% số vụ gian lận**, đóng vai trò như lớp phòng thủ an toàn thứ 2 (Defense-in-Depth).
+Nhờ vậy, dù **hoàn toàn không dùng nhãn khi huấn luyện**, Autoencoder vẫn đạt **Recall = 75.23%**, đóng vai trò như lớp phòng thủ thứ hai (Defense-in-Depth), miễn nhiễm với các thủ thuật lừa đảo mới chưa từng có tiền lệ.
 
-Tiếp theo, em xin mời bạn **Nguyễn Duy Khang** trình bày phần Đánh giá kiểm thử và Bảng so sánh kết quả giữa các mô hình.
+Tiếp theo, em xin mời bạn **Nguyễn Duy Khang** trình bày phần Đánh giá thực nghiệm và Đối chuẩn giữa các mô hình.
 
 ---
 
 ### SLIDE 14 – PHẦN 4: KẾT QUẢ THỰC NGHIỆM & PHÂN TÍCH
 
-_(Thời lượng: ~10s | Người nói: **Nguyễn Duy Khang** - Evaluation & Metrics Lead)_
+_(Thời lượng chuẩn hóa: **~25s** [Meeting thực tế: ~25s] | Người nói: **Nguyễn Duy Khang** - Evaluation & Metrics Lead)_
 
-Dạ em cảm ơn chị Cẩm. Em là **Nguyễn Duy Khang**. Em đảm nhận việc viết các script kiểm thử độc lập trong `src/evaluation/`, tính toán các chỉ số và xuất bảng so sánh chéo giữa các mô hình. Sau đây em xin trình bày kết quả.
+Dạ em cảm ơn chị Cẩm. Em chào thầy và các bạn, em là **Nguyễn Duy Khang**. Phần việc của em là xây dựng các script kiểm thử độc lập trong `src/evaluation/`, tính toán các chỉ số và lập bảng đối chuẩn so sánh chéo giữa các mô hình. Sau đây em xin trình bày kết quả.
 
 ---
 
 ### SLIDE 15 – KẾT QUẢ THỰC NGHIỆM: BẢNG SO SÁNH ĐA CHỈ SỐ
 
-_(Thời lượng: ~60s | Người nói: **Nguyễn Duy Khang**)_
+_(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~80s] | Người nói: **Nguyễn Duy Khang**)_
 
-Mọi người nhìn vào bảng so sánh ở bên trái và biểu đồ so sánh ở bên phải do em tổng hợp:
+Nhìn vào bảng so sánh bên trái và biểu đồ bên phải do nhóm em tổng hợp:
 
-- **Random Forest + SMOTE** đạt hiệu năng phân lớp cao nhất toàn diện: **Precision = 99.94%**, **Recall = 99.51%**, và **F1-Score = 99.73%**.
-- **XGBoost + SMOTE** bám sát nút với **Precision = 99.76%**, **Recall = 99.51%**, **F1-Score = 99.63%**, nhưng thời gian chạy thì nhanh vượt trội, chỉ 41.7 giây.
-- **Deep Autoencoder** đạt **Recall 75.23%** ở chế độ hoàn toàn không giám sát.
+- **Random Forest + SMOTE** đạt hiệu năng phân lớp toàn diện cao nhất: **Precision = 99.94%**, **Recall = 99.51%**, và **F1-Score = 99.73%**.
+- **XGBoost + SMOTE** bám sát nút với **Precision = 99.76%**, **Recall = 99.51%**, **F1-Score = 99.63%**, nhưng có thời gian huấn luyện siêu tốc chỉ **41.7 giây**.
+- **Deep Autoencoder** đạt **Recall = 75.23%** ở chế độ hoàn toàn không giám sát.
 
-Nhìn vào biểu đồ cột bên phải, thầy và các bạn có thể thấy 2 mô hình cây (cột xanh) đạt độ cân bằng lý tưởng giữa Precision và Recall. Còn Autoencoder (cột đỏ) chấp nhận Precision ở mức 38.2% để giữ Recall cao ở mức 75.2%, đúng với triết lý an toàn: _'Thà cảnh báo nhầm để kiểm tra lại, còn hơn bỏ lọt tội phạm tài chính'_.
+Nhìn vào biểu đồ cột bên phải: Hai mô hình cây (cột xanh) đạt sự cân bằng lý tưởng giữa Precision và Recall. Còn Autoencoder (cột đỏ) chấp nhận Precision ở mức 38.2% để giữ Recall cao ở mức 75.2%, hoàn toàn đúng với triết lý an toàn tài chính: *"Thà cảnh báo nhầm để kiểm tra lại một bước OTP, còn hơn bỏ lọt tội phạm tài chính"*.
 
 ---
 
 ### SLIDE 16 – PHÂN TÍCH MA TRẬN NHẦM LẪN & ĐÁNH ĐỔI SAI SỐ
 
-_(Thời lượng: ~60s | Người nói: **Nguyễn Duy Khang**)_
+_(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~80s] | Người nói: **Nguyễn Duy Khang**)_
 
-Slide này thể hiện chi tiết **Ma trận nhầm lẫn (Confusion Matrix)** trên 40,000 mẫu kiểm thử độc lập mà em đã trích xuất:
+Slide này thể hiện chi tiết **Ma trận nhầm lẫn** trên 40,000 mẫu kiểm thử độc lập:
 
-- Ở ô đầu tiên — **Random Forest**: Trong 1,643 vụ gian lận thật, mô hình bắt trúng **1,635 vụ (TP)**, chỉ để lọt duy nhất **8 vụ (FN)**. Và trên 38,357 giao dịch bình thường, mô hình chỉ cảnh báo nhầm đúng **1 ca duy nhất (FP)**.
-- Ở ô thứ hai — **XGBoost**: Bắt trúng **1,635 vụ gian lận**, bỏ lọt 8 vụ, và chỉ đoán nhầm **4 vụ**. Đây là sự đánh đổi hoàn toàn tối ưu để lấy tốc độ nhanh gấp 28.5 lần.
-- Ở ô thứ ba — **Deep Autoencoder**: Bắt trúng **1,236 vụ gian lận** mà không cần biết trước nhãn. Dù có 1,998 ca đoán nhầm, nhưng với quy mô ngân hàng, việc chuyển 5% giao dịch đáng ngờ sang bước xác thực OTP là hoàn toàn chấp nhận được.
+- **Ô đầu tiên — Random Forest:** Trong 1,643 vụ gian lận thật, mô hình bắt trúng **1,635 vụ (TP)**, chỉ để lọt duy nhất **8 vụ (FN)**. Và trên 38,357 giao dịch bình thường, mô hình chỉ cảnh báo nhầm đúng **1 ca duy nhất (FP)**.
+- **Ô thứ hai — XGBoost:** Bắt trúng **1,635 vụ gian lận**, bỏ lọt 8 vụ, và chỉ đoán nhầm **4 vụ**. Đây là sự đánh đổi hoàn toàn tối ưu để lấy tốc độ huấn luyện nhanh gấp 28.5 lần.
+- **Ô thứ ba — Deep Autoencoder:** Bắt trúng **1,236 vụ gian lận** mà không cần biết trước nhãn. Dù có 1,998 ca đoán nhầm, nhưng với quy mô ngân hàng, việc chuyển 5% giao dịch đáng ngờ sang bước xác thực OTP bổ sung là hoàn toàn khả thi và chấp nhận được trong thực tế.
 
 ---
 
 ### SLIDE 17 – PHÂN TÍCH ĐÓNG GÓP ĐẶC TRƯNG (FEATURE IMPORTANCE)
 
-_(Thời lượng: ~50s | Người nói: **Nguyễn Duy Khang**)_
+_(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~82s] | Người nói: **Nguyễn Duy Khang**)_
 
-Cũng trong module đánh giá, em tiến hành phân tích **Độ quan trọng của đặc trưng (Feature Importance)**:
+Cũng trong module đánh giá, nhóm tiến hành phân tích **Độ quan trọng của đặc trưng (Feature Importance)**:
 
-Nhìn vào biểu đồ thanh ngang và bảng xếp hạng ở đây, mọi người sẽ thấy một kết quả định lượng rất rõ ràng:
-
+Nhìn vào biểu đồ thanh ngang và bảng xếp hạng, Thầy và các bạn sẽ thấy một kết quả định lượng rất rõ ràng:
 Hai đặc trưng do bạn Thanh thiết kế đứng đầu bảng:
-
-- **`errorBalanceOrig`** (Sai lệch số dư nguồn) chiếm **49.9%** đóng góp (Split Gains).
+- **`errorBalanceOrig`** (Sai lệch số dư nguồn) chiếm **49.9%** đóng góp.
 - **`newbalanceOrig`** (Rút cạn số dư về 0) chiếm **47.2%** đóng góp.
 
-Chỉ riêng 2 đặc trưng này gộp lại đã chiếm tới **97.1% toàn bộ sức mạnh phân loại** của mô hình! Các thuộc tính truyền thống như số tiền giao dịch (`amount`) chỉ chiếm 1.4%, hay khung giờ đêm chỉ chiếm 0.9%.
+**Chỉ riêng 2 đặc trưng này gộp lại đã chiếm tới 97.1% toàn bộ sức mạnh phân loại của mô hình!** Trong khi các thuộc tính truyền thống như số tiền giao dịch (`amount`) chỉ chiếm 1.4%, hay khung giờ đêm chỉ chiếm 0.9%.
 
-Điều này chứng minh rằng: Kẻ gian có thể chia nhỏ số tiền để ngụy trang, nhưng không thể xóa được dấu vết sai lệch trên số dư tài khoản.
+Điều này chứng minh một sự thật rằng: Kẻ gian có thể chia nhỏ số tiền để ngụy trang, nhưng không thể nào xóa được dấu vết sai lệch trên số dư tài khoản.
 
-Tiếp theo, em mời chị **Mỷ Cẩm** sẽ giải thích nốt về cách chọn ngưỡng của mô hình Autoencoder.
+Tiếp theo, em xin mời chị **Mỷ Cẩm** giải thích phần chọn ngưỡng của mô hình Autoencoder ở slide 18.
 
 ---
 
 ### SLIDE 18 – PHÂN BỐ SAI SỐ TÁI TẠO & NGƯỠNG ANOMALY
 
-_(Thời lượng: ~50s | Người nói: **Bùi Thị Mỷ Cẩm**)_
+_(Thời lượng chuẩn hóa: **~75s – 80s** [Meeting thực tế: ~104s] | Người nói: **Bùi Thị Mỷ Cẩm**)_
 
 Dạ em cảm ơn bạn Khang.
 
-Với mô hình Deep Autoencoder, quyết định then chốt của em khi huấn luyện nằm ở việc **chọn ngưỡng cắt sai số $\tau$**.
+Như mọi người thấy trên slide, biểu đồ bên trái thể hiện rõ sự phân tách sai số tái tạo MSE: giao dịch hợp lệ (đường màu xanh) tập trung ở vùng sai số cực thấp, dưới 0.02; trong khi giao dịch gian lận (đường màu đỏ) có sai số trải dài sang bên phải do cấu trúc luồng tiền dị biệt không thể nén qua nút thắt cổ chai.
 
-Mọi người nhìn vào biểu đồ phân bố bên trái:
+Bảng bên phải thể hiện việc dò ngưỡng qua các phân vị:
+- Ở phân vị 90th ($\tau = 0.0211$): Recall đạt 88.4% nhưng Precision chỉ 24.1%.
+- Ở phân vị 99th ($\tau = 0.2104$): Precision tăng lên 68.5% nhưng Recall giảm mạnh còn 49.8%.
+- Nhóm quyết định chọn **Điểm cắt tại phân vị 95th ($\tau = 0.0455$)**: tạo cân bằng tối ưu giữa **Recall = 75.2%** và **Precision = 38.2%**.
 
-- Đường màu xanh (giao dịch bình thường) tập trung ở vùng sai số rất nhỏ, dưới 0.02.
-- Đường màu đỏ (giao dịch gian lận) có sai số trải dài sang tận bên phải.
+Đây là chốt chặn phòng thủ thứ hai vững chắc: nếu mô hình có giám sát bị qua mặt bởi hình thức lừa đảo mới, Autoencoder sẽ lập tức kích hoạt báo động chuyển giao dịch sang thẩm định chuyên sâu mà không phụ thuộc vào việc có nhãn hay chưa.
 
-Sau khi quét qua các phân vị từ 90th đến 99.9th, em quyết định chọn **Ngưỡng phân vị 95th ($\tau = 0.0455$)**. Ngưỡng này giúp Autoencoder đạt điểm cân bằng tối ưu: giữ được **Recall 75.23%** cho lớp phòng thủ Zero-Day mà vẫn kiểm soát được tỷ lệ cảnh báo nhầm.
-
-Tiếp theo, em xin mời bạn **Phạm Thành Trung** và anh **Vũ Văn Duy** trình diễn phần Demo giao diện Streamlit và Video kịch bản kiểm thử.
+Tiếp theo, em xin mời anh **Vũ Văn Duy** và bạn **Phạm Thành Trung** trình bày hệ thống Demo Streamlit và các kịch bản kiểm thử ạ.
 
 ---
 
 ### SLIDE 19 – PHẦN 5: DEMO HỆ THỐNG & KẾT LUẬN
 
-_(Thời lượng: ~10s | Người nói: **Phạm Thành Trung** - Demo UI Lead)_
+_(Thời lượng chuẩn hóa: **~20s** [Chuyển giao màn hình Live Demo] | Người nói: **Phạm Thành Trung** - Demo UI Lead)_
 
-Dạ em cảm ơn bạn Cẩm. Em chào thầy và các bạn, em là **Phạm Thành Trung**. Sau đây em và anh **Vũ Văn Duy** xin đại diện nhóm trình diễn hệ thống Demo Streamlit thực tế và các kịch bản kiểm thử.
+Dạ em cảm ơn bạn Cẩm. Em chào thầy và các bạn, em là **Phạm Thành Trung**. Sau đây em và anh **Vũ Văn Duy** xin đại diện nhóm trình diễn hệ thống Demo Dashboard Streamlit thực tế và các kịch bản kiểm thử.
+
+Trước khi em chia sẻ màn hình để thao tác ứng dụng, em xin mời anh **Duy** trình bày 3 kịch bản kiểm thử mà anh đã thiết kế ạ.
 
 ---
 
 ### SLIDE 20 – HỆ THỐNG DEMO STREAMLIT & KỊCH BẢN KIỂM THỬ
 
-_(Thời lượng: ~75s | Người nói: **Phạm Thành Trung** & **Vũ Văn Duy**)_
+_(Thời lượng chuẩn hóa: **~240s – 270s** (~4m00s – 4m30s) [Duy ~85s, Trung Live Demo ~160s-185s] | [Meeting thực tế: Duy 149s + Trung Demo 304s = 453s] | Người nói: **Vũ Văn Duy** [3 Test Cases] & **Phạm Thành Trung** [Live Demo Streamlit & Đóng góp])_
 
-_(Phần 1 - Giao diện Dashboard: **Phạm Thành Trung** trình bày)_
+---
 
-Để mô hình không chỉ dừng lại ở các dòng code trong notebook, Em đã phát triển một giao diện **Dashboard giám sát gian lận thời gian thực trên nền tảng Streamlit** như khung hình bên trái.
-Giao diện cho phép người vận hành chọn mô hình suy luận (XGBoost, Random Forest hoặc Autoencoder), nhập thông số giao dịch và nhận kết quả cảnh báo rủi ro tức thì trong chưa đầy 0.5 mili-giây. Ngoài ra, hệ thống còn hỗ trợ tính năng **Audit Batch CSV**, cho phép tải lên danh sách hàng nghìn giao dịch để tự động trích xuất các ca có nguy cơ cao.
+#### 🔹 PHẦN 1: TRÌNH BÀY 3 KỊCH BẢN KIỂM THỬ (Vũ Văn Duy trình bày — ~85s)
 
-_(Phần 2 - Kịch bản Test Case & Video Demo: **Vũ Văn Duy** tiếp lời)_
+Em chào Thầy và các bạn, em là **Vũ Văn Duy**. Để kiểm thử toàn diện khả năng vận hành thực tế của mô hình ngoài đời, em đã thiết kế **3 kịch bản kiểm thử (Test Scenarios)** đại diện cho các tình huống điển hình:
 
-Em chào thầy và các bạn, em là **Vũ Văn Duy**. Em đã hoàn thiện báo cáo Word và thiết kế **3 kịch bản kiểm thử (Test Scenarios)**:
+1. **Kịch bản 1 — Giao dịch an toàn (Hợp lệ chuẩn):**  
+   Giao dịch chuyển khoản thông thường với dòng tiền cân đối, số dư trước và sau trừ tiền khớp chuẩn 100% về mặt sổ sách kế toán.  
+   ➔ *Kỳ vọng:* Hệ thống đánh giá an toàn, xác suất gian lận cực thấp dưới 0.1%, trả về trạng thái Hợp lệ.
 
-1. _Kịch bản 1 (Giao dịch an toàn):_ Chuyển tiền thông thường, số dư biến động khớp chuẩn ➔ Hệ thống báo Xanh an toàn (Xác suất rủi ro $< 0.1\%$).
-2. _Kịch bản 2 (Gian lận rút cạn tài khoản):_ Lệnh chuyển tiền vét sạch số dư về 0 ➔ Hệ thống lập tức báo Đỏ (Xác suất $> 99.8\%$) và khóa giao dịch.
-3. _Kịch bản 3 (Bất thường Zero-Day):_ Đưa giao dịch lạ qua Autoencoder để kích hoạt cờ kiểm duyệt thứ cấp.
-   Video demo chi tiết hoạt động của 3 kịch bản này đã được em ghi lại và lưu trong thư mục `demo/` của đồ án.
+2. **Kịch bản 2 — Gian lận rút cạn tài khoản (Cảnh báo đỏ khẩn cấp):**  
+   Mô phỏng hành vi tội phạm vét sạch tài khoản nạn nhân về đúng bằng 0 (`newbalanceOrig = 0`), số tiền chuyển đi lớn hơn số dư hiện có và xuất hiện sai lệch kế toán nghiêm trọng.  
+   ➔ *Kỳ vọng:* Mô hình XGBoost lập tức phát hiện với xác suất gian lận trên 88%, kích hoạt cờ đỏ khóa giao dịch ngay lập tức.
 
-_(Phạm Thành Trung tổng kết 4 đóng góp & Lộ trình)_
+3. **Kịch bản 3 — Giao dịch rủi ro cận biên & Zero-Day (Cần lưu ý):**  
+   Giao dịch chuyển 2.5 triệu thực hiện vào khung giờ đêm (2h - 3h sáng), cấu trúc dòng tiền có dấu hiệu bất thường nhưng chưa đủ bằng chứng rõ rệt để khóa ngay.  
+   ➔ *Kỳ vọng:* Hệ thống trả về xác suất cảnh báo ở mức ~32%, hiển thị mức cảnh báo vàng "Cần lưu ý" để yêu cầu người dùng xác thực thêm mã OTP.
 
-Tóm lại, đồ án của nhóm đạt được **4 kết quả cốt lõi**: Pipeline chuẩn Leak-Free; 14 đặc trưng chiếm >97% đóng góp; F1-Score đạt 99.73%; và kiến trúc phòng thủ đa tầng.
+Sau đây, xin mời bạn **Trung** sẽ trực tiếp thao tác chạy 3 kịch bản này trên giao diện ứng dụng Streamlit của nhóm!
 
-Trong tương lai, nhóm sẽ mở rộng sang **Graph Neural Networks (GNN)** như GraphSAGE để phát hiện đường dây rửa tiền, và tích hợp Apache Kafka để xử lý luồng dữ liệu lớn.
+---
+
+#### 🔹 PHẦN 2: THAO TÁC LIVE DEMO GIAO DIỆN STREAMLIT (Phạm Thành Trung trình bày — ~160s – 185s)
+
+*(Phạm Thành Trung chia sẻ màn hình và thao tác trực tiếp trên trình duyệt)*
+
+Dạ em cảm ơn anh Duy. Thưa Thầy và các bạn, đây là giao diện **Dashboard giám sát gian lận thời gian thực** do em xây dựng trên nền tảng Streamlit, kết nối trực tiếp với trọng số mô hình XGBoost và Autoencoder đã huấn luyện.
+
+- **Khu vực nhập liệu:** Cho phép người dùng nhập loại giao dịch, thời điểm thực hiện, số tiền, và số dư trước sau của tài khoản nguồn và đích. Sau khi nhập, hệ thống tự động vector hóa để tạo 14 đặc trưng miền và chuẩn hóa bằng StandardScaler trong bộ nhớ.
+- **Thực nghiệm Kịch bản 1 (An toàn):** Em chọn mẫu giao dịch cân đối. Nhấn *"Phân tích giao dịch"* ➔ Hệ thống trả về kết quả rủi ro rất thấp (0.02%), gắn nhãn Xanh an toàn trong chưa đầy 0.5 mili-giây.
+- **Thực nghiệm Kịch bản 3 (Cận biên ban đêm):** Em chọn mẫu 2.5 triệu thực hiện ban đêm. Nhấn *"Phân tích giao dịch"* ➔ Mô hình trả về xác suất 31.95%. Kết quả chưa vượt ngưỡng 50% nhưng hệ thống lập tức hiển thị nhãn Vàng *"Cần lưu ý"* để nhân viên rà soát hoặc kích hoạt bước gửi mã OTP xác thực.
+- **Thực nghiệm Kịch bản 2 (Vét cạn tài khoản):** Em chọn kịch bản tài khoản nguồn bị rút cạn về 0 và sai lệch sổ sách. Nhấn *"Phân tích giao dịch"* ➔ Xác suất gian lận tăng vọt lên **88.36%**, vượt ngưỡng cảnh báo và hệ thống lập tức gán cờ Đỏ *"Nghi vấn gian lận"*.
+- **Ba góc nhìn trực quan:** Người vận hành có thể xem chi tiết:
+  1. *Tín hiệu rủi ro:* Hiển thị trực quan các cờ cảnh báo (rút cạn ví, giờ đêm, tỷ lệ tiền/số dư).
+  2. *Sơ đồ dòng tiền:* Mô phỏng luồng tiền di chuyển giữa tài khoản nguồn và đích.
+  3. *Biến động số dư:* Đối chiếu sai lệch sổ sách trước và sau giao dịch.
+- **Tab Hiệu năng & Lịch sử:** Giao diện cho phép xem lại toàn bộ ma trận nhầm lẫn, biểu đồ ROC/PR, chuyển đổi giữa SMOTENC và ADASYN để đối chiếu. Đồng thời, toàn bộ giao dịch được lưu cục bộ trong cơ sở dữ liệu SQLite, hỗ trợ lọc theo trạng thái và xuất báo cáo kiểm toán định dạng CSV.
+
+---
+
+#### 🔹 PHẦN 3: TỔNG KẾT ĐÓNG GÓP & LỘ TRÌNH (Phạm Thành Trung tổng kết — ~30s)
+
+Tóm lại, đồ án của nhóm đạt được **4 đóng góp cốt lõi**:
+1. Pipeline chuẩn mực **Leak-Free 100%**, bảo vệ tính khách quan của thực nghiệm.
+2. Trích xuất thành công **14 đặc trưng miền kế toán**, giải thích tới hơn 97.1% sức mạnh phân loại.
+3. Đạt hiệu năng xuất sắc với **F1-Score 99.73%** (Random Forest) và mô hình triển khai **XGBoost 41.7s siêu tốc**.
+4. Kiến trúc phòng thủ đa tầng kết hợp Deep Autoencoder bắt các mối đe dọa Zero-Day.
+
+Về hướng phát triển, nhóm định hướng mở rộng sang **Graph Neural Networks (GNN)** như GraphSAGE để phát hiện các đường dây rửa tiền đa tầng, và tích hợp Apache Kafka để xử lý luồng dữ liệu phân tán quy mô lớn.
+
+Sau đây, em xin nhường lời lại cho bạn Hôn để tổng kết buổi báo cáo ạ.
 
 ---
 
 ### SLIDE 21 – TỔNG KẾT, TÀI LIỆU THAM KHẢO & PHIÊN HỎI ĐÁP (Q&A)
 
-_(Thời lượng: ~45s | Người nói: **Trần Hoàng Hôn** - Trưởng nhóm)_
+_(Thời lượng chuẩn hóa: **~45s – 50s** | Người nói: **Trần Hoàng Hôn** - Trưởng nhóm)_
 
-Dạ thưa Thầy và các bạn, toàn bộ mã nguồn chương trình, tài liệu kỹ thuật và mô hình đã được nhóm công khai trên GitHub tại địa chỉ như trên slide.
+Kính thưa Thầy và các bạn, toàn bộ mã nguồn chương trình, bộ dữ liệu thực nghiệm đã xử lý, tài liệu kỹ thuật, báo cáo Word và slide thuyết trình đã được nhóm chúng em đóng gói và phát hành đầy đủ trên GitHub repository của đồ án.
 
-Thay mặt Nhóm 9, chúng em xin gửi lời cảm ơn chân thành nhất đến **Thầy** đã tận tình hướng dẫn trong suốt học kỳ vừa qua.
+Thay mặt toàn thể 7 thành viên Nhóm 9, chúng em xin gửi lời cảm ơn chân thành và sâu sắc nhất đến **Thầy** đã tận tình hướng dẫn, định hướng khoa học cho chúng em trong suốt học kỳ vừa qua.
 
-Sau đây, nhóm chúng em xin lắng nghe các câu hỏi và góp ý từ Thầy và các bạn để hoàn thiện đồ án hơn nữa ạ. Em xin chân thành cảm ơn!
+Sau đây, nhóm chúng em xin trân trọng lắng nghe các câu hỏi nhận xét, góp ý và phản biện từ Thầy cùng các bạn để hoàn thiện đồ án hơn nữa ạ.
+
+Em xin chân thành cảm ơn Thầy và các bạn đã chú ý lắng nghe!
 
 ---
 
@@ -353,12 +441,12 @@ Sau đây, nhóm chúng em xin lắng nghe các câu hỏi và góp ý từ Th�
 
 > **Người trả lời chính:** **Đặng Chí Thanh** _(EDA & Preprocessing)_  
 > **Hướng trả lời:**  
-> "Dạ thưa thầy, nhóm em đã kiểm soát rất chặt nguy cơ rò rỉ dữ liệu qua 3 chốt chặn:
->
-> 1. Tập Test độc lập (20%) được tách ra đầu tiên trước mọi bước xử lý.
-> 2. SMOTE chỉ chạy trên 80% tập Train. Tập Test hoàn toàn giữ nguyên phân bố tự nhiên 0.13% và không có mẫu nhân tạo nào.
-> 3. Scaler chỉ `fit` trên Train và `transform` mù trên Test.
->    Điểm số cao thực chất là nhờ 2 đặc trưng miền `errorBalanceOrig` và `newbalanceOrig` do em thiết kế đã giải thích đúng bản chất kế toán của hành vi gian lận (chiếm >97% split gains), giúp phân tách dữ liệu gần như tuyến tính thay vì do mô hình học vẹt ạ."
+> "Dạ thưa thầy, nhóm em đã kiểm soát rất chặt nguy cơ rò rỉ dữ liệu qua 4 chốt chặn Leak-Free nghiêm ngặt:
+> 1. Tập Test độc lập (20%) được tách riêng đầu tiên trước mọi bước xử lý.
+> 2. SMOTENC chỉ chạy trên 80% tập Train. Tập Test hoàn toàn giữ nguyên phân bố tự nhiên 0.13% và tuyệt đối không có mẫu nhân tạo nào.
+> 3. StandardScaler chỉ `fit` trên Train và `transform` mù trên Test.
+> 4. Toàn bộ quá trình chọn ngưỡng và tinh chỉnh tham số đều dùng 5-Fold Cross Validation nội bộ trên Train.  
+> Điểm số cao thực chất là nhờ 2 đặc trưng miền `errorBalanceOrig` và `newbalanceOrig` do em thiết kế đã giải thích đúng bản chất kế toán của hành vi gian lận (chiếm >97% split gains), giúp biến bài toán phân lớp phi tuyến phức tạp thành ranh giới tuyến tính phân tách rõ rệt thay vì do mô hình học vẹt ạ."
 
 ---
 
@@ -366,7 +454,7 @@ Sau đây, nhóm chúng em xin lắng nghe các câu hỏi và góp ý từ Th�
 
 > **Người trả lời chính:** **Bùi Thị Mỷ Cẩm / Hoàng Cao Sơn**  
 > **Hướng trả lời:**  
-> "Dạ thưa thầy, về chất lượng phân loại thì 2 mô hình tương đương nhau (chỉ chênh nhau 3 ca đoán nhầm trên 40,000 mẫu). Nhưng Random Forest mất gần 20 phút để train và file model rất nặng. Còn XGBoost chỉ mất 41 giây để train, độ trễ suy luận dưới 0.5ms và tốn rất ít RAM. Với hệ thống cổng thanh toán cần xử lý hàng nghìn giao dịch mỗi giây thì XGBoost là lựa chọn tối ưu hơn hẳn ạ."
+> "Dạ thưa thầy, về chất lượng phân loại thì 2 mô hình tương đương nhau (F1 chênh lệch không đáng kể: 99.73% so với 99.63%, chỉ lệch 3 ca đoán nhầm trên 40,000 mẫu). Nhưng Random Forest mất gần 20 phút để huấn luyện và file model rất nặng (~32MB). Trong khi đó, XGBoost chỉ mất 41.7 giây để huấn luyện (nhanh gấp 28.5 lần), file model native JSON chỉ 410KB, và độ trễ suy luận cho 1 giao dịch chỉ dưới 0.5 mili-giây. Với các hệ thống cổng thanh toán trực tuyến cần xử lý hàng chục ngàn giao dịch mỗi giây thì XGBoost là lựa chọn tối ưu vượt trội để triển khai production ạ."
 
 ---
 
@@ -374,7 +462,8 @@ Sau đây, nhóm chúng em xin lắng nghe các câu hỏi và góp ý từ Th�
 
 > **Người trả lời chính:** **Bùi Thị Mỷ Cẩm / Nguyễn Duy Khang**  
 > **Hướng trả lời:**  
-> "Dạ thưa thầy, Autoencoder đóng vai trò là màng bọc an toàn thứ 2 chứ không thay thế XGBoost. Mô hình có giám sát chỉ bắt được các chiêu trò cũ đã có nhãn. Còn Autoencoder học 'thế nào là bình thường', nên bất kỳ chiêu trò mới nào làm dòng tiền bất thường đều bị nó phát hiện. Tỷ lệ Precision 38.2% là do em chủ động hạ ngưỡng để bắt được 75.2% gian lận. 5% giao dịch bị nghi ngờ này ngân hàng chỉ cần bắt gửi mã OTP hoặc chuyên viên rà soát là xử lý được ạ."
+> "Dạ thưa thầy, Deep Autoencoder đóng vai trò là màng bọc an toàn thứ hai (Defense-in-Depth) chứ không thay thế mô hình có giám sát. Mô hình có giám sát chỉ bắt được các thủ đoạn gian lận cũ đã có nhãn. Còn Autoencoder học 'thế nào là bình thường', nên bất kỳ chiêu trò Zero-Day mới nào làm sai lệch dòng tiền đều bị nó phát hiện qua sai số tái tạo tăng vọt.  
+> Tỷ lệ Precision 38.2% là do em chủ động hạ ngưỡng cắt xuống phân vị thứ 95 (tau = 0.0455) để ưu tiên đẩy Recall lên 75.2%, đúng với triết lý 'thà cảnh báo nhầm còn hơn bỏ sót'. Khoảng 5% giao dịch bị nghi ngờ này hệ thống ngân hàng chỉ cần gửi một mã OTP bổ sung yêu cầu khách hàng xác nhận là giải quyết được, hoàn toàn không làm gián đoạn trải nghiệm người dùng ạ."
 
 ---
 
@@ -382,4 +471,4 @@ Sau đây, nhóm chúng em xin lắng nghe các câu hỏi và góp ý từ Th�
 
 > **Người trả lời chính:** **Phạm Thành Trung / Vũ Văn Duy**  
 > **Hướng trả lời:**  
-> "Dạ thưa thầy, trong giao diện Streamlit, em đã cấu hình tính năng `st.cache_resource` để tải trước trọng số mô hình XGBoost vào bộ nhớ đệm, và sử dụng thư viện Pandas để vector hóa việc tính 14 đặc trưng miền theo lô (batch processing). Do đó, khi tải file CSV lên, hệ thống chấm điểm song song hàng chục ngàn dòng chỉ trong vài giây mà không bị nghẽn giao diện ạ."
+> "Dạ thưa thầy, trong giao diện Streamlit, em đã cấu hình tính năng `@st.cache_resource` để tải trước trọng số mô hình XGBoost và StandardScaler vào bộ nhớ đệm, tránh tải lại mô hình ở mỗi lượt tương tác. Đồng thời, em sử dụng thư viện Pandas để vector hóa toàn bộ quá trình tính toán 14 đặc trưng miền theo lô (batch processing). Do đó, khi tải file CSV lớn lên, hệ thống có thể chấm điểm song song hàng chục ngàn giao dịch chỉ trong vài giây mà không làm đơ hay nghẽn giao diện ạ."

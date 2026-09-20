@@ -134,11 +134,17 @@ def build_submission_structure():
 
     # 3. Slides directory
     slides_dir = TARGET_DIR / "slides"
-    print("\n[3/5] Packaging Presentation Slides...")
+    print("\n[3/5] Packaging Presentation Slides & Scripts...")
     slide_pptx = DRAFT_DIR / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx"
     slide_pdf = DRAFT_DIR / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf"
+    script_docx = DRAFT_DIR / "slide" / "scripts" / "SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.docx"
+    script_md = DRAFT_DIR / "slide" / "scripts" / "SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md"
     copy_file_safe(slide_pptx, slides_dir / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx")
     copy_file_safe(slide_pdf, slides_dir / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf")
+    if script_docx.exists():
+        copy_file_safe(script_docx, slides_dir / "SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.docx")
+    if script_md.exists():
+        copy_file_safe(script_md, slides_dir / "SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md")
 
     # 4. Demo directory
     demo_dir = TARGET_DIR / "demo"

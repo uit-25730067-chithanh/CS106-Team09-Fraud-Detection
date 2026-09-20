@@ -220,14 +220,8 @@ Place in `Final/submit/` before zipping.
 ## Next Actions (Sprint 3 Closing & Sprint 4 Kickoff — 09/09 → 18/09)
 
 > **⚠️ PM Audit 09/09/2026 — Checkpoint findings & Missed Items Radar (by Hôn):**
-> - **Tiến độ:** 6/9 phases passed (66.7%). 6/6 notebooks hoàn thành & chạy sạch 100%. 74 tests passed (0 fail).
-> - **Slide Deck & Script:** Bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md`) đã được **PM chính thức phê duyệt** làm sản phẩm bảo vệ của Nhóm 9.
-> - **Missed Items Radar cần xử lý:**
->   1. `demo/screenshots/` hiện chỉ có `.gitkeep` — Trung & Hôn cần chụp ảnh thực tế 3 màn hình UI (System/Sáng/Tối) và lưu trữ.
->   2. Demo clip 2–3 phút cần quay theo kịch bản `demo/DEMO-SCRIPT.md`.
->   3. Báo cáo Word/PDF: Đảm bảo xuất thêm file tên chuẩn `[Nhom9]_BaoCao_FraudDetection.docx` phục vụ đóng gói submit.
->   4. Submit package: Thư mục `submit/` cần chuẩn bị cấu trúc `[Project AI-UIT] - Nhom 9/` trước ngày 18/9.
->   5. An toàn bảo mật: File `.env` chứa token Kaggle và file `paysim.csv` (470MB) tuyệt đối không được nén vào ZIP nộp bài.
+> - **Slide Deck & Script:** Bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md` & `.docx`) đã được **PM chính thức phê duyệt** và **hiệu chỉnh thời lượng thực tế** dựa trên dữ liệu buổi họp diễn tập (Dry-run meeting 18/09/2026, 49m48s). Tốc độ phát biểu WPM của 7 thành viên đã được đo lường chính xác, thời lượng toàn bài được chuẩn hóa tối ưu ở mức **~23–25 phút** (thay cho ước tính cũ phi thực tế ~15 phút).
+> - **Submit Package:** Đã đóng gói hoàn chỉnh `[Project AI-UIT] - Nhom 9.zip` (47.33 MB, 124 files), bao gồm slide và kịch bản thuyết trình Word/MD.
 
 ### ✅ Thanh — DONE (Phase 00 + 01 + 01b PASSED)
 - EDA notebook `notebooks/01_eda.ipynb` hoàn thành (6 visualizations, run clean)
