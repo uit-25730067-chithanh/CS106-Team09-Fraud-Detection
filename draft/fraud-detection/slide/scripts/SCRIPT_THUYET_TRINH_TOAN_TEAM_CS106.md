@@ -67,13 +67,9 @@ Bây giờ, em xin nhường lời lại cho bạn **Thanh** bắt đầu với 
 
 ### SLIDE 3 – PHẦN 1: TỔNG QUAN ĐỀ TÀI & DỮ LIỆU
 
-_(Thời lượng: ~25s | Người nói: **Đặng Chí Thanh** - EDA & Preprocessing Lead)_
+_(Thời lượng: ~15s | Người nói: **Đặng Chí Thanh** - EDA & Preprocessing Lead)_
 
-Dạ em cảm ơn anh Hôn cho phần mở đầu vừa rồi. Em chào thầy và các bạn!
-
-Để tiếp nối lộ trình báo cáo của nhóm, em xin phép đi thẳng vào **Phần 01: Giới thiệu và phát biểu bài toán**.
-
-Ở Phần 1 này, nhóm sẽ đi qua 3 nội dung chính như trên slide, gồm: bối cảnh công nghiệp của Mobile Money (thanh toán di động), các thách thức kỹ thuật cốt lõi, và mục tiêu nghiên cứu của nhóm.
+Dạ em cảm ơn anh Hôn. Em chào thầy và các bạn! Nhóm sẽ bắt đầu với **Phần 01** — gồm bối cảnh Mobile Money, thách thức kỹ thuật và mục tiêu nghiên cứu.
 
 ---
 
@@ -115,41 +111,31 @@ Thầy và các bạn có thể nhìn vào bảng ở giữa màn hình: dữ li
 
 _(Thời lượng: ~10s | Người nói: **Đặng Chí Thanh**)_
 
-Sau khi đã khoanh vùng được tập dữ liệu sạch, chúng ta đến với **Phần 02: Phân tích khám phá dữ liệu và kỹ thuật đặc trưng**.
+Sau khi đã khoanh vùng được tập dữ liệu sạch, chúng ta đến với **Phần 02** — gồm 3 nội dung: phân tích dấu vết hành vi thực nghiệm, công thức toán học của 14 đặc trưng, và xử lý mất cân bằng lớp.
 
 ---
 
 ### SLIDE 7 – PHÂN TÍCH KHÁM PHÁ DỮ LIỆU: DẤU VẾT HÀNH VI CỐT LÕI
 
-_(Thời lượng: ~55s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng: ~45s | Người nói: **Đặng Chí Thanh**)_
 
 Khi thực hiện EDA trên notebook `01_eda.ipynb`, em đúc kết được **3 dấu vết hành vi mang tính bản chất của tội phạm tài chính**, tương ứng với 3 cột trên màn hình:
 
-- **Cột đầu tiên — Khoanh vùng loại giao dịch**: Kẻ gian chiếm được tài khoản sẽ dùng lệnh `TRANSFER` chuyển tiền sang tài khoản trung gian, rồi lập tức rút tiền mặt `CASH_OUT` ngay để cắt đứt dấu vết dòng tiền.
-- **Cột thứ hai — Hành vi vét sạch tài khoản**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị rút cạn sạch về đúng bằng 0 (`newbalanceOrig == 0`) trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
-- **Cột thứ ba — Sai lệch sổ cái đích**: Tiền chuyển đi nhưng số dư tài khoản nhận thực tế không tăng tương ứng (`newbalanceDest ≈ 0`), vạch trần việc dùng các tài khoản rác (mule account) để tẩu tán tiền.
-
-Nếu chỉ đưa số tiền hay số dư thô vào mô hình thì rất lãng phí. Vì vậy, em đã tiến hành chuyển đổi các quy luật này thành các đặc trưng kế toán.
+- **Phát hiện 1 — Khoanh vùng loại giao dịch**: Kẻ gian chiếm được tài khoản sẽ dùng lệnh `TRANSFER` chuyển tiền sang tài khoản trung gian, rồi lập tức rút tiền mặt `CASH_OUT` ngay để cắt đứt dấu vết dòng tiền.
+- **Phát hiện 2 — Vét sạch số dư nguồn**: Trong **97.56%** số vụ gian lận, số dư của nạn nhân sau giao dịch bị rút cạn sạch về đúng bằng 0 (`newbalanceOrig == 0`) trong 1 lần duy nhất trước khi nạn nhân kịp phát hiện và khóa thẻ.
+- **Phát hiện 3 — Sai lệch số dư đích**: Tiền chuyển đi nhưng số dư tài khoản nhận thực tế không tăng tương ứng (`newbalanceDest ≈ 0`), vạch trần việc dùng các tài khoản rác (mule account) để tẩu tán tiền.
 
 ---
 
 ### SLIDE 8 – KỸ THUẬT ĐẶC TRƯNG: 14 THUỘC TÍNH CỐT LÕI
 
-_(Thời lượng: ~50s | Người nói: **Đặng Chí Thanh**)_
+_(Thời lượng: ~40s | Người nói: **Đặng Chí Thanh**)_
 
 Từ 3 dấu vết trên, em hiện thực trong code tổng cộng **14 đặc trưng miền chuyên sâu** ở 3 khung công thức bên trái: gồm sai lệch số dư nguồn (`errorBalanceOrig`), sai lệch số dư đích (`errorBalanceDest`), cùng cờ rút cạn (`drain_flag`) kết hợp giờ đêm (`is_overnight`).
 
-Điều chứng minh rõ nhất hiệu quả của việc thiết kế đặc trưng nằm ở **khung Feature Importance góc dưới bên phải**:
-Khi đánh giá mô hình, **chỉ riêng 2 biến `errorBalanceOrig` (49.9%) và `newbalanceOrig` (47.2%) đã chiếm tới hơn `97.1%` tổng sức mạnh phân loại!**
+Khi đánh giá mô hình, **chỉ riêng 2 biến `errorBalanceOrig` (49.9%) và `newbalanceOrig` (47.2%) đã chiếm tới hơn `97.1%` tổng sức mạnh phân loại** — và toàn bộ các bước chuẩn hóa chỉ fit trên tập Train để đảm bảo tuyệt đối nguyên tắc Leak-Free.
 
-Điều này chứng minh kỹ thuật đặc trưng miền đã giải quyết bài toán tận gốc, biến ranh giới phân lớp phức tạp thành tuyến tính rõ rệt. Và một nguyên tắc em luôn tuân thủ nghiêm ngặt là chống rò rỉ dữ liệu: toàn bộ các bước scale chuẩn hóa chỉ được fit trên tập Train.
-
-> **Đúc kết Phần 02 (Nhánh EDA & Features):**  
-> Tóm lại, nhóm đã chuyển hóa thành công 3 dấu vết hành vi thành các đặc trưng kế toán quyết định 97.1% sức mạnh phân loại và đảm bảo tuyệt đối nguyên tắc Leak-Free.
-
-Khi đã có không gian đặc trưng chất lượng cao, bài toán tiếp theo là xử lý mất cân bằng 0.13% bằng kỹ thuật sinh mẫu thích ứng. 
-
-Sau đây, em xin chuyển lại phần trình bày cho bạn **Hoàng Cao Sơn** tiếp tục với nội dung SMOTE và ADASYN ở Slide 9 ạ.
+Sau đây, em xin chuyển lại phần trình bày cho bạn **Hoàng Cao Sơn** tiếp tục với nội dung SMOTE và ADASYN ạ.
 
 ---
 
