@@ -69,8 +69,8 @@ Final/
 | **Sprint 1 (25/8 – 28/8)** | Khởi tạo Repo, phân công & thiết kế khung dự án | ✅ Xong | Thanh + Hôn |
 | **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, XGBoost & Autoencoder ✅, Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT 21 slides học thuật & Kịch bản toàn team ✅, Streamlit UI Shell ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
 | **Sprint 3 (4/9 – 11/9)** | Đầy đủ 6/6 notebooks hoàn thành & chạy sạch; Phase 05 Evaluation hoàn tất (Khang ✅); Báo cáo Tóm tắt + Chương 1–7 (32 trang DOCX/PDF, số liệu khớp 100% Phase 05); Demo UI kết nối model thật + mapping datetime/VNĐ (Trung ✅); Slide 21 trang & Kịch bản 7 người chính thức duyệt (Hôn ✅); PM Audit Sprint 3 Closing (Hôn ✅). | ✅ Hoàn tất Sprint 3 | Cả nhóm |
-| **Sprint 4 (11/9 – 18/9)** | Hoàn thiện Demo UI tương tác, quy trình phân tích 4 bước, import CSV/JSON, 74 tests pass, video demo Google Drive (Trung ✅); xuất bản báo cáo DOCX/PDF chuẩn UIT (Duy ✅); diễn tập thuyết trình 10–12 phút theo kịch bản 7 người (Hôn ✅). | ✅ Hoàn tất Sprint 4 (8/9 phases passed — 88.9%) | Cả nhóm |
-| **Nộp bài (18/9)** | Đóng gói zip `[Project AI-UIT] - Nhom 9.zip` & Nộp bài chính thức trước deadline (Phase 08) | 🔲 Sẵn sàng đóng gói | Hôn |
+| **Sprint 4 (11/9 – 18/9)** | Hoàn thiện Demo UI tương tác, quy trình phân tích 4 bước, import CSV/JSON, video demo Google Drive (Trung ✅); xuất bản báo cáo DOCX/PDF chuẩn UIT (Duy ✅); hiệu chỉnh kịch bản thuyết trình ~23–25 phút theo diễn tập meeting (Hôn ✅). | ✅ Hoàn tất Sprint 4 (9/9 phases passed — 100%) | Cả nhóm |
+| **Nộp bài (18/9)** | Đóng gói tự động `[Project AI-UIT] - Nhom 9.zip` (118.58 MB, 128 files, 116 tests pass) & Sẵn sàng nộp chính thức trước deadline (Phase 08) | ✅ Hoàn thành đóng gói | Hôn |
 
 ---
 

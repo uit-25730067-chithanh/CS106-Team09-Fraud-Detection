@@ -121,7 +121,7 @@ def create_guide_docx(md_path: Path, output_docx: Path):
 
     doc.add_paragraph("3.3. Chạy Kiểm thử Tự động (Tests):\n"
                       "  pytest tests/\n"
-                      "Hệ thống đạt 100% tỷ lệ pass (74 tests pass).")
+                      "Hệ thống đạt 100% tỷ lệ pass (116 tests pass).")
 
     # Section 4: Summary Table
     h4 = doc.add_heading("4. Bảng Tổng hợp Kết quả Thực nghiệm", level=1)

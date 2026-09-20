@@ -41,9 +41,9 @@ gantt
     section Sprint 4 (11/9 - 18/9)
     Chạy evaluation & So sánh (Khang)   :done, s4_1, 2026-09-06, 3d
     Figures & demo evidence (Trung)      :done, s4_2, 2026-09-09, 4d
-    Báo cáo Results & Conclusion (Duy)   :active, s4_3, 2026-09-09, 4d
-    Hoàn thiện PPT & Review (Hôn)        :active, s4_4, 2026-09-09, 4d
-    Đóng gói & Nộp bài (Hôn)             :milestone, s4_5, 2026-09-18, 0d
+    Báo cáo Results & Conclusion (Duy)   :done, s4_3, 2026-09-09, 4d
+    Hoàn thiện PPT & Review (Hôn)        :done, s4_4, 2026-09-09, 4d
+    Đóng gói & Nộp bài (Hôn)             :done, s4_5, 2026-09-17, 1d
 ```
 
 ---
@@ -178,13 +178,13 @@ gantt
 |------|---------|-----------|
 | Đối chiếu Results draft và viết Discussion (Word) <br> *[Đầu vào: `reports/model_comparison.csv` + plots \| Đầu ra: Chương 5 đã xác nhận + Chương 6 Thảo luận]* | 🔴 Critical | ✅ (Chương 5 & 6 khớp 100% Phase 05) |
 | Viết Conclusion + References, tóm tắt Abstract <br> *[Đầu vào: Final outcomes \| Đầu ra: Chương 7, Tóm tắt & tài liệu tham khảo]* | 🟡 High | ✅ (Chương 7, Bảng 7.1 & [1]–[8] IEEE) |
-| Format báo cáo Word & kiểm tra tài liệu tham khảo <br> *[Đầu vào: All text segments \| Đầu ra: `reports/[Nhom9]_BaoCao_FraudDetection.docx` hoàn chỉnh]* | 🟡 High | 🟡 Tự động hóa qua build_report.py, đang xuất bản cuối |
+| Format báo cáo Word & kiểm tra tài liệu tham khảo <br> *[Đầu vào: All text segments \| Đầu ra: `reports/[Nhom9]_BaoCao_FraudDetection.docx` hoàn chỉnh]* | 🟡 High | ✅ Hoàn thành: DOCX/PDF 32 trang chuẩn cấu trúc UIT qua build_report.py |
 
 ### Hôn
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
 | PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `reports/model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | ✅ (Slide 21 trang & kịch bản 7 người đã duyệt) |
-| Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | 🔲 Chuẩn bị cây thư mục submit/ (Sprint 4) |
+| Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | ✅ Hoàn thành đóng gói tự động: ZIP 118.58 MB (128 files), 116 tests pass, bảo mật 100% |
 
 ---
 

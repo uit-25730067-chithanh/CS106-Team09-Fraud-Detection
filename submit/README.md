@@ -36,6 +36,6 @@ Sau đó zip thành: **`[Project AI-UIT] - Nhom 9.zip`**
 - [x] Báo cáo Word/PDF có đủ: Tóm tắt, Giới thiệu, Dữ liệu, Phương pháp, Kết quả, Thảo luận, Kết luận (Chương 1–7)
 - [x] PPT có slide kết quả và biểu đồ (Bộ Slide học thuật 21 trang đã duyệt chính thức)
 - [x] Demo: Đã lưu 5 screenshots chuẩn hóa và kịch bản demo vào `demo/screenshots/`
-- [x] File nộp đúng tên chuẩn: `[Project AI-UIT] - Nhom 9.zip` (dung lượng 47.26 MB, loại trừ triệt để .env và paysim.csv)
-- [x] Toàn bộ 87/87 automated unit/integration tests vượt qua 100%
+- [x] File nộp đúng tên chuẩn: `[Project AI-UIT] - Nhom 9.zip` (dung lượng 118.58 MB, 128 files, loại trừ triệt để .env và paysim.csv)
+- [x] Toàn bộ 116/116 automated unit/integration tests vượt qua 100%
 - [x] Script tự động đóng gói `draft/fraud-detection/src/reporting/package_submission.py` hoạt động hoàn hảo

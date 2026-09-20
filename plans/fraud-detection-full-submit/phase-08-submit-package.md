@@ -134,29 +134,29 @@ Tự động hóa qua script chuẩn: `draft/fraud-detection/src/reporting/packa
 - [x] `[Project AI-UIT] - Nhom 9/` folder structure đúng chuẩn UIT
 - [x] `code/notebooks/` có đủ 6/6 notebooks (chạy sạch 100%)
 - [x] `report/` có Word file + PDF bản nộp chính thức + Excel Danh sách nhóm
-- [x] `slides/` có PPTX + PDF file chính thức 21 slide học thuật
+- [x] `slides/` có PPTX + PDF file chính thức 21 slide học thuật + Kịch bản thuyết trình toàn team
 - [x] `demo/` có 5 screenshots chuẩn hóa + DEMO-SCRIPT.md
 - [x] ZIP tạo thành công: `[Project AI-UIT] - Nhom 9.zip`
-- [x] ZIP size hợp lý: 47.26 MB (< 500MB, loại bỏ paysim.csv)
-- [x] Test unzip và kiểm tra nội dung: 122 items passed integrity check
+- [x] ZIP size hợp lý: 118.58 MB (< 500MB, loại bỏ paysim.csv)
+- [x] Test unzip và kiểm tra nội dung: 128 items passed integrity check
 - [x] Sẵn sàng nộp trước hạn 18/9/2026 (hoàn tất ngày 17/9/2026)
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 87/87 tests pass |
+| All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 116/116 tests pass |
 | ZIP created | ✅ | `submit/[Project AI-UIT] - Nhom 9.zip` |
-| ZIP size | < 500MB | 47.26 MB |
+| ZIP size | < 500MB | 118.58 MB |
 | Submitted | ✅ | Gói nộp hoàn chỉnh, sẵn sàng nộp LMS/Drive |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
 Notebooks clean: 6/6 ✅
-Unit & integration tests: 87/87 passed ✅
+Unit & integration tests: 116/116 passed ✅
 ZIP filename: [Project AI-UIT] - Nhom 9.zip
-ZIP size: 47.26 MB (Uncompressed: 98.60 MB, 122 files)
+ZIP size: 118.58 MB (Uncompressed: 171.91 MB, 128 files)
 Packaging script: draft/fraud-detection/src/reporting/package_submission.py
 Security audit: PASSED (No paysim.csv, no .env, no cache files)
 Submit date: 17/09/2026 19:52 ICT
@@ -179,7 +179,7 @@ Status: READY FOR SUBMISSION
 ```
 Hoàn thành: 17/09/2026
 Người thực hiện: Trần Hoàng Hôn (Nhóm trưởng) + Toàn bộ 7 thành viên Nhóm 9
-Trạng thái: Gói nộp [Project AI-UIT] - Nhom 9.zip đã đóng gói thành công (47.26 MB), kiểm tra toàn vẹn 100% không lỗi.
+Trạng thái: Gói nộp [Project AI-UIT] - Nhom 9.zip đã đóng gói thành công (118.58 MB, 128 files), kiểm tra toàn vẹn 100% không lỗi.
 Sẵn sàng nộp trên hệ thống của môn học.
 ```
 
@@ -187,26 +187,5 @@ Sẵn sàng nộp trên hệ thống của môn học.
 
 ```bash
 git add submit/README.md plans/ AGENTS.md
-git commit -m "chore(phase08): complete submit package — [Project AI-UIT] Nhóm 9"un All | Medium | High | Fix errors before packaging |
-| Dataset accidentally included in ZIP | Low | Medium | Verify ZIP size, check .gitignore |
-| Models too large for submission | Low | Medium | Exclude large .h5 if > 50MB; note in README |
-| Deadline miss | Low | Critical | Submit 1 day early as buffer |
-
-## Phase Summary *(viết sau khi làm — evidence-based)*
-
-> ⬜ Chưa hoàn thành
-
-```
-Hoàn thành: __/__/2026
-Người thực hiện: Hôn (+ toàn nhóm verify)
-Submitted at: __:__ ICT __/__/2026
-Confirmation: ____________________
-```
-
-## Commit
-
-```bash
-git add Final/submit/
-git commit -m "chore(phase08): final submit package ready — [Project AI-UIT] Nhóm 9"
-git tag -a v1.0 -m "CS106 Final Submission"
+git commit -m "chore(phase08): complete submit package — [Project AI-UIT] Nhóm 9"
 ```

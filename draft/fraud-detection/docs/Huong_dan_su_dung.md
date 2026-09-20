@@ -97,7 +97,7 @@ Thầy/cô và các bạn có thể mở và chạy lại 6 Notebooks trong thư
 ---
 
 ### Cách 3: Chạy Kiểm thử Tự động (Unit Tests)
-Dự án được bảo vệ bằng hệ thống 74 bài test tự động (đạt tỷ lệ vượt qua 100%):
+Dự án được bảo vệ bằng hệ thống 116 bài test tự động (đạt tỷ lệ vượt qua 100%):
 ```bash
 pytest tests/
 ```
