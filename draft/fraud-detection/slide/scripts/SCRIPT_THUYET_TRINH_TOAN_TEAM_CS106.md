@@ -155,41 +155,41 @@ Sau đây, em xin chuyển lại phần trình bày cho bạn **Hoàng Cao Sơn*
 
 ### SLIDE 9 – XỬ LÝ MẤT CÂN BẰNG LỚP: SMOTE và ADASYN
 
-_(Thời lượng: ~50s | Người nói: **Hoàng Cao Sơn** - Imbalance & Random Forest Lead)_
+_(Thời lượng: ~30s | Người nói: **Hoàng Cao Sơn** - Imbalance & Random Forest Lead)_
 
-Em chào thầy và các bạn, em là **Hoàng Cao Sơn**.
+Cảm ơn Thanh. Chào Thầy và các bạn, mình là **Sơn**. Sau khi Thanh đã trích xuất 14 đặc trưng, mình tiếp nhận bài toán và xử lý thách thức cốt lõi đầu tiên: **Dữ liệu bị mất cân bằng (Imbalanced Data) cực đoan ~0.13%**.
 
-Em đảm nhận việc xử lý bài toán mất cân bằng dữ liệu 0.13%. Em đã thử nghiệm và so sánh 2 kỹ thuật sinh mẫu nhân tạo là **SMOTE** và **ADASYN**:
+Nhìn vào khung cảnh báo màu đỏ ở trên cùng: Đây là **Accuracy Paradox (nghịch lý độ chính xác)**. Nếu mô hình ngây thơ đoán 100% giao dịch là bình thường thì **Accuracy (độ chính xác tổng thể)** vẫn đạt 99.87% nhưng bỏ sót toàn bộ gian lận. Do đó, việc đánh giá bắt buộc phải dẫn dắt bởi **Precision (độ chuẩn xác)**, **Recall (độ phủ)**, **F1-Score** và **PR-AUC**.
 
-- Với **SMOTE**: Thuật toán lấy mẫu gian lận $x_i$ và nội suy tuyến tính với láng giềng gần nhất $k$-NN trong không gian ẩn. Cơ chế này tạo ra ranh giới quyết định rất phẳng và phân tách rõ giữa 2 lớp.
-- Với **ADASYN**: Thuật toán cố gắng sinh nhiều mẫu hơn ở các vùng biên khó. Tuy nhiên, trong bài toán PaySim, ADASYN bị hiện tượng sinh mẫu quá đà ở vùng chồng lấn nhiễu, làm tăng tỷ lệ báo động giả (False Alarm).
+Để cân bằng dữ liệu, mình đưa 2 kỹ thuật sinh mẫu vào đối chuẩn:
+- Ở khung màu xanh bên trái: Như công thức hiển thị, bản chất của **SMOTE (Kỹ thuật nội suy mẫu tổng hợp)** là nội suy mẫu nhân tạo dọc theo đoạn thẳng nối các láng giềng **k-NN (k láng giềng gần nhất)**, tạo ra đường biên phân tách phẳng và rõ nét. Điểm mấu chốt là mình dùng biến thể **SMOTENC (Nominal & Continuous - biến định danh và liên tục)** để bảo toàn nguyên vẹn giá trị 0-1 của các cờ nhị phân.
+- Ngược lại, ở khung màu xám bên phải là **ADASYN (Lấy mẫu thích ứng theo mật độ)**: Do cố sinh mẫu theo mật độ vùng biên khó, mà kẻ gian lại ngụy trang tinh vi, ADASYN đã đẻ mẫu quá đà ở vùng chồng lấn nhiễu, làm tăng **False Positives (báo động giả)**.
 
-**Kết luận thực nghiệm**: Em quyết định chọn **SMOTE** làm phương pháp xử lý mất cân bằng chính thức, tạo ra tập dữ liệu huấn luyện cân bằng (230,145 dòng) giúp mô hình đạt F1-Score cao nhất và gần như triệt tiêu hoàn toàn báo động giả.
+👉 **Chốt lại:** Mình chọn **SMOTENC**, tạo ra tập train cân bằng **230.145 dòng** (theo tỷ lệ 1:2 tối ưu), triệt tiêu tối đa báo động giả.
 
 ---
 
 ### SLIDE 10 – PHẦN 3: PHƯƠNG PHÁP & MÔ HÌNH HỌC MÁY
 
-_(Thời lượng: ~10s | Người nói: **Hoàng Cao Sơn**)_
+_(Thời lượng: ~5s | Người nói: **Hoàng Cao Sơn**)_
 
-Tiếp theo, em xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free và Mô hình Random Forest mà em đã huấn luyện.
+Tiếp theo, mình xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free và Mô hình Random Forest do mình huấn luyện.
 
 ---
 
 ### SLIDE 11 – KIẾN TRÚC PIPELINE CHUẨN LEAK-FREE
 
-_(Thời lượng: ~60s | Người nói: **Hoàng Cao Sơn**)_
+_(Thời lượng: ~25s | Người nói: **Hoàng Cao Sơn**)_
 
-Thưa thầy, trong các hệ thống AI tài chính, rủi ro lớn nhất là **Rò rỉ dữ liệu (Data Leakage)** — làm cho mô hình có điểm số cao ảo khi huấn luyện nhưng khi chạy thật thì hoàn toàn thất bại.
+Bước sang Slide 11 là kiến trúc **Pipeline (chuỗi quy trình xử lý)** gồm 6 bước của nhóm (từ Lọc dữ liệu, Trích xuất đặc trưng, Chia tập, Tái lấy mẫu, Huấn luyện đến Đánh giá), được thiết kế để triệt tiêu hoàn toàn nguy cơ **Data Leakage (rò rỉ dữ liệu)**.
 
-Để giải quyết, nhóm em xây dựng một **Pipeline gồm 6 bước** với **4 nguyên tắc bảo vệ**:
+Mọi người có thể thấy **4 quy chuẩn bảo vệ nghiêm ngặt** ở khung bên dưới:
+1. **Stratified Split (chia phân tầng) 80/20** được chốt chặn trước bất kỳ bước tái lấy mẫu hay chuẩn hóa nào.
+2. **Resampling (tái lấy mẫu)** ở Bước 4 **tuyệt đối chỉ chạy trên tập Train (huấn luyện)**; tập **Test (kiểm thử)** 40.000 mẫu được giữ nguyên vẹn 100% tỷ lệ thực tế ngoài đời, không một mẫu nhân tạo nào được lọt vào.
+3. **StandardScaler (chuẩn hóa độ lệch chuẩn)** chỉ `fit` (học tham số) trên Train rồi mới `transform` (áp dụng chuyển đổi) mù sang Test.
+4. Toàn bộ khâu chọn ngưỡng và dò **Hyperparameters (siêu tham số)** đều dùng **Cross-Validation (kiểm định chéo)** nội bộ trên Train, không chạm vào Test.
 
-1. **Phân chia Stratified Split (80/20) TRƯỚC TIÊN**: Tách riêng tập Train và Test trước khi thực hiện bất kỳ phép biến đổi nào.
-2. **Resampling cách ly tuyệt đối**: SMOTE **chỉ được chạy trên 80% tập Train**. Tập Test ($N = 40,000$ mẫu) được giữ nguyên vẹn 100% tỷ lệ mất cân bằng tự nhiên 0.13%, tuyệt đối không có mẫu nhân tạo nào lọt vào tập Test.
-3. **Chuẩn hóa Scaler độc lập**: Bộ `StandardScaler` chỉ được `fit` trên tập Train, rồi dùng nguyên tham số đó `transform` trên tập Test.
-4. **Không tối ưu tham số trên tập Test**: Toàn bộ quá trình chọn ngưỡng và tune model đều dùng K-Fold Cross Validation nội bộ trên tập Train.
-
-Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm đều đảm bảo tính khách quan và trung thực tuyệt đối.
+Nhờ vậy, kết quả thực nghiệm hoàn toàn khách quan và trung thực.
 
 ---
 
@@ -197,11 +197,18 @@ Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm �
 
 _(Thời lượng: ~60s | Người nói: **Hoàng Cao Sơn** [phần RF] & **Bùi Thị Mỷ Cẩm** [phần XGB])_
 
-_(Phần 1 - Random Forest: **Hoàng Cao Sơn** trình bày)_
+_(Phần 1 - Random Forest: **Hoàng Cao Sơn** trình bày - ~20s)_
 
-Về mô hình Random Forest ở bên trái: Em sử dụng kỹ thuật Bagging với 100 cây quyết định độc lập, kết hợp tinh chỉnh siêu tham số `RandomizedSearchCV` với 50 vòng lặp trên 5-Fold CV.
+Tại Slide 12, ở nửa bên trái là mô hình **Random Forest (Rừng ngẫu nhiên)** do mình huấn luyện.
 
-Mô hình này cho độ chính xác cực kỳ cao, Precision đạt **99.94%**, trên 38,357 giao dịch bình thường nó chỉ đoán nhầm đúng 1 ca. Tuy nhiên, nhược điểm là thời gian huấn luyện khá lâu, mất gần 20 phút.
+Về kiến trúc, mô hình tập hợp **100 Decision Trees (cây quyết định độc lập)** theo cơ chế **Ensemble Bagging (học kết hợp đóng bao)**, phân nhánh tối ưu theo độ tinh khiết **Gini** như công thức trên slide. Để chống **Overfitting (học vẹt)**, mình khống chế độ sâu tối đa `max_depth = 15`.
+
+🎯 **Kết quả thực nghiệm nổi bật:**
+- **Peak Precision (độ chuẩn xác đỉnh cao) đạt 99.94%:** Trong 38.357 giao dịch hợp lệ, mô hình chỉ báo nhầm duy nhất **đúng 1 ca**!
+- **F1-Score đạt 0.9973:** Đưa Random Forest trở thành mô hình có độ chính xác cao nhất toàn đồ án.
+- **Hạn chế:** Thời gian huấn luyện khá lâu, mất gần 20 phút (~1187 giây).
+
+Để khắc phục độ trễ huấn luyện và mở rộng khả năng bắt gian lận chưa từng thấy, phần tiếp theo sẽ do bạn **Bùi Thị Mỷ Cẩm** trình bày về mô hình **XGBoost (mô hình tăng cường độ dốc cực đại)** ở nửa bên phải và mạng **Deep Autoencoder (tự mã hóa học sâu)**.
 
 _(Phần 2 - XGBoost: **Bùi Thị Mỷ Cẩm** tiếp lời)_
 
