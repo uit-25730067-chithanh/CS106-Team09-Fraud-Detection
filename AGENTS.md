@@ -59,7 +59,7 @@ Final/
 | Evaluation (`src/evaluation/`) | ✅ Phase 05 `passed` (PR #26 & #28) — 4/4 scripts của Khang xong (metrics_calculator.py, plot_roc_curve.py, confusion_matrix_plot.py, model_comparator.py); `notebooks/06_evaluation_comparison.ipynb` chạy sạch; `reports/model_comparison.csv` + 7 figures đã xuất, khớp 100% `ch5_metrics_recomputed.csv`. Thêm 2 scripts vẽ đồ thị báo cáo |
 | Demo UI | ✅ Phase 06 `passed` — Streamlit Web UI + XGBoost-SMOTE & scaler kết nối hoàn chỉnh; bổ sung quy trình phân tích trực quan 4 bước, hộp chọn dữ liệu mẫu hỗ trợ nhập CSV/JSON an toàn, mapping thời gian PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, 3 themes; 5 screenshots chuẩn hóa, kịch bản 7 cảnh & video clip demo; tests pass |
 | Báo cáo & Slide | ✅ Phase 07 `passed` (15/09) — Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang chuẩn định dạng UIT, khớp 100% Phase 05). Slide: bộ học thuật 21 trang kèm Kịch bản toàn team 7 người **đã duyệt chính thức**. |
-| Gói nộp bài | ✅ Phase 08 `passed` (17/09) — Đóng gói tự động `[Project AI-UIT] - Nhom 9.zip` (47.26 MB), kiểm tra toàn vẹn và bảo mật đạt 100% |
+| Gói nộp bài | ✅ Phase 08 `passed` (17/09) — Đóng gói tự động `[Project AI-UIT] - Nhom 9.zip` (118.51 MB, 127 files), kiểm tra toàn vẹn và bảo mật đạt 100% |
 | Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides, Huong_dan_su_dung (Word & MD), Danh sách nhóm (Excel) |
 
 > **Verdict (19/09/2026): Phase 00–08 TOÀN BỘ PASSED (9/9 = 100%). Đồ án hoàn thành trọn vẹn trước hạn chót. Toàn bộ mã nguồn, 6/6 notebooks, báo cáo Word/PDF 32 trang, Slide học thuật 21 trang kèm kịch bản thuyết trình toàn team, giao diện demo UI tương tác và gói nộp bài ZIP [Project AI-UIT] - Nhom 9.zip đã sẵn sàng nộp chính thức.**
@@ -220,8 +220,8 @@ Place in `Final/submit/` before zipping.
 ## Next Actions (Sprint 3 Closing & Sprint 4 Kickoff — 09/09 → 18/09)
 
 > **⚠️ PM Audit 09/09/2026 — Checkpoint findings & Missed Items Radar (by Hôn):**
-> - **Slide Deck & Script:** Bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md` & `.docx`) đã được **PM chính thức phê duyệt** và **hiệu chỉnh thời lượng thực tế** dựa trên dữ liệu buổi họp diễn tập (Dry-run meeting 18/09/2026, 49m48s). Tốc độ phát biểu WPM của 7 thành viên đã được đo lường chính xác, thời lượng toàn bài được chuẩn hóa tối ưu ở mức **~23–25 phút** (thay cho ước tính cũ phi thực tế ~15 phút).
-> - **Submit Package:** Đã đóng gói hoàn chỉnh `[Project AI-UIT] - Nhom 9.zip` (47.33 MB, 124 files), bao gồm slide và kịch bản thuyết trình Word/MD.
+> - **Slide Deck & Script:** Bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người (`SCRIPT_THUYET_TRINH_TOAN_TEAM_CS106.md` & `.docx`) đã được **PM chính thức phê duyệt**, bổ sung Bảng đối chiếu mục tiêu 15 phút (900s), cột tình trạng cập nhật của từng thành viên, và hướng dẫn tốc độ nói chuẩn kỹ thuật 2.0–2.3 từ/giây (~120–140 WPM).
+> - **Submit Package:** Đã đóng gói hoàn chỉnh `[Project AI-UIT] - Nhom 9.zip` (118.51 MB, 127 files), bảo mật & kiểm toán an toàn đạt 100%, thư mục `slides/` giao nộp chỉ giữ Slide PPTX/PDF học thuật chính thức (kịch bản lưu nội bộ để luyện tập).
 
 ### ✅ Thanh — DONE (Phase 00 + 01 + 01b PASSED)
 - EDA notebook `notebooks/01_eda.ipynb` hoàn thành (6 visualizations, run clean)
@@ -273,7 +273,7 @@ Place in `Final/submit/` before zipping.
 ### ✅ Hôn — DONE (Phase 07 & 08 PASSED — Final Package Ready)
 1. ✅ **Chính thức phê duyệt** bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người.
 2. ✅ **Xây dựng script tự động đóng gói:** `draft/fraud-detection/src/reporting/package_submission.py`.
-3. ✅ **Kiểm tra bảo mật & toàn vẹn:** Loại bỏ triệt để `paysim.csv` (470MB) và `.env` token, nén thành công `[Project AI-UIT] - Nhom 9.zip` dung lượng 47.26 MB (122 files).
+3. ✅ **Kiểm tra bảo mật & toàn vẹn:** Loại bỏ triệt để `paysim.csv` (470MB), `.env` token và các file kịch bản nội bộ khỏi thư mục `slides/`, nén thành công `[Project AI-UIT] - Nhom 9.zip` dung lượng 118.51 MB (127 files).
 4. ✅ **Bổ sung tài liệu giao nộp:** `Danh sách nhóm.xlsx` (Excel chuẩn 7 thành viên), `Huong_dan_su_dung.docx`/`.md`.
 5. ✅ **Sẵn sàng nộp bài:** Nhóm trưởng Hôn đại diện nộp file ZIP lên hệ thống môn học CS106 đúng hạn (trước 18/09/2026).
 

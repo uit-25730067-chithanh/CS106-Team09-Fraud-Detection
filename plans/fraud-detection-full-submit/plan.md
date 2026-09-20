@@ -50,7 +50,7 @@ Từ skeleton ban đầu (docs + structure, không có code) → bản nộp ho�
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `passed` ✅ | 4/4 scripts done; notebook 06 chạy Restart&Run All sạch; `model_comparison.csv` + 7 figures xuất xong, khớp ch5_metrics_recomputed.csv |
 | 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `passed` ✅ | Streamlit Web UI, quy trình 4 bước, import CSV/JSON, inference XGBoost, 3 themes, comparison/9 figures, 5 screenshots chuẩn hóa & kịch bản demo |
 | 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `passed` ✅ | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
-| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `passed` ✅ | Đóng gói tự động hoàn chỉnh `[Project AI-UIT] - Nhom 9.zip` (118.58 MB), 116/116 tests pass, 100% clean |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `passed` ✅ | Đóng gói tự động hoàn chỉnh `[Project AI-UIT] - Nhom 9.zip` (118.51 MB), 116/116 tests pass, 100% clean |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
@@ -58,7 +58,7 @@ Từ skeleton ban đầu (docs + structure, không có code) → bản nộp ho�
 >
 > **Phase 07 — Duy & Hôn — hoàn tất 15/09/2026:** Báo cáo Word & PDF 32 trang chuẩn cấu trúc UIT khớp 100% số liệu thực nghiệm Phase 05; bộ Slide học thuật 21 trang và kịch bản thuyết trình toàn team 7 người đã duyệt chính thức.
 >
-> **Phase 08 — Hôn (PM) — hoàn tất 17/09/2026:** Hoàn tất script đóng gói tự động `package_submission.py`, kiểm tra bảo mật (loại bỏ paysim.csv, .env), cấu trúc `[Project AI-UIT] - Nhom 9/` chuẩn quy định và tạo thành công file nén `[Project AI-UIT] - Nhom 9.zip` (118.58 MB, 128 files). 100% tiêu chí đạt chuẩn.
+> **Phase 08 — Hôn (PM) — hoàn tất 17/09/2026:** Hoàn tất script đóng gói tự động `package_submission.py`, kiểm tra bảo mật (loại bỏ paysim.csv, .env, các script nội bộ), cấu trúc `[Project AI-UIT] - Nhom 9/` chuẩn quy định và tạo thành công file nén `[Project AI-UIT] - Nhom 9.zip` (118.51 MB, 127 files). 100% tiêu chí đạt chuẩn.
 >
 > **PM Audit & Final Verdict — Hôn — 19/09/2026:** Toàn bộ 9/9 phases (100%) đã chính thức **PASSED**. Đầy đủ 6/6 notebooks chạy sạch 100%, 116/116 tests pass. Nhóm 9 đã hoàn thành xuất sắc toàn bộ yêu cầu đồ án môn học trước hạn chót.
 
