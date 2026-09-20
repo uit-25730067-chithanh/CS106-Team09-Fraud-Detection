@@ -34,13 +34,13 @@
 | **1** | **Trần Hoàng Hôn**   |        **Slide 1, 2**        |      🟢**Đã cập nhật** *(Rút gọn Slide 1 & 2)*      | Mở đầu, giới thiệu 7 thành viên Nhóm 9 và lộ trình 5 phần.                                           |      **1 phút 15s** *(75s)*      |        **1 phút 22s** *(82s)*        |      *3 phút 16s* *(196s)*      |      🟢**Vượt +7s** *(+9%)*      | ✅**ĐẠT CHUẨN** (Khớp mục tiêu sau khi rút gọn).                                       |
 | **2** | **Đặng Chí Thanh**   |  **Slide 3, 4, 5, 6, 7, 8**  |   🟢**Đã cập nhật** *(Rút gọn Slide 3–8 PR #37 & #38)*   | Bối cảnh, PaySim 200k, 100% gian lận ở 2 loại, 14 đặc trưng miền.                                       |     **3 phút 30s** *(210s)*     |        **4 phút 48s** *(288s)*        |      *7 phút 54s* *(474s)*      |    🔴**Vượt +1m18s** *(+37%)*    | ✅**Đã rút gọn ~34s (PR #38):** Lời thoại ngắn gọn, đi thẳng vào 2 biến 97.1%.             |
 | **3** | **Hoàng Cao Sơn**     | **Slide 9, 10, 11, 12 (RF)** |     🟢**Đã cập nhật** *(Rút gọn Slide 9–12 PR #42)*     | SMOTENC giữ nguyên cờ 0/1, 4 chốt chặn Leak-Free và Random Forest.                                         |     **2 phút 00s** *(120s)*     |        **2 phút 30s** *(150s)*        |      *7 phút 17s* *(437s)*      |    🟢**Vượt +30s** *(+25%)*    | ✅**Đã rút gọn (PR #42):** Bám sát slide, 4 nguyên tắc Leak-Free & kết quả RF F1=0.9973.           |
-| **4** | **Bùi Thị Mỷ Cẩm**  |  **Slide 12 (XGB), 13, 18**  |     🔴**Chưa cập nhật** *(Giữ nguyên bản cũ)*     | XGBoost siêu tốc (41s, JSON 410KB) và Deep Autoencoder bắt Zero-Day.                                         |     **2 phút 00s** *(120s)*     |        **3 phút 43s** *(223s)*        |      *4 phút 15s* *(255s)*      |    🔴**Vượt +1m43s** *(+86%)*    | ⚠️**Cần cô đọng:** XGB 40s + Autoencoder & ngưỡng 95th 80s.                            |
+| **4** | **Bùi Thị Mỷ Cẩm**  |  **Slide 12 (XGB), 13, 18**  |     🟢**Đã cập nhật** *(Script mới của Cẩm, 20/09 — gộp local)*     | XGBoost (huấn luyện chưa tới 1 phút, nhanh hơn RF hơn 20 lần) và Deep Autoencoder: lớp phòng thủ thứ cấp, chọn ngưỡng phân vị 95.                                         |     **2 phút 00s** *(120s)*     |        **7 phút 56s** *(476s)* *(đếm lại: 1,074 từ ÷ 135.5 WPM; Slide 12 XGB 258 từ / 114s, Slide 13 409 từ / 181s, Slide 18 407 từ / 180s)*        |      *4 phút 15s* *(255s)*      |    🔴**Vượt +5m56s** *(+297%)*    | ⚠️**Cần cắt mạnh:** kịch bản dài gần 4 lần ngân sách 2 phút; không có mốc **[có thể bỏ]** trong lời thoại. Ưu tiên giữ ngưỡng 95th, Recall 75.2%, và vai trò lớp phòng thủ thứ hai.                            |
 | **5** | **Nguyễn Duy Khang**   |   **Slide 14, 15, 16, 17**   |     🔴**Chưa cập nhật** *(Giữ nguyên bản cũ)*     | Đối chuẩn 5 mô hình, Ma trận nhầm lẫn (sót 8 ca) và Feature Importance.                                |     **2 phút 15s** *(135s)*     |        **4 phút 39s** *(279s)*        |      *4 phút 27s* *(267s)*      |    🔴**Vượt +2m24s** *(+106%)*    | ⚠️**Không đọc bảng:** Chỉ nêu bật RF & XGBoost dẫn đầu, lướt các chỉ số phụ. |
 | **6** | **Vũ Văn Duy**        |       *Không nói Slide*       |     🟢**Đã cập nhật** *(0s — Chuyển sang Q&A)*     | **Chuyên trách phản biện:** Trụ cột trả lời Q&A về Báo cáo Word 32 trang & Threats to Validity. |      **0 phút 00s** *(0s)*      |         **0 phút 00s** *(0s)*         |      *2 phút 29s* *(149s)*      |   🟢**`0s` (Khớp tuyệt đối)**   | 🎯**HOÀN THÀNH MỤC TIÊU:** Duy không nói slide, tránh đổi micro.                      |
 | **7** | **Phạm Thành Trung**  | **Slide 19, 20 + Cảm ơn** | 🔴**Chưa cập nhật** *(Chưa gộp kịch bản Slide 20)* | Giới thiệu Dashboard, nêu 3 kịch bản, Live Demo, 4 đóng góp, Cảm ơn & Mời Q&A.                        |     **2 phút 40s** *(160s)*     |        **3 phút 50s** *(230s)*        |      *5 phút 04s* *(304s)*      |    🔴**Vượt +1m10s** *(+44%)*    | ⚠️**Cần demo nhanh:** Bấm 2 preset mẫu, không gõ tay dữ liệu.                         |
 |     ⏩     | **Slide 21**            |            *Bỏ qua*            |       🟢**Đã cập nhật** *(Cắt bỏ khỏi bài)*       | Trung nói cảm ơn trực tiếp tại cuối Slide 20, không quay lại Slide 21.                                  |      **0 phút 00s** *(0s)*      |         **0 phút 00s** *(0s)*         |               *45s*               |   🟢**`0s` (Khớp tuyệt đối)**   | 🎯**HOÀN THÀNH MỤC TIÊU:** Cắt bỏ hoàn toàn độ trễ switch slide.                    |
 |    ⏱️    | **Dự phòng (Buffer)** |                 —                 |                                —                                | Độ trễ chuyển slide giữa các thành viên và kết nối micro.                                             |      **1 phút 20s** *(80s)*      |                       —                       |                  —                  |                     —                     | Dành cho việc chuyển slide và kết nối âm thanh.                                               |
-|     🏁     | **TỔNG TOÀN BÀI**    |        **20 Slides**        |                 **4/7 bạn đã tối ưu**                 | **6 thành viên nói + Live Demo**                                                                        |     **15 phút 00s** *(900s)*     |      **17 phút 32s** *(1,052s)*      |      *~35m02s (Thuần nói)*      |      🔴**VƯỢT +2m32s (+17%)**      | ⚠️**ĐÃ CẬP NHẬT 4/7 THÀNH VIÊN. CẦN CẨM, KHANG, TRUNG TIẾP TỤC RÚT GỌN.**                     |
+|     🏁     | **TỔNG TOÀN BÀI**    |        **20 Slides**        |                 **5/7 bạn đã cập nhật; 4/7 đã tối ưu**                 | **6 thành viên nói + Live Demo**                                                                        |     **15 phút 00s** *(900s)*     |      **21 phút 45s** *(1,305s)*      |      *~35m02s (Thuần nói)*      |      🔴**VƯỢT +6m45s (+45%)**      | ⚠️**CẨM ĐÃ CẬP NHẬT NỘI DUNG NHƯNG CẦN CẮT VỀ 2 PHÚT. KHANG, TRUNG TIẾP TỤC RÚT GỌN.**                     |
 
 # LỜI THOẠI VĂN NÓI CHI TIẾT THEO TỪNG SLIDE
 
@@ -199,7 +199,7 @@ Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm �
 
 ### SLIDE 12 – MÔ HÌNH GIÁM SÁT: RANDOM FOREST và XGBOOST
 
-_(Thời lượng chuẩn hóa: **~90s – 95s** [Sơn ~40s, Cẩm ~50s] [Meeting thực tế: ~200s] | Người nói: **Hoàng Cao Sơn** [phần RF] & **Bùi Thị Mỷ Cẩm** [phần XGB])_
+_(Thời lượng chuẩn hóa: **~154s** [Sơn ~40s, Cẩm ~114s / 258 từ] [Meeting thực tế: ~200s] | Người nói: **Hoàng Cao Sơn** [phần RF] & **Bùi Thị Mỷ Cẩm** [phần XGB])_
 
 _(Phần 1 - Random Forest: **Hoàng Cao Sơn** trình bày - ~40s)_
 
@@ -212,37 +212,46 @@ Về kiến trúc, mô hình tập hợp **200 Decision Trees (cây quyết đ�
 - **F1-Score đạt 0.9973:** Đưa Random Forest trở thành mô hình có độ chính xác cao nhất toàn đồ án.
 - **Hạn chế:** Thời gian huấn luyện khá lâu, mất gần 20 phút (~1187 giây).
 
-Để khắc phục độ trễ huấn luyện và mở rộng khả năng bắt gian lận chưa từng thấy, phần tiếp theo sẽ do bạn **Bùi Thị Mỷ Cẩm** trình bày về mô hình **XGBoost (mô hình tăng cường độ dốc cực đại)** ở nửa bên phải và mạng **Deep Autoencoder (tự mã hóa học sâu)**.
+Để giải quyết bài toán tốc độ, phần tiếp theo sẽ do bạn **Bùi Thị Mỷ Cẩm** trình bày về mô hình XGBoost.
 
 _(Phần 2 - XGBoost: **Bùi Thị Mỷ Cẩm** tiếp lời)_
 
-Dạ em chào thầy và các bạn, em là **Bùi Thị Mỷ Cẩm**. Em đảm nhận việc huấn luyện mô hình **XGBoost** ở bên phải:
+_(Anh Sơn vừa nói xong: Random Forest rất chính xác nhưng train mất gần 20 phút)_
 
-Về cơ chế, XGBoost tối ưu hàm mục tiêu xấp xỉ bậc 2 sử dụng cả Gradient bậc 1 ($g_i$) và Hessian bậc 2 ($h_i$) của hàm mất mát, kết hợp số hạng điều chuẩn $\Omega(f_t)$ để kiểm soát độ sâu cây và chống Overfitting.
+Dạ em cảm ơn anh Sơn. Em chào thầy và các bạn, em là Cẩm, em phụ trách mô hình **XGBoost** và **Deep Autoencoder**.
 
-**Ưu thế vượt trội:** XGBoost đạt **F1-Score = 99.63%**, tương đương Random Forest, nhưng **thời gian huấn luyện nhanh gấp 28.5 lần — chỉ mất 41.7 giây!** Độ trễ suy luận cho mỗi giao dịch chỉ dưới **0.5 mili-giây**, cực kỳ lý tưởng để triển khai vào các cổng thanh toán xử lý thời gian thực.
+Như anh Sơn vừa trình bày thì Random Forest rất chính xác nhưng train khá lâu. XGBoost ở khung bên phải là hướng tiếp cận nhanh hơn cho cùng bài toán.
+
+Thầy và các bạn có thể hình dung thế này: Random Forest là hàng trăm cây _làm độc lập_ rồi bỏ phiếu. Còn XGBoost thuộc họ Gradient Boosting (tăng cường theo độ dốc), các cây được xây _nối tiếp_ nhau — cây sau sinh ra để sửa đúng những chỗ cây trước làm sai. Để biết sửa theo hướng nào, XGBoost dùng cả gradient (đạo hàm bậc một) lẫn Hessian (đạo hàm bậc hai) — nói đơn giản là nó không chỉ biết hướng đi mà còn biết độ cong của địa hình, nên mỗi bước sửa vừa chuẩn vừa nhanh. _(chỉ vào công thức)_ Còn công thức phạt này là **L2 regularization** (điều chuẩn L2) cộng với phạt số lá, giữ cho cây không quá phức tạp để tránh **Overfitting** (học vẹt).
+
+Kết quả là **F1-Score 99.63%** — ngang ngửa Random Forest — nhưng thời gian huấn luyện **chưa tới một phút**, trong khi Random Forest mất gần 20 phút, tức là nhanh hơn **hơn 20 lần**. Và **inference latency** (độ trễ suy luận) chỉ cỡ **nửa mili-giây** cho một giao dịch, rất hợp với cổng thanh toán **real-time** (thời gian thực). Vì vậy XGBoost là mô hình mà phần demo phía sau dùng để chấm điểm trực tiếp ạ.
 
 ---
 
 ### SLIDE 13 – MÔ HÌNH KHÔNG GIÁM SÁT: DEEP AUTOENCODER
 
-_(Thời lượng chuẩn hóa: **~105s – 110s** [Meeting thực tế: ~85s] | Người nói: **Bùi Thị Mỷ Cẩm** - Modeling XGB & Autoencoder Lead)_
+_(Thời lượng chuẩn hóa: **~181s** [409 từ ÷ 135.5 WPM] [Meeting thực tế: ~85s] | Người nói: **Bùi Thị Mỷ Cẩm** - Modeling XGB & Autoencoder Lead)_
 
-Em đặt ra một câu hỏi: *"Nếu kẻ gian dùng một hình thức lừa đảo hoàn toàn mới, chưa từng có nhãn trong quá khứ thì mô hình có giám sát có còn phát hiện được không?"*
+_(Dừng một nhịp, đổi giọng sang đặt vấn đề.)_
 
-Để trả lời, em xây dựng thêm mô hình không giám sát **Deep Autoencoder**:
+Nhưng cả Random Forest và XGBoost có một điểm chung: đều là Supervised Learning (học có giám sát) — nghĩa là phải có **nhãn**. Chúng chỉ giỏi bắt những kiểu gian lận mà đã từng được nhìn thấy. Vậy _nếu kẻ gian nghĩ ra một chiêu hoàn toàn mới, chưa có nhãn nào_ thì sao?
 
-Kiến trúc mạng đối xứng gồm: 14 chiều đầu vào ➔ qua 2 tầng nén 16 và 8 chiều ➔ nút cổ chai Bottleneck 4 chiều ➔ giải mã qua 8 và 16 chiều ➔ và tái tạo lại 14 chiều đầu ra.
+Để bổ sung cho trường hợp đó, em xây thêm **Deep Autoencoder** (mạng tự mã hóa sâu), học theo hướng **Unsupervised** (không giám sát).
 
-Nguyên lý phát hiện gồm **3 giai đoạn**:
+Ý tưởng rất đời thường: giống một nhân viên kế toán làm việc nhiều năm chỉ với hóa đơn hợp lệ — chưa cần ai dạy "hóa đơn giả trông thế nào", nhưng cứ đưa một tờ bất thường là họ thấy "sai sai" ngay.
 
-- **Giai đoạn 1 - Học chuẩn**: Mạng **chỉ huấn luyện trên giao dịch hợp lệ**, học cách nén và tái tạo cấu trúc luồng tiền bình thường.
-- **Giai đoạn 2 - Bắt lỗi**: Khi gặp giao dịch gian lận bất thường, mạng không thể tái tạo chính xác, khiến sai số tái tạo MSE ($L_{\text{rec}}$) tăng vọt.
-- **Giai đoạn 3 - Ra quyết định**: Hệ thống gắn cờ gian lận nếu sai số vượt ngưỡng $\tau = 0.0455$ (tương ứng phân vị thứ 95).
+_(chỉ vào sơ đồ mạng ở đầu slide)_ Về kiến trúc: mạng nhận vào vector 14 chiều, phần **encoder** (bộ mã hóa) nén dần qua các lớp 16, rồi 8, xuống **bottleneck** (nút cổ chai) chỉ còn 4 chiều; sau đó phần **decoder** (bộ giải mã) giãn ngược lại 8, 16 và về 14 chiều. Vì nút cổ chai quá hẹp, mạng không thể học vẹt — nó buộc phải giữ lại cái _cốt lõi_ của giao dịch.
 
-Nhờ vậy, dù **không dùng nhãn gian lận khi huấn luyện mạng**, Autoencoder vẫn đạt **Recall = 75.23% trên tập Test**, đóng vai trò như lớp phòng thủ thứ hai (Defense-in-Depth) phát hiện bất thường độc lập với nhãn.
+Nguyên lý chạy qua 3 giai đoạn:
 
-Tiếp theo, em xin mời bạn **Nguyễn Duy Khang** trình bày phần Đánh giá thực nghiệm và Đối chuẩn giữa các mô hình.
+- **Một, học chuẩn**: mạng _chỉ_ được huấn luyện trên giao dịch **hợp lệ**, không dùng nhãn gian lận. Nó học "dòng tiền bình thường trông như thế nào".
+- **Hai, bắt lỗi**: khi gặp giao dịch gian lận, cấu trúc dòng tiền lạ so với những gì nó đã học, nên nó tái tạo rất tệ — **reconstruction error** (sai số tái tạo), đo bằng **MSE**, tăng vọt.
+- **Ba, ra quyết định**: sai số vượt **ngưỡng τ = 0.0455** thì hệ thống gắn cờ cảnh báo.
+
+Kết quả trên tập Test: dù trong lúc huấn luyện mạng không hề biết nhãn gian lận, Autoencoder vẫn bắt được **75.23% Recall** — tức 1,236 trên 1,643 vụ gian lận. Em đặt nó ở vai trò **Defense-in-Depth** (phòng thủ nhiều lớp): _không thay thế_ XGBoost, mà là lớp lưới an toàn thứ hai, chuyển các giao dịch đáng ngờ sang thẩm định chuyên sâu.
+- Về nguyên lý, vì không phụ thuộc nhãn nên lớp này không bị trói vào những kiểu gian lận đã từng thấy; còn khả năng với biến thể hoàn toàn mới thì nhóm chưa kiểm thử riêng, đó là hướng phát triển ạ.
+
+Bây giờ em xin mời bạn Khang trình bày kết quả so sánh chi tiết giữa các mô hình ạ.
 
 ---
 
@@ -302,21 +311,19 @@ Tiếp theo, em xin mời chị **Mỷ Cẩm** giải thích phần chọn ngư�
 
 ### SLIDE 18 – PHÂN BỐ SAI SỐ TÁI TẠO & NGƯỠNG ANOMALY
 
-_(Thời lượng chuẩn hóa: **~75s – 80s** [Meeting thực tế: ~104s] | Người nói: **Bùi Thị Mỷ Cẩm**)_
+_(Thời lượng chuẩn hóa: **~180s** [407 từ ÷ 135.5 WPM] [Meeting thực tế: ~104s] | Người nói: **Bùi Thị Mỷ Cẩm**)_
 
-Dạ em cảm ơn bạn Khang.
+Cảm ơn bạn Khang. Em xin quay lại Autoencoder một chút, vì còn một quyết định quan trọng nhất của mô hình này: **đặt ngưỡng τ ở đâu**. Autoencoder không cho ra xác suất, nó chỉ cho một con số "độ lạ" — chính là reconstruction error — nên mình phải tự vạch một đường cắt.
 
-Như mọi người thấy trên slide, biểu đồ bên trái thể hiện rõ sự phân tách sai số tái tạo MSE: giao dịch hợp lệ (đường màu xanh) tập trung ở vùng sai số cực thấp, dưới 0.02; trong khi giao dịch gian lận (đường màu đỏ) có sai số trải dài sang bên phải do cấu trúc luồng tiền dị biệt không thể nén qua nút thắt cổ chai.
+_(chỉ biểu đồ)_ Thầy và các bạn nhìn biểu đồ bên trái: **màu xanh** là giao dịch bình thường, dồn hết vào vùng sai số rất thấp — hơn 90% nằm dưới 0.02. **màu đỏ** là giao dịch gian lận, trải dài sang bên phải, nhiều ca có sai số lớn hơn hẳn, vì dòng tiền dị biệt đó không nén qua nổi bottleneck. Nhưng hai phân bố **không tách hoàn toàn**: vẫn có khoảng một phần tư giao dịch gian lận có sai số nằm dưới ngưỡng — đó chính là 407 ca mà Autoencoder bỏ sót. Vùng chồng lấn này buộc mình phải đánh đổi.
 
-Bảng bên phải thể hiện việc dò ngưỡng qua các phân vị trên tập Validation:
+_(chỉ bảng bên phải)_ Bảng này cho thấy sự đánh đổi đó. Ngưỡng được đặt theo **percentile** (phân vị) của sai số. Hạ ngưỡng xuống, ví dụ phân vị 90, thì **Recall** trên 80% nhưng **Precision** chưa tới 30% — báo nhầm rất nhiều. Kéo ngưỡng lên cao thì ngược lại: ở phân vị 99.9, Precision lên tới 91.5% nhưng Recall chỉ còn 25.4%, tức là bỏ lọt ba phần tư số vụ gian lận.
 
-- Ở phân vị 90th ($\tau = 0.0134$): Recall đạt 84.8% nhưng Precision chỉ 26.6%.
-- Ở phân vị 99th ($\tau = 0.1240$): Precision tăng lên 66.8% nhưng Recall giảm xuống còn 47.0%.
-- Nhóm quyết định chọn **Điểm cắt tại phân vị 95th ($\tau = 0.0455$)**: đạt F1 cao nhất (0.5064) trong các ngưỡng thỏa mãn điều kiện Recall $\ge 60\%$. Trên tập Test độc lập sau đó, mô hình đạt **Recall = 75.2%** và **Precision = 38.2%** (F1 = 50.69%).
+Em chọn **phân vị 95, τ = 0.0455**. Trên tập Test, ngưỡng này cho **Recall 75.2%** và **Precision 38.2%**. Em ưu tiên Recall vì bạn Thanh đã nói ở phần đầu: bỏ sót một vụ gian lận đắt hơn rất nhiều so với báo nhầm. Cụ thể, em đặt ràng buộc **Recall tối thiểu 60%**, rồi trong các ngưỡng thỏa ràng buộc đó thì phân vị 95 cho F1 cao nhất. Mà với vai trò lớp phòng thủ thứ hai, giao dịch bị gắn cờ chỉ bị chuyển sang bước xác thực thêm, ví dụ **OTP** hoặc chuyên viên rà soát — nên chấp nhận Precision thấp là hợp lý.
 
-Đây là chốt chặn phòng thủ thứ hai vững chắc: nếu mô hình có giám sát bị qua mặt bởi hình thức bất thường, Autoencoder sẽ lập tức kích hoạt báo động chuyển giao dịch sang thẩm định chuyên sâu mà không phụ thuộc vào việc có nhãn hay chưa.
+Một điểm nữa em muốn nhấn mạnh: ngưỡng này được chọn bằng cách quét trên **tập validation** tách từ tập Train, hoàn toàn _không_ chạm vào tập Test — đúng với nguyên tắc **leak-free** mà anh Sơn đã trình bày.
 
-Tiếp theo, em xin mời anh **Vũ Văn Duy** và bạn **Phạm Thành Trung** trình bày hệ thống Demo Streamlit và các kịch bản kiểm thử ạ.
+Tóm lại, Autoencoder và XGBoost không cạnh tranh nhau mà **bổ sung** cho nhau. Tiếp theo em xin mời bạn **Trung** và bạn **Duy** trình diễn phần Demo ạ. Em xin cảm ơn.
 
 ---
 
@@ -415,7 +422,7 @@ Em xin chân thành cảm ơn Thầy và các bạn đã chú ý lắng nghe!
 
 > **Người trả lời chính:** **Bùi Thị Mỷ Cẩm / Hoàng Cao Sơn**
 > **Hướng trả lời:**
-> "Dạ thưa thầy, về chất lượng phân loại thì 2 mô hình tương đương nhau (F1 chênh lệch không đáng kể: 99.73% so với 99.63%, chỉ lệch 3 ca đoán nhầm trên 40,000 mẫu). Nhưng Random Forest mất gần 20 phút để huấn luyện và file model rất nặng (~32MB). Trong khi đó, XGBoost chỉ mất khoảng 42s–58s để huấn luyện (nhanh gấp hơn 20 lần), file model native JSON chỉ 410KB, và độ trễ suy luận cho 1 giao dịch chỉ dưới 0.5 mili-giây. Với các hệ thống cổng thanh toán trực tuyến cần xử lý hàng chục ngàn giao dịch mỗi giây thì XGBoost là lựa chọn tối ưu vượt trội để triển khai production ạ."
+> "Dạ thưa thầy, về chất lượng phân loại thì 2 mô hình tương đương nhau (F1 99.73% so với 99.63%, chỉ chênh 3 ca đoán nhầm trên 40,000 mẫu). Nhưng Random Forest mất gần 20 phút để huấn luyện, còn XGBoost chưa tới một phút, nhanh hơn hơn 20 lần, và độ trễ suy luận cỡ nửa mili-giây cho một giao dịch. Với cổng thanh toán cần xử lý thời gian thực thì XGBoost là lựa chọn phù hợp để triển khai, và cũng là mô hình mà phần demo dùng để chấm điểm trực tiếp ạ."
 
 ---
 
@@ -423,8 +430,8 @@ Em xin chân thành cảm ơn Thầy và các bạn đã chú ý lắng nghe!
 
 > **Người trả lời chính:** **Bùi Thị Mỷ Cẩm / Nguyễn Duy Khang**
 > **Hướng trả lời:**
-> "Dạ thưa thầy, Deep Autoencoder đóng vai trò là màng bọc an toàn thứ hai (Defense-in-Depth) chứ không thay thế mô hình có giám sát. Mô hình có giám sát chỉ bắt được các thủ đoạn gian lận cũ đã có nhãn. Còn Autoencoder học 'thế nào là bình thường', nên bất kỳ chiêu trò Zero-Day mới nào làm sai lệch dòng tiền đều bị nó phát hiện qua sai số tái tạo tăng vọt.
-> Tỷ lệ Precision 38.2% là do em chủ động hạ ngưỡng cắt xuống phân vị thứ 95 (tau = 0.0455) để ưu tiên đẩy Recall lên 75.2%, đúng với triết lý 'thà cảnh báo nhầm còn hơn bỏ sót'. Khoảng 5% giao dịch bị nghi ngờ này hệ thống ngân hàng chỉ cần gửi một mã OTP bổ sung yêu cầu khách hàng xác nhận là giải quyết được, hoàn toàn không làm gián đoạn trải nghiệm người dùng ạ."
+> "Dạ thưa thầy, Deep Autoencoder đóng vai trò lớp phòng thủ thứ hai (Defense-in-Depth), không thay thế XGBoost. Precision 38.2% là do em chủ động đặt ngưỡng ở phân vị 95 với ràng buộc Recall tối thiểu 60%, để ưu tiên bắt được nhiều vụ gian lận (Recall 75.2%) vì bỏ sót một vụ gian lận đắt hơn nhiều so với báo nhầm.
+> Với vai trò lớp thứ hai, giao dịch bị gắn cờ chỉ bị chuyển sang bước xác thực thêm, ví dụ OTP hoặc chuyên viên rà soát; khoảng 5% giao dịch hợp lệ bị báo nhầm nên chấp nhận Precision thấp là hợp lý. Ưu điểm của Autoencoder là không dùng nhãn khi huấn luyện mạng, nên về nguyên lý không bị giới hạn bởi các kiểu gian lận đã có nhãn. Tuy nhiên nhóm chưa kiểm thử riêng trên biến thể gian lận mới, và trong 8 ca XGBoost bỏ sót thì Autoencoder chỉ bắt thêm được 1 ca ạ."
 
 ---
 
@@ -433,3 +440,35 @@ Em xin chân thành cảm ơn Thầy và các bạn đã chú ý lắng nghe!
 > **Người trả lời chính:** **Phạm Thành Trung / Vũ Văn Duy**
 > **Hướng trả lời:**
 > "Dạ thưa thầy, trong giao diện Streamlit, em đã cấu hình tính năng `@st.cache_resource` để tải trước trọng số mô hình XGBoost và StandardScaler vào bộ nhớ đệm, tránh tải lại mô hình ở mỗi lượt tương tác. Đồng thời, em sử dụng thư viện Pandas để vector hóa toàn bộ quá trình tính toán 14 đặc trưng miền theo lô (batch processing). Do đó, khi tải file CSV lớn lên, hệ thống có thể chấm điểm song song hàng chục ngàn giao dịch chỉ trong vài giây mà không làm đơ hay nghẽn giao diện ạ."
+
+---
+
+### ❓ Câu 5: "Autoencoder có bắt được Zero-Day thật không?"
+
+> **Người trả lời chính:** **Bùi Thị Mỷ Cẩm**
+> **Hướng trả lời:**
+> "Dạ, do không dùng nhãn khi huấn luyện nên về nguyên lý nó không bị giới hạn bởi kiểu gian lận cũ. Còn trên PaySim, nhóm chưa có thí nghiệm riêng cho biến thể mới, và trong 8 ca mà XGBoost bỏ sót thì Autoencoder chỉ bắt thêm được 1 ca. Đó là hướng phát triển của nhóm ạ."
+
+---
+
+### ❓ Câu 6: "Autoencoder hoàn toàn không dùng nhãn à?"
+
+> **Người trả lời chính:** **Bùi Thị Mỷ Cẩm**
+> **Hướng trả lời:**
+> "Dạ, không dùng nhãn khi huấn luyện mạng. Nhãn chỉ dùng ở bước chọn ngưỡng trên tập validation ạ."
+
+---
+
+### ❓ Câu 7: "Sao không chọn phân vị 99, F1 cao hơn?"
+
+> **Người trả lời chính:** **Bùi Thị Mỷ Cẩm**
+> **Hướng trả lời:**
+> "Dạ, phân vị 99 cho F1 cao hơn nhưng Recall chỉ 47%, không đạt ràng buộc Recall tối thiểu 60% mà em đặt, vì bỏ sót gian lận đắt hơn báo nhầm ạ."
+
+---
+
+### ❓ Câu 8: "Tại sao gọi là Deep Autoencoder mà dùng scikit-learn?"
+
+> **Người trả lời chính:** **Bùi Thị Mỷ Cẩm**
+> **Hướng trả lời:**
+> "Dạ, TensorFlow/Keras chưa có bản tương thích với Python 3.14 trên máy phát triển, nên nhóm triển khai cùng nguyên lý bằng MLPRegressor với 5 lớp ẩn 16-8-4-8-16, và đã ghi rõ trong báo cáo ạ."
