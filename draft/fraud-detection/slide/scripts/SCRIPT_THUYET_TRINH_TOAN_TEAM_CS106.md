@@ -157,20 +157,19 @@ Sau đây, em xin chuyển lại phần trình bày cho bạn **Hoàng Cao Sơn*
 
 ---
 
-### SLIDE 9 – XỬ LÝ MẤT CÂN BẰNG LỚP: SMOTE và ADASYN
+#### SLIDE 9 – XỬ LÝ MẤT CÂN BẰNG LỚP: SMOTE và ADASYN
 
 _(Thời lượng chuẩn hóa: **~75s – 80s** [Meeting thực tế: ~153s] | Người nói: **Hoàng Cao Sơn** - Imbalance & Random Forest Lead)_
 
-Em chào thầy và các bạn, mình là **Hoàng Cao Sơn**.
+Cảm ơn Thanh. Chào Thầy và các bạn, mình là **Sơn**. Sau khi em Thanh đã trích xuất 14 đặc trưng, mình tiếp nhận bài toán và xử lý thách thức cốt lõi đầu tiên: **Dữ liệu bị mất cân bằng (Imbalanced Data) cực đoan ~0.13%**.
 
-Ở phần trước thì Thanh đã phân tích rất rõ về 14 đặc trưng trích xuất. Nhưng khi bước sang huấn luyện mô hình, thách thức lớn nhất là tỷ lệ gian lận cực đoan chỉ chiếm **0.13%**. Nếu để nguyên dữ liệu gốc, mô hình sẽ bị rơi vào cái bẫy 'bộ phân lớp hiển nhiên' (Majority Classifier) — đoán tất cả là bình thường thì Accuracy vẫn 99.87% nhưng hoàn toàn vô dụng.
+Nhìn vào khung cảnh báo màu đỏ ở trên cùng: Đây là **Accuracy Paradox (nghịch lý độ chính xác)**. Nếu mô hình ngây thơ đoán 100% giao dịch là bình thường thì **Accuracy (độ chính xác tổng thể)** vẫn đạt 99.87% nhưng bỏ sót toàn bộ gian lận. Do đó, việc đánh giá bắt buộc phải dẫn dắt bởi **Precision (độ chuẩn xác)**, **Recall (độ phủ)**, **F1-Score** và **PR-AUC**.
 
-Để xử lý, nhóm đã thử nghiệm đối chuẩn 2 kỹ thuật sinh mẫu nhân tạo là **SMOTENC** và **ADASYN**:
+Để cân bằng dữ liệu, mình đưa 2 kỹ thuật sinh mẫu vào đối chuẩn:
+- Ở khung màu xanh bên trái: Như công thức hiển thị, bản chất của **SMOTE (Kỹ thuật nội suy mẫu tổng hợp)** là nội suy mẫu nhân tạo dọc theo đoạn thẳng nối các láng giềng **k-NN (k láng giềng gần nhất)**, tạo ra đường biên phân tách phẳng và rõ nét. Điểm mấu chốt là mình dùng biến thể **SMOTENC (Nominal & Continuous - biến định danh và liên tục)** để bảo toàn nguyên vẹn giá trị 0-1 của các cờ nhị phân.
+- Ngược lại, ở khung màu xám bên phải là **ADASYN (Lấy mẫu thích ứng theo mật độ)**: Do cố sinh mẫu theo mật độ vùng biên khó, mà kẻ gian lại ngụy trang tinh vi, ADASYN đã đẻ mẫu quá đà ở vùng chồng lấn nhiễu, làm tăng **False Positives (báo động giả)**.
 
-- Với **ADASYN**: Thuật toán ưu tiên sinh mẫu ở các vùng biên khó. Tuy nhiên trong dữ liệu gian lận, vùng biên thường bị nhiễu do kẻ gian ngụy trang. ADASYN tập trung sinh dày đặc mẫu nhân tạo vào vùng nhiễu này, làm méo mó ranh giới quyết định và dẫn tới **tỷ lệ báo động giả (False Alarm) tăng vọt**, khách hàng bình thường cũng bị chặn thẻ.
-- Với **SMOTENC**: Thuật toán nội suy tuyến tính láng giềng k-NN trong không gian ẩn ổn định hơn, tạo ra ranh giới phẳng và phân cách rõ ràng. Điểm mấu chốt là nhóm dùng biến thể **SMOTENC (Nominal and Continuous)**: vì dữ liệu có 4 cờ nhị phân quan trọng (như cờ rút cạn, giao dịch đêm), SMOTENC bảo toàn nguyên vẹn giá trị 0 hoặc 1, không bao giờ nội suy ra các số thực lẻ vô nghĩa như 0.4 hay 0.7.
-
-**Kết luận thực nghiệm:** Nhóm chọn **SMOTENC** làm phương pháp xử lý chính thức, tạo ra tập huấn luyện cân bằng gồm **230,145 dòng**, giúp mô hình triệt tiêu tối đa các ca báo động giả.
+👉 **Chốt lại:** Mình chọn **SMOTENC**, tạo ra tập train cân bằng **230.145 dòng** (theo tỷ lệ 1:2 tối ưu), triệt tiêu tối đa báo động giả.
 
 ---
 
@@ -178,7 +177,7 @@ Em chào thầy và các bạn, mình là **Hoàng Cao Sơn**.
 
 _(Thời lượng chuẩn hóa: **~10s** [Meeting thực tế: ~10s] | Người nói: **Hoàng Cao Sơn**)_
 
-Tiếp theo, em xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free và chi tiết 3 mô hình học máy mà nhóm đã xây dựng.
+Tiếp theo, mình xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free và Mô hình Random Forest do mình huấn luyện.
 
 ---
 
@@ -186,16 +185,15 @@ Tiếp theo, em xin đi vào Phần 3: Kiến trúc Pipeline chuẩn Leak-Free v
 
 _(Thời lượng chuẩn hóa: **~85s – 90s** [Meeting thực tế: ~140s] | Người nói: **Hoàng Cao Sơn**)_
 
-Kính thưa Thầy, trong các hệ thống AI tài chính, rủi ro lớn nhất là **Rò rỉ dữ liệu (Data Leakage)** — mô hình nhìn trộm dữ liệu kiểm thử, dẫn đến điểm số trên máy thì cao chót vót nhưng đem ra chạy thực tế thì thất bại hoàn toàn.
+Bước sang Slide 11 là kiến trúc **Pipeline (chuỗi quy trình xử lý)** gồm 6 bước của nhóm (từ Lọc dữ liệu, Trích xuất đặc trưng, Chia tập, Tái lấy mẫu, Huấn luyện đến Đánh giá), được thiết kế để triệt tiêu hoàn toàn nguy cơ **Data Leakage (rò rỉ dữ liệu)**.
 
-Để đảm bảo tính trung thực và khách quan tuyệt đối, nhóm đã thiết kế quy trình gồm 6 bước với **4 nguyên tắc bảo vệ Leak-Free nghiêm ngặt**:
+Mọi người có thể thấy **4 quy chuẩn bảo vệ nghiêm ngặt** ở khung bên dưới:
+1. **Stratified Split (chia phân tầng) 80/20** được chốt chặn trước bất kỳ bước tái lấy mẫu hay chuẩn hóa nào.
+2. **Resampling (tái lấy mẫu)** ở Bước 4 **tuyệt đối chỉ chạy trên tập Train (huấn luyện)**; tập **Test (kiểm thử)** 40.000 mẫu được giữ nguyên vẹn 100% tỷ lệ thực tế ngoài đời, không một mẫu nhân tạo nào được lọt vào.
+3. **StandardScaler (chuẩn hóa độ lệch chuẩn)** chỉ `fit` (học tham số) trên Train rồi mới `transform` (áp dụng chuyển đổi) mù sang Test.
+4. Toàn bộ khâu chọn ngưỡng và dò **Hyperparameters (siêu tham số)** đều dùng **Cross-Validation (kiểm định chéo)** nội bộ trên Train, không chạm vào Test.
 
-1. **Stratified Split (80/20) TRƯỚC TIÊN**: Chốt chặn đầu tiên tách riêng tập Train (160,000 dòng) và Test (40,000 dòng) trước khi thực hiện bất kỳ phép biến đổi nào.
-2. **Cô lập Resampling tuyệt đối**: Quá trình sinh mẫu SMOTENC **chỉ chạy trên 80% tập Train**. Tập Test 40,000 mẫu được giữ nguyên vẹn 100% tỷ lệ thực tế ngoài đời, tuyệt đối không có một mẫu nhân tạo nào lọt vào.
-3. **Chuẩn hóa Scaler độc lập**: Bộ `StandardScaler` chỉ được `fit` trên tập Train để lấy trung bình và phương sai, rồi dùng nguyên tham số đó `transform` trên Test.
-4. **Tối ưu siêu tham số độc lập**: Toàn bộ khâu chọn ngưỡng và tune model đều dùng **5-Fold Stratified Cross-Validation nội bộ trên Train**, không chạm vào Test.
-
-Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm đều là số liệu thật và có giá trị tin cậy cao.
+Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm đều đảm bảo tính khách quan và trung thực tuyệt đối.
 
 ---
 
@@ -203,13 +201,18 @@ Nhờ 4 nguyên tắc này, toàn bộ kết quả thực nghiệm của nhóm �
 
 _(Thời lượng chuẩn hóa: **~90s – 95s** [Sơn ~40s, Cẩm ~50s] [Meeting thực tế: ~200s] | Người nói: **Hoàng Cao Sơn** [phần RF] & **Bùi Thị Mỷ Cẩm** [phần XGB])_
 
-_(Phần 1 - Random Forest: **Hoàng Cao Sơn** trình bày)_
+_(Phần 1 - Random Forest: **Hoàng Cao Sơn** trình bày - ~40s)_
 
-Dựa trên pipeline đó, mô hình có giám sát đầu tiên nhóm xây dựng là **Random Forest** ở bên trái. Nhóm sử dụng cơ chế Ensemble Bagging với 200 cây quyết định độc lập, tối ưu qua `RandomizedSearchCV` 50 vòng lặp, khống chế `max_depth = 20`, đồng thời áp dụng trọng số lớp cân bằng theo từng cây con.
+Tại Slide 12, ở nửa bên trái là mô hình **Random Forest (Rừng ngẫu nhiên)** do mình huấn luyện.
 
-Khi kiểm thử trên 40,000 mẫu tập Test, mô hình đạt độ chính xác cực cao: **Precision = 99.94%** (trên 38,357 giao dịch bình thường chỉ đoán nhầm đúng 1 ca), **Recall = 99.51%**, và **F1-Score = 0.9973**. Tuy nhiên, hạn chế của Random Forest là thời gian huấn luyện khá lâu, mất gần 20 phút.
+Về kiến trúc, mô hình tập hợp **100 Decision Trees (cây quyết định độc lập)** theo cơ chế **Ensemble Bagging (học kết hợp đóng bao)**, phân nhánh tối ưu theo độ tinh khiết **Gini** như công thức trên slide. Để chống **Overfitting (học vẹt)**, mình khống chế độ sâu tối đa `max_depth = 15`.
 
-Để giải quyết bài toán tốc độ, phần tiếp theo sẽ do bạn **Bùi Thị Mỷ Cẩm** trình bày về mô hình XGBoost.
+🎯 **Kết quả thực nghiệm nổi bật:**
+- **Peak Precision (độ chuẩn xác đỉnh cao) đạt 99.94%:** Trong 38.357 giao dịch hợp lệ, mô hình chỉ báo nhầm duy nhất **đúng 1 ca**!
+- **F1-Score đạt 0.9973:** Đưa Random Forest trở thành mô hình có độ chính xác cao nhất toàn đồ án.
+- **Hạn chế:** Thời gian huấn luyện khá lâu, mất gần 20 phút (~1187 giây).
+
+Để khắc phục độ trễ huấn luyện và mở rộng khả năng bắt gian lận chưa từng thấy, phần tiếp theo sẽ do bạn **Bùi Thị Mỷ Cẩm** trình bày về mô hình **XGBoost (mô hình tăng cường độ dốc cực đại)** ở nửa bên phải và mạng **Deep Autoencoder (tự mã hóa học sâu)**.
 
 _(Phần 2 - XGBoost: **Bùi Thị Mỷ Cẩm** tiếp lời)_
 
