@@ -132,33 +132,33 @@ Tự động hóa qua script chuẩn: `draft/fraud-detection/src/reporting/packa
 - [x] Git remote URL sử dụng đúng alias học thuật `github.com-uit`
 
 **Submit package verification (Hôn & Team):**
-- [x] `[Project AI-UIT] - Nhom 9/` folder structure đúng theo quy cách UIT (47 deliverables sạch)
+- [x] `[Project AI-UIT] - Nhom 9/` folder structure đúng theo quy cách UIT (50 deliverables sạch)
 - [x] `code/notebooks/` có đủ 6/6 notebooks chạy sạch 0 lỗi
-- [x] `Bao_cao/` có PDF báo cáo chính thức và PPTX slide kèm video
-- [x] `Chuong_trinh/demo/` có 5 screenshots và link video demo
+- [x] `Bao_cao/` có PDF báo cáo chính thức, Word DOCX, PPTX slide và PDF slide kèm link video
+- [x] `Chuong_trinh/demo/` có 5 screenshots và file liên kết video demo Google Drive
 - [x] `Danh_sach_nhom.xlsx` đầy đủ 7 thành viên, MSSV, Lớp và phân công chi tiết
-- [x] `HUONG_DAN_SU_DUNG.docx` hoàn chỉnh hướng dẫn cài đặt và chạy lại thực nghiệm
+- [x] `HUONG_DAN_SU_DUNG.docx` và `.md` hoàn chỉnh hướng dẫn cài đặt và chạy lại thực nghiệm
 - [x] Sẵn sàng nộp trước hạn
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 116/116 tests pass |
+| All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 102 tests pass sạch |
 | Bundle created | ✅ | `submit/[Project AI-UIT] - Nhom 9/` |
-| Deliverables count | 47 files | 47/47 clean deliverables (< 160MB uncompressed) |
+| Deliverables count | 50 files | 50/50 clean deliverables (91.55 MB uncompressed) |
 | Submitted | ✅ | Sẵn sàng upload lên cổng LMS/Moodle UIT |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
 Notebooks clean: 6/6 ✅
-Unit & integration tests: 116/116 passed ✅
+Unit & integration tests: 102 passed, 1 skipped ✅
 Bundle folder: [Project AI-UIT] - Nhom 9/
-Bundle size: ~160 MB uncompressed (47 files)
+Bundle size: ~91.55 MB uncompressed (50 files)
 Packaging script: draft/fraud-detection/scripts/package_submission.py
 Security audit: PASSED (No paysim.csv, no .env, no cache files)
-Packaged date: 20/09/2026 ICT
+Packaged date: 21/09/2026 ICT
 Status: READY FOR SUBMISSION
 ```
 

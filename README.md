@@ -70,7 +70,7 @@ Final/
 | **Sprint 2 (28/8 – 4/9)** | EDA ✅, Preprocessing ✅, Imbalance (SMOTE/ADASYN) ✅, Random Forest ✅, XGBoost & Autoencoder ✅, Báo cáo Word nháp (Chương 1–3) ✅, Slide PPT 21 slides học thuật & Kịch bản toàn team ✅, Streamlit UI Shell ✅ | ✅ Vượt tiến độ | Cả nhóm (song song) |
 | **Sprint 3 (4/9 – 11/9)** | Đầy đủ 6/6 notebooks hoàn thành & chạy sạch; Phase 05 Evaluation hoàn tất (Khang ✅); Báo cáo Tóm tắt + Chương 1–7 (32 trang DOCX/PDF, số liệu khớp 100% Phase 05); Demo UI kết nối model thật + mapping datetime/VNĐ (Trung ✅); Slide 21 trang & Kịch bản 7 người chính thức duyệt (Hôn ✅); PM Audit Sprint 3 Closing (Hôn ✅). | ✅ Hoàn tất Sprint 3 | Cả nhóm |
 | **Sprint 4 (11/9 – 18/9)** | Hoàn thiện Demo UI tương tác, quy trình phân tích 4 bước, import CSV/JSON, video demo Google Drive (Trung ✅); xuất bản báo cáo DOCX/PDF chuẩn UIT (Duy ✅); hiệu chỉnh kịch bản thuyết trình toàn team theo diễn tập meeting (Hôn ✅). | ✅ Hoàn tất Sprint 4 (9/9 phases passed — 100%) | Cả nhóm |
-| **Nộp bài (20/9)** | Đóng gói cấu trúc nộp bài `[Project AI-UIT] - Nhom 9` (47 deliverables sạch, an toàn Git) & Sẵn sàng nộp chính thức trước deadline (Phase 08) | ✅ Hoàn thành đóng gói | Hôn |
+| **Nộp bài (20/9)** | Đóng gói cấu trúc nộp bài `[Project AI-UIT] - Nhom 9` (50 deliverables sạch, an toàn Git, 102 tests pass) & Sẵn sàng nộp chính thức trước deadline (Phase 08) | ✅ Hoàn thành đóng gói | Hôn |
 
 
 ---
@@ -97,14 +97,16 @@ Gói bài nộp chính thức được tự động chuẩn bị và kiểm đ�
 [Project AI-UIT] - Nhom 9/
 ├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
 ├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
-│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 32 trang)
-│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (đã nhúng sẵn video demo)
+│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
+│   ├── [Nhom9]_BaoCao_FraudDetection.docx  ← Báo cáo học thuật định dạng Word
+│   ├── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf  ← Slide thuyết trình dạng PDF
+│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (ảnh minh họa & link Google Drive)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
     ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
-    ├── HUONG_DAN_SU_DUNG.pdf               ← Hướng dẫn sử dụng (xuất từ Word sau khi chốt)
+    ├── HUONG_DAN_SU_DUNG.md                ← Bản Markdown đối soát nhanh
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc tối giản
     ├── demo/                               ← Minh chứng sản phẩm Demo
-    │   ├── LINK_VIDEO_DEMO.pdf             ← Liên kết video clip demo (PDF hoặc TXT)
+    │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo Google Drive (quyền xem công khai)
     │   └── screenshots/                    ← 5 ảnh chụp màn hình UI sắc nét
     └── code/                               ← Toàn bộ mã nguồn giải thuật & thực nghiệm
         ├── src/                            ← 4 modules Python modular (preprocessing, models, evaluation, utils)
@@ -114,10 +116,10 @@ Gói bài nộp chính thức được tự động chuẩn bị và kiểm đ�
 ```
 
 ### 2. Trạng thái nghiệm thu & các lưu ý của Nhóm 9:
-* **Các file đang hoàn thiện nội dung:** Báo cáo PDF, Slide PPTX, Hướng dẫn sử dụng DOCX, Danh sách nhóm Excel và Demo hiện đang trong giai đoạn rà soát, tinh chỉnh cuối cùng trước khi đóng gói nộp.
-* **Chụp lại Screenshots:** Thư mục `demo/screenshots/` sẽ được chụp lại giao diện mới nhất và lưu tại `draft/fraud-detection/demo/screenshots/`.
-* **Xuất bản PDF tài liệu hướng dẫn:** File `HUONG_DAN_SU_DUNG.docx` sẽ được xuất sang định dạng `.pdf` sau khi team nghiệm thu xong toàn bộ văn bản.
-* **Chuyển đổi liên kết video:** File `LINK_VIDEO_DEMO.txt` cũng sẽ được chuyển đổi sang `.pdf` để đảm bảo tính mỹ thuật khi nộp bài.
+* **Báo cáo & Slide:** Báo cáo PDF 31 trang và Slide PPTX/PDF 21 trang đã hoàn tất nghiệm thu và đồng bộ 100% số liệu.
+* **Hướng dẫn sử dụng:** File `HUONG_DAN_SU_DUNG.docx` và `.md` tập trung hướng dẫn chạy 6 Notebooks thực nghiệm và dẫn liên kết trải nghiệm Web UI.
+* **Liên kết video demo:** File `LINK_VIDEO_DEMO.txt` cung cấp liên kết video clip demo Full HD 5m34s trên Google Drive và được minh họa tại Slide 15.
+* **Mã nguồn đầy đủ & Tests:** Toàn bộ ứng dụng Web UI Streamlit và 102 unit/integration tests được lưu trữ đầy đủ tại GitHub Repository chính thức.
 
 ### 3. Lệnh đóng gói và nén file:
 ```bash

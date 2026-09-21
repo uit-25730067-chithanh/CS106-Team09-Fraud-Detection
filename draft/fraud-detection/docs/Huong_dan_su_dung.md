@@ -9,7 +9,7 @@
 
 ## 1. Yêu cầu Môi trường & Cài đặt
 
-Chương trình được phát triển và kiểm thử ổn định trên hệ điều hành Windows / Linux / macOS với **Python 3.10 trở lên** (khuyến nghị Python 3.10 – 3.11).
+Chương trình được phát triển và kiểm thử ổn định trên hệ điều hành Windows / Linux / macOS với **Python 3.10 trở lên** (khuyến nghị Python 3.10 – 3.12).
 
 ### Bước 1: Tạo và kích hoạt môi trường ảo (Khuyến nghị)
 ```bash
@@ -30,61 +30,41 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-*(Lưu ý: Nếu máy tính đã có sẵn các thư viện khoa học dữ liệu như `pandas`, `scikit-learn`, `xgboost`, `streamlit`, `openpyxl`, `matplotlib`, `seaborn` thì có thể chạy trực tiếp mà không cần cài đặt lại).*
+*(Lưu ý: Nếu máy tính đã có sẵn các thư viện khoa học dữ liệu như `pandas`, `scikit-learn`, `xgboost`, `imbalanced-learn`, `openpyxl`, `matplotlib`, `seaborn` thì có thể chạy trực tiếp mà không cần cài đặt lại).*
 
 ---
 
 ## 2. Cấu trúc Mã nguồn & Hoạt động các Module
 
-Toàn bộ mã nguồn được thiết kế theo kiến trúc module hóa hướng đối tượng (OOP & Functional Pipeline), tuân thủ nguyên tắc **chống rò rỉ dữ liệu (Anti-leakage)**:
+Toàn bộ mã nguồn thực nghiệm được thiết kế theo kiến trúc module hóa hướng đối tượng (OOP & Functional Pipeline), tuân thủ nguyên tắc **chống rò rỉ dữ liệu (Anti-leakage)**:
 
+```text
+Chuong_trinh/
+├── HUONG_DAN_SU_DUNG.docx              # Bản Word hướng dẫn sử dụng chính thức
+├── HUONG_DAN_SU_DUNG.md                # Bản Markdown đối soát nhanh
+├── requirements.txt                    # Danh sách thư viện Python phụ thuộc
+├── demo/                               # Minh chứng sản phẩm Demo
+│   ├── LINK_VIDEO_DEMO.txt             # Liên kết video clip demo Google Drive (quyền xem công khai)
+│   └── screenshots/                    # 5 ảnh chụp màn hình giao diện UI trực quan
+└── code/                               # Toàn bộ mã nguồn giải thuật & thực nghiệm
+    ├── src/                            # 4 modules Python modular
+    │   ├── preprocessing/              # data_loader, feature_scaler, data_splitter, imbalance_handler
+    │   ├── models/                     # random_forest_model, xgboost_model, autoencoder_model
+    │   ├── evaluation/                 # metrics_calculator, plot_roc_curve, confusion_matrix_plot, model_comparator...
+    │   └── utils/                      # helpers.py, constants, compatibility
+    ├── notebooks/                      # 6/6 Jupyter Notebooks thực nghiệm chạy sạch 100%
+    ├── data/processed/                 # Dữ liệu tiền xử lý (X_train, X_test, y_train, y_test, SMOTE/ADASYN)
+    └── reports/                        # Prediction caches đầu vào đối sánh (rf, xgb, autoencoder)
 ```
-Code/
-├── src/
-│   ├── preprocessing/     # Tiền xử lý & Trích xuất đặc trưng
-│   │   ├── data_loader.py         # Lọc tập TRANSFER/CASH_OUT, lấy mẫu phân tầng 200k
-│   │   ├── data_splitter.py       # Chia tập Train/Test (80/20) Stratified
-│   │   ├── feature_scaler.py      # Tạo 14 đặc trưng (5 derived features) + StandardScaler
-│   │   └── imbalance_handler.py   # Xử lý mất cân bằng: SMOTENC & ADASYN (chỉ trên Train)
-│   ├── models/            # 3 họ mô hình phân loại & phát hiện bất thường
-│   │   ├── random_forest_model.py # Random Forest + RandomizedSearchCV
-│   │   ├── xgboost_model.py       # Gradient Boosting (XGBoost) siêu tốc + native JSON
-│   │   └── autoencoder_model.py   # Deep Learning Autoencoder (Anomaly Detection không giám sát)
-│   ├── evaluation/        # Đánh giá & So sánh chéo
-│   │   ├── metrics_calculator.py  # Tính F1, ROC-AUC, PR-AUC, Precision, Recall
-│   │   ├── plot_roc_curve.py      # Trực quan hóa ROC Curves & PR Curves
-│   │   ├── confusion_matrix_plot.py# Vẽ ma trận nhầm lẫn chuẩn hóa
-│   │   └── model_comparator.py    # Bảng tổng hợp so sánh chéo 5 biến thể mô hình
-│   └── utils/             # Hằng số, helper functions, cố định Random Seed (42)
-├── notebooks/             # 6 Notebooks thực nghiệm trực quan (từ EDA đến So sánh)
-├── demo/                  # Giao diện tương tác Streamlit Web UI (app.py)
-├── models/                # Artifacts mô hình (scaler.pkl, xgb_smote.json, autoencoder_meta.json)
-└── data/
-    └── processed/         # Dữ liệu đã chia tập (X_train, X_test, y_train, y_test)
-```
+
+*(Lưu ý: Ứng dụng tương tác Web UI Streamlit và bộ 102 bài kiểm thử tự động được quản lý đầy đủ tại GitHub Repository chính thức của đồ án).*
 
 ---
 
 ## 3. Hướng dẫn Chạy Thử nghiệm
 
-### Cách 1: Khởi chạy Giao diện Trực quan Streamlit Web UI (Khuyến nghị)
-Nhóm đã phát triển giao diện Web hoàn chỉnh cho phép nhập thông tin giao dịch, kiểm tra rủi ro gian lận thời gian thực với mô hình XGBoost-SMOTE:
-
-```bash
-# Chạy ứng dụng Demo
-streamlit run demo/app.py
-```
-* Trình duyệt sẽ tự động mở tại địa chỉ: `http://localhost:8501`.
-* **Tính năng trên giao diện:**
-  1. **Phân tích giao dịch:** Hỗ trợ nhập số tiền (tự động phân cách hàng nghìn VNĐ), số dư gốc/đích, loại giao dịch; cung cấp các nút chọn sẵn mẫu giao dịch thực tế.
-  2. **Risk Meter & Cảnh báo:** Đo lường mức độ rủi ro gian lận trực quan (Thấp / Trung bình / Cao / Nghi vấn gian lận).
-  3. **Hiệu năng mô hình:** Xem bảng số liệu so sánh chéo 5 mô hình, đường cong ROC/PR Curves và ma trận nhầm lẫn.
-  4. **Chuyển đổi Giao diện:** Hỗ trợ Theme Tối (Dark mode), Theme Sáng (Light mode) và Tự động theo hệ thống.
-
----
-
-### Cách 2: Chạy các Notebooks Thực nghiệm Jupyter
-Thầy/cô và các bạn có thể mở và chạy lại 6 Notebooks trong thư mục `notebooks/` theo thứ tự:
+### 3.1. Chạy các Notebooks Thực nghiệm Jupyter (Phương thức thẩm định chính)
+Thầy/cô và các bạn có thể mở và chạy lại 6 Notebooks trong thư mục `code/notebooks/` theo thứ tự:
 1. `01_eda.ipynb`: Thăm dò phân phối dữ liệu, hành vi gian lận và tương quan đặc trưng.
 2. `02_imbalance_handling.ipynb`: Thử nghiệm kỹ thuật SMOTENC và ADASYN trên tập huấn luyện.
 3. `03_model_random_forest.ipynb`: Huấn luyện, dò siêu tham số và phân tích Feature Importance của Random Forest.
@@ -96,9 +76,27 @@ Thầy/cô và các bạn có thể mở và chạy lại 6 Notebooks trong thư
 
 ---
 
-### Cách 3: Chạy Kiểm thử Tự động (Unit Tests)
-Dự án được bảo vệ bằng hệ thống 116 bài test tự động (đạt tỷ lệ vượt qua 100%):
+### 3.2. Xem Minh chứng Video Clip Thuyết minh Demo Giao diện
+Thầy/cô có thể xem video thuyết minh giao diện tương tác (Streamlit Web UI) độ phân giải Full HD 1080p, thời lượng 05 phút 34 giây do sinh viên Phạm Thành Trung trình bày:
+- **Xem trực tiếp qua liên kết Google Drive:** Mở tệp `demo/LINK_VIDEO_DEMO.txt` hoặc truy cập trực tiếp:  
+  [https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view](https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view)
+- **Xem qua Slide trình chiếu:** Slide 15 trong tệp `Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx`.
+- **Xem hình ảnh giao diện:** 5 ảnh chụp màn hình độ phân giải cao tại thư mục `demo/screenshots/`.
+
+---
+
+### 3.3. Trải nghiệm Demo Trực tiếp & Chạy Unit Tests trên GitHub Repository
+Để tương tác với giao diện Web thời gian thực hoặc chạy toàn bộ **102 bài test tự động (`pytest`)**, kính mời Quý Thầy/Cô truy cập kho mã nguồn chính thức:
 ```bash
+# Clone repository chính thức
+git clone https://github.com/uit-25730067-chithanh/CS106-Team09-Fraud-Detection.git
+cd CS106-Team09-Fraud-Detection/draft/fraud-detection
+
+# Cài đặt và khởi chạy Streamlit Web UI
+pip install -r requirements.txt
+streamlit run demo/app.py
+
+# Chạy kiểm thử tự động toàn diện (102 tests pass sạch)
 pytest tests/
 ```
 
@@ -106,12 +104,14 @@ pytest tests/
 
 ## 4. Tóm tắt Kết quả Thực nghiệm Chính
 
-| Thứ hạng | Mô hình thực nghiệm | Kỹ thuật cân bằng | F1-Score | ROC-AUC | PR-AUC | Thời gian train |
-| :---: | :--- | :---: | :---: | :---: | :---: | :---: |
-| 🥇 1 | **Random Forest** | SMOTENC | **0.9973** | **0.9994** | **0.9981** | ~180s |
-| 🥈 2 | **Random Forest** | ADASYN | 0.9966 | 0.9992 | 0.9974 | ~195s |
-| 🥉 3 | **XGBoost (Được chọn triển khai UI)** | SMOTENC | **0.9963** | **0.9993** | **0.9978** | **41.6s** |
-| 4 | **XGBoost** | ADASYN | 0.9954 | 0.9994 | 0.9975 | 45.2s |
-| 5 | **Autoencoder (Anomaly Detection)**| Normal Only | 0.5074 | 0.9318 | 0.4421 | ~90s |
+Bảng số liệu đối sánh thực nghiệm chính thức (trích từ Bảng 5 Báo cáo học thuật và `ch5_metrics_recomputed.csv`):
 
-> **Lý do chọn XGBoost-SMOTE cho Demo UI:** Hiệu năng xấp xỉ Random Forest (F1 đạt 0.9963 so với 0.9973) nhưng thời gian huấn luyện nhanh hơn gấp 4.3 lần và kích thước file mô hình cực nhẹ (chỉ 410 KB dạng JSON Native so với 50MB+ của Random Forest).
+| Thứ hạng | Mô hình thực nghiệm | Kỹ thuật cân bằng | Precision | Recall | F1-Score | ROC-AUC | PR-AUC | Thời gian train |
+| :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 🥇 1 | **Random Forest** | SMOTENC | **0.9994** | **0.9951** | **0.9973** | **0.9994** | **0.9983** | 1187s (~19.8m) |
+| 🥈 2 | **Random Forest** | ADASYN | 0.9982 | 0.9951 | 0.9966 | 0.9992 | 0.9978 | 1168s (~19.5m) |
+| 🥉 3 | **XGBoost (Được chọn triển khai UI)** | SMOTENC | **0.9976** | **0.9951** | **0.9963** | **0.9993** | **0.9969** | **57.94s** |
+| 4 | **XGBoost** | ADASYN | 0.9957 | 0.9951 | 0.9954 | 0.9994 | 0.9976 | 45.48s |
+| 5 | **Autoencoder (Anomaly Detection)**| Normal Only | 0.3822 | 0.7523 | 0.5069 | 0.9318 | 0.5973 | ~90s |
+
+> **Lý do chọn XGBoost-SMOTE cho Demo UI:** Hiệu năng xấp xỉ Random Forest (F1 đạt 0.9963 so với 0.9973) nhưng thời gian huấn luyện nhanh hơn gấp 20.5 lần (57.94s so với 1187s) và kích thước file mô hình cực nhẹ (chỉ 495 KB dạng JSON Native so với 50MB+ của Random Forest).

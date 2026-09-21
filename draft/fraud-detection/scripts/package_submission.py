@@ -8,15 +8,16 @@ Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác
 [Project AI-UIT] - Nhom 9/
 ├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
 ├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
-│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 32 trang)
-│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (đã nhúng sẵn video demo)
+│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
+│   ├── [Nhom9]_BaoCao_FraudDetection.docx  ← Báo cáo học thuật định dạng Word
+│   ├── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf  ← Slide thuyết trình dạng PDF
+│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (ảnh minh họa & link Google Drive)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
     ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
-    ├── HUONG_DAN_SU_DUNG.pdf               ← Hướng dẫn sử dụng (bản PDF xuất từ Word)
     ├── HUONG_DAN_SU_DUNG.md                ← Bản Markdown đối soát nhanh
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc
     ├── demo/                               ← Minh chứng sản phẩm Demo
-    │   ├── LINK_VIDEO_DEMO.pdf             ← Liên kết video clip demo (PDF trình bày đẹp)
+    │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo Google Drive (quyền xem công khai)
     │   └── screenshots/                    ← 5 ảnh chụp màn hình UI sắc nét
     └── code/                               ← Toàn bộ mã nguồn giải thuật & thực nghiệm
         ├── src/                            ← 4 modules Python: preprocessing, models, evaluation, utils
@@ -42,7 +43,8 @@ from datetime import datetime
 
 EXCLUDE_DIRS = {
     ".git", ".venv", "venv", "__pycache__", ".pytest_cache",
-    "node_modules", ".idea", ".vscode", "tmp", ".data"
+    "node_modules", ".idea", ".vscode", "tmp", ".data",
+    ".ipynb_checkpoints", ".mypy_cache", ".ruff_cache",
 }
 
 EXCLUDE_FILES = {
@@ -103,7 +105,6 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
 
     # 1. Danh sách nhóm (Excel)
     candidates_excel = [
-        final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Danh_sach_nhom.xlsx",
         draft_dir / "docs" / "Danh_sach_nhom.xlsx",
         draft_dir / "reports" / "Danh sách nhóm.xlsx",
         final_dir / "Danh_sach_nhom.xlsx",
@@ -134,13 +135,12 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     prog = bundle_dir / "Chuong_trinh"
     prog.mkdir(parents=True, exist_ok=True)
 
-    # 3.1 Single unified guide (DOCX + PDF + MD) & requirements
-    for guide_name in ["HUONG_DAN_SU_DUNG.docx", "HUONG_DAN_SU_DUNG.pdf", "HUONG_DAN_SU_DUNG.md"]:
+    # 3.1 Single unified guide (DOCX + MD) & requirements
+    for guide_name in ["HUONG_DAN_SU_DUNG.docx", "HUONG_DAN_SU_DUNG.md"]:
         candidates = [
             draft_dir / "docs" / guide_name,
             draft_dir / "docs" / "Huong_dan_su_dung.docx" if guide_name == "HUONG_DAN_SU_DUNG.docx" else None,
             draft_dir / "docs" / "Huong_dan_su_dung.md" if guide_name == "HUONG_DAN_SU_DUNG.md" else None,
-            final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / guide_name,
             final_dir / guide_name,
         ]
         for c in candidates:
@@ -149,7 +149,6 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
                 break
 
     req_candidates = [
-        final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / "requirements.txt",
         draft_dir / "requirements.txt",
     ]
     for r in req_candidates:
@@ -157,19 +156,20 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
             shutil.copy2(r, prog / "requirements.txt")
             break
 
-    # 3.2 Demo (Strictly screenshots and PDF video link)
+    # 3.2 Demo (Strictly screenshots and video link)
     demo_dst = prog / "demo"
     demo_dst.mkdir(parents=True, exist_ok=True)
     copy_clean_tree(draft_dir / "demo" / "screenshots", demo_dst / "screenshots")
 
-    # Prefer PDF link, fallback to TXT
-    link_pdf = final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / "demo" / "LINK_VIDEO_DEMO.pdf"
-    if not link_pdf.exists():
-        link_pdf = draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.pdf"
-    if link_pdf.exists():
-        shutil.copy2(link_pdf, demo_dst / "LINK_VIDEO_DEMO.pdf")
-    elif (draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.txt").exists():
-        shutil.copy2(draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.txt", demo_dst / "LINK_VIDEO_DEMO.txt")
+    # Prefer PDF link if available, fallback to TXT
+    link_candidates = [
+        draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.pdf",
+        draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.txt",
+    ]
+    for lc in link_candidates:
+        if lc.exists():
+            shutil.copy2(lc, demo_dst / lc.name)
+            break
 
     # 3.3 Code (src, notebooks, data/processed, reports)
     code_dst = prog / "code"
@@ -197,10 +197,8 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
             shutil.copy2(src_f, reports_dst / f)
 
     # Clean any accidental caches or unwanted files
-    for root, dirs, files in os.walk(bundle_dir):
-        for d in list(dirs):
-            if d in EXCLUDE_DIRS:
-                shutil.rmtree(Path(root) / d, ignore_errors=True)
+    for root, dirs, files in os.walk(bundle_dir, topdown=True):
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
         for f in files:
             if f in EXCLUDE_FILES or f.startswith("._") or f.startswith("~$") or f.endswith(tuple(EXCLUDE_EXTS)):
                 (Path(root) / f).unlink(missing_ok=True)
