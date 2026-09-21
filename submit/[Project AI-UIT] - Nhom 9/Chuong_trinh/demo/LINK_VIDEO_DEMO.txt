@@ -1,0 +1,15 @@
+LIÊN KẾT VIDEO CLIP DEMO HỆ THỐNG PHÁT HIỆN GIAO DỊCH GIAN LẬN (FRAUD SHIELD)
+NHÓM 9 — MÔN TRÍ TUỆ NHÂN TẠO (CS106) — UIT
+
+- Video Clip: Demo ứng dụng Streamlit Fraud Shield (Phạm Thành Trung trình bày)
+- Thời lượng: 05 phút 34 giây
+- Độ phân giải: 1920x1080 (Full HD / 30fps)
+- Định dạng: MP4 (H.264 / AAC Stereo)
+
+ĐƯỜNG DẪN GOOGLE DRIVE TRỰC TIẾP (QUYỀN XEM CÔNG KHAI):
+https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view
+
+LƯU Ý:
+Tệp video này cũng đã được nhúng trực tiếp vào slide trình chiếu:
+`Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` (Slide 15 - Demo trực tiếp).
+Quý Thầy/Cô có thể xem video trực tiếp trong slide hoặc truy cập qua liên kết Google Drive trên.
