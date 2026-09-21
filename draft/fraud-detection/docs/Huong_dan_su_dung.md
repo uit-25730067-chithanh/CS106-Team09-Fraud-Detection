@@ -41,7 +41,6 @@ Toàn bộ mã nguồn thực nghiệm được thiết kế theo kiến trúc m
 ```text
 Chuong_trinh/
 ├── HUONG_DAN_SU_DUNG.docx              # Bản Word hướng dẫn sử dụng chính thức
-├── HUONG_DAN_SU_DUNG.md                # Bản Markdown đối soát nhanh
 ├── requirements.txt                    # Danh sách thư viện Python phụ thuộc
 ├── demo/                               # Minh chứng sản phẩm Demo
 │   ├── LINK_VIDEO_DEMO.txt             # Liên kết video clip demo Google Drive (quyền xem công khai)

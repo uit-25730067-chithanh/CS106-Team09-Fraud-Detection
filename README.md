@@ -103,7 +103,6 @@ Gói bài nộp chính thức được tự động chuẩn bị và kiểm đ�
 │   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (ảnh minh họa & link Google Drive)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
     ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
-    ├── HUONG_DAN_SU_DUNG.md                ← Bản Markdown đối soát nhanh
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc tối giản
     ├── demo/                               ← Minh chứng sản phẩm Demo
     │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo Google Drive (quyền xem công khai)
@@ -117,7 +116,7 @@ Gói bài nộp chính thức được tự động chuẩn bị và kiểm đ�
 
 ### 2. Trạng thái nghiệm thu & các lưu ý của Nhóm 9:
 * **Báo cáo & Slide:** Báo cáo PDF 31 trang và Slide PPTX/PDF 21 trang đã hoàn tất nghiệm thu và đồng bộ 100% số liệu.
-* **Hướng dẫn sử dụng:** File `HUONG_DAN_SU_DUNG.docx` và `.md` tập trung hướng dẫn chạy 6 Notebooks thực nghiệm và dẫn liên kết trải nghiệm Web UI.
+* **Hướng dẫn sử dụng:** File `HUONG_DAN_SU_DUNG.docx` tập trung hướng dẫn chạy 6 Notebooks thực nghiệm và dẫn liên kết trải nghiệm Web UI.
 * **Liên kết video demo:** File `LINK_VIDEO_DEMO.txt` cung cấp liên kết video clip demo Full HD 5m34s trên Google Drive và được minh họa tại Slide 15.
 * **Mã nguồn đầy đủ & Tests:** Toàn bộ ứng dụng Web UI Streamlit và 102 unit/integration tests được lưu trữ đầy đủ tại GitHub Repository chính thức.
 

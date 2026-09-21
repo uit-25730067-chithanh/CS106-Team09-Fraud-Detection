@@ -14,7 +14,6 @@ Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác
 │   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (ảnh minh họa & link Google Drive)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
     ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
-    ├── HUONG_DAN_SU_DUNG.md                ← Bản Markdown đối soát nhanh
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc
     ├── demo/                               ← Minh chứng sản phẩm Demo
     │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo Google Drive (quyền xem công khai)
@@ -135,18 +134,16 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     prog = bundle_dir / "Chuong_trinh"
     prog.mkdir(parents=True, exist_ok=True)
 
-    # 3.1 Single unified guide (DOCX + MD) & requirements
-    for guide_name in ["HUONG_DAN_SU_DUNG.docx", "HUONG_DAN_SU_DUNG.md"]:
-        candidates = [
-            draft_dir / "docs" / guide_name,
-            draft_dir / "docs" / "Huong_dan_su_dung.docx" if guide_name == "HUONG_DAN_SU_DUNG.docx" else None,
-            draft_dir / "docs" / "Huong_dan_su_dung.md" if guide_name == "HUONG_DAN_SU_DUNG.md" else None,
-            final_dir / guide_name,
-        ]
-        for c in candidates:
-            if c and c.exists():
-                shutil.copy2(c, prog / guide_name)
-                break
+    # 3.1 Single unified guide (DOCX) & requirements
+    guide_candidates = [
+        draft_dir / "docs" / "HUONG_DAN_SU_DUNG.docx",
+        draft_dir / "docs" / "Huong_dan_su_dung.docx",
+        final_dir / "HUONG_DAN_SU_DUNG.docx",
+    ]
+    for c in guide_candidates:
+        if c and c.exists():
+            shutil.copy2(c, prog / "HUONG_DAN_SU_DUNG.docx")
+            break
 
     req_candidates = [
         draft_dir / "requirements.txt",

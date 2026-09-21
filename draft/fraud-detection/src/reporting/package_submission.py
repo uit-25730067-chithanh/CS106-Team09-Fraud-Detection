@@ -149,9 +149,7 @@ def build_submission_structure():
     # 5. Root documentation files
     print("\n[5/5] Packaging Top-Level Documentation & Guide...")
     guide_docx = DRAFT_DIR / "docs" / "Huong_dan_su_dung.docx"
-    guide_md = DRAFT_DIR / "docs" / "Huong_dan_su_dung.md"
     copy_file_safe(guide_docx, TARGET_DIR / "Huong_dan_su_dung.docx")
-    copy_file_safe(guide_md, TARGET_DIR / "Huong_dan_su_dung.md")
     copy_file_safe(team_excel, TARGET_DIR / "Danh sách nhóm.xlsx")
     copy_file_safe(REPO_ROOT / "README.md", TARGET_DIR / "README.md")
 
