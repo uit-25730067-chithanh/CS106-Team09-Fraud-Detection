@@ -1,24 +1,39 @@
 #!/usr/bin/env python3
 """
-CS106 Final Project Submission Packager — Nhóm 9 (Fraud Detection)
-Packages project deliverables into a clean, compliant ZIP archive:
-`[Project AI-UIT] - Nhom 9.zip` according to UIT university standards.
+CS106 Final Project Submission Packager — Nhóm 9 (Financial Fraud Detection)
+Prepares and verifies the canonical, clean submission directory:
+`submit/[Project AI-UIT] - Nhom 9/` according to UIT university course requirements.
 
-Features:
-- Automatic exclusion of virtualenvs (.venv), caches (__pycache__, .pytest_cache)
-- Automatic exclusion of large files (>50MB like paysim.csv)
-- Security exclusion of sensitive files (.env, credentials)
-- Generation of SHA256 checksum and packaging manifest
+Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác):
+[Project AI-UIT] - Nhom 9/
+├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
+├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
+│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 32 trang)
+│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (đã nhúng sẵn video demo)
+└── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
+    ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
+    ├── HUONG_DAN_SU_DUNG.pdf               ← Hướng dẫn sử dụng (bản PDF xuất từ Word)
+    ├── HUONG_DAN_SU_DUNG.md                ← Bản Markdown đối soát nhanh
+    ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc
+    ├── demo/                               ← Minh chứng sản phẩm Demo
+    │   ├── LINK_VIDEO_DEMO.pdf             ← Liên kết video clip demo (PDF trình bày đẹp)
+    │   └── screenshots/                    ← 5 ảnh chụp màn hình UI sắc nét
+    └── code/                               ← Toàn bộ mã nguồn giải thuật & thực nghiệm
+        ├── src/                            ← 4 modules Python: preprocessing, models, evaluation, utils
+        ├── notebooks/                      ← 6/6 Jupyter Notebooks thực nghiệm chạy sạch 100%
+        ├── data/processed/                 ← 8 tệp .pkl tiền xử lý (chạy ngay không cần 500MB raw)
+        └── reports/                        ← 3 tệp predictions .pkl (đầu vào cho Notebook 06 đối sánh)
 
 Usage:
-    python scripts/package_submission.py --dry-run
-    python scripts/package_submission.py
+    python scripts/package_submission.py            # Chuẩn bị và kiểm định thư mục nộp bài
+    python scripts/package_submission.py --zip      # Chỉ nén ZIP khi người dùng yêu cầu
 """
 
 from __future__ import annotations
 
 import os
 import sys
+import shutil
 import zipfile
 import hashlib
 import argparse
@@ -27,14 +42,16 @@ from datetime import datetime
 
 EXCLUDE_DIRS = {
     ".git", ".venv", "venv", "__pycache__", ".pytest_cache",
-    "node_modules", ".idea", ".vscode", "tmp"
+    "node_modules", ".idea", ".vscode", "tmp", ".data"
+}
+
+EXCLUDE_FILES = {
+    ".DS_Store", ".gitkeep"
 }
 
 EXCLUDE_EXTS = {
     ".pyc", ".pyo", ".tmp", ".log"
 }
-
-MAX_FILE_SIZE_MB = 50.0
 
 
 def calculate_sha256(file_path: Path) -> str:
@@ -46,132 +63,194 @@ def calculate_sha256(file_path: Path) -> str:
     return sha.hexdigest()
 
 
-def should_include_file(fp: Path, project_dir: Path) -> bool:
-    """Check if a file should be included in the submission bundle."""
-    # Check parts for excluded directories
-    for part in fp.relative_to(project_dir).parts:
-        if part in EXCLUDE_DIRS:
-            return False
-
-    if fp.name == ".DS_Store" or fp.name.startswith("._"):
-        return False
-
-    # Security: never package .env or private key files
-    if fp.name == ".env" or fp.name.startswith(".env.") or fp.suffix in {".pem", ".key"}:
-        print(f"[\033[91mSECURITY\033[0m] Excluding sensitive file: {fp.name}")
-        return False
-
-    if fp.suffix.lower() in EXCLUDE_EXTS:
-        return False
-
-    # Check file size limit (>50MB)
-    try:
-        size_mb = fp.stat().st_size / (1024 * 1024)
-        if size_mb > MAX_FILE_SIZE_MB:
-            print(f"[\033[93mEXCLUDE\033[0m] Skipping file > 50MB ({round(size_mb, 1)} MB): {fp.name}")
-            return False
-    except Exception:
-        return False
-
-    return True
+def copy_file_safe(src: Path, dst: Path):
+    """Copy file ensuring parent directory exists."""
+    dst.parent.mkdir(parents=True, exist_ok=True)
+    shutil.copy2(src, dst)
 
 
-def collect_submission_files(project_dir: Path) -> list[Path]:
-    """Scan and filter all project files for submission."""
-    included = []
-    for root, dirs, files in os.walk(project_dir):
-        # Prune excluded directories in-place
-        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
-        for f in files:
-            fp = Path(root) / f
-            if should_include_file(fp, project_dir):
-                included.append(fp)
-    return sorted(included)
-
-
-def package_project(args):
-    project_dir = Path(args.project).resolve()
-    out_dir = Path(args.output).resolve()
-    out_dir.mkdir(parents=True, exist_ok=True)
-
-    zip_filename = args.filename or "[Project AI-UIT] - Nhom 9.zip"
-    zip_path = out_dir / zip_filename
-
-    print(f"\n=======================================================")
-    print(f"[*] UIT CS106 Final Submission Packager — Nhom 9")
-    print(f"[*] Target Directory: {project_dir}")
-    print(f"[*] Output ZIP File:  {zip_path}")
-    print(f"=======================================================\n")
-
-    files_to_pack = collect_submission_files(project_dir)
-    total_size_bytes = sum(f.stat().st_size for f in files_to_pack)
-    total_size_mb = round(total_size_bytes / (1024 * 1024), 2)
-
-    print(f"[✓] Collected {len(files_to_pack)} clean files ({total_size_mb} MB total uncompressed)\n")
-
-    if args.dry_run:
-        print("[!] DRY RUN MODE — Previewing first 30 files:")
-        for f in files_to_pack[:30]:
-            print(f"  - {f.relative_to(project_dir)}")
-        if len(files_to_pack) > 30:
-            print(f"  ... and {len(files_to_pack) - 30} more files.")
-        print("\n[✓] Dry run complete. No zip archive created.")
+def copy_clean_tree(src: Path, dst: Path, skip_names: set[str] = None):
+    """Recursively copy directory tree filtering out caches and junk files."""
+    if not src.exists():
         return
+    dst.mkdir(parents=True, exist_ok=True)
+    for root, dirs, files in os.walk(src):
+        dirs[:] = [d for d in dirs if d not in EXCLUDE_DIRS]
+        rel_root = Path(root).relative_to(src)
+        target_root = dst / rel_root
+        target_root.mkdir(parents=True, exist_ok=True)
+        for f in files:
+            if f in EXCLUDE_FILES or f.startswith("._") or f.startswith("~$") or f.startswith(".env") or f.endswith(tuple(EXCLUDE_EXTS)):
+                continue
+            if skip_names and f in skip_names:
+                continue
+            if f in {"paysim.csv", "creditcard.csv"}:
+                continue
+            if f.endswith(".mp4") and "clip" in Path(root).parts:
+                continue
+            copy_file_safe(Path(root) / f, target_root / f)
 
-    # Create ZIP archive
-    print(f"[*] Compressing files into {zip_path.name}...")
-    with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
-        for f in files_to_pack:
-            arcname = f.relative_to(project_dir)
-            zf.write(f, arcname)
 
-    zip_size_mb = round(zip_path.stat().st_size / (1024 * 1024), 2)
-    sha256 = calculate_sha256(zip_path)
+def assemble_submission(final_dir: Path, bundle_dir: Path):
+    """Assemble project deliverables into canonical UIT submission tree."""
+    draft_dir = final_dir / "draft" / "fraud-detection"
 
-    print(f"\n[✓] Package successfully created: {zip_path}")
-    print(f"    - Compressed Size: {zip_size_mb} MB")
-    print(f"    - SHA256 Checksum: {sha256}")
+    if bundle_dir.exists():
+        shutil.rmtree(bundle_dir)
+    bundle_dir.mkdir(parents=True, exist_ok=True)
 
-    # Generate / Update submit/MANIFEST.md
-    manifest_path = out_dir / "MANIFEST.md"
-    manifest_content = f"""# Submission Package Manifest — Nhóm 9 (CS106)
+    print(f"[*] Assembling deliverables into: {bundle_dir}")
 
-> **Môn học:** Trí tuệ Nhân tạo (CS106.F31.CN2.TTNT) — UIT  
-> **Đề tài:** #7 — Hệ thống Phát hiện Giao dịch Tài chính Bất thường  
-> **Thời gian tạo:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}  
-> **Tệp nén chính:** `{zip_filename}` ({zip_size_mb} MB)  
-> **SHA256 Checksum:** `{sha256}`  
+    # 1. Danh sách nhóm (Excel)
+    excel_src = final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Danh_sach_nhom.xlsx"
+    if not excel_src.exists():
+        excel_src = final_dir / "Danh_sach_nhom.xlsx"
+    if excel_src.exists():
+        shutil.copy2(excel_src, bundle_dir / "Danh_sach_nhom.xlsx")
 
----
+    # 2. Bao_cao (Only official PDF report & PPTX slide with embedded video)
+    bao_cao = bundle_dir / "Bao_cao"
+    bao_cao.mkdir(parents=True, exist_ok=True)
+    pdf_report = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.pdf"
+    if pdf_report.exists():
+        shutil.copy2(pdf_report, bao_cao / "[Nhom9]_BaoCao_FraudDetection.pdf")
+    pptx_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx"
+    if pptx_slide.exists():
+        shutil.copy2(pptx_slide, bao_cao / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx")
 
-## 1. Thông Tin Nộp Bài
-- **Tên file nộp:** `{zip_filename}`
-- **Số lượng tệp được đóng gói:** {len(files_to_pack)} files
-- **Dung lượng giải nén:** {total_size_mb} MB
-- **Dung lượng nén ZIP:** {zip_size_mb} MB
+    # 3. Chuong_trinh
+    prog = bundle_dir / "Chuong_trinh"
+    prog.mkdir(parents=True, exist_ok=True)
 
-## 2. Danh Mục Sản Phẩm Đã Kiểm Tra (Deliverables)
-- [x] **Mã nguồn & Notebooks:** 6/6 Jupyter Notebooks đã chạy sạch 100%, thư mục `src/` modular đầy đủ preprocessing, models, evaluation, reporting.
-- [x] **Báo cáo học thuật:** Word (`[Nhom9]_BaoCao_FraudDetection.docx`) và PDF (`[Nhom9]_BaoCao_FraudDetection.pdf`) 32 trang đầy đủ Chương 1–7.
-- [x] **Slide thuyết trình:** Bản PPTX (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx`) và PDF 21 slide học thuật kèm Kịch bản bảo vệ 7 người.
-- [x] **Demo giao diện:** Streamlit app kết nối mô hình XGBoost-SMOTE, 4 presets, mapping datetime và định dạng VNĐ.
-- [x] **An toàn dữ liệu:** Đã loại trừ hoàn toàn `.env`, `.git`, `.venv` và tập dữ liệu thô `paysim.csv` (470MB).
-"""
-    with open(manifest_path, "w", encoding="utf-8") as f:
-        f.write(manifest_content)
-    print(f"[✓] Generated manifest: {manifest_path}\n")
+    # 3.1 Single unified guide (DOCX + PDF + MD) & requirements
+    for guide_name in ["HUONG_DAN_SU_DUNG.docx", "HUONG_DAN_SU_DUNG.pdf", "HUONG_DAN_SU_DUNG.md"]:
+        candidates = [
+            draft_dir / "docs" / guide_name,
+            final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / guide_name,
+            final_dir / guide_name,
+        ]
+        for c in candidates:
+            if c.exists():
+                shutil.copy2(c, prog / guide_name)
+                break
+
+    req_candidates = [
+        final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / "requirements.txt",
+        draft_dir / "requirements.txt",
+    ]
+    for r in req_candidates:
+        if r.exists():
+            shutil.copy2(r, prog / "requirements.txt")
+            break
+
+    # 3.2 Demo (Strictly screenshots and PDF video link)
+    demo_dst = prog / "demo"
+    demo_dst.mkdir(parents=True, exist_ok=True)
+    copy_clean_tree(draft_dir / "demo" / "screenshots", demo_dst / "screenshots")
+
+    # Prefer PDF link, fallback to TXT
+    link_pdf = final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / "demo" / "LINK_VIDEO_DEMO.pdf"
+    if not link_pdf.exists():
+        link_pdf = draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.pdf"
+    if link_pdf.exists():
+        shutil.copy2(link_pdf, demo_dst / "LINK_VIDEO_DEMO.pdf")
+    elif (draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.txt").exists():
+        shutil.copy2(draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.txt", demo_dst / "LINK_VIDEO_DEMO.txt")
+
+    # 3.3 Code (src, notebooks, data/processed, reports)
+    code_dst = prog / "code"
+    code_dst.mkdir(parents=True, exist_ok=True)
+
+    # Core modular packages only (omit internal reporting builders and scripts)
+    src_dst = code_dst / "src"
+    src_dst.mkdir(parents=True, exist_ok=True)
+    if (draft_dir / "src" / "__init__.py").exists():
+        shutil.copy2(draft_dir / "src" / "__init__.py", src_dst / "__init__.py")
+    for mod in ["preprocessing", "models", "evaluation", "utils"]:
+        src_mod = draft_dir / "src" / mod
+        if src_mod.exists():
+            copy_clean_tree(src_mod, src_dst / mod)
+
+    copy_clean_tree(draft_dir / "notebooks", code_dst / "notebooks")
+    copy_clean_tree(draft_dir / "data" / "processed", code_dst / "data" / "processed", skip_names={"README.md"})
+
+    # Reports inside code (strictly prediction pickles needed as input for Notebook 06)
+    reports_dst = code_dst / "reports"
+    reports_dst.mkdir(parents=True, exist_ok=True)
+    for f in ["rf_predictions.pkl", "xgb_predictions.pkl", "autoencoder_predictions.pkl"]:
+        src_f = draft_dir / "reports" / f
+        if src_f.exists():
+            shutil.copy2(src_f, reports_dst / f)
+
+    # Clean any accidental caches or unwanted files
+    for root, dirs, files in os.walk(bundle_dir):
+        for d in list(dirs):
+            if d in EXCLUDE_DIRS:
+                shutil.rmtree(Path(root) / d, ignore_errors=True)
+        for f in files:
+            if f in EXCLUDE_FILES or f.startswith("._") or f.startswith("~$") or f.endswith(tuple(EXCLUDE_EXTS)):
+                (Path(root) / f).unlink(missing_ok=True)
+
+
+def list_bundle_files(bundle_dir: Path) -> list[Path]:
+    """Get all clean files inside bundle."""
+    files = []
+    for root, _, fnames in os.walk(bundle_dir):
+        for f in fnames:
+            if not f.startswith("~$") and f not in EXCLUDE_FILES and not f.endswith(tuple(EXCLUDE_EXTS)):
+                files.append(Path(root) / f)
+    return sorted(files)
 
 
 def main():
     parser = argparse.ArgumentParser(description="UIT CS106 Final Submission Packager — Nhom 9")
     base_default = Path(__file__).resolve().parent.parent.parent.parent
-    parser.add_argument("--project", "-p", default=str(base_default), help="Project directory (default: repo root)")
-    parser.add_argument("--output", "-o", default=str(base_default / "submit"), help="Output directory (default: submit/)")
-    parser.add_argument("--filename", "-f", default="[Project AI-UIT] - Nhom 9.zip", help="ZIP filename")
-    parser.add_argument("--dry-run", action="store_true", help="Inspect files without creating archive")
+    parser.add_argument("--project", "-p", default=str(base_default), help="Project directory")
+    parser.add_argument("--output", "-o", default=str(base_default / "submit"), help="Output directory")
+    parser.add_argument("--zip", action="store_true", help="Also generate .zip archive (default: False)")
+    parser.add_argument("--dry-run", action="store_true", help="Preview files only without changing submit/")
     args = parser.parse_args()
 
-    package_project(args)
+    final_dir = Path(args.project).resolve()
+    submit_dir = Path(args.output).resolve()
+    folder_name = "[Project AI-UIT] - Nhom 9"
+    bundle_dir = submit_dir / folder_name
+
+    print("\n=======================================================")
+    print("[*] UIT CS106 Final Submission Packager — Nhom 9")
+    print(f"[*] Target Directory: {bundle_dir}")
+    print("=======================================================\n")
+
+    if args.dry_run:
+        import tempfile
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            tmp_bundle = Path(tmp_dir) / folder_name
+            assemble_submission(final_dir, tmp_bundle)
+            files = list_bundle_files(tmp_bundle)
+            total_mb = round(sum(f.stat().st_size for f in files) / (1024 * 1024), 2)
+            print(f"[!] DRY RUN MODE — Successfully simulated {len(files)} deliverables ({total_mb} MB):\n")
+            for f in files:
+                print(f"  - {f.relative_to(tmp_bundle)} ({round(f.stat().st_size / 1024, 1)} KB)")
+        return
+
+    assemble_submission(final_dir, bundle_dir)
+    files = list_bundle_files(bundle_dir)
+    total_mb = round(sum(f.stat().st_size for f in files) / (1024 * 1024), 2)
+
+    print(f"[✓] Successfully assembled {len(files)} clean deliverables ({total_mb} MB total uncompressed)\n")
+
+
+
+    if args.zip:
+        zip_path = submit_dir / f"{folder_name}.zip"
+        print(f"[*] Creating ZIP: {zip_path.name}...")
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+            for f in files:
+                zf.write(f, Path(folder_name) / f.relative_to(bundle_dir))
+        sha = calculate_sha256(zip_path)
+        print(f"[✓] ZIP created: {zip_path} ({round(zip_path.stat().st_size / (1024*1024), 2)} MB, SHA256: {sha})")
+    else:
+        print("[i] Skipping ZIP creation as requested. You can compress the directory manually.")
 
 
 if __name__ == "__main__":

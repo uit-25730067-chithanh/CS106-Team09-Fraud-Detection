@@ -44,7 +44,6 @@ models/*.joblib
 
 # Submission packages & staging
 submit/*.zip
-submit/\[Project AI-UIT\]*/
 
 # Media & Video files (too large for Git, stored on Google Drive/YouTube)
 *.mp4
@@ -54,3 +53,4 @@ submit/\[Project AI-UIT\]*/
 
 # Temporary scratch scripts
 **/scratch/
+
