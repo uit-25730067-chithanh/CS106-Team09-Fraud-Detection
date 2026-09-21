@@ -265,45 +265,39 @@ Dạ em cảm ơn chị Cẩm. Em chào thầy và các bạn, em là **Nguyễn
 
 ### SLIDE 15 – KẾT QUẢ THỰC NGHIỆM: BẢNG SO SÁNH ĐA CHỈ SỐ
 
-_(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~80s] | Người nói: **Nguyễn Duy Khang**)_
+_(Thời lượng chuẩn hóa: **~45s – 50s** | Người nói: **Nguyễn Duy Khang**)_
 
-Nhìn vào bảng so sánh bên trái và biểu đồ bên phải do nhóm em tổng hợp:
+Nhìn vào bảng so sánh bên trái, thầy và các bạn có thể thấy hai mô hình cây là **Random Forest** và **XGBoost** đều đạt F1-Score trên **99.5%**, tức là bắt gần như trọn gian lận mà rất ít báo động nhầm. Random Forest nhỉnh hơn một chút, với F1 là **99.73%**.
 
-- **Random Forest + SMOTE** đạt hiệu năng phân lớp toàn diện cao nhất: **Precision = 99.94%**, **Recall = 99.51%**, và **F1-Score = 99.73%**.
-- **XGBoost + SMOTE** bám sát nút với **Precision = 99.76%**, **Recall = 99.51%**, **F1-Score = 99.63%**, nhưng có thời gian huấn luyện siêu tốc chỉ **41.7 giây**.
-- **Deep Autoencoder** đạt **Recall = 75.23%** ở chế độ hoàn toàn không giám sát.
+Điểm khác biệt nằm ở thời gian huấn luyện: XGBoost chỉ mất **chưa tới một phút**, còn Random Forest mất gần 20 phút, tức là nhanh hơn khoảng **20 lần**.
 
-Nhìn vào biểu đồ cột bên phải: Hai mô hình cây (cột xanh) đạt sự cân bằng lý tưởng giữa Precision và Recall. Còn Autoencoder (cột đỏ) chấp nhận Precision ở mức 38.2% để giữ Recall cao ở mức 75.2%, hoàn toàn đúng với triết lý an toàn tài chính: *"Thà cảnh báo nhầm để kiểm tra lại một bước OTP, còn hơn bỏ lọt tội phạm tài chính"*.
+Riêng **Autoencoder** học hoàn toàn không cần nhãn nhưng vẫn bắt được khoảng **75%** số vụ gian lận, nên đóng vai trò lớp phòng thủ dự phòng.
+
+Ở biểu đồ bên phải, hai mô hình cây gần như đạt tối đa cả ba chỉ số, còn Autoencoder chủ động chấp nhận Precision thấp, khoảng 38%, để giữ Recall cao. Đây là đánh đổi có chủ đích: *"Thà cảnh báo nhầm để xác thực thêm một bước OTP, còn hơn bỏ lọt tội phạm tài chính"*.
 
 ---
 
 ### SLIDE 16 – PHÂN TÍCH MA TRẬN NHẦM LẪN & ĐÁNH ĐỔI SAI SỐ
 
-_(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~80s] | Người nói: **Nguyễn Duy Khang**)_
+_(Thời lượng chuẩn hóa: **~45s – 50s** | Người nói: **Nguyễn Duy Khang**)_
 
-Slide này thể hiện chi tiết **Ma trận nhầm lẫn** trên 40,000 mẫu kiểm thử độc lập:
+Đây là **Ma trận nhầm lẫn** của các mô hình trên 40,000 mẫu kiểm thử độc lập.
 
-- **Ô đầu tiên — Random Forest:** Trong 1,643 vụ gian lận thật, mô hình bắt trúng **1,635 vụ (TP)**, chỉ để lọt duy nhất **8 vụ (FN)**. Và trên 38,357 giao dịch bình thường, mô hình chỉ cảnh báo nhầm đúng **1 ca duy nhất (FP)**.
-- **Ô thứ hai — XGBoost:** Bắt trúng **1,635 vụ gian lận**, bỏ lọt 8 vụ, và chỉ đoán nhầm **4 vụ**. Đây là sự đánh đổi hoàn toàn tối ưu để lấy tốc độ huấn luyện nhanh gấp 28.5 lần.
-- **Ô thứ ba — Deep Autoencoder:** Bắt trúng **1,236 vụ gian lận** mà không cần biết trước nhãn. Dù có 1,998 ca đoán nhầm, nhưng với quy mô ngân hàng, việc chuyển 5% giao dịch đáng ngờ sang bước xác thực OTP bổ sung là hoàn toàn khả thi và chấp nhận được trong thực tế.
+Với **Random Forest**, trong 1,643 vụ gian lận thật, mô hình bắt trúng 1,635 vụ, chỉ để lọt **8 vụ**, và trên hơn 38 nghìn giao dịch bình thường chỉ cảnh báo nhầm **đúng 1 ca**. **XGBoost**, mô hình nhóm chọn đưa vào sản xuất, cũng bắt trúng 1,635 vụ và bỏ lọt 8 vụ, chỉ cảnh báo nhầm **4 ca**, nhưng huấn luyện nhanh hơn nhiều và độ trễ chỉ cỡ nửa mili-giây.
+
+Còn **Autoencoder** bắt được **1,236 vụ** mà không cần nhãn, đóng vai trò màng lọc thứ cấp cho các kiểu tấn công lạ. Đổi lại, mô hình vẫn bỏ lọt 407 vụ và cảnh báo nhầm cỡ **5%** giao dịch. Với ngân hàng thì con số này vẫn chấp nhận được, vì chỉ cần chuyển các giao dịch đó sang bước xác thực OTP.
 
 ---
 
 ### SLIDE 17 – PHÂN TÍCH ĐÓNG GÓP ĐẶC TRƯNG (FEATURE IMPORTANCE)
 
-_(Thời lượng chuẩn hóa: **~80s – 85s** [Meeting thực tế: ~82s] | Người nói: **Nguyễn Duy Khang**)_
+_(Thời lượng chuẩn hóa: **~45s – 50s** | Người nói: **Nguyễn Duy Khang**)_
 
-Cũng trong module đánh giá, nhóm tiến hành phân tích **Độ quan trọng của đặc trưng (Feature Importance)**:
+Tiếp theo là **Độ quan trọng của đặc trưng**, tức là mô hình XGBoost dựa vào thông tin nào nhiều nhất để ra quyết định.
 
-Nhìn vào biểu đồ thanh ngang và bảng xếp hạng, Thầy và các bạn sẽ thấy một kết quả định lượng rất rõ ràng:
-Hai đặc trưng hàng đầu chiếm thế thượng phong:
+Nhìn vào biểu đồ, hai đặc trưng đứng đầu là **`errorBalanceOrig`**, tức sai lệch số dư nguồn, chiếm khoảng **50%**, và **`newbalanceOrig`**, tức số dư về 0 sau khi rút cạn, chiếm khoảng **47%**. Gộp lại, riêng hai đặc trưng này đã chiếm tới **97%** sức mạnh phân loại. Số tiền giao dịch hay khung giờ đêm gần như không đóng góp đáng kể.
 
-- **`errorBalanceOrig`** (Sai lệch số dư nguồn) chiếm **49.9%** đóng góp.
-- **`newbalanceOrig`** (Số dư nguồn về 0 khi rút cạn) chiếm **47.2%** đóng góp.
-
-**Chỉ riêng 2 đặc trưng này gộp lại đã chiếm tới 97.1% toàn bộ Feature Split Gains của XGBoost!** Trong khi các thuộc tính phụ trợ như số tiền giao dịch (`amount`) chỉ chiếm khoảng 0.5%, hay khung giờ đêm chỉ chiếm 0.03%.
-
-Điều này cho thấy mô hình bám rất chặt vào dấu vết sai lệch số dư. Trong báo cáo, nhóm cũng nhận diện rõ việc phụ thuộc 98.5% vào nhóm số dư là nguy cơ rủi ro do đặc thù simulator PaySim, chứ không vội vàng xem đây là ranh giới tuyến tính đơn giản ngoài thực tế.
+Điều này cho thấy mô hình bám rất chặt vào dấu vết sai lệch số dư. Tuy nhiên, nhóm cũng lưu ý đây là đặc thù của dữ liệu mô phỏng PaySim, nên chưa thể khẳng định kết quả này giữ nguyên ngoài thực tế.
 
 Tiếp theo, em xin mời chị **Mỷ Cẩm** giải thích phần chọn ngưỡng của mô hình Autoencoder ở slide 18.
 
