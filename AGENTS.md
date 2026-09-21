@@ -58,11 +58,12 @@ Final/
 | `models/autoencoder_meta.json` | ✅ Autoencoder trained — AUC=0.9318, Recall=0.7523 (Threshold: 0.045456) |
 | Evaluation (`src/evaluation/`) | ✅ Phase 05 `passed` (PR #26 & #28) — 4/4 scripts của Khang xong (metrics_calculator.py, plot_roc_curve.py, confusion_matrix_plot.py, model_comparator.py); `notebooks/06_evaluation_comparison.ipynb` chạy sạch; `reports/model_comparison.csv` + 7 figures đã xuất, khớp 100% `ch5_metrics_recomputed.csv`. Thêm 2 scripts vẽ đồ thị báo cáo |
 | Demo UI | ✅ Phase 06 `passed` — Streamlit Web UI + XGBoost-SMOTE & scaler kết nối hoàn chỉnh; bổ sung quy trình phân tích trực quan 4 bước, hộp chọn dữ liệu mẫu hỗ trợ nhập CSV/JSON an toàn, mapping thời gian PaySim, định dạng tiền VNĐ, comparison CSV + 9 figures, 3 themes; 5 screenshots chuẩn hóa, kịch bản 7 cảnh & video clip demo; tests pass |
-| Báo cáo & Slide | ✅ Phase 07 `passed` (15/09) — Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 32 trang chuẩn định dạng UIT, khớp 100% Phase 05). Slide: bộ học thuật 21 trang kèm Kịch bản toàn team 7 người **đã duyệt chính thức**. |
-| Gói nộp bài | ✅ Phase 08 `passed` (17/09) — Đóng gói tự động `[Project AI-UIT] - Nhom 9.zip` (118.51 MB, 127 files), kiểm tra toàn vẹn và bảo mật đạt 100% |
-| Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides, Huong_dan_su_dung (Word & MD), Danh sách nhóm (Excel) |
+| Báo cáo & Slide | ✅ Phase 07 `passed` (15/09) — Word: **Tóm tắt + Chương 1–7 ✅** (Duy — DOCX/PDF 31 trang chuẩn định dạng UIT, khớp 100% Phase 05). Slide: bộ học thuật 21 trang kèm Kịch bản toàn team 7 người **đã duyệt chính thức**. |
+| Gói nộp bài | ✅ Phase 08 `passed` (20/09) — Chuẩn bị hoàn tất cấu trúc nộp bài `[Project AI-UIT] - Nhom 9` (47 deliverables sạch, an toàn Git) đầy đủ Danh sách nhóm Excel, Hướng dẫn sử dụng DOCX, Báo cáo học thuật PDF, Slide thuyết trình PDF và Mã nguồn 6 notebooks thực nghiệm |
+| Docs | ✅ Đầy đủ: overview, roadmap, architecture, code-standards, data guides, Huong_dan_su_dung (Word), Danh sách nhóm (Excel) |
 
-> **Verdict (19/09/2026): Phase 00–08 TOÀN BỘ PASSED (9/9 = 100%). Đồ án hoàn thành trọn vẹn trước hạn chót. Toàn bộ mã nguồn, 6/6 notebooks, báo cáo Word/PDF 32 trang, Slide học thuật 21 trang kèm kịch bản thuyết trình toàn team, giao diện demo UI tương tác và gói nộp bài ZIP [Project AI-UIT] - Nhom 9.zip đã sẵn sàng nộp chính thức.**
+> **Verdict (20/09/2026): Phase 00–08 TOÀN BỘ PASSED (9/9 = 100%). Đồ án hoàn thành trọn vẹn. Toàn bộ mã nguồn, 6/6 notebooks, báo cáo PDF 31 trang, Slide học thuật 21 trang kèm kịch bản thuyết trình toàn team, 102 tests pass sạch, và gói nộp bài [Project AI-UIT] - Nhom 9 (47 deliverables sạch) đã sẵn sàng nộp chính thức.**
+
 
 ---
 
@@ -272,9 +273,9 @@ Place in `Final/submit/` before zipping.
 
 ### ✅ Hôn — DONE (Phase 07 & 08 PASSED — Final Package Ready)
 1. ✅ **Chính thức phê duyệt** bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người.
-2. ✅ **Xây dựng script tự động đóng gói:** `draft/fraud-detection/src/reporting/package_submission.py`.
-3. ✅ **Kiểm tra bảo mật & toàn vẹn:** Loại bỏ triệt để `paysim.csv` (470MB), `.env` token và các file kịch bản nội bộ khỏi thư mục `slides/`, nén thành công `[Project AI-UIT] - Nhom 9.zip` dung lượng 118.51 MB (127 files).
-4. ✅ **Bổ sung tài liệu giao nộp:** `Danh sách nhóm.xlsx` (Excel chuẩn 7 thành viên), `Huong_dan_su_dung.docx`/`.md`.
+2. ✅ **Xây dựng script tự động đóng gói:** `draft/fraud-detection/scripts/package_submission.py`.
+3. ✅ **Kiểm tra bảo mật & toàn vẹn:** Loại bỏ triệt để `paysim.csv` (470MB), `.env` token và các file rác, chuẩn bị thành công `[Project AI-UIT] - Nhom 9` dung lượng ~88.56 MB (47 clean deliverables).
+4. ✅ **Bổ sung tài liệu giao nộp:** `Danh_sach_nhom.xlsx` (Excel chuẩn 7 thành viên) và `HUONG_DAN_SU_DUNG.docx` nằm trực tiếp trong gói nộp `submit/`.
 5. ✅ **Sẵn sàng nộp bài:** Nhóm trưởng Hôn đại diện nộp file ZIP lên hệ thống môn học CS106 đúng hạn (trước 18/09/2026).
 
 

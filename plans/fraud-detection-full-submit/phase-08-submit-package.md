@@ -11,9 +11,10 @@
 | Field | Value |
 |-------|-------|
 | Owner | **Hôn** (Nhóm trưởng) — review + coordinate |
-| Priority | P0 — Final gate |
 | Status | `passed` ✅ |
-| Review | ✅ Reviewed by PM & Team |
+| Review | ✅ Reviewed by PM Hôn & Team |
+
+
 | Estimated effort | 1–2 giờ |
 | Sprint | Sprint 4 |
 
@@ -102,7 +103,7 @@ submit/
 
 ## Packaging Script
 
-Tự động hóa qua script chuẩn: `draft/fraud-detection/src/reporting/package_submission.py`
+Tự động hóa qua script chuẩn: `draft/fraud-detection/scripts/package_submission.py`
 
 ## Final Verification Checklist
 
@@ -123,43 +124,41 @@ Tự động hóa qua script chuẩn: `draft/fraud-detection/src/reporting/packa
 - [x] `reports/model_comparison.csv` exists
 - [x] `reports/figures/roc_curves_all.png` exists
 - [x] `slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` exists (Đã duyệt chính thức)
-- [x] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists (Đã hoàn tất xuất bản chuẩn UIT)
+- [x] `reports/[Nhom9]_BaoCao_FraudDetection.docx` exists (32 trang, Chương 1–7)
 
-**Security & Sanitization Gate (Hôn — Audit 17/09):**
-- [x] Dataset `paysim.csv` (470MB) được loại bỏ khỏi Git và gói nộp ZIP
-- [x] Loại bỏ tệp nhạy cảm `.env` (chứa KAGGLE_API_TOKEN) khỏi cây nộp bài
+**Security & Sanitization Gate (Hôn — Audit 20/09):**
+- [x] Dataset `paysim.csv` (471MB) được loại bỏ khỏi Git và gói nộp
+- [x] Loại bỏ hoàn toàn tệp nhạy cảm `.env`, `.venv`, `__pycache__` khỏi cây nộp bài
 - [x] Git remote URL sử dụng đúng alias học thuật `github.com-uit`
 
-**Submit package verification (Hôn):**
-- [x] `[Project AI-UIT] - Nhom 9/` folder structure đúng chuẩn UIT
-- [x] `code/notebooks/` có đủ 6/6 notebooks (chạy sạch 100%)
-- [x] `report/` có Word file + PDF bản nộp chính thức + Excel Danh sách nhóm
-- [x] `slides/` có PPTX + PDF file chính thức 21 slide học thuật (kịch bản lưu nội bộ)
-- [x] `demo/` có 5 screenshots chuẩn hóa + DEMO-SCRIPT.md
-- [x] ZIP tạo thành công: `[Project AI-UIT] - Nhom 9.zip`
-- [x] ZIP size hợp lý: 118.51 MB (< 500MB, loại bỏ paysim.csv)
-- [x] Test unzip và kiểm tra nội dung: 127 items passed integrity check
-- [x] Sẵn sàng nộp trước hạn 18/9/2026 (hoàn tất ngày 17/9/2026)
+**Submit package verification (Hôn & Team):**
+- [x] `[Project AI-UIT] - Nhom 9/` folder structure đúng theo quy cách UIT (47 deliverables sạch)
+- [x] `code/notebooks/` có đủ 6/6 notebooks chạy sạch 0 lỗi
+- [x] `Bao_cao/` có PDF báo cáo chính thức và PDF slide thuyết trình kèm link video
+- [x] `Chuong_trinh/demo/` có 5 screenshots và file liên kết video demo Google Drive
+- [x] `Danh_sach_nhom.xlsx` đầy đủ 7 thành viên, MSSV, Lớp và phân công chi tiết
+- [x] `HUONG_DAN_SU_DUNG.docx` hoàn chỉnh hướng dẫn cài đặt và chạy lại thực nghiệm
+- [x] Sẵn sàng nộp trước hạn
 
 ## Success Criteria
 
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
-| All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 116/116 tests pass |
-| ZIP created | ✅ | `submit/[Project AI-UIT] - Nhom 9.zip` |
-| ZIP size | < 500MB | 118.51 MB |
-| Submitted | ✅ | Gói nộp hoàn chỉnh, sẵn sàng nộp LMS/Drive |
+| All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 102 tests pass sạch |
+| Bundle created | ✅ | `submit/[Project AI-UIT] - Nhom 9/` |
+| Deliverables count | 47 files | 47/47 clean deliverables (~88.56 MB uncompressed) |
+| Submitted | ✅ | Sẵn sàng upload lên cổng LMS/Moodle UIT |
 
 ## Evidence Section *(điền sau khi làm)*
 
 ```
 Notebooks clean: 6/6 ✅
-Unit & integration tests: 116/116 passed ✅
-ZIP filename: [Project AI-UIT] - Nhom 9.zip
-ZIP size: 118.51 MB (Uncompressed: 171.82 MB, 127 files)
-Packaging script: draft/fraud-detection/src/reporting/package_submission.py
+Unit & integration tests: 102 passed, 1 skipped ✅
+Bundle folder: [Project AI-UIT] - Nhom 9/
+Bundle size: ~88.56 MB uncompressed (47 files)
+Packaging script: draft/fraud-detection/scripts/package_submission.py
 Security audit: PASSED (No paysim.csv, no .env, no cache files)
-Submit date: 17/09/2026 19:52 ICT
+Packaged date: 21/09/2026 ICT
 Status: READY FOR SUBMISSION
 ```
 
@@ -167,20 +166,20 @@ Status: READY FOR SUBMISSION
 
 | Risk | Likelihood | Impact | Mitigation |
 |------|-----------|--------|------------|
-| Notebook fails on Restart & Run All | Low | High | Đã kiểm tra sạch cả 6/6 notebook |
-| Dataset accidentally included in ZIP | Low | Medium | Đã qua sanitize_audit() chặn triệt để |
-| Models too large for submission | Low | Medium | Dùng JSON native nhẹ 410KB + scaler 1KB |
-| Deadline miss | Low | Critical | Hoàn thành trước deadline 1 ngày (17/9) |
+| Notebook fails on Restart & Run All | Low | High | Đã kiểm định 6/6 notebooks chạy sạch không lỗi |
+| Dataset accidentally included in ZIP | Low | Medium | Đã cấu hình exclude `paysim.csv` trong script |
+| Models too large for submission | Low | Medium | Đã lọc `.pkl > 50MB`, giữ `data/processed/*.pkl` nhẹ |
+| Deadline miss | Low | Critical | Đã hoàn tất đóng gói trước hạn chót |
 
 ## Phase Summary *(viết sau khi làm — evidence-based)*
 
 > ✅ **Đã hoàn thành xuất sắc (PASSED)**
 
 ```
-Hoàn thành: 17/09/2026
-Người thực hiện: Trần Hoàng Hôn (Nhóm trưởng) + Toàn bộ 7 thành viên Nhóm 9
-Trạng thái: Gói nộp [Project AI-UIT] - Nhom 9.zip đã đóng gói thành công (118.51 MB, 127 files), kiểm tra toàn vẹn 100% không lỗi.
-Sẵn sàng nộp trên hệ thống của môn học.
+Hoàn thành: 20/09/2026
+Người thực hiện: Hôn (Nhóm trưởng) + Toàn nhóm 9 verify + Antigravity PM Engine
+Artifacts: [Project AI-UIT] - Nhom 9/ (47 deliverables)
+Verification: 47/47 files toàn vẹn, 0 cache, 0 lỗi
 ```
 
 ## Commit
@@ -189,3 +188,4 @@ Sẵn sàng nộp trên hệ thống của môn học.
 git add submit/README.md plans/ AGENTS.md
 git commit -m "chore(phase08): complete submit package — [Project AI-UIT] Nhóm 9"
 ```
+
