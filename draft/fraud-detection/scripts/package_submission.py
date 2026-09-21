@@ -113,15 +113,22 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
             shutil.copy2(c, bundle_dir / "Danh_sach_nhom.xlsx")
             break
 
-    # 2. Bao_cao (Only official PDF report & PPTX slide with embedded video)
+    # 2. Bao_cao (Official Word & PDF report, and official PPTX & PDF slide)
     bao_cao = bundle_dir / "Bao_cao"
     bao_cao.mkdir(parents=True, exist_ok=True)
-    pdf_report = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.pdf"
-    if pdf_report.exists():
-        shutil.copy2(pdf_report, bao_cao / "[Nhom9]_BaoCao_FraudDetection.pdf")
+    report_docx = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.docx"
+    report_pdf = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.pdf"
+    if report_docx.exists():
+        shutil.copy2(report_docx, bao_cao / "[Nhom9]_BaoCao_FraudDetection.docx")
+    if report_pdf.exists():
+        shutil.copy2(report_pdf, bao_cao / "[Nhom9]_BaoCao_FraudDetection.pdf")
+
     pptx_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx"
+    pdf_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf"
     if pptx_slide.exists():
         shutil.copy2(pptx_slide, bao_cao / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx")
+    if pdf_slide.exists():
+        shutil.copy2(pdf_slide, bao_cao / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf")
 
     # 3. Chuong_trinh
     prog = bundle_dir / "Chuong_trinh"
