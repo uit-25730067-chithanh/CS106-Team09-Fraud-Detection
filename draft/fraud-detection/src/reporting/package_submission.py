@@ -126,7 +126,6 @@ def build_submission_structure():
     team_excel = DRAFT_DIR / "reports" / "Danh sách nhóm.xlsx"
     comparison_csv = DRAFT_DIR / "reports" / "model_comparison.csv"
 
-    copy_file_safe(report_docx, report_dir / "[Nhom9]_BaoCao_FraudDetection.docx")
     copy_file_safe(report_pdf, report_dir / "[Nhom9]_BaoCao_FraudDetection.pdf")
     copy_file_safe(team_excel, report_dir / "Danh sách nhóm.xlsx")
     copy_file_safe(comparison_csv, report_dir / "model_comparison.csv")
@@ -135,9 +134,7 @@ def build_submission_structure():
     # 3. Slides directory
     slides_dir = TARGET_DIR / "slides"
     print("\n[3/5] Packaging Presentation Slides...")
-    slide_pptx = DRAFT_DIR / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx"
     slide_pdf = DRAFT_DIR / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf"
-    copy_file_safe(slide_pptx, slides_dir / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx")
     copy_file_safe(slide_pdf, slides_dir / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf")
 
     # 4. Demo directory

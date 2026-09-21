@@ -9,9 +9,7 @@ Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác
 ├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
 ├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
 │   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
-│   ├── [Nhom9]_BaoCao_FraudDetection.docx  ← Báo cáo học thuật định dạng Word
-│   ├── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf  ← Slide thuyết trình dạng PDF
-│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pptx ← Slide PowerPoint (ảnh minh họa & link Google Drive)
+│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf  ← Slide thuyết trình dạng PDF (21 trang)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
     ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc
@@ -113,20 +111,14 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
             shutil.copy2(c, bundle_dir / "Danh_sach_nhom.xlsx")
             break
 
-    # 2. Bao_cao (Official Word & PDF report, and official PPTX & PDF slide)
+    # 2. Bao_cao (Official PDF report & PDF slide)
     bao_cao = bundle_dir / "Bao_cao"
     bao_cao.mkdir(parents=True, exist_ok=True)
-    report_docx = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.docx"
     report_pdf = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.pdf"
-    if report_docx.exists():
-        shutil.copy2(report_docx, bao_cao / "[Nhom9]_BaoCao_FraudDetection.docx")
     if report_pdf.exists():
         shutil.copy2(report_pdf, bao_cao / "[Nhom9]_BaoCao_FraudDetection.pdf")
 
-    pptx_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx"
     pdf_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf"
-    if pptx_slide.exists():
-        shutil.copy2(pptx_slide, bao_cao / "[Nhom9]_Slide_FraudDetection_Academic_VN.pptx")
     if pdf_slide.exists():
         shutil.copy2(pdf_slide, bao_cao / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf")
 

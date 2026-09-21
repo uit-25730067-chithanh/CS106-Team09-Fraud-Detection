@@ -79,7 +79,7 @@ Thầy/cô và các bạn có thể mở và chạy lại 6 Notebooks trong thư
 Thầy/cô có thể xem video thuyết minh giao diện tương tác (Streamlit Web UI) độ phân giải Full HD 1080p, thời lượng 05 phút 34 giây do sinh viên Phạm Thành Trung trình bày:
 - **Xem trực tiếp qua liên kết Google Drive:** Mở tệp `demo/LINK_VIDEO_DEMO.txt` hoặc truy cập trực tiếp:  
   [https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view](https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view)
-- **Xem qua Slide trình chiếu:** Slide 15 trong tệp `Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pptx`.
+- **Xem qua Slide trình chiếu:** Trang 15 trong tệp `Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf`.
 - **Xem hình ảnh giao diện:** 5 ảnh chụp màn hình độ phân giải cao tại thư mục `demo/screenshots/`.
 
 ---
