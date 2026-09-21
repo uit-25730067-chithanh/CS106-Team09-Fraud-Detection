@@ -102,11 +102,16 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     print(f"[*] Assembling deliverables into: {bundle_dir}")
 
     # 1. Danh sách nhóm (Excel)
-    excel_src = final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Danh_sach_nhom.xlsx"
-    if not excel_src.exists():
-        excel_src = final_dir / "Danh_sach_nhom.xlsx"
-    if excel_src.exists():
-        shutil.copy2(excel_src, bundle_dir / "Danh_sach_nhom.xlsx")
+    candidates_excel = [
+        final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Danh_sach_nhom.xlsx",
+        draft_dir / "docs" / "Danh_sach_nhom.xlsx",
+        draft_dir / "reports" / "Danh sách nhóm.xlsx",
+        final_dir / "Danh_sach_nhom.xlsx",
+    ]
+    for c in candidates_excel:
+        if c.exists():
+            shutil.copy2(c, bundle_dir / "Danh_sach_nhom.xlsx")
+            break
 
     # 2. Bao_cao (Only official PDF report & PPTX slide with embedded video)
     bao_cao = bundle_dir / "Bao_cao"
@@ -126,11 +131,13 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     for guide_name in ["HUONG_DAN_SU_DUNG.docx", "HUONG_DAN_SU_DUNG.pdf", "HUONG_DAN_SU_DUNG.md"]:
         candidates = [
             draft_dir / "docs" / guide_name,
+            draft_dir / "docs" / "Huong_dan_su_dung.docx" if guide_name == "HUONG_DAN_SU_DUNG.docx" else None,
+            draft_dir / "docs" / "Huong_dan_su_dung.md" if guide_name == "HUONG_DAN_SU_DUNG.md" else None,
             final_dir / "submit" / "[Project AI-UIT] - Nhom 9" / "Chuong_trinh" / guide_name,
             final_dir / guide_name,
         ]
         for c in candidates:
-            if c.exists():
+            if c and c.exists():
                 shutil.copy2(c, prog / guide_name)
                 break
 
