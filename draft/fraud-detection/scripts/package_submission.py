@@ -94,6 +94,17 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     """Assemble project deliverables into canonical UIT submission tree."""
     draft_dir = final_dir / "draft" / "fraud-detection"
 
+    # Preserve canonical submission-only documents if already present in bundle_dir
+    preserved: dict[Path, bytes] = {}
+    for rel_path in [
+        Path("Danh_sach_nhom.xlsx"),
+        Path("Chuong_trinh/HUONG_DAN_SU_DUNG.docx"),
+        Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt"),
+    ]:
+        p = bundle_dir / rel_path
+        if p.exists():
+            preserved[rel_path] = p.read_bytes()
+
     if bundle_dir.exists():
         shutil.rmtree(bundle_dir)
     bundle_dir.mkdir(parents=True, exist_ok=True)
@@ -101,15 +112,9 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     print(f"[*] Assembling deliverables into: {bundle_dir}")
 
     # 1. Danh sách nhóm (Excel)
-    candidates_excel = [
-        draft_dir / "docs" / "Danh_sach_nhom.xlsx",
-        draft_dir / "reports" / "Danh sách nhóm.xlsx",
-        final_dir / "Danh_sach_nhom.xlsx",
-    ]
-    for c in candidates_excel:
-        if c.exists():
-            shutil.copy2(c, bundle_dir / "Danh_sach_nhom.xlsx")
-            break
+    team_excel = bundle_dir / "Danh_sach_nhom.xlsx"
+    if Path("Danh_sach_nhom.xlsx") in preserved:
+        team_excel.write_bytes(preserved[Path("Danh_sach_nhom.xlsx")])
 
     # 2. Bao_cao (Official PDF report & PDF slide)
     bao_cao = bundle_dir / "Bao_cao"
@@ -127,15 +132,9 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     prog.mkdir(parents=True, exist_ok=True)
 
     # 3.1 Single unified guide (DOCX) & requirements
-    guide_candidates = [
-        draft_dir / "docs" / "HUONG_DAN_SU_DUNG.docx",
-        draft_dir / "docs" / "Huong_dan_su_dung.docx",
-        final_dir / "HUONG_DAN_SU_DUNG.docx",
-    ]
-    for c in guide_candidates:
-        if c and c.exists():
-            shutil.copy2(c, prog / "HUONG_DAN_SU_DUNG.docx")
-            break
+    guide_docx = prog / "HUONG_DAN_SU_DUNG.docx"
+    if Path("Chuong_trinh/HUONG_DAN_SU_DUNG.docx") in preserved:
+        guide_docx.write_bytes(preserved[Path("Chuong_trinh/HUONG_DAN_SU_DUNG.docx")])
 
     req_candidates = [
         draft_dir / "requirements.txt",
@@ -150,15 +149,9 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     demo_dst.mkdir(parents=True, exist_ok=True)
     copy_clean_tree(draft_dir / "demo" / "screenshots", demo_dst / "screenshots")
 
-    # Prefer PDF link if available, fallback to TXT
-    link_candidates = [
-        draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.pdf",
-        draft_dir / "demo" / "clip" / "LINK_VIDEO_DEMO.txt",
-    ]
-    for lc in link_candidates:
-        if lc.exists():
-            shutil.copy2(lc, demo_dst / lc.name)
-            break
+    link_file = demo_dst / "LINK_VIDEO_DEMO.txt"
+    if Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt") in preserved:
+        link_file.write_bytes(preserved[Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt")])
 
     # 3.3 Code (src, notebooks, data/processed, reports)
     code_dst = prog / "code"

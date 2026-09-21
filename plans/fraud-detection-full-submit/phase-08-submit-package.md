@@ -103,7 +103,7 @@ submit/
 
 ## Packaging Script
 
-Tự động hóa qua script chuẩn: `draft/fraud-detection/src/reporting/package_submission.py`
+Tự động hóa qua script chuẩn: `draft/fraud-detection/scripts/package_submission.py`
 
 ## Final Verification Checklist
 

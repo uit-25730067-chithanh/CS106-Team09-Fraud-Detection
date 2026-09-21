@@ -273,9 +273,9 @@ Place in `Final/submit/` before zipping.
 
 ### ✅ Hôn — DONE (Phase 07 & 08 PASSED — Final Package Ready)
 1. ✅ **Chính thức phê duyệt** bộ Slide học thuật 21 trang (`[Nhom9]_Slide_FraudDetection_Academic_VN.pptx` & `.pdf`) và Kịch bản bảo vệ toàn team 7 người.
-2. ✅ **Xây dựng script tự động đóng gói:** `draft/fraud-detection/src/reporting/package_submission.py`.
-3. ✅ **Kiểm tra bảo mật & toàn vẹn:** Loại bỏ triệt để `paysim.csv` (470MB), `.env` token và các file kịch bản nội bộ khỏi thư mục `slides/`, nén thành công `[Project AI-UIT] - Nhom 9.zip` dung lượng 118.51 MB (127 files).
-4. ✅ **Bổ sung tài liệu giao nộp:** `Danh sách nhóm.xlsx` (Excel chuẩn 7 thành viên), `Huong_dan_su_dung.docx`.
+2. ✅ **Xây dựng script tự động đóng gói:** `draft/fraud-detection/scripts/package_submission.py`.
+3. ✅ **Kiểm tra bảo mật & toàn vẹn:** Loại bỏ triệt để `paysim.csv` (470MB), `.env` token và các file rác, chuẩn bị thành công `[Project AI-UIT] - Nhom 9` dung lượng ~88.56 MB (47 clean deliverables).
+4. ✅ **Bổ sung tài liệu giao nộp:** `Danh_sach_nhom.xlsx` (Excel chuẩn 7 thành viên) và `HUONG_DAN_SU_DUNG.docx` nằm trực tiếp trong gói nộp `submit/`.
 5. ✅ **Sẵn sàng nộp bài:** Nhóm trưởng Hôn đại diện nộp file ZIP lên hệ thống môn học CS106 đúng hạn (trước 18/09/2026).
 
 
