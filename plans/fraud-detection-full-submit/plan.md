@@ -17,7 +17,7 @@ sprints: 4 sprints | Sprint review mỗi tối Thứ 6 | Bắt đầu 25/8 | Dea
 ## Mục tiêu
 
 Từ skeleton ban đầu (docs + structure, không có code) → bản nộp hoàn chỉnh:
-`[Project AI-UIT] - Nhom 9.zip` với đủ: code, notebooks, báo cáo Word, PPT, demo.
+`CS106_F31_CN2 - Nhom 9.zip` với đủ: code, notebooks, báo cáo Word, PPT, demo.
 
 ## Sprint Timeline
 
@@ -51,7 +51,7 @@ Từ skeleton ban đầu (docs + structure, không có code) → bản nộp ho�
 | 05 | [Evaluation & Comparison](./phase-05-evaluation-comparison.md) | Khang | Sprint 2–4* | `passed` ✅ | 4/4 scripts done; notebook 06 chạy Restart&Run All sạch; `model_comparison.csv` + 7 figures xuất xong, khớp ch5_metrics_recomputed.csv |
 | 06 | [Demo UI](./phase-06-demo-ui.md) | Trung | Sprint 2–4* | `passed` ✅ | Streamlit Web UI, quy trình 4 bước, import CSV/JSON, inference XGBoost, 3 themes, comparison/9 figures, 5 screenshots chuẩn hóa & kịch bản demo |
 | 07 | [Report & PPT](./phase-07-report-ppt.md) | Duy + Hôn | Sprint 2–4* | `passed` ✅ | Word/PDF Tóm tắt + Chương 1–7 ✅ 32 trang (Duy), khớp 100% Phase 05; PPT 21 slides học thuật & Kịch bản toàn team đã duyệt chính thức |
-| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `passed` ✅ | Chuẩn bị gói nộp bài [Project AI-UIT] - Nhom 9 (47 deliverables sạch, an toàn Git) |
+| 08 | [Submit Package](./phase-08-submit-package.md) | Hôn | Sprint 4 | `passed` ✅ | Chuẩn bị gói nộp bài CS106_F31_CN2 - Nhom 9 (47 deliverables sạch, an toàn Git) |
 
 > \* Phase 05–07 có **Early Start Tasks** bắt đầu từ Sprint 2. Xem chi tiết trong từng file.
 >
@@ -59,7 +59,7 @@ Từ skeleton ban đầu (docs + structure, không có code) → bản nộp ho�
 >
 > **Phase 07 — Duy & Hôn — hoàn tất 15/09/2026:** Báo cáo Word & PDF 32 trang chuẩn cấu trúc UIT khớp 100% số liệu thực nghiệm Phase 05; bộ Slide học thuật 21 trang và kịch bản thuyết trình toàn team 7 người đã duyệt chính thức.
 >
-> **Phase 08 — Hôn & Team — hoàn tất 20/09/2026:** Hoàn tất đóng gói toàn diện theo đúng chuẩn UIT: tạo `Danh_sach_nhom.xlsx` (7 thành viên), trích xuất 5 screenshots từ video demo, viết `HUONG_DAN_SU_DUNG.docx`, chuẩn bị cấu trúc `submit/[Project AI-UIT] - Nhom 9/` (47 deliverables sạch) an toàn đưa lên Git repo.
+> **Phase 08 — Hôn & Team — hoàn tất 20/09/2026:** Hoàn tất đóng gói toàn diện theo đúng chuẩn UIT: tạo `Danh_sach_nhom.xlsx` (7 thành viên), trích xuất 5 screenshots từ video demo, viết `HUONG_DAN_SU_DUNG.docx`, chuẩn bị cấu trúc `submit/CS106_F31_CN2 - Nhom 9/` (47 deliverables sạch) an toàn đưa lên Git repo.
 >
 > **PM Audit & Final Verdict — Hôn — 20/09/2026:** Toàn bộ 9/9 phases (100%) đã chính thức **PASSED**. Đầy đủ 6/6 notebooks chạy sạch 100%, 116 tests pass. Nhóm 9 đã hoàn thành xuất sắc toàn bộ yêu cầu đồ án môn học trước hạn chót.
 

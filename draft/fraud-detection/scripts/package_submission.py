@@ -2,10 +2,10 @@
 """
 CS106 Final Project Submission Packager — Nhóm 9 (Financial Fraud Detection)
 Prepares and verifies the canonical, clean submission directory:
-`submit/[Project AI-UIT] - Nhom 9/` according to UIT university course requirements.
+`submit/CS106_F31_CN2 - Nhom 9/` according to UIT university course requirements.
 
 Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác):
-[Project AI-UIT] - Nhom 9/
+CS106_F31_CN2 - Nhom 9/
 ├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
 ├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
 │   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
@@ -14,7 +14,7 @@ Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác
     ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc
     ├── demo/                               ← Minh chứng sản phẩm Demo
-    │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo Google Drive (quyền xem công khai)
+    │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo chính thức (quyền xem công khai)
     │   └── screenshots/                    ← 5 ảnh chụp màn hình UI sắc nét
     └── code/                               ← Toàn bộ mã nguồn giải thuật & thực nghiệm
         ├── src/                            ← 4 modules Python: preprocessing, models, evaluation, utils
@@ -152,6 +152,22 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     link_file = demo_dst / "LINK_VIDEO_DEMO.txt"
     if Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt") in preserved:
         link_file.write_bytes(preserved[Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt")])
+    else:
+        link_content = (
+            "LIÊN KẾT VIDEO CLIP DEMO HỆ THỐNG PHÁT HIỆN GIAO DỊCH GIAN LẬN (FRAUD SHIELD)\n"
+            "NHÓM 9 — MÔN TRÍ TUỆ NHÂN TẠO (CS106) — UIT\n\n"
+            "- Video Clip: Demo ứng dụng Streamlit Fraud Shield (Phạm Thành Trung trình bày)\n"
+            "- Thời lượng: 05 phút 34 giây\n"
+            "- Độ phân giải: 1920x1080 (Full HD / 30fps)\n"
+            "- Định dạng: MP4 (H.264 / AAC Stereo)\n\n"
+            "ĐƯỜNG DẪN VIDEO DEMO CHÍNH THỨC (TRUY CẬP TRỰC TIẾP):\n"
+            "https://aceteam-uit.vercel.app/l/70vGyu\n\n"
+            "LƯU Ý:\n"
+            "Ảnh minh họa và liên kết trực tiếp tới video này cũng đã được tích hợp trên slide trình chiếu:\n"
+            "`Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf` (Trang 15 - Demo trực tiếp).\n"
+            "Quý Thầy/Cô có thể truy cập xem video qua liên kết trực tiếp ở trên.\n"
+        )
+        link_file.write_text(link_content, encoding="utf-8")
 
     # 3.3 Code (src, notebooks, data/processed, reports)
     code_dst = prog / "code"
@@ -207,7 +223,7 @@ def main():
 
     final_dir = Path(args.project).resolve()
     submit_dir = Path(args.output).resolve()
-    folder_name = "[Project AI-UIT] - Nhom 9"
+    folder_name = "CS106_F31_CN2 - Nhom 9"
     bundle_dir = submit_dir / folder_name
 
     print("\n=======================================================")
