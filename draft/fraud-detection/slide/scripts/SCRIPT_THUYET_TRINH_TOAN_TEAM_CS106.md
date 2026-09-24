@@ -328,7 +328,7 @@ Sau đây, em xin mời Thầy và các bạn cùng theo dõi ạ.
 
 #### 🔹 PHẦN 2: TIẾP NỐI SAU DEMO – TỔNG KẾT ĐÓNG GÓP, HƯỚNG PHÁT TRIỂN & KẾT BÀI (~35s)
 
-*(Ngay khi phần demo kết thúc tại câu "...để ưu tiên đưa vào quá trình rà soát" với cờ đỏ 88.36%, Phạm Thành Trung cầm micro tiếp lời liền mạch)*
+*(Ngay khi phần demo kết thúc... Trung cầm micro tiếp lời)*
 
 Dạ như Thầy và các bạn vừa theo dõi qua demo thực tế, mô hình XGBoost đã bắt trọn dấu hiệu sai lệch số dư và rút cạn ví ở kịch bản rủi ro cao với xác suất 88.36%, đồng thời phản hồi siêu tốc dưới 0.5 mili-giây cho cả 3 cấp độ.
 
@@ -349,7 +349,7 @@ _(Trạng thái: **SLIDE DỰ BỊ / PHÔNG NỀN Q&A** | Người nói: **Phạ
 
 Dạ, toàn bộ mã nguồn chương trình, bộ dữ liệu thực nghiệm đã xử lý, tài liệu kỹ thuật, báo cáo Word và slide thuyết trình đã được nhóm chúng em đóng gói và phát hành đầy đủ trên repository của đồ án.
 
-Thay mặt toàn thể 7 thành viên Nhóm 09, em xin chân thành cảm ơn Thầy và các bạn đã chú ý theo dõi phần trình bày của nhóm. Sau đây, nhóm chúng em xin trân trọng kính mời Thầy và hội đồng bắt đầu phiên hỏi đáp phản biện Q&A ạ!
+Thay mặt toàn thể 7 thành viên Nhóm 09, em xin chân thành cảm ơn Thầy và các bạn đã chú ý theo dõi phần trình bày của nhóm ạ!
 
 ---
 
