@@ -184,7 +184,7 @@ gantt
 | Task | Ưu tiên | Trạng thái |
 |------|---------|-----------|
 | PPT: Cập nhật kết quả thực tế, biểu đồ so sánh và ảnh chụp Streamlit UI vào PPT <br> *[Đầu vào: `reports/model_comparison.csv` + plots + UI screenshots \| Đầu ra: `reports/[Nhom9]_PPT_FraudDetection.pptx` hoàn chỉnh]* | 🔴 Critical | ✅ (Slide 21 trang & kịch bản 7 người đã duyệt) |
-| Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/[Project AI-UIT] - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | ✅ Hoàn thành đóng gói tự động: ZIP 118.58 MB (128 files), 116 tests pass, bảo mật 100% |
+| Đóng gói: Kiểm tra chạy notebooks end-to-end không lỗi, nén zip thư mục `submit/` và nộp bài <br> *[Đầu vào: code, report, slides, demo folders \| Đầu ra: `submit/CS106_F31_CN2 - Nhom 9.zip` nộp trước deadline]* | 🔴 Critical | ✅ Hoàn thành đóng gói tự động: CS106_F31_CN2 - Nhom 9 (45 clean deliverables), 116 tests pass, bảo mật 100% |
 
 ---
 

@@ -175,7 +175,7 @@
 - `screenshots/prediction-legitimate.png`
 - `screenshots/prediction-fraud.png`
 - `screenshots/model-performance.png`
-- Video Demo: [Google Drive Nhóm 9 — Demo Video MP4](https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view) (nhúng link vào Slide PPT/PDF báo cáo; lưu trữ ngoại bộ để đảm bảo dung lượng repo Git luôn an toàn < 50MB)
+- Video Demo: [Video Demo Nhóm 9 — Fraud Shield](https://aceteam-uit.vercel.app/l/70vGyu) (nhúng link vào Slide PPT/PDF báo cáo; lưu trữ ngoại bộ để đảm bảo dung lượng repo Git luôn an toàn < 50MB)
 
 ## Phương án rút gọn nếu vượt thời gian
 

@@ -218,7 +218,7 @@ Kết quả mong đợi: `110 passed`.
 
 - **Báo cáo toàn văn (PDF 31 trang):** [reports/[Nhom9]_BaoCao_FraudDetection.pdf](reports/[Nhom9]_BaoCao_FraudDetection.pdf)
 - **Slide thuyết trình (PDF 21 trang):** [slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf](slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf)
-- **Video Clip Demo (Full HD):** Đã tích hợp tại Slide 15 và lưu trữ công khai trên [Google Drive](https://drive.google.com/file/d/1QkrP-Zl4LXTgB13U0lQkLU9hB72qkZGL/view).
+- **Video Clip Demo (Full HD):** Đã tích hợp tại Slide 15 và truy cập trực tiếp tại [Video Demo Fraud Shield](https://aceteam-uit.vercel.app/l/70vGyu).
 
 ---
 
