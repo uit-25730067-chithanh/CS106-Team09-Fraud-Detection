@@ -129,8 +129,7 @@ CS106-Team09-Fraud-Detection/
 │   ├── xgb_smote.json                              ← Model XGBoost (SMOTE-NC)
 │   ├── xgb_adasyn.json                             ← Model XGBoost (ADASYN)
 │   └── autoencoder_meta.json                       ← Trọng số & ngưỡng Autoencoder
-├── reports/                                        ← Báo cáo học thuật & minh chứng thực nghiệm
-│   ├── [Nhom9]_BaoCao_FraudDetection.pdf           ← Báo cáo bản PDF chính thức (31 trang)
+├── reports/                                        ← Minh chứng thực nghiệm & đối sánh mô hình
 │   ├── figures/                                    ← Biểu đồ ROC, PR, ma trận nhầm lẫn, Feature Importance
 │   ├── model_comparison.csv                        ← Bảng số liệu tổng hợp đối sánh
 │   └── *.pkl, *.csv, *.txt                         ← Tập predictions & báo cáo chi tiết
@@ -216,7 +215,7 @@ Kết quả mong đợi: `110 passed`.
 
 ## 📄 Ấn phẩm học thuật
 
-- **Báo cáo toàn văn (PDF 31 trang):** [reports/[Nhom9]_BaoCao_FraudDetection.pdf](reports/[Nhom9]_BaoCao_FraudDetection.pdf)
+- **Báo cáo toàn văn (PDF 31 trang):** Đã nộp chính thức trên hệ thống UIT Moodle LMS theo quy chế môn học (Nhóm bảo lưu quyền tác giả và phòng chống sao chép học thuật; vui lòng liên hệ nhóm nếu cần tham khảo nghiên cứu).
 - **Slide thuyết trình (PDF 21 trang):** [slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf](slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf)
 - **Video Clip Demo (Full HD):** Đã tích hợp tại Slide 15 và truy cập trực tiếp tại [Video Demo Fraud Shield](https://aceteam-uit.vercel.app/l/70vGyu).
 
