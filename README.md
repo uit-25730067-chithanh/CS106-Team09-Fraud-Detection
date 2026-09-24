@@ -44,7 +44,7 @@ Final/
 | **Models** | Random Forest, XGBoost, Autoencoder |
 | **Imbalance** | SMOTE / ADASYN (~0.13% fraud gốc, điều chỉnh khi downsample) |
 | **Metrics** | F1-Score, ROC-AUC, Precision, Recall |
-| **Nộp bài** | Tên: `[Project AI-UIT] - Nhóm 9` |
+| **Nộp bài** | Tên: `CS106_F31_CN2 - Nhom 9` |
 
 ---
 

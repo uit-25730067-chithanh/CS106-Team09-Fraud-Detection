@@ -176,4 +176,4 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 - **PPT**: Trình bày kết quả tại buổi báo cáo
 - **Code**: Toàn bộ notebook + src scripts
 - **Demo**: Clip hoặc hình ảnh demo
-- **Nộp theo tên**: `[Project AI-UIT] - Nhóm 9`
+- **Nộp theo tên**: `CS106_F31_CN2 - Nhom 9`

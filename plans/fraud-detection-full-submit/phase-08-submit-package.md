@@ -25,7 +25,7 @@ Phase cuối: gộp tất cả, final verification, đóng gói ZIP, nộp bài.
 ## Requirements
 
 - Tất cả notebooks phải **Restart & Run All** không error
-- Tên file nộp: `[Project AI-UIT] - Nhom 9.zip`
+- Tên file nộp: `CS106_F31_CN2 - Nhom 9.zip`
 - Cấu trúc submit package đúng theo quy định
 
 - `Restart & Run All` quan trọng — tránh trường hợp notebook chạy được vì có cached variables
@@ -76,7 +76,7 @@ git push origin main --tags
 
 ```
 submit/
-└── [Project AI-UIT] - Nhom 9/
+└── CS106_F31_CN2 - Nhom 9/
     ├── code/
     │   ├── src/
     │   │   ├── preprocessing/
@@ -132,7 +132,7 @@ Tự động hóa qua script chuẩn: `draft/fraud-detection/scripts/package_sub
 - [x] Git remote URL sử dụng đúng alias học thuật `github.com-uit`
 
 **Submit package verification (Hôn & Team):**
-- [x] `[Project AI-UIT] - Nhom 9/` folder structure đúng theo quy cách UIT (47 deliverables sạch)
+- [x] `CS106_F31_CN2 - Nhom 9/` folder structure đúng theo quy cách UIT (47 deliverables sạch)
 - [x] `code/notebooks/` có đủ 6/6 notebooks chạy sạch 0 lỗi
 - [x] `Bao_cao/` có PDF báo cáo chính thức và PDF slide thuyết trình kèm link video
 - [x] `Chuong_trinh/demo/` có 5 screenshots và file liên kết video demo Google Drive
@@ -145,7 +145,7 @@ Tự động hóa qua script chuẩn: `draft/fraud-detection/scripts/package_sub
 | Criterion | Expected | Evidence |
 |-----------|---------|---------|
 | All 6 notebooks run clean | 0 errors | 6/6 clean run, 0 errors, 102 tests pass sạch |
-| Bundle created | ✅ | `submit/[Project AI-UIT] - Nhom 9/` |
+| Bundle created | ✅ | `submit/CS106_F31_CN2 - Nhom 9/` |
 | Deliverables count | 47 files | 47/47 clean deliverables (~88.56 MB uncompressed) |
 | Submitted | ✅ | Sẵn sàng upload lên cổng LMS/Moodle UIT |
 
@@ -154,7 +154,7 @@ Tự động hóa qua script chuẩn: `draft/fraud-detection/scripts/package_sub
 ```
 Notebooks clean: 6/6 ✅
 Unit & integration tests: 102 passed, 1 skipped ✅
-Bundle folder: [Project AI-UIT] - Nhom 9/
+Bundle folder: CS106_F31_CN2 - Nhom 9/
 Bundle size: ~88.56 MB uncompressed (47 files)
 Packaging script: draft/fraud-detection/scripts/package_submission.py
 Security audit: PASSED (No paysim.csv, no .env, no cache files)
@@ -178,7 +178,7 @@ Status: READY FOR SUBMISSION
 ```
 Hoàn thành: 20/09/2026
 Người thực hiện: Hôn (Nhóm trưởng) + Toàn nhóm 9 verify + Antigravity PM Engine
-Artifacts: [Project AI-UIT] - Nhom 9/ (47 deliverables)
+Artifacts: CS106_F31_CN2 - Nhom 9/ (47 deliverables)
 Verification: 47/47 files toàn vẹn, 0 cache, 0 lỗi
 ```
 
@@ -186,6 +186,6 @@ Verification: 47/47 files toàn vẹn, 0 cache, 0 lỗi
 
 ```bash
 git add submit/README.md plans/ AGENTS.md
-git commit -m "chore(phase08): complete submit package — [Project AI-UIT] Nhóm 9"
+git commit -m "chore(phase08): complete submit package — CS106_F31_CN2 - Nhom 9"
 ```
 
