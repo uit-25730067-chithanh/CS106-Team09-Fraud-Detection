@@ -161,10 +161,10 @@ Demo đã tích hợp XGBoost-SMOTE và scaler thật, tái tạo đúng contrac
 6. Comparison     ✔ Bảng reports/model_comparison.csv + 7 figures ROC/PR/Confusion Matrix (Khang)
 7. Demo UI        ✔ Streamlit UI + XGBoost inference + Quy trình 4 bước + Import mẫu + 74 tests pass + Clip Google Drive (Trung)
 8. Report         ✔ Báo cáo Word/PDF Tóm tắt + Chương 1–7 đầy đủ, 32 trang (Duy) + Bộ Slide 21 trang & Kịch bản đã duyệt chính thức (Hôn)
-9. Packaging      ✔ Đóng gói tự động [Project AI-UIT] - Nhom 9.zip (118.58 MB), 116/116 tests pass, bảo mật 100% (Hôn)
+9. Packaging      ✔ Đóng gói tự động CS106_F31_CN2 - Nhom 9.zip, 116/116 tests pass, bảo mật 100% (Hôn)
 ```
 
-> 🏆 **PM Audit & Final Verdict (19/09/2026):** Toàn bộ 9/9 phases (100%) đã chính thức **PASSED**. 6/6 notebooks hoàn thành và chạy sạch (01–06), 116/116 tests toàn dự án passed (74 demo tests + 42 evaluation/reporting tests). Gói nộp bài `[Project AI-UIT] - Nhom 9.zip` đã sẵn sàng nộp chính thức.
+> 🏆 **PM Audit & Final Verdict (19/09/2026):** Toàn bộ 9/9 phases (100%) đã chính thức **PASSED**. 6/6 notebooks hoàn thành và chạy sạch (01–06), 116/116 tests toàn dự án passed (74 demo tests + 42 evaluation/reporting tests). Gói nộp bài `CS106_F31_CN2 - Nhom 9.zip` đã sẵn sàng nộp chính thức.
 
 > 📄 Dữ liệu đầu ra từ bước 2 đã được commit trong git. Xem chi tiết: [data/processed/README.md](./data/processed/README.md)
 
