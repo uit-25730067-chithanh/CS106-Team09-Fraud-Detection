@@ -8,19 +8,22 @@ Cấu trúc thư mục chuẩn nộp bài (Chuẩn tối giản UIT, 0 file rác
 CS106_F31_CN2 - Nhom 9/
 ├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
 ├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
-│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
-│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf  ← Slide thuyết trình dạng PDF (21 trang)
+│   ├── [Nhom9]_Report_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
+│   └── [Nhom9]_Slide_FraudDetection.pdf    ← Slide thuyết trình dạng PDF (21 trang)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
-    ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
+    ├── Huong_dan_su_dung.pdf               ← Hướng dẫn sử dụng (bản PDF in chuẩn UIT theo phong cách học thuật)
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc
-    ├── demo/                               ← Minh chứng sản phẩm Demo
-    │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo chính thức (quyền xem công khai)
-    │   └── screenshots/                    ← 5 ảnh chụp màn hình UI sắc nét
+    ├── demo/                               ← Ứng dụng Demo Streamlit Fraud Shield
+    │   ├── Link_video_demo.txt             ← Liên kết video clip demo chính thức (1 phút 37 giây)
+    │   ├── app.py                          ← Giao diện Streamlit chính
+    │   ├── ...                             ← 7 modules logic phụ trợ demo & assets/
+    │   ├── models/                         ← Trọng số model chạy inference (xgb_smote.json, scaler.pkl)
+    │   └── screenshots/                    ← 6 ảnh chụp màn hình UI thực tế qua Playwright
     └── code/                               ← Toàn bộ mã nguồn giải thuật & thực nghiệm
         ├── src/                            ← 4 modules Python: preprocessing, models, evaluation, utils
         ├── notebooks/                      ← 6/6 Jupyter Notebooks thực nghiệm chạy sạch 100%
         ├── data/processed/                 ← 8 tệp .pkl tiền xử lý (chạy ngay không cần 500MB raw)
-        └── reports/                        ← 3 tệp predictions .pkl (đầu vào cho Notebook 06 đối sánh)
+        └── reports/                        ← Đối sánh mô hình, biểu đồ và 3 predictions .pkl
 
 Usage:
     python scripts/package_submission.py            # Chuẩn bị và kiểm định thư mục nộp bài
@@ -51,6 +54,8 @@ EXCLUDE_FILES = {
 EXCLUDE_EXTS = {
     ".pyc", ".pyo", ".tmp", ".log"
 }
+
+SUBMISSION_NAME = "CS106_F31_CN2 - Nhom 9"
 
 
 def calculate_sha256(file_path: Path) -> str:
@@ -98,10 +103,13 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     preserved: dict[Path, bytes] = {}
     for rel_path in [
         Path("Danh_sach_nhom.xlsx"),
-        Path("Chuong_trinh/HUONG_DAN_SU_DUNG.docx"),
+        Path("Chuong_trinh/Huong_dan_su_dung.pdf"),
+        Path("Chuong_trinh/demo/Link_video_demo.txt"),
         Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt"),
     ]:
         p = bundle_dir / rel_path
+        if not p.exists():
+            p = final_dir / "submit" / SUBMISSION_NAME / rel_path
         if p.exists():
             preserved[rel_path] = p.read_bytes()
 
@@ -119,22 +127,28 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     # 2. Bao_cao (Official PDF report & PDF slide)
     bao_cao = bundle_dir / "Bao_cao"
     bao_cao.mkdir(parents=True, exist_ok=True)
-    report_pdf = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.pdf"
+    report_pdf = draft_dir / "reports" / "[Nhom9]_Report_FraudDetection.pdf"
+    if not report_pdf.exists():
+        report_pdf = draft_dir / "reports" / "[Nhom9]_BaoCao_FraudDetection.pdf"
     if report_pdf.exists():
-        shutil.copy2(report_pdf, bao_cao / "[Nhom9]_BaoCao_FraudDetection.pdf")
+        shutil.copy2(report_pdf, bao_cao / "[Nhom9]_Report_FraudDetection.pdf")
 
-    pdf_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf"
+    pdf_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection.pdf"
+    if not pdf_slide.exists():
+        pdf_slide = draft_dir / "slide" / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf"
     if pdf_slide.exists():
-        shutil.copy2(pdf_slide, bao_cao / "[Nhom9]_Slide_FraudDetection_Academic_VN.pdf")
+        shutil.copy2(pdf_slide, bao_cao / "[Nhom9]_Slide_FraudDetection.pdf")
 
     # 3. Chuong_trinh
     prog = bundle_dir / "Chuong_trinh"
     prog.mkdir(parents=True, exist_ok=True)
 
-    # 3.1 Single unified guide (DOCX) & requirements
-    guide_docx = prog / "HUONG_DAN_SU_DUNG.docx"
-    if Path("Chuong_trinh/HUONG_DAN_SU_DUNG.docx") in preserved:
-        guide_docx.write_bytes(preserved[Path("Chuong_trinh/HUONG_DAN_SU_DUNG.docx")])
+    # 3.1 Single unified guide (PDF) & requirements
+    guide_pdf = prog / "Huong_dan_su_dung.pdf"
+    if (draft_dir / "docs" / "Huong_dan_su_dung.pdf").exists():
+        shutil.copy2(draft_dir / "docs" / "Huong_dan_su_dung.pdf", guide_pdf)
+    elif Path("Chuong_trinh/Huong_dan_su_dung.pdf") in preserved:
+        guide_pdf.write_bytes(preserved[Path("Chuong_trinh/Huong_dan_su_dung.pdf")])
 
     req_candidates = [
         draft_dir / "requirements.txt",
@@ -144,27 +158,56 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
             shutil.copy2(r, prog / "requirements.txt")
             break
 
-    # 3.2 Demo (Strictly screenshots and video link)
+    # 3.2 Demo (Streamlit app, 7 supporting modules, assets, models, screenshots, and Link_video_demo.txt)
     demo_dst = prog / "demo"
     demo_dst.mkdir(parents=True, exist_ok=True)
     copy_clean_tree(draft_dir / "demo" / "screenshots", demo_dst / "screenshots")
 
-    link_file = demo_dst / "LINK_VIDEO_DEMO.txt"
-    if Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt") in preserved:
+    # Demo app scripts & assets
+    for demo_file in [
+        "app.py",
+        "analysis_pipeline.py",
+        "evaluation_artifacts.py",
+        "history_store.py",
+        "inference.py",
+        "input_formatting.py",
+        "pipeline_details.py",
+        "sample_import.py",
+        "requirements-demo.txt",
+    ]:
+        src_demo_file = draft_dir / "demo" / demo_file
+        if src_demo_file.exists():
+            shutil.copy2(src_demo_file, demo_dst / demo_file)
+
+    if (draft_dir / "demo" / "assets").exists():
+        copy_clean_tree(draft_dir / "demo" / "assets", demo_dst / "assets")
+
+    # Demo model weights for direct inference
+    models_dst = demo_dst / "models"
+    models_dst.mkdir(parents=True, exist_ok=True)
+    for m in ["xgb_smote.json", "scaler.pkl"]:
+        src_m = draft_dir / "models" / m
+        if src_m.exists():
+            shutil.copy2(src_m, models_dst / m)
+
+    link_file = demo_dst / "Link_video_demo.txt"
+    if Path("Chuong_trinh/demo/Link_video_demo.txt") in preserved:
+        link_file.write_bytes(preserved[Path("Chuong_trinh/demo/Link_video_demo.txt")])
+    elif Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt") in preserved:
         link_file.write_bytes(preserved[Path("Chuong_trinh/demo/LINK_VIDEO_DEMO.txt")])
     else:
         link_content = (
             "LIÊN KẾT VIDEO CLIP DEMO HỆ THỐNG PHÁT HIỆN GIAO DỊCH GIAN LẬN (FRAUD SHIELD)\n"
             "NHÓM 9 — MÔN TRÍ TUỆ NHÂN TẠO (CS106) — UIT\n\n"
             "- Video Clip: Demo ứng dụng Streamlit Fraud Shield (Phạm Thành Trung trình bày)\n"
-            "- Thời lượng: 05 phút 34 giây\n"
+            "- Thời lượng: 1 phút 37 giây\n"
             "- Độ phân giải: 1920x1080 (Full HD / 30fps)\n"
             "- Định dạng: MP4 (H.264 / AAC Stereo)\n\n"
             "ĐƯỜNG DẪN VIDEO DEMO CHÍNH THỨC (TRUY CẬP TRỰC TIẾP):\n"
             "https://aceteam-uit.vercel.app/l/70vGyu\n\n"
             "LƯU Ý:\n"
             "Ảnh minh họa và liên kết trực tiếp tới video này cũng đã được tích hợp trên slide trình chiếu:\n"
-            "`Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf` (Trang 15 - Demo trực tiếp).\n"
+            "`Bao_cao/[Nhom9]_Slide_FraudDetection.pdf` (Trang 15 - Demo trực tiếp).\n"
             "Quý Thầy/Cô có thể truy cập xem video qua liên kết trực tiếp ở trên.\n"
         )
         link_file.write_text(link_content, encoding="utf-8")
@@ -173,7 +216,7 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     code_dst = prog / "code"
     code_dst.mkdir(parents=True, exist_ok=True)
 
-    # Core modular packages only (omit internal reporting builders and scripts)
+    # Core modular packages only (omit dead redundant files)
     src_dst = code_dst / "src"
     src_dst.mkdir(parents=True, exist_ok=True)
     if (draft_dir / "src" / "__init__.py").exists():
@@ -181,18 +224,39 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
     for mod in ["preprocessing", "models", "evaluation", "utils"]:
         src_mod = draft_dir / "src" / mod
         if src_mod.exists():
-            copy_clean_tree(src_mod, src_dst / mod)
+            copy_clean_tree(src_mod, src_dst / mod, skip_names={"plot_feature_importance.py"})
+
+    # Update src/evaluation/__init__.py to not expose deleted plot_feature_importance
+    eval_init = src_dst / "evaluation" / "__init__.py"
+    if eval_init.exists():
+        lines = eval_init.read_text(encoding="utf-8").splitlines()
+        filtered = [
+            line for line in lines
+            if "plot_feature_importance" not in line
+        ]
+        eval_init.write_text("\n".join(filtered) + "\n", encoding="utf-8")
 
     copy_clean_tree(draft_dir / "notebooks", code_dst / "notebooks")
     copy_clean_tree(draft_dir / "data" / "processed", code_dst / "data" / "processed", skip_names={"README.md"})
 
-    # Reports inside code (strictly prediction pickles needed as input for Notebook 06)
+    # Reports inside code (predictions .pkl, model comparison, summary txt, figures)
     reports_dst = code_dst / "reports"
     reports_dst.mkdir(parents=True, exist_ok=True)
-    for f in ["rf_predictions.pkl", "xgb_predictions.pkl", "autoencoder_predictions.pkl"]:
+    for f in [
+        "rf_predictions.pkl",
+        "xgb_predictions.pkl",
+        "autoencoder_predictions.pkl",
+        "model_comparison.csv",
+        "autoencoder_summary.txt",
+        "rf_smote_summary.txt",
+        "xgb_smote_summary.txt",
+    ]:
         src_f = draft_dir / "reports" / f
         if src_f.exists():
             shutil.copy2(src_f, reports_dst / f)
+
+    if (draft_dir / "reports" / "figures").exists():
+        copy_clean_tree(draft_dir / "reports" / "figures", reports_dst / "figures")
 
     # Clean any accidental caches or unwanted files
     for root, dirs, files in os.walk(bundle_dir, topdown=True):

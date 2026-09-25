@@ -97,14 +97,17 @@ Gói bài nộp chính thức được tự động chuẩn bị và kiểm đ�
 CS106_F31_CN2 - Nhom 9/
 ├── Danh_sach_nhom.xlsx                     ← [1] Danh sách nhóm Excel (7 thành viên, MSSV, Lớp)
 ├── Bao_cao/                                ← [2] Báo cáo học thuật & Slide thuyết trình
-│   ├── [Nhom9]_BaoCao_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
-│   └── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf  ← Slide thuyết trình dạng PDF (21 trang)
+│   ├── [Nhom9]_Report_FraudDetection.pdf   ← Báo cáo học thuật chính thức (Chương 1–7, 31 trang)
+│   └── [Nhom9]_Slide_FraudDetection.pdf    ← Slide thuyết trình dạng PDF (21 trang)
 └── Chuong_trinh/                           ← [3] Chương trình & Thực nghiệm
-    ├── HUONG_DAN_SU_DUNG.docx              ← Hướng dẫn sử dụng (bản Word chính thức)
+    ├── Huong_dan_su_dung.pdf               ← Hướng dẫn sử dụng (bản PDF in học thuật chuẩn UIT)
     ├── requirements.txt                    ← Danh sách thư viện Python phụ thuộc tối giản
-    ├── demo/                               ← Minh chứng sản phẩm Demo
-    │   ├── LINK_VIDEO_DEMO.txt             ← Liên kết video clip demo chính thức (quyền xem công khai)
-    │   └── screenshots/                    ← 5 ảnh chụp màn hình UI sắc nét
+    ├── demo/                               ← Minh chứng sản phẩm Demo & Mã nguồn Web UI
+    │   ├── Link_video_demo.txt             ← Liên kết video clip demo chính thức (1 phút 37 giây)
+    │   ├── screenshots/                    ← Bộ 6 ảnh chụp màn hình UI thực tế qua Playwright
+    │   ├── app.py                          ← Ứng dụng Web Demo Streamlit tương tác
+    │   ├── models/                         ← Trọng số mô hình phục vụ Demo (XGBoost & Scaler)
+    │   └── assets/                         ← Logo nhận diện ứng dụng Fraud Shield
     └── code/                               ← Toàn bộ mã nguồn giải thuật & thực nghiệm
         ├── src/                            ← 4 modules Python modular (preprocessing, models, evaluation, utils)
         ├── notebooks/                      ← 6/6 Jupyter Notebooks thực nghiệm chạy sạch 100%
@@ -113,10 +116,10 @@ CS106_F31_CN2 - Nhom 9/
 ```
 
 ### 2. Trạng thái nghiệm thu & các lưu ý của Nhóm 9:
-* **Báo cáo & Slide:** Báo cáo PDF 31 trang và Slide PDF 21 trang đã hoàn tất nghiệm thu và đồng bộ 100% số liệu.
-* **Hướng dẫn sử dụng:** File `HUONG_DAN_SU_DUNG.docx` tập trung hướng dẫn chạy 6 Notebooks thực nghiệm và dẫn liên kết trải nghiệm Web UI.
-* **Liên kết video demo:** File `LINK_VIDEO_DEMO.txt` cung cấp liên kết video clip demo Full HD 5m34s tại [https://aceteam-uit.vercel.app/l/70vGyu](https://aceteam-uit.vercel.app/l/70vGyu) và được minh họa tại Trang 15 của Slide PDF.
-* **Mã nguồn đầy đủ & Tests:** Toàn bộ ứng dụng Web UI Streamlit và 116 unit/integration tests được lưu trữ đầy đủ tại GitHub Repository chính thức.
+* **Báo cáo & Slide:** Báo cáo PDF 31 trang (`[Nhom9]_Report_FraudDetection.pdf`) và Slide PDF 21 trang (`[Nhom9]_Slide_FraudDetection.pdf`) đã hoàn tất nghiệm thu và đồng bộ 100% số liệu.
+* **Hướng dẫn sử dụng:** File `Huong_dan_su_dung.pdf` trình bày theo chuẩn học thuật (Times New Roman, bảng booktabs, đơn sắc trắng đen tương đồng với báo cáo), hướng dẫn chi tiết chạy 6 Notebooks thực nghiệm và khởi chạy ứng dụng Web UI Streamlit. Bản nháp `.docx` được lưu trữ tại `draft/fraud-detection/docs/` và `tmp/`.
+* **Liên kết video demo:** File `Link_video_demo.txt` cung cấp liên kết video clip demo Full HD 1 phút 37 giây tại [https://aceteam-uit.vercel.app/l/70vGyu](https://aceteam-uit.vercel.app/l/70vGyu) và được minh họa tại Trang 15 của Slide PDF.
+* **Mã nguồn đầy đủ & Tests:** Toàn bộ ứng dụng Web UI Streamlit, pipeline ML và 116 unit/integration tests được đóng gói và lưu trữ đầy đủ tại GitHub Repository chính thức.
 
 ### 3. Lệnh đóng gói và nén file:
 ```bash
