@@ -2,7 +2,7 @@ LIÊN KẾT VIDEO CLIP DEMO HỆ THỐNG PHÁT HIỆN GIAO DỊCH GIAN LẬN (FR
 NHÓM 9 — MÔN TRÍ TUỆ NHÂN TẠO (CS106) — UIT
 
 - Video Clip: Demo ứng dụng Streamlit Fraud Shield (Phạm Thành Trung trình bày)
-- Thời lượng: 05 phút 34 giây
+- Thời lượng: 1 phút 37 giây
 - Độ phân giải: 1920x1080 (Full HD / 30fps)
 - Định dạng: MP4 (H.264 / AAC Stereo)
 

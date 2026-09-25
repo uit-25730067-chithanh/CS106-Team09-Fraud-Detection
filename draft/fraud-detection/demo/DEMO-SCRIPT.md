@@ -1,6 +1,6 @@
 # Kịch bản quay Demo UI
 
-**Người trình bày:** Phạm Thành Trung · **Thời lượng dự kiến:** 5–6 phút
+**Người trình bày:** Phạm Thành Trung · **Thời lượng:** 1 phút 37 giây
 
 **Sản phẩm:** Fraud Shield — Hệ thống phát hiện giao dịch tài chính bất thường
 
