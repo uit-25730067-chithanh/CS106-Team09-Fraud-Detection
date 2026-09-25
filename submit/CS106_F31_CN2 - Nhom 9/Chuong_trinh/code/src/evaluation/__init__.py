@@ -4,7 +4,6 @@ from .confusion_matrix_plot import plot_confusion_matrix
 from .metrics_calculator import compute_metrics, print_metrics
 from .model_comparator import compare_models, save_comparison
 from .plot_confusion_components import plot_confusion_components
-from .plot_feature_importance import plot_feature_importance
 from .plot_roc_curve import plot_pr_curves, plot_roc_curves
 from .prevalence_projection import (
     ORIGINAL_PREVALENCE,
@@ -20,7 +19,6 @@ __all__ = [
     "plot_roc_curves",
     "plot_confusion_components",
     "plot_confusion_matrix",
-    "plot_feature_importance",
     "plot_pr_curves",
     "compare_models",
     "save_comparison",
