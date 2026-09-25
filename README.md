@@ -117,7 +117,7 @@ CS106_F31_CN2 - Nhom 9/
 
 ### 2. Trạng thái nghiệm thu & các lưu ý của Nhóm 9:
 * **Báo cáo & Slide:** Báo cáo PDF 31 trang (`[Nhom9]_Report_FraudDetection.pdf`) và Slide PDF 21 trang (`[Nhom9]_Slide_FraudDetection.pdf`) đã hoàn tất nghiệm thu và đồng bộ 100% số liệu.
-* **Hướng dẫn sử dụng:** File `Huong_dan_su_dung.pdf` trình bày theo chuẩn học thuật (Times New Roman, bảng booktabs, đơn sắc trắng đen tương đồng với báo cáo), hướng dẫn chi tiết chạy 6 Notebooks thực nghiệm và khởi chạy ứng dụng Web UI Streamlit. Bản nháp `.docx` được lưu trữ tại `draft/fraud-detection/docs/` và `tmp/`.
+* **Hướng dẫn sử dụng:** File `Huong_dan_su_dung.pdf` trình bày theo chuẩn học thuật (Times New Roman, bảng booktabs, đơn sắc trắng đen tương đồng với báo cáo), hướng dẫn chi tiết chạy 6 Notebooks thực nghiệm và khởi chạy ứng dụng Web UI Streamlit. Bản nháp `.docx` được lưu trữ tại `tmp/` ngoài vùng theo dõi của Git.
 * **Liên kết video demo:** File `Link_video_demo.txt` cung cấp liên kết video clip demo Full HD 1 phút 37 giây tại [https://aceteam-uit.vercel.app/l/70vGyu](https://aceteam-uit.vercel.app/l/70vGyu) và được minh họa tại Trang 15 của Slide PDF.
 * **Mã nguồn đầy đủ & Tests:** Toàn bộ ứng dụng Web UI Streamlit, pipeline ML và 116 unit/integration tests được đóng gói và lưu trữ đầy đủ tại GitHub Repository chính thức.
 
