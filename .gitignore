@@ -39,8 +39,9 @@ models/*.joblib
 # Local Streamlit demo state
 **/demo/.data/
 
-# Office temp lock files
+# Office files & temp lock files
 ~$*
+*.pptx
 
 # Submission packages & staging
 submit/*.zip

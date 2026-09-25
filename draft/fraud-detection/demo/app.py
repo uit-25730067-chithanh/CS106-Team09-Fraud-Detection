@@ -207,6 +207,9 @@ st.html(
     .st-key-theme_mode_menu button {
         width: 100%;
         justify-content: flex-start;
+        background: var(--fraud-card-background) !important;
+        border: 1px solid var(--fraud-surface-border) !important;
+        color: var(--st-text-color) !important;
     }
 
     .st-key-theme_bootstrap {
@@ -505,17 +508,32 @@ st.html(
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
-PROCESSED_DATA_DIR = PROJECT_ROOT / "data" / "processed"
-SCALER_PATH = PROJECT_ROOT / "models" / "scaler.pkl"
-XGB_MODEL_PATH = PROJECT_ROOT / "models" / "xgb_smote.json"
+_CODE_DIR = PROJECT_ROOT / "code"
+PROCESSED_DATA_DIR = (
+    (PROJECT_ROOT / "data" / "processed")
+    if (PROJECT_ROOT / "data" / "processed").exists()
+    else (_CODE_DIR / "data" / "processed")
+)
+_MODELS_DIR = (
+    (PROJECT_ROOT / "models")
+    if (PROJECT_ROOT / "models").exists()
+    else (DEMO_DIR / "models")
+)
+SCALER_PATH = _MODELS_DIR / "scaler.pkl"
+XGB_MODEL_PATH = _MODELS_DIR / "xgb_smote.json"
 LOGO_PATH = DEMO_DIR / "assets" / "fraud-shield-logo.png"
-COMPARISON_PATH = PROJECT_ROOT / "reports" / "model_comparison.csv"
-FIGURES_DIR = PROJECT_ROOT / "reports" / "figures"
-XGB_PREDICTIONS_PATH = PROJECT_ROOT / "reports" / "xgb_predictions.pkl"
+_REPORTS_DIR = (
+    (PROJECT_ROOT / "reports")
+    if (PROJECT_ROOT / "reports").exists()
+    else (_CODE_DIR / "reports")
+)
+COMPARISON_PATH = _REPORTS_DIR / "model_comparison.csv"
+FIGURES_DIR = _REPORTS_DIR / "figures"
+XGB_PREDICTIONS_PATH = _REPORTS_DIR / "xgb_predictions.pkl"
 TRAINING_SUMMARIES = {
-    "Random Forest": PROJECT_ROOT / "reports" / "rf_smote_summary.txt",
-    "XGBoost": PROJECT_ROOT / "reports" / "xgb_smote_summary.txt",
-    "Autoencoder": PROJECT_ROOT / "reports" / "autoencoder_summary.txt",
+    "Random Forest": _REPORTS_DIR / "rf_smote_summary.txt",
+    "XGBoost": _REPORTS_DIR / "xgb_smote_summary.txt",
+    "Autoencoder": _REPORTS_DIR / "autoencoder_summary.txt",
 }
 
 THEME_SWITCHER = st.components.v2.component(
