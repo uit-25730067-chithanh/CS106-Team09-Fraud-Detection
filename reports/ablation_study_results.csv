@@ -1,0 +1,4 @@
+Scenario,Num_Features,Train_Time_s,Inference_Latency_us,TP,FP,FN,TN,Precision_Test,Recall_Test,F1_Score_Test,ROC_AUC,PR_AUC,Precision_Projected_Real,FP_Per_Million
+Full_14_Baseline,14,1.7,1.28,1635,10,8,38347,0.9939,0.9951,0.9945,0.9995,0.9969,0.8315,261
+Pruned_12_Optimized,12,1.74,1.48,1635,9,8,38348,0.9945,0.9951,0.9948,0.9994,0.9968,0.8457,235
+No_Balance_6_Ablation,6,1.46,1.39,1171,477,472,37880,0.7106,0.7127,0.7116,0.9457,0.7783,0.069,12436

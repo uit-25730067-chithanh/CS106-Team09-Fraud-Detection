@@ -1,0 +1,25 @@
+======================================================================
+BÁO CÁO THỰC NGHIỆM ABLATION STUDY & FEATURE PRUNING (CS106 - NHÓM 09)
+======================================================================
+Thời điểm thực nghiệm: 2026-09-26 11:36:42
+Tập huấn luyện (SMOTE): 230,145 dòng
+Tập kiểm thử độc lập:  40,000 dòng (1.643 gian lận / 38.357 hợp lệ)
+----------------------------------------------------------------------
+[Full_14_Baseline] (14 feats | Train: 1.70s | Latency: 1.3µs/mẫu):
+  - Confusion Matrix: TP=1635, FP=10, FN=8, TN=38347
+  - Precision: 0.9939 | Recall: 0.9951 | F1-Score: 0.9945
+  - ROC-AUC:   0.9995 | PR-AUC: 0.9969
+  - Quy chiếu tỷ lệ gốc 0.129%: Precision=0.8315 (~261 FP/triệu GD)
+
+[Pruned_12_Optimized] (12 feats | Train: 1.74s | Latency: 1.5µs/mẫu):
+  - Confusion Matrix: TP=1635, FP=9, FN=8, TN=38348
+  - Precision: 0.9945 | Recall: 0.9951 | F1-Score: 0.9948
+  - ROC-AUC:   0.9994 | PR-AUC: 0.9968
+  - Quy chiếu tỷ lệ gốc 0.129%: Precision=0.8457 (~235 FP/triệu GD)
+
+[No_Balance_6_Ablation] (6 feats | Train: 1.46s | Latency: 1.4µs/mẫu):
+  - Confusion Matrix: TP=1171, FP=477, FN=472, TN=37880
+  - Precision: 0.7106 | Recall: 0.7127 | F1-Score: 0.7116
+  - ROC-AUC:   0.9457 | PR-AUC: 0.7783
+  - Quy chiếu tỷ lệ gốc 0.129%: Precision=0.0690 (~12436 FP/triệu GD)
+

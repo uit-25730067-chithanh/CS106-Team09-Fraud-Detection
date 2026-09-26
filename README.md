@@ -49,6 +49,24 @@ Dự án **Fraud Shield** xây dựng một pipeline phân tích và phát hiệ
 > - Các đặc trưng tài chính tạo mới như `errorBalanceOrig` (sai lệch số dư tài khoản chuyển) và `errorBalanceDest` (sai lệch số dư tài khoản nhận) đóng góp hơn 65% độ quan trọng trong cây quyết định.
 > - **Autoencoder** thể hiện ưu thế phát hiện bất thường mà không cần gán nhãn (`ROC-AUC = 0.9318`), phù hợp đóng vai trò bộ lọc tầng 1 (First-tier filter) trong kiến trúc giám sát đa tầng.
 
+### 🔬 Thực nghiệm đối chứng (Ablation Study & Feature Pruning)
+
+Nhằm tiếp thu phản biện học thuật từ hội đồng và khảo sát sự phụ thuộc vào các biến số dư của bộ dữ liệu PaySim, nhóm thiết kế 3 kịch bản thực nghiệm đối chứng trên mô hình XGBoost (SMOTE-NC, tập kiểm tra 40,000 mẫu):
+
+| Kịch bản thực nghiệm | Số lượng đặc trưng | Recall | F1-Score | FP / 1 triệu GD | Đánh giá & Tác động thực tế |
+|---|---|---|---|---|---|
+| **Full_14 (Baseline)** | 14 đặc trưng | **0.9951** | **0.9945** | 261 | Mô hình nền tảng khai thác triệt để 8 đặc trưng số dư và 6 biến giao dịch |
+| **Pruned_12 (Tối ưu hóa)** | 12 đặc trưng *(cắt bỏ `is_night`, `is_large`)* | **0.9951** | **0.9948** | **235** | Tinh gọn 14.3% số biến, giữ nguyên Recall, F1 tăng nhẹ, FP giảm còn 235 |
+| **No_Balance_6 (Loại số dư)** | 6 đặc trưng thuần giao dịch | 0.7127 | 0.7116 | 12,436 | **F1 sụt giảm 28.3%**, số ca bỏ sót tăng từ 8 lên 472 ca (gấp 59 lần), FP tăng vọt 47 lần |
+
+<p align="center">
+  <img src="reports/figures/ablation_study_comparison.png" alt="Ablation Study Comparison" width="85%" style="border-radius: 6px;" />
+</p>
+
+> **Kết luận thực nghiệm:**
+> 1. Đặc trưng số dư (`errorBalanceOrig`, `errorBalanceDest`) mang tính sống còn đối với bài toán nhận diện gian lận trên dữ liệu PaySim do cơ chế gian lận rửa tiền luôn tìm cách rút cạn tài khoản (`oldbalanceOrg == amount`).
+> 2. Kịch bản **Pruned_12** chứng minh việc loại bỏ 2 đặc trưng nhiễu/ít phân hóa giúp mô hình tối ưu hơn về chi phí tính toán khi triển khai thực tế mà không làm suy giảm hiệu năng nhận diện.
+
 ---
 
 ## 🏗️ Kiến trúc hệ thống
@@ -130,19 +148,23 @@ CS106-Team09-Fraud-Detection/
 │   ├── xgb_adasyn.json                             ← Model XGBoost (ADASYN)
 │   └── autoencoder_meta.json                       ← Trọng số & ngưỡng Autoencoder
 ├── reports/                                        ← Minh chứng thực nghiệm & đối sánh mô hình
-│   ├── figures/                                    ← Biểu đồ ROC, PR, ma trận nhầm lẫn, Feature Importance
+│   ├── figures/                                    ← Biểu đồ ROC, PR, ma trận nhầm lẫn, Ablation Study
 │   ├── model_comparison.csv                        ← Bảng số liệu tổng hợp đối sánh
+│   ├── ablation_study_results.csv                  ← Bảng dữ liệu thực nghiệm Ablation Study
 │   └── *.pkl, *.csv, *.txt                         ← Tập predictions & báo cáo chi tiết
 ├── demo/                                           ← Ứng dụng Web Streamlit Fraud Shield
 │   ├── app.py                                      ← Điểm khởi chạy giao diện
 │   ├── inference.py                                ← Module kết nối suy luận thời gian thực
 │   ├── analysis_pipeline.py                        ← Quy trình phân tích giao dịch 4 bước
 │   ├── history_store.py                            ← Quản lý lịch sử kiểm tra
-│   ├── screenshots/                                ← Ảnh chụp giao diện Light/Dark mode
+│   ├── screenshots/                                ← Bộ 6 ảnh chụp giao diện (Fraud, Legitimate, Warning)
 │   └── requirements-demo.txt                       ← Thư viện tối giản cho Demo
 ├── slide/                                          ← Slide thuyết trình học thuật
-│   ├── [Nhom9]_Slide_FraudDetection_Academic_VN.pdf← Slide PDF chính thức (21 trang)
+│   ├── [Nhom9]_Slide_FraudDetection.pdf            ← Slide PDF chính thức (21 trang)
 │   └── slide_assets/                               ← Đồ họa & hình ảnh phục vụ slide
+├── scripts/                                        ← Scripts chạy thực nghiệm độc lập
+│   ├── run_ablation_study.py                       ← Khảo sát 3 kịch bản thực nghiệm đối chứng
+│   └── plot_ablation_study.py                      ← Xuất biểu đồ phân tích Ablation Study
 ├── tests/                                          ← Bộ kiểm thử tự động (110 unit & integration tests)
 │   ├── demo/                                       ← Kiểm thử giao diện & suy luận Streamlit
 │   └── evaluation/                                 ← Kiểm thử bộ tính toán chỉ số & biểu đồ
@@ -216,7 +238,7 @@ Kết quả mong đợi: `110 passed`.
 ## 📄 Ấn phẩm học thuật
 
 - **Báo cáo toàn văn (PDF 31 trang):** Đã nộp chính thức trên hệ thống UIT Moodle LMS theo quy chế môn học (Nhóm bảo lưu quyền tác giả và phòng chống sao chép học thuật; vui lòng liên hệ nhóm nếu cần tham khảo nghiên cứu).
-- **Slide thuyết trình (PDF 21 trang):** [slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf](slide/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf)
+- **Slide thuyết trình (PDF 21 trang):** [slide/[Nhom9]_Slide_FraudDetection.pdf](slide/[Nhom9]_Slide_FraudDetection.pdf)
 - **Video Clip Demo (Full HD):** Đã tích hợp tại Slide 15 và truy cập trực tiếp tại [Video Demo Fraud Shield](https://aceteam-uit.vercel.app/l/70vGyu).
 
 ---

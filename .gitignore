@@ -39,8 +39,13 @@ models/*.joblib
 # Local Streamlit demo state
 **/demo/.data/
 
-# Office temp lock files
+# Office temp lock files & binary presentation
 ~$*
+*.pptx
+**/Huong_dan_su_dung.docx
+
+# Internal draft folder (purged on curated submit branch)
+draft/
 
 # Submission packages & staging
 submit/*.zip
