@@ -207,7 +207,7 @@ def assemble_submission(final_dir: Path, bundle_dir: Path):
             "https://aceteam-uit.vercel.app/l/70vGyu\n\n"
             "LƯU Ý:\n"
             "Ảnh minh họa và liên kết trực tiếp tới video này cũng đã được tích hợp trên slide trình chiếu:\n"
-            "`Bao_cao/[Nhom9]_Slide_FraudDetection.pdf` (Trang 15 - Demo trực tiếp).\n"
+            "`Bao_cao/[Nhom9]_Slide_FraudDetection.pdf` (Trang 20 - Demo trực tiếp).\n"
             "Quý Thầy/Cô có thể truy cập xem video qua liên kết trực tiếp ở trên.\n"
         )
         link_file.write_text(link_content, encoding="utf-8")

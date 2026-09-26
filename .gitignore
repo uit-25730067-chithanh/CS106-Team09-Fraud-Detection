@@ -42,6 +42,7 @@ models/*.joblib
 # Office files & temp lock files
 ~$*
 *.pptx
+**/Huong_dan_su_dung.docx
 
 # Submission packages & staging
 submit/*.zip
