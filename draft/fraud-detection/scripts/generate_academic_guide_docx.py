@@ -50,45 +50,22 @@ def apply_booktabs_borders(table, border_color="CCCCCC", top_sz="8", bottom_sz="
     tblPr.append(borders)
 
 def add_code_block(doc, code_text):
-    """Add a shaded monospace code box."""
-    tbl = doc.add_table(rows=1, cols=1)
-    tbl.alignment = WD_TABLE_ALIGNMENT.CENTER
-    cell = tbl.rows[0].cells[0]
-    cell.width = Inches(6.5)
-    set_cell_margins(cell, top=60, bottom=60, left=140, right=140)
-    set_cell_shading(cell, "F8F9FA")
-    
-    # Border for code block
-    tcPr = cell._tc.get_or_add_tcPr()
-    borders = parse_xml(f'''
-        <w:tcBorders {nsdecls("w")}>
-            <w:top w:val="single" w:sz="4" w:color="E0E0E0"/>
-            <w:left w:val="single" w:sz="12" w:color="888888"/>
-            <w:bottom w:val="single" w:sz="4" w:color="E0E0E0"/>
-            <w:right w:val="single" w:sz="4" w:color="E0E0E0"/>
-        </w:tcBorders>
-    ''')
-    tcPr.append(borders)
-    
-    p = cell.paragraphs[0]
-    p.paragraph_format.space_before = Pt(1)
-    p.paragraph_format.space_after = Pt(1)
-    p.paragraph_format.line_spacing = 1.05
+    """Add a clean monospace code paragraph block (without table)."""
     for i, line in enumerate(code_text.splitlines()):
-        if i > 0:
-            p = cell.add_paragraph()
-            p.paragraph_format.space_before = Pt(0)
-            p.paragraph_format.space_after = Pt(0)
-            p.paragraph_format.line_spacing = 1.05
+        p = doc.add_paragraph()
+        p.paragraph_format.left_indent = Inches(0.35)
+        p.paragraph_format.space_before = Pt(2) if i == 0 else Pt(0)
+        p.paragraph_format.space_after = Pt(2)
+        p.paragraph_format.line_spacing = 1.15
         r = p.add_run(line)
         r.font.name = "Courier New"
-        r.font.size = Pt(9.0)
+        r.font.size = Pt(9.5)
         if line.strip().startswith("#"):
             r.font.color.rgb = RGBColor(100, 100, 100)
             r.italic = True
         else:
             r.font.color.rgb = BLACK
-            r.bold = False
+            r.bold = True
 
 def create_guide_docx(template_path: str, output_path: str):
     doc = docx.Document(template_path)
@@ -178,7 +155,7 @@ def create_guide_docx(template_path: str, output_path: str):
     rt3.italic = True
     rt3.font.color.rgb = BLACK
 
-    rt4 = p_title.add_run("Nhóm 09 — Lớp CS106.P11.CN2 — GVHD: PGS.TS. Nguyễn Đình Hiển")
+    rt4 = p_title.add_run("Nhóm 09 — Lớp CS106.F31.CN2.TTNT — GVHD: PGS.TS. Nguyễn Đình Hiển")
     rt4.font.name = "Times New Roman"
     rt4.font.size = Pt(10.5)
     rt4.font.color.rgb = BLACK
@@ -436,7 +413,7 @@ def create_guide_docx(template_path: str, output_path: str):
     r_link_f.font.bold = True
     r_link_f.font.color.rgb = BLACK
 
-    r = p32.add_run(" hoặc xem tại Trang 15 trong tệp trình chiếu ")
+    r = p32.add_run(" hoặc xem tại Trang 20 trong tệp trình chiếu ")
     r.font.name = "Times New Roman"
     r.font.size = Pt(10.5)
     r.font.color.rgb = BLACK
@@ -593,7 +570,7 @@ def create_guide_docx(template_path: str, output_path: str):
 if __name__ == "__main__":
     script_dir = Path(__file__).resolve().parent
     base_dir = script_dir.parents[2]  # assignments/Final
-    template = base_dir / "draft/fraud-detection/reports/[Nhom9]_BaoCao_FraudDetection.docx"
+    template = base_dir / "draft/fraud-detection/reports/[Nhom9]_Report_FraudDetection.docx"
     
     out_tmp = base_dir.parent.parent / "tmp/Huong_dan_su_dung.docx"
     out_tmp.parent.mkdir(parents=True, exist_ok=True)

@@ -49,9 +49,11 @@ def parse_inline_formatting(
         # Markdown Web Link: [Anchor](URL)
         md_link_m = re.match(r"^\[([^\]]+)\]\((https?://[^\)]+)\)$", token)
         if md_link_m:
+            raw_url = md_link_m.group(2)
+            clean_url = raw_url.rstrip(".,;:?!)")
             add_external_hyperlink(
                 paragraph,
-                md_link_m.group(2),
+                clean_url,
                 text=md_link_m.group(1),
                 font_name=base_font_name,
                 font_size=base_font_size,
@@ -62,12 +64,14 @@ def parse_inline_formatting(
             )
             continue
 
-        # Direct Web URL
+        # Direct Web URL (tách dấu chấm, phẩy kết câu ở đuôi để tránh lỗi 404 Not Found)
         if re.match(r"^https?://[^\s)\]]+$", token):
+            clean_url = token.rstrip(".,;:?!)")
+            trailing_punct = token[len(clean_url):]
             add_external_hyperlink(
                 paragraph,
-                token,
-                text=token,
+                clean_url,
+                text=clean_url,
                 font_name=base_font_name,
                 font_size=base_font_size,
                 is_bold=is_bold,
@@ -75,9 +79,16 @@ def parse_inline_formatting(
                 color_hex="000000",
                 is_underline=True,
             )
+            if trailing_punct:
+                r_punct = paragraph.add_run(trailing_punct)
+                r_punct.font.name = base_font_name
+                r_punct.font.size = Pt(base_font_size)
+                r_punct.bold = is_bold
+                r_punct.italic = is_italic
+                r_punct.font.color.rgb = COLOR_TEXT_MAIN
             continue
 
-        # Citation [n] -> Clickable link to Bibliography anchor ref_n
+        # Citation [n] -> Clickable link to Bibliography anchor ref_n in Superscript
         cit_m = re.match(r"^\[(\d+)\]$", token)
         if cit_m:
             ref_id = cit_m.group(1)
@@ -86,8 +97,9 @@ def parse_inline_formatting(
                 f"ref_{ref_id}",
                 f"[{ref_id}]",
                 font_name=base_font_name,
-                font_size=base_font_size,
-                is_bold=True,
+                font_size=9.5,
+                is_bold=False,
+                is_superscript=True,
                 color_hex="000000",
             )
             continue

@@ -32,8 +32,8 @@ META_YAML = os.path.join(REPORTS_DIR, "report-meta.yaml")
 TOC_PAGES = os.path.join(REPORTS_DIR, "_toc_pages.json")
 TEMPLATE = os.path.join(REPORTS_DIR, "_report_template.docx")
 
-OUTPUT_DOCX = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection.docx")
-OUTPUT_PDF = os.path.join(REPORTS_DIR, "[Nhom9]_BaoCao_FraudDetection.pdf")
+OUTPUT_DOCX = os.path.join(REPORTS_DIR, "[Nhom9]_Report_FraudDetection.docx")
+OUTPUT_PDF = os.path.join(REPORTS_DIR, "[Nhom9]_Report_FraudDetection.pdf")
 
 
 def main() -> None:
@@ -84,13 +84,8 @@ def main() -> None:
         except Exception as e:
             print(f"[!] Lỗi trong quá trình đồng bộ số trang: {e}")
 
-    # 7. Đồng bộ sang thư mục submit nếu có
-    submit_report_dir = os.path.abspath(os.path.join(REPORTS_DIR, "..", "..", "submit", "report"))
-    if os.path.exists(submit_report_dir):
-        shutil.copy2(OUTPUT_DOCX, os.path.join(submit_report_dir, os.path.basename(OUTPUT_DOCX)))
-        if os.path.exists(OUTPUT_PDF):
-            shutil.copy2(OUTPUT_PDF, os.path.join(submit_report_dir, os.path.basename(OUTPUT_PDF)))
-        print(f"[✓] Đã đồng bộ sang submit/report/{os.path.basename(OUTPUT_DOCX)}")
+    # Lưu ý: Không tự ý copy sang thư mục submit khi chưa có lệnh tường minh từ người dùng.
+    print("[*] Toàn bộ tệp đã được tạo an toàn trong reports/")
 
     print("\n=== Tổng kết báo cáo ===")
     print(f"- Số đoạn văn (Paragraphs): {len(doc.paragraphs)}")

@@ -21,6 +21,11 @@ def clean_search_title(title: str) -> str:
     return text.strip()
 
 
+def normalize_text_for_search(text: str) -> str:
+    """Normalize text by removing all markers, punctuation, whitespace for robust matching."""
+    return re.sub(r'[*_`#\s–—\.\-:,;()\[\]/]+', '', text).lower()
+
+
 def extract_toc_page_mapping(pdf_path: str, toc_entries: list[dict]) -> dict[str, int]:
     """
     Search for each TOC entry title in the PDF and record its body-relative page number.
@@ -38,48 +43,65 @@ def extract_toc_page_mapping(pdf_path: str, toc_entries: list[dict]) -> dict[str
     total_pages = len(doc)
     page_texts = [doc[i].get_text("text") for i in range(total_pages)]
 
-    # Detect body start (typically where TÓM TẮT or CHƯƠNG 1 appears in body after TOC)
-    first_entry_text = clean_search_title(toc_entries[0]["text"]) if toc_entries else ""
+    # Detect body start (first page after cover & TOC where Section 3 body text begins)
     first_body_pdf_page = 0
-
     for p_idx in range(total_pages):
         text = page_texts[p_idx]
-        if "MỤC LỤC" in text and p_idx < 3:
+        lines = [l.strip() for l in text.split("\n") if l.strip()]
+        # Skip cover page (index 0) and pages with TOC dot leaders or "MỤC LỤC" header
+        if p_idx == 0 or any("...." in l or "…" in l for l in lines) or "MỤC LỤC" in text:
             continue
-        if first_entry_text and first_entry_text.lower() in text.lower():
-            first_body_pdf_page = p_idx
-            break
+        # The first page after cover and TOC is page 1 of Section 3 (Body)
+        first_body_pdf_page = p_idx
+        break
 
-    if first_body_pdf_page == 0 and total_pages > 2:
-        first_body_pdf_page = 2  # Cover is 0, TOC is 1, Body starts at index 2
+    if first_body_pdf_page == 0 and total_pages > 3:
+        first_body_pdf_page = 3  # Default fallback if TOC is 2 pages (0=cover, 1=toc1, 2=toc2)
 
     print(f"[*] Detected body start at PDF page index {first_body_pdf_page + 1} (Page 1 of body)")
 
     mapping: dict[str, int] = {}
     current_search_page = first_body_pdf_page
+    norm_page_texts = [normalize_text_for_search(t) for t in page_texts]
 
     for entry in toc_entries:
         raw_title = entry["text"]
-        search_query = clean_search_title(raw_title)
+        norm_query = normalize_text_for_search(raw_title)
 
-        short_query = search_query
-        if ":" in search_query:
-            short_query = search_query.split(":")[0].strip()
-        elif "." in search_query and len(search_query) > 35:
-            short_query = search_query[:35].strip()
+        # Extract numbering prefix if present (e.g. 'CHƯƠNG 2', '2.1', '3.6.2')
+        m_num = re.match(r"^(chương\s*\d+|\d+(?:\.\d+)+)", raw_title, re.IGNORECASE)
+        sec_prefix = m_num.group(1).lower() if m_num else None
 
         found_page = None
+
+        # 1. Forward search from current_search_page
         for p_idx in range(current_search_page, total_pages):
-            p_text = page_texts[p_idx]
-            if (search_query.lower() in p_text.lower()) or (short_query.lower() in p_text.lower()):
+            lines = [l.strip() for l in page_texts[p_idx].split("\n") if l.strip()]
+            if any("...." in l or "…" in l for l in lines):
+                continue
+
+            # Exact normalized substring match
+            if norm_query in norm_page_texts[p_idx]:
                 found_page = (p_idx - first_body_pdf_page) + 1
                 current_search_page = p_idx
                 break
 
+            # Heading line starting with section number
+            if sec_prefix and any(l.lower().startswith(sec_prefix) for l in lines):
+                found_page = (p_idx - first_body_pdf_page) + 1
+                current_search_page = p_idx
+                break
+
+        # 2. Fallback scan from body start if not found forward
         if found_page is None:
             for p_idx in range(first_body_pdf_page, total_pages):
-                p_text = page_texts[p_idx]
-                if (search_query.lower() in p_text.lower()) or (short_query.lower() in p_text.lower()):
+                lines = [l.strip() for l in page_texts[p_idx].split("\n") if l.strip()]
+                if any("...." in l or "…" in l for l in lines):
+                    continue
+                if norm_query in norm_page_texts[p_idx]:
+                    found_page = (p_idx - first_body_pdf_page) + 1
+                    break
+                if sec_prefix and any(l.lower().startswith(sec_prefix) for l in lines):
                     found_page = (p_idx - first_body_pdf_page) + 1
                     break
 

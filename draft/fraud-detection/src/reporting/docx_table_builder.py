@@ -144,6 +144,22 @@ def get_table_column_widths(
     if norm_headers == ["#", "mục tiêu", "kết quả", "vị trí"]:
         return [1.0, 8.5, 3.0, 3.5]
 
+    # Bảng phân công nhiệm vụ (6 cột)
+    if len(norm_headers) == 6 and norm_headers[0] in ["stt", "#"] and any("họ và tên" in nh for nh in norm_headers):
+        return [1.0, 3.2, 2.0, 2.2, 6.1, 1.5]
+
+    # Bảng danh mục từ viết tắt (3 cột)
+    if len(norm_headers) == 3 and any("ký hiệu" in nh or "viết tắt" in nh for nh in norm_headers) and any("tiếng anh" in nh for nh in norm_headers):
+        return [2.2, 6.8, 7.0]
+
+    # Bảng 4.2: 14 đặc trưng dẫn xuất (4 cột)
+    if len(norm_headers) == 4 and any("feature cuối" in nh for nh in norm_headers):
+        return [1.0, 4.0, 4.0, 7.0]
+
+    # Bảng 5.3: Thực nghiệm Ablation Study & Feature Pruning (9 cột)
+    if len(norm_headers) == 9 and any("cấu hình" in nh for nh in norm_headers):
+        return [3.0, 1.1, 1.4, 1.4, 1.4, 1.3, 1.3, 1.7, 3.4]
+
     # 2. Dynamic heuristic fallback for any other table
     col_max_lens = []
     for c in range(num_cols):
@@ -225,11 +241,29 @@ def add_styled_table(
     trPr0.append(parse_xml(f'<w:cantSplit {nsdecls("w")}/>'))
     trPr0.append(parse_xml(f'<w:tblHeader {nsdecls("w")}/>'))
 
+    # Determine adaptive font size and padding based on column count
+    if num_cols >= 8:
+        hdr_font_sz = 9.0
+        body_font_sz = 8.5
+        top_pad, bot_pad, lr_pad = 3, 3, 3
+    elif num_cols == 6:
+        hdr_font_sz = 10.0
+        body_font_sz = 9.5
+        top_pad, bot_pad, lr_pad = 3, 3, 4
+    elif num_cols == 3 and any("ký hiệu" in h.lower() or "viết tắt" in h.lower() for h in headers):
+        hdr_font_sz = 10.0
+        body_font_sz = 9.5
+        top_pad, bot_pad, lr_pad = 2, 2, 4
+    else:
+        hdr_font_sz = 10.5
+        body_font_sz = 10.0
+        top_pad, bot_pad, lr_pad = 4, 4, 6
+
     for c_idx, h_text in enumerate(headers):
         cell = hdr_row.cells[c_idx]
         cell.width = Cm(col_widths_cm[c_idx])
         cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
-        set_cell_margins_and_border(cell, top_pt=5, bottom_pt=5, left_pt=6, right_pt=6)
+        set_cell_margins_and_border(cell, top_pt=top_pad + 1, bottom_pt=bot_pad + 1, left_pt=lr_pad, right_pt=lr_pad)
 
         # Header Shading (clean light gray #F2F2F2, pure black text)
         tcPr = cell._tc.get_or_add_tcPr()
@@ -244,11 +278,11 @@ def add_styled_table(
         p.paragraph_format.keep_with_next = True
 
         if parse_inline_func:
-            parse_inline_func(p, h_text, base_font_size=10.5, is_bold=True, base_color=COLOR_TEXT_MAIN)
+            parse_inline_func(p, h_text, base_font_size=hdr_font_sz, is_bold=True, base_color=COLOR_TEXT_MAIN)
         else:
             r = p.add_run(h_text.strip())
             r.font.name = "Times New Roman"
-            r.font.size = Pt(10.5)
+            r.font.size = Pt(hdr_font_sz)
             r.bold = True
             r.font.color.rgb = COLOR_TEXT_MAIN
 
@@ -269,7 +303,7 @@ def add_styled_table(
             cell = b_row.cells[c_idx]
             cell.width = Cm(col_widths_cm[c_idx])
             cell.vertical_alignment = WD_ALIGN_VERTICAL.CENTER
-            set_cell_margins_and_border(cell, top_pt=4, bottom_pt=4, left_pt=6, right_pt=6)
+            set_cell_margins_and_border(cell, top_pt=top_pad, bottom_pt=bot_pad, left_pt=lr_pad, right_pt=lr_pad)
 
             tcPr = cell._tc.get_or_add_tcPr()
             if shd_hex != "FFFFFF":
@@ -286,11 +320,11 @@ def add_styled_table(
                 p.paragraph_format.keep_with_next = True
 
             if parse_inline_func:
-                parse_inline_func(p, c_text, base_font_size=10.0, base_color=COLOR_TEXT_MAIN)
+                parse_inline_func(p, c_text, base_font_size=body_font_sz, base_color=COLOR_TEXT_MAIN)
             else:
                 r = p.add_run(c_text.strip())
                 r.font.name = "Times New Roman"
-                r.font.size = Pt(10.0)
+                r.font.size = Pt(body_font_sz)
                 r.font.color.rgb = COLOR_TEXT_MAIN
 
     # Table Borders: subtle gray borders

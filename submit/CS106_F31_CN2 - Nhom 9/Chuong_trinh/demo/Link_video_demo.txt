@@ -11,5 +11,5 @@ https://aceteam-uit.vercel.app/l/70vGyu
 
 LƯU Ý:
 Ảnh minh họa và liên kết trực tiếp tới video này cũng đã được tích hợp trên slide trình chiếu:
-`Bao_cao/[Nhom9]_Slide_FraudDetection_Academic_VN.pdf` (Trang 15 - Demo trực tiếp).
+`Bao_cao/[Nhom9]_Slide_FraudDetection.pdf` (Trang 20 - Demo trực tiếp).
 Quý Thầy/Cô có thể truy cập xem video qua liên kết trực tiếp ở trên.

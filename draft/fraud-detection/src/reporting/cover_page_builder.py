@@ -188,28 +188,36 @@ def build_cover_page(doc: docx.Document, meta: dict, base_dir: str) -> None:
 
 
 def _build_roster_block(doc: docx.Document, meta: dict) -> None:
-    """Build the instructor + student roster table on the cover page."""
-    table = doc.add_table(rows=1, cols=1)
+    """Build the instructor + student roster table on the cover page (2-column balanced layout)."""
+    table = doc.add_table(rows=1, cols=2)
     table.alignment = WD_TABLE_ALIGNMENT.CENTER
     table.autofit = False
 
-    cell = table.cell(0, 0)
-    cell.width = Cm(12.0)
+    # Set column widths: Left (GVHD) 5.8cm, Right (SVTH) 9.2cm = 15.0cm
+    col_widths = [Cm(5.8), Cm(9.2)]
+    for i, col in enumerate(table.columns):
+        col.width = col_widths[i]
 
-    # Remove cell borders
-    tcPr = cell._tc.get_or_add_tcPr()
-    borders_xml = parse_xml(
-        f'<w:tcBorders {nsdecls("w")}>'
-        f'<w:top w:val="none"/><w:left w:val="none"/>'
-        f'<w:bottom w:val="none"/><w:right w:val="none"/>'
-        f"</w:tcBorders>"
-    )
-    tcPr.append(borders_xml)
+    # Remove cell borders and set top vertical alignment
+    for i, w in enumerate(col_widths):
+        c = table.cell(0, i)
+        c.width = w
+        tcPr = c._tc.get_or_add_tcPr()
+        borders_xml = parse_xml(
+            f'<w:tcBorders {nsdecls("w")}>'
+            f'<w:top w:val="none"/><w:left w:val="none"/>'
+            f'<w:bottom w:val="none"/><w:right w:val="none"/>'
+            f"</w:tcBorders>"
+        )
+        tcPr.append(borders_xml)
+        valign_xml = parse_xml(f'<w:vAlign {nsdecls("w")} w:val="top"/>')
+        tcPr.append(valign_xml)
 
-    # Instructor
-    p_gv = cell.paragraphs[0]
+    # 1. Left Cell: Instructor
+    cell_gv = table.cell(0, 0)
+    p_gv = cell_gv.paragraphs[0]
     p_gv.paragraph_format.space_before = Pt(4)
-    p_gv.paragraph_format.space_after = Pt(1)
+    p_gv.paragraph_format.space_after = Pt(2)
     p_gv.paragraph_format.line_spacing = 1.15
     r_gvh = p_gv.add_run("GIẢNG VIÊN HƯỚNG DẪN:")
     r_gvh.font.name = "Times New Roman"
@@ -217,9 +225,9 @@ def _build_roster_block(doc: docx.Document, meta: dict) -> None:
     r_gvh.bold = True
     r_gvh.font.color.rgb = COLOR_TEXT_MAIN
 
-    p_gvn = cell.add_paragraph()
-    p_gvn.paragraph_format.space_before = Pt(0)
-    p_gvn.paragraph_format.space_after = Pt(10)
+    p_gvn = cell_gv.add_paragraph()
+    p_gvn.paragraph_format.space_before = Pt(2)
+    p_gvn.paragraph_format.space_after = Pt(4)
     p_gvn.paragraph_format.line_spacing = 1.15
     inst = meta.get("instructor", {})
     inst_name = inst.get("name", "Nguyễn Đình Hiển") if isinstance(inst, dict) else str(inst)
@@ -230,10 +238,11 @@ def _build_roster_block(doc: docx.Document, meta: dict) -> None:
     r_gvn.bold = True
     r_gvn.font.color.rgb = COLOR_TEXT_MAIN
 
-    # Student group header
-    p_svh = cell.add_paragraph()
-    p_svh.paragraph_format.space_before = Pt(0)
-    p_svh.paragraph_format.space_after = Pt(1)
+    # 2. Right Cell: Student Group
+    cell_sv = table.cell(0, 1)
+    p_svh = cell_sv.paragraphs[0]
+    p_svh.paragraph_format.space_before = Pt(4)
+    p_svh.paragraph_format.space_after = Pt(2)
     p_svh.paragraph_format.line_spacing = 1.15
     r_svh = p_svh.add_run("NHÓM SINH VIÊN THỰC HIỆN:")
     r_svh.font.name = "Times New Roman"
@@ -241,19 +250,20 @@ def _build_roster_block(doc: docx.Document, meta: dict) -> None:
     r_svh.bold = True
     r_svh.font.color.rgb = COLOR_TEXT_MAIN
 
-    group_name = meta.get("group_name", "Nhóm 9")
-    p_grp = cell.add_paragraph()
+    group_name = meta.get("group_name", "Nhóm 09")
+    class_id = meta.get("class_id", "CS106.F31.CN2.TTNT")
+    p_grp = cell_sv.add_paragraph()
     p_grp.paragraph_format.space_before = Pt(0)
-    p_grp.paragraph_format.space_after = Pt(3)
+    p_grp.paragraph_format.space_after = Pt(4)
     p_grp.paragraph_format.line_spacing = 1.15
-    r_grp = p_grp.add_run(group_name)
+    r_grp = p_grp.add_run(f"{group_name} - Lớp: {class_id}")
     r_grp.font.name = "Times New Roman"
-    r_grp.font.size = Pt(11.5)
+    r_grp.font.size = Pt(11.0)
     r_grp.bold = True
     r_grp.font.color.rgb = COLOR_TEXT_MAIN
 
     # Student list
-    p_sts = cell.add_paragraph()
+    p_sts = cell_sv.add_paragraph()
     p_sts.paragraph_format.space_before = Pt(0)
     p_sts.paragraph_format.space_after = Pt(4)
     p_sts.paragraph_format.line_spacing = 1.25
