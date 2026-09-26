@@ -59,7 +59,7 @@ def collect_toc_entries(blocks: list[dict] | list[str]) -> list[dict]:
                 })
             elif stripped.startswith('### '):
                 t = stripped[4:].strip()
-                if re.match(r'^\d+\.\d+\.\d+\.', t):
+                if re.match(r'^\d+\.\d+\.\d+', t):
                     h3_count += 1
                     entries.append({
                         "text": t,
@@ -141,8 +141,8 @@ def build_toc_section(
     """
     p_title = doc.add_paragraph()
     p_title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    p_title.paragraph_format.space_before = Pt(14)
-    p_title.paragraph_format.space_after = Pt(12)
+    p_title.paragraph_format.space_before = Pt(10)
+    p_title.paragraph_format.space_after = Pt(8)
     p_title.paragraph_format.line_spacing = 1.15
     r_t = p_title.add_run("MỤC LỤC")
     r_t.font.name = "Times New Roman"
@@ -157,18 +157,19 @@ def build_toc_section(
         page_num = page_mapping.get(title, "")
 
         p_toc = doc.add_paragraph()
-        p_toc.paragraph_format.space_before = Pt(3 if level == 1 else 1)
-        p_toc.paragraph_format.space_after = Pt(2)
-        p_toc.paragraph_format.line_spacing = 1.25
+        p_toc.paragraph_format.space_before = Pt(2 if level == 1 else 0.5)
+        p_toc.paragraph_format.space_after = Pt(1)
+        p_toc.paragraph_format.line_spacing = 1.18
 
         indent_cm = TOC_INDENT_CM.get(level, 0.0)
         if indent_cm:
             p_toc.paragraph_format.left_indent = Cm(indent_cm)
 
-        # Vị trí tab tính theo mép trong của lề, nên phải trừ đi phần thụt lề của
-        # từng cấp để số trang của cả ba cấp thẳng một cột. Chừa thêm TOC_TAB_SAFETY_CM
-        # vì tab canh phải đặt đúng mép lề sẽ khiến số trang bị đẩy xuống dòng sau.
-        tab_position_cm = CONTENT_WIDTH_CM - TOC_TAB_SAFETY_CM - indent_cm
+        # Vị trí tab trong OpenXML tính từ mép lề trái của trang (Left Margin),
+        # KHÔNG phụ thuộc vào độ thụt dòng paragraph left_indent. Do đó, tất cả
+        # các cấp mục lục (H1, H2, H3) phải dùng chung một tọa độ tab stop tuyệt đối
+        # để cột số trang và dãy chấm dot-leader thẳng hàng tăm tắp về bên phải.
+        tab_position_cm = CONTENT_WIDTH_CM - TOC_TAB_SAFETY_CM
         tab_stops = p_toc.paragraph_format.tab_stops
         tab_stops.add_tab_stop(Cm(tab_position_cm), WD_TAB_ALIGNMENT.RIGHT, WD_TAB_LEADER.DOTS)
 

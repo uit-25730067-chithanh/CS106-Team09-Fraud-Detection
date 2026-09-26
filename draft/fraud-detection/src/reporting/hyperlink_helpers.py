@@ -85,6 +85,7 @@ def add_internal_hyperlink(
     font_size: float = 13.0,
     is_bold: bool = False,
     is_italic: bool = False,
+    is_superscript: bool = False,
     color_hex: str = "000000",
 ) -> None:
     """Add an internal clickable hyperlink run targeting a bookmark anchor.
@@ -94,6 +95,7 @@ def add_internal_hyperlink(
     (in-text citation links).
     """
     hl = parse_xml(f'<w:hyperlink {nsdecls("w")} w:anchor="{target_anchor}"/>')
+    superscript_tag = '<w:vertAlign w:val="superscript"/>' if is_superscript else ""
     r = parse_xml(
         f'<w:r {nsdecls("w")}>'
         f"<w:rPr>"
@@ -101,6 +103,7 @@ def add_internal_hyperlink(
         f'<w:sz w:val="{int(font_size * 2)}"/>'
         f'{"<w:b/>" if is_bold else ""}'
         f'{"<w:i/>" if is_italic else ""}'
+        f"{superscript_tag}"
         f'<w:color w:val="{color_hex}"/>'
         f"</w:rPr>"
         f"{_run_content_xml(text)}"

@@ -101,58 +101,79 @@ def build_body_section(
     # Skip draft metadata header if source starts with # Title / metadata table
     start_idx = 0
     for idx, line in enumerate(lines):
-        if line.strip().startswith("# TÓM TẮT") or line.strip().startswith(
-            "# CHƯƠNG 1"
+        stripped_line = line.strip()
+        if stripped_line.startswith("# ") and not (
+            "TIỂU LUẬN" in stripped_line.upper()
+            or "BÁO CÁO" in stripped_line.upper()
+            or "BÌA" in stripped_line.upper()
         ):
             start_idx = idx
             break
 
     i = start_idx
     bookmark_counter = 1000
+    last_was_page_break = True  # Đã ở trang mới ngay đầu Section 3
 
     while i < len(lines):
         line = lines[i]
         stripped = line.strip()
 
-        # 1. Skip dividers, page breaks, empty lines
-        if (
-            stripped in ["---", "***", "___", "\\newpage", "<br>", "<br><br>"]
-            or not stripped
-        ):
+        # 1. Bỏ qua dòng trống và thẻ ngắt dòng HTML
+        if not stripped or stripped in ["<br>", "<br><br>"]:
             i += 1
             continue
 
-        # 2. Image tag: ![alt](path)
+        # 2. Xử lý ngắt trang chủ động từ Markdown (---, \newpage, <!-- pagebreak -->)
+        if stripped in ["---", "***", "___", "\\newpage", "<!-- pagebreak -->"]:
+            if not last_was_page_break:
+                doc.add_page_break()
+                last_was_page_break = True
+            i += 1
+            continue
+
+        # 3. Image tag: ![alt](path)
         img_match = re.match(r"^!\[(.*?)\]\((.*?)\)$", stripped)
         if img_match:
             bookmark_counter, i = _handle_image(
                 doc, img_match, base_dir, bookmark_counter, i
             )
+            last_was_page_break = False
             continue
 
-        # 3. Figure caption standalone: *Hình X: ...*
+        # 4. Figure caption standalone: *Hình X: ...*
         if re.match(r"^\*Hình\s+\d+.*\*$", stripped):
             _add_figure_caption(doc, stripped[1:-1].strip())
+            last_was_page_break = False
             i += 1
             continue
 
-        # 4–6. Headings
+        # 5–7. Headings
         if line.startswith("# "):
+            h_title = line[2:].strip().upper()
+            # Bảo đảm các chương chính và phụ lục luôn bắt đầu ở trang mới
+            if any(h_title.startswith(pfx) for pfx in ["CHƯƠNG", "TÀI LIỆU THAM KHẢO", "PHỤ LỤC"]):
+                if not last_was_page_break:
+                    doc.add_page_break()
+                    last_was_page_break = True
+
             bookmark_counter = _handle_heading(
                 doc, line[2:], 1, anchor_by_title, bookmark_counter
             )
+            last_was_page_break = False
             i += 1
             continue
         if line.startswith("## "):
             bookmark_counter = _handle_heading(
                 doc, line[3:], 2, anchor_by_title, bookmark_counter
             )
+            last_was_page_break = False
             i += 1
             continue
         if line.startswith("### "):
             bookmark_counter = _handle_heading(
                 doc, line[4:], 3, anchor_by_title, bookmark_counter
             )
+            last_was_page_break = False
             i += 1
             continue
 
@@ -175,12 +196,14 @@ def build_body_section(
             parse_inline_formatting(
                 p_q, full_quote, is_italic=True, base_font_size=12.0
             )
+            last_was_page_break = False
             continue
 
         # 8. List items (*, -, +, or 1.)
         list_match = re.match(r"^(\s*)([\*\-\+]|\d+\.)\s+(.*)$", line)
         if list_match:
             _handle_list_item(doc, list_match)
+            last_was_page_break = False
             i += 1
             continue
 
@@ -190,17 +213,20 @@ def build_body_section(
             bookmark_counter = _handle_reference(
                 doc, ref_match, bookmark_counter
             )
+            last_was_page_break = False
             i += 1
             continue
 
         # 10. Markdown Table: | col1 | col2 |
         if stripped.startswith("|") and "|" in stripped[1:]:
             i = _handle_table(doc, lines, i)
+            last_was_page_break = False
             continue
 
         # 11. Standalone Table Caption: **Bảng X.Y...** or *Bảng X.Y...*
         if re.match(r"^(\*\*|\*)?Bảng\s+\d+.*?(\*\*|\*)?$", stripped):
             _add_table_caption(doc, stripped)
+            last_was_page_break = False
             i += 1
             continue
 
@@ -212,6 +238,7 @@ def build_body_section(
         p_body.paragraph_format.space_after = Pt(2.0)
         p_body.paragraph_format.line_spacing = 1.3
         parse_inline_formatting(p_body, stripped)
+        last_was_page_break = False
         i += 1
 
 
